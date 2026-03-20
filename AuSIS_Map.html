@@ -142,7 +142,7 @@
                 onAdd: function() {
                     var div = L.DomUtil.create('div', 'leaflet-bar');
                     div.innerHTML = '<a href="#" title="Zoom to all stations" style="font-size:16px; line-height:30px; display:block; width:30px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
-                    div.onclick = function(e) { e.preventDefault(); if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05)); };
+                    div.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
                     return div;
                 }
             });
@@ -234,7 +234,8 @@
             return fetchAvailability();
         }).then(function() {
             addMarkers();
-            if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
+            // Fixed view tuned for 728x500 iframe
+            map.setView([-28, 134], 4);
 
             // Update legend with counts
             var active = stations.filter(function(s) { return !s.endTime; }).length;
