@@ -21,9 +21,6 @@
         .popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
         .popup-row { color: #4b5563; font-size: 12px; }
         .popup-row strong { color: #374151; }
-        .popup-doi { margin-top: 6px; font-size: 11px; }
-        .popup-doi a { color: #2563eb; text-decoration: none; }
-        .popup-doi a:hover { text-decoration: underline; }
         .leaflet-control-search { background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; }
         .leaflet-control-search input { border: none; outline: none; font-size: 13px; width: 200px; }
         .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
@@ -40,7 +37,7 @@
         // ── State ──────────────────────────────────────────────────────
         var stations = [],   // Array of station objects from FDSN response
             markers = [],    // Array of Leaflet markers on the map
-            map     = null;  // Leaflet map instance (null until boot)
+            map     = null;  // Leaflet map instance
 
         // ── Marker icon ────────────────────────────────────────────────
         // Generates an SVG inverted-triangle icon at the given pixel size.
@@ -176,7 +173,7 @@
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Webicorder &#x2197;</a></div>';
+                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Helicorder &#x2197;</a></div>';
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
                 s.marker = m; markers.push(m);
             });
