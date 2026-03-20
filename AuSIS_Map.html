@@ -101,8 +101,8 @@
         }
 
         async function fetchStations() {
-            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
-            if (!resp.ok) throw new Error('FDSN returned HTTP ' + resp.status);
+            var resp = await fetch('https://auspass.edu.au/fdsnws/station/1/query?network=S1&level=station&format=text');
+            if (!resp.ok) throw new Error('AusPass returned HTTP ' + resp.status);
             var lines = (await resp.text()).trim().split('\n');
             var out = [];
             for (var i = 1; i < lines.length; i++) {
