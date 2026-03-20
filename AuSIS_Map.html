@@ -37,8 +37,14 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        var stations = [], markers = [], map = null;
+        // ── State ──────────────────────────────────────────────────────
+        var stations = [],   // Array of station objects from FDSN response
+            markers = [],    // Array of Leaflet markers on the map
+            map     = null;  // Leaflet map instance (null until boot)
 
+        // ── Marker icon ────────────────────────────────────────────────
+        // Generates an SVG inverted-triangle icon at the given pixel size.
+        // Black fill with a thin white stroke; used as a Leaflet divIcon.
         function triangleIcon(size) {
             var h = size / 2;
             var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
@@ -46,6 +52,9 @@
             return L.divIcon({ html: svg, className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
+        // ── Map initialisation ──────────────────────────────────────────
+        // Creates the Leaflet map centred on Australia with satellite tiles,
+        // a search control (top-right), and a home/reset button (top-left).
         function initMap() {
             map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, maxBounds: [[-50, 100], [-5, 165]], maxBoundsViscosity: 0.8 });
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
@@ -86,6 +95,7 @@
             });
             new HomeControl({ position: 'topleft' }).addTo(map);
 
+            // Resize markers when zoom changes (range 16–32 px)
             map.on('zoomend', function() {
                 var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
                 var icon = triangleIcon(size);
@@ -93,6 +103,9 @@
             });
         }
 
+        // ── Helpers ─────────────────────────────────────────────────────
+        // Converts an ISO date string (e.g. "2019-03-15T00:00:00") to
+        // a readable format: "15 Mar 2019".
         function formatDate(d) {
             if (!d) return 'Unknown';
             var p = d.substring(0, 10).split('-');
@@ -100,6 +113,11 @@
             return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
         }
 
+        // ── Data fetching ──────────────────────────────────────────────
+        // Queries the AusPass FDSN Station Service for all S1 network
+        // stations. The response is pipe-delimited text:
+        //   Network|Station|Latitude|Longitude|Elevation|SiteName|StartTime|EndTime
+        // Returns an array of station objects.
         async function fetchStations() {
             var resp = await fetch('https://auspass.edu.au/fdsnws/station/1/query?network=S1&level=station&format=text');
             if (!resp.ok) throw new Error('AusPass returned HTTP ' + resp.status);
@@ -113,6 +131,10 @@
             return out;
         }
 
+        // ── Marker rendering ─────────────────────────────────────────
+        // Places a triangle marker for each station. Popups show school
+        // name, station code, recording period, status, and coordinates.
+        // A station is "Active" if it has no endTime in the FDSN response.
         function addMarkers() {
             var icon = triangleIcon(Math.max(16, Math.min(32, map.getZoom() * 2.9)));
             stations.forEach(function(s) {
@@ -122,31 +144,23 @@
                     + (s.endTime ? '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>' : '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>')
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
-                    + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>';
+                    + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
+                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Webicorder &#x2197;</a></div>';
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
                 s.marker = m; markers.push(m);
             });
         }
 
-        function boot() {
-            var el = document.getElementById('map');
-            if (!el || map) return; // Already initialised or element missing
-            initMap();
-            fetchStations().then(function(data) {
-                stations = data;
-                addMarkers();
-                if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
-                document.getElementById('status').textContent = stations.length + ' stations loaded';
-            }).catch(function(err) {
-                document.getElementById('status').innerHTML = '<span style="color:red">Error: ' + err.message + '</span>';
-            });
-        }
-
-        // Run on normal page load
-        boot();
-        // Re-run on Squarespace AJAX navigation (Mercury loader)
-        window.addEventListener('mercury:load', boot);
-        document.addEventListener('DOMContentLoaded', boot);
+        // ── Initialise ─────────────────────────────────────────────────
+        initMap();
+        fetchStations().then(function(data) {
+            stations = data;
+            addMarkers();
+            if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
+            document.getElementById('status').textContent = stations.length + ' stations loaded';
+        }).catch(function(err) {
+            document.getElementById('status').innerHTML = '<span style="color:red">Error: ' + err.message + '</span>';
+        });
     </script>
 </body>
 </html>
