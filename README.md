@@ -18,7 +18,7 @@ https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BHZ&for
 
 - Satellite imagery base map (Esri World Imagery)
 - Triangle markers for each seismometer station
-- Click a marker to see: school name, station code, recording start date, streaming status, coordinates, elevation, and a link to the [IRIS Webicorder](https://www.iris.edu/app/station_monitor/) helicorder view
+- Click a marker to see: school name, station code, recording start date, streaming status, coordinates, elevation, and a link to the [IRIS Webicorder](https://www.iris.edu/app/station_monitor/) webicorder view
 - Search box to find stations by name or code
 - Home button to reset the map view
 - Marker icons scale with zoom level
