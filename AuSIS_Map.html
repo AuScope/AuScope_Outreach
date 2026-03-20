@@ -123,18 +123,21 @@
             for (var i = 1; i < lines.length; i++) {
                 var p = lines[i].split('|');
                 if (p.length < 7) continue;
-                out.push({ code: p[1].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', latestData: null, marker: null });
+                var code = p[1].trim();
+                if (code === 'TEST') continue;  // Skip test station
+                out.push({ code: code, lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', latestData: null, marker: null });
             }
             return out;
         }
 
         // ── Data availability ─────────────────────────────────────────
-        // Queries the IRIS FDSN Availability extent endpoint for BHZ
+        // Queries the IRIS FDSN Availability extent endpoint for BH and HH
         // channels across all S1 stations to determine streaming status.
+        // Some stations (e.g. AUDAR) only stream HH channels, not BH.
         // Columns: N S L C Q SampleRate Earliest Latest Updated TimeSpans Restriction
         async function fetchAvailability() {
             try {
-                var resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BHZ&format=text');
+                var resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
                 if (!resp.ok) return;
                 var lines = (await resp.text()).trim().split('\n');
                 var latest = {};  // code → latest Date
