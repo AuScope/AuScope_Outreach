@@ -41,12 +41,24 @@
 
         // ── Marker icon ────────────────────────────────────────────────
         // Generates an SVG inverted-triangle icon at the given pixel size.
-        // Black fill with a thin white stroke; used as a Leaflet divIcon.
-        function triangleIcon(size) {
+        // Black fill with coloured stroke: green=streaming, orange=offline, red=ended.
+        function triangleIcon(size, strokeColor) {
             var h = size / 2;
+            var stroke = strokeColor || '#fff';
             var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg>';
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round"/></svg>';
             return L.divIcon({ html: svg, className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+        }
+
+        // Returns the stroke colour for a station based on its status
+        function stationStrokeColor(s) {
+            if (s.endTime) return '#ef4444';        // red — ended
+            if (s.latestData) {
+                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                if (daysAgo <= 7) return '#22c55e';  // green — streaming
+                return '#facc15';                     // yellow — offline
+            }
+            return '#22c55e';                         // green — active (no availability data)
         }
 
         // ── Map initialisation ──────────────────────────────────────────
@@ -95,8 +107,9 @@
             // Resize markers when zoom changes (range 16–32 px)
             map.on('zoomend', function() {
                 var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-                var icon = triangleIcon(size);
-                markers.forEach(function(m) { m.setIcon(icon); });
+                stations.forEach(function(s) {
+                    if (s.marker) s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
+                });
             });
         }
 
@@ -161,8 +174,9 @@
         // name, station code, recording period, status, and coordinates.
         // A station is "Active" if it has no endTime in the FDSN response.
         function addMarkers() {
-            var icon = triangleIcon(Math.max(16, Math.min(32, map.getZoom() * 2.9)));
+            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
             stations.forEach(function(s) {
+                var icon = triangleIcon(size, stationStrokeColor(s));
                 var html = '<div class="popup-title">' + s.name + '</div>'
                     + '<span class="popup-code">S1.' + s.code + '</span>'
                     + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
