@@ -8,68 +8,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AuSIS - Australian Seismometers In Schools</title>
+    <title>AuSIS Station Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; }
-        #map { width: 100%; height: 100vh; }
-        #status { position: absolute; bottom: 8px; left: 8px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 4px; font-size: 12px; color: #555; z-index: 1000; }
+        body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+
+        /* Header */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #282572; color: #fff; padding: 4px 16px; min-height: 36px;
+        }
+        .header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; }
+        .header-logo img { height: 36px; }
+
+        /* Map */
+        #map { flex: 1; width: 100%; }
+
+        /* Popups */
         .leaflet-popup-content-wrapper { opacity: 0.92 !important; }
-        .leaflet-popup-content { margin: 10px 14px !important; font-size: 13px; line-height: 1.6; }
-        .popup-title { font-weight: 700; font-size: 14px; color: #1e3a5f; margin-bottom: 4px; }
+        .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
+        .popup-title { font-weight: 700; font-size: 14px; color: #282572; margin-bottom: 4px; }
         .popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
         .popup-row { color: #4b5563; font-size: 12px; }
         .popup-row strong { color: #374151; }
+
+        /* Search */
         .leaflet-control-search { background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; }
-        .leaflet-control-search input { border: none; outline: none; font-size: 13px; width: 200px; }
+        .leaflet-control-search input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
         .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
-        .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; }
+        .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
         .search-results div:hover { background: #eff6ff; }
+
+        /* Footer / Legend */
+        .footer {
+            display: flex; align-items: center; justify-content: center; gap: 24px;
+            background: #282572; color: #fff; padding: 6px 16px; min-height: 36px;
+            font-family: Arial, Helvetica, sans-serif; font-size: 12px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-icon { display: inline-block; }
+
+        @media (max-width: 600px) {
+            .header-title { font-size: 14px; }
+            .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <span class="header-title">AuSIS Station Map</span>
+        <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
+    </div>
+
     <div id="map"></div>
-    <div id="status">Loading stations...</div>
+
+    <div class="footer">
+        <span class="legend-item"><span class="legend-icon" id="legend-active"></span> <span id="legend-active-text">Active stations</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Offline</span>
+        <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Ended</span>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ── State ──────────────────────────────────────────────────────
-        var stations = [],   // Array of station objects from FDSN response
-            markers = [],    // Array of Leaflet markers on the map
-            map     = null;  // Leaflet map instance
+        var stations = [],
+            markers = [],
+            map     = null;
 
         // ── Marker icon ────────────────────────────────────────────────
-        // Generates an SVG inverted-triangle icon at the given pixel size.
-        // Black fill with coloured stroke: green=streaming, orange=offline, red=ended.
+        function triangleSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
         function triangleIcon(size, strokeColor) {
             var h = size / 2;
             var stroke = strokeColor || '#fff';
-            var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + stroke + '" stroke-width="2" stroke-linejoin="round"/></svg>';
-            return L.divIcon({ html: svg, className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+            return L.divIcon({ html: triangleSVG(size, stroke), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
-        // Returns the stroke colour for a station based on its status
         function stationStrokeColor(s) {
-            if (s.endTime) return '#ef4444';        // red — ended
+            if (s.endTime) return '#ef4444';
             if (s.latestData) {
                 var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-                if (daysAgo <= 7) return '#22c55e';  // green — streaming
-                return '#facc15';                     // yellow — offline
+                if (daysAgo <= 7) return '#22c55e';
+                return '#facc15';
             }
-            return '#22c55e';                         // green — active (no availability data)
+            return '#22c55e';
         }
 
-        // ── Map initialisation ──────────────────────────────────────────
-        // Creates the Leaflet map centred on Australia with satellite tiles,
-        // a search control (top-right), and a home/reset button (top-left).
+        // ── Legend icons ───────────────────────────────────────────────
+        function setLegendIcons() {
+            document.getElementById('legend-active').innerHTML = triangleSVG(16, '#fff');
+            document.getElementById('legend-streaming').innerHTML = triangleSVG(16, '#22c55e');
+            document.getElementById('legend-offline').innerHTML = triangleSVG(16, '#facc15');
+            document.getElementById('legend-ended').innerHTML = triangleSVG(16, '#ef4444');
+        }
+
+        // ── Map initialisation ────────────────────────────────────────
         function initMap() {
             map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3 });
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
-            // Search control
+            // Search
             var SearchControl = L.Control.extend({
                 onAdd: function() {
                     var c = L.DomUtil.create('div', 'leaflet-control-search');
@@ -104,7 +148,7 @@
             });
             new HomeControl({ position: 'topleft' }).addTo(map);
 
-            // Resize markers when zoom changes (range 16–32 px)
+            // Resize markers on zoom
             map.on('zoomend', function() {
                 var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
                 stations.forEach(function(s) {
@@ -113,9 +157,7 @@
             });
         }
 
-        // ── Helpers ─────────────────────────────────────────────────────
-        // Converts an ISO date string (e.g. "2019-03-15T00:00:00") to
-        // a readable format: "15 Mar 2019".
+        // ── Helpers ───────────────────────────────────────────────────
         function formatDate(d) {
             if (!d) return 'Unknown';
             var p = d.substring(0, 10).split('-');
@@ -123,11 +165,7 @@
             return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
         }
 
-        // ── Data fetching ──────────────────────────────────────────────
-        // Queries the IRIS FDSN Station Service for all S1 network
-        // stations. The response is pipe-delimited text:
-        //   Network|Station|Latitude|Longitude|Elevation|SiteName|StartTime|EndTime
-        // Returns an array of station objects.
+        // ── Data fetching ─────────────────────────────────────────────
         async function fetchStations() {
             var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
             if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
@@ -137,23 +175,18 @@
                 var p = lines[i].split('|');
                 if (p.length < 7) continue;
                 var code = p[1].trim();
-                if (code === 'TEST') continue;  // Skip test station
+                if (code === 'TEST') continue;
                 out.push({ code: code, lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', latestData: null, marker: null });
             }
             return out;
         }
 
-        // ── Data availability ─────────────────────────────────────────
-        // Queries the IRIS FDSN Availability extent endpoint for BH and HH
-        // channels across all S1 stations to determine streaming status.
-        // Some stations (e.g. AUDAR) only stream HH channels, not BH.
-        // Columns: N S L C Q SampleRate Earliest Latest Updated TimeSpans Restriction
         async function fetchAvailability() {
             try {
                 var resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
                 if (!resp.ok) return;
                 var lines = (await resp.text()).trim().split('\n');
-                var latest = {};  // code → latest Date
+                var latest = {};
                 for (var i = 1; i < lines.length; i++) {
                     var cols = lines[i].trim().split(/\s+/);
                     if (cols.length < 8) continue;
@@ -164,15 +197,10 @@
                 stations.forEach(function(s) {
                     if (latest[s.code]) s.latestData = latest[s.code];
                 });
-            } catch (e) {
-                // Availability is non-critical; popups will omit the row
-            }
+            } catch (e) {}
         }
 
-        // ── Marker rendering ─────────────────────────────────────────
-        // Places a triangle marker for each station. Popups show school
-        // name, station code, recording period, status, and coordinates.
-        // A station is "Active" if it has no endTime in the FDSN response.
+        // ── Marker rendering ──────────────────────────────────────────
         function addMarkers() {
             var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
             stations.forEach(function(s) {
@@ -198,20 +226,23 @@
             });
         }
 
-        // ── Initialise ─────────────────────────────────────────────────
+        // ── Initialise ────────────────────────────────────────────────
+        setLegendIcons();
         initMap();
         fetchStations().then(function(data) {
             stations = data;
-            // Fetch availability data before rendering so popups show streaming status
             return fetchAvailability();
         }).then(function() {
             addMarkers();
             if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
+
+            // Update legend with counts
             var active = stations.filter(function(s) { return !s.endTime; }).length;
             var streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7; }).length;
-            document.getElementById('status').textContent = active + ' active stations | ' + streaming + ' live streaming';
+            document.getElementById('legend-active-text').textContent = 'AuSIS active stations (' + active + ')';
+            document.getElementById('legend-streaming-text').textContent = 'AuSIS live streaming (' + streaming + ')';
         }).catch(function(err) {
-            document.getElementById('status').innerHTML = '<span style="color:red">Error: ' + err.message + '</span>';
+            console.error('Error:', err);
         });
     </script>
 </body>

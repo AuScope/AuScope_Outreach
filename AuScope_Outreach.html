@@ -63,10 +63,10 @@
     <div id="map"></div>
 
     <div class="footer">
-        <span class="legend-item"><span class="legend-icon" id="legend-ausis"></span> Seismometers in Schools (AuSIS)</span>
-        <span class="legend-item"><span class="legend-icon" id="legend-mag"></span> Magnetometers in Schools</span>
-        <span class="legend-item"><span class="legend-icon" id="legend-eb"></span> EarthBank in the Classroom</span>
-        <span class="legend-item" id="legend-gp-item" style="display:none"><span class="legend-icon" id="legend-gp"></span> GPlates in Schools</span>
+        <span class="legend-item"><span class="legend-icon" id="legend-ausis"></span> <span id="legend-ausis-text">Seismometers in Schools (AuSIS)</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-mag"></span> <span id="legend-mag-text">Magnetometers in Schools</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-eb"></span> <span id="legend-eb-text">EarthBank in the Classroom</span></span>
+        <span class="legend-item" id="legend-gp-item" style="display:none"><span class="legend-icon" id="legend-gp"></span> <span id="legend-gp-text">GPlates in Schools</span></span>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -258,9 +258,15 @@
             addMarkers();
             if (allMarkers.length > 0) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.05));
 
+            // Update legend with school counts
+            document.getElementById('legend-ausis-text').textContent = 'Seismometers in Schools (' + results[0].length + ' schools)';
+            if (results[1].length > 0) document.getElementById('legend-mag-text').textContent = 'Magnetometers in Schools (' + results[1].length + ' schools)';
+            if (results[2].length > 0) document.getElementById('legend-eb-text').textContent = 'EarthBank in the Classroom (' + results[2].length + ' schools)';
+
             // Show GPlates legend only if data was loaded
             if (results[3].length > 0) {
                 document.getElementById('legend-gp-item').style.display = 'flex';
+                document.getElementById('legend-gp-text').textContent = 'GPlates in Schools (' + results[3].length + ' schools)';
             }
         }).catch(function(err) {
             console.error('Load error:', err);
