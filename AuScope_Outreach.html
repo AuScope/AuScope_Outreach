@@ -204,8 +204,6 @@
                 if (p.length < 7) continue;
                 var code = p[1].trim();
                 if (code === 'TEST') continue;
-                var endTime = p[7] ? p[7].trim() : '';
-                if (endTime && endTime !== '2599-12-31T23:59:59') continue;
                 out.push({ name: p[5].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), program: 'ausis', marker: null });
             }
             return out;
