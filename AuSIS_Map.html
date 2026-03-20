@@ -190,7 +190,9 @@
         }).then(function() {
             addMarkers();
             if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
-            document.getElementById('status').textContent = stations.length + ' stations loaded';
+            var active = stations.filter(function(s) { return !s.endTime; }).length;
+            var streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7; }).length;
+            document.getElementById('status').textContent = active + ' active stations | ' + streaming + ' live streaming';
         }).catch(function(err) {
             document.getElementById('status').innerHTML = '<span style="color:red">Error: ' + err.message + '</span>';
         });
