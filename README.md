@@ -1,4 +1,4 @@
-# AuSIS Map — Australian Seismometers In Schools
+# AuSIS - Australian Seismometers In Schools - Map
 
 Interactive map displaying all station locations from the **AuSIS** (Australian Seismometers In Schools) program, part of the [AuScope](https://www.auscope.org.au/) national research infrastructure, which is funded by the Australian Government through the National Collaborative Research Infrastructure Strategy.
 
