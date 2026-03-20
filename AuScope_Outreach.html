@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--
+    AuScope_Outreach.html
+    Interactive map of AuScope outreach program locations.
+    Programs: AuSIS (Seismometers in Schools), Magnetometers in Schools,
+    EarthBank in the Classroom, GPlates in Schools.
+    Static data loaded from data/ folder; AuSIS fetched live from IRIS.
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AuScope Outreach Locations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+
+        /* Header */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #282572; color: #fff; padding: 8px 16px; min-height: 48px;
+        }
+        .header-title { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
+        .header-logo img { height: 36px; }
+
+        /* Map */
+        #map { flex: 1; width: 100%; }
+
+        /* Popups */
+        .leaflet-popup-content-wrapper { opacity: 0.92 !important; }
+        .leaflet-popup-content { margin: 8px 12px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.5; }
+        .popup-name { font-weight: 700; font-size: 14px; color: #282572; }
+        .popup-program { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+        /* Search */
+        .leaflet-control-search { background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; }
+        .leaflet-control-search input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
+        .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
+        .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
+        .search-results div:hover { background: #eff6ff; }
+
+        /* Footer / Legend */
+        .footer {
+            display: flex; align-items: center; justify-content: center; gap: 24px;
+            background: #282572; color: #fff; padding: 6px 16px; min-height: 36px;
+            font-family: Arial, Helvetica, sans-serif; font-size: 12px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-icon { display: inline-block; }
+
+        @media (max-width: 600px) {
+            .header-title { font-size: 14px; }
+            .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="header-title">AuScope Outreach Locations</span>
+        <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="footer">
+        <span class="legend-item"><span class="legend-icon" id="legend-ausis"></span> Seismometers in Schools (AuSIS)</span>
+        <span class="legend-item"><span class="legend-icon" id="legend-mag"></span> Magnetometers in Schools</span>
+        <span class="legend-item"><span class="legend-icon" id="legend-eb"></span> EarthBank in the Classroom</span>
+        <span class="legend-item" id="legend-gp-item" style="display:none"><span class="legend-icon" id="legend-gp"></span> GPlates in Schools</span>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ── State ──────────────────────────────────────────────────────
+        var allStations = [];
+        var allMarkers = [];
+        var map = null;
+
+        // ── Program config ─────────────────────────────────────────────
+        var PROGRAMS = {
+            ausis:     { name: 'Seismometers in Schools (AuSIS)', color: '#22c55e' },
+            mag:       { name: 'Magnetometers in Schools',        color: '#a855f7' },
+            earthbank: { name: 'EarthBank in the Classroom',      color: '#3b82f6' },
+            gplates:   { name: 'GPlates in Schools',              color: '#f59e0b' }
+        };
+
+        // ── SVG icon generators ────────────────────────────────────────
+        function triangleSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function triangleIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: triangleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+        }
+
+        function diamondSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function diamondIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: diamondSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        function circleSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2"/></svg>';
+        }
+        function circleIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: circleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        function squareSVG(size, strokeColor) {
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function squareIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: squareSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        function makeIcon(program, size) {
+            var color = PROGRAMS[program].color;
+            if (program === 'ausis') return triangleIcon(size, color);
+            if (program === 'mag') return diamondIcon(size, color);
+            if (program === 'earthbank') return circleIcon(size, color);
+            if (program === 'gplates') return squareIcon(size, color);
+            return triangleIcon(size, color);
+        }
+
+        // ── Legend icons ───────────────────────────────────────────────
+        function setLegendIcons() {
+            document.getElementById('legend-ausis').innerHTML = triangleSVG(16, PROGRAMS.ausis.color);
+            document.getElementById('legend-mag').innerHTML = diamondSVG(16, PROGRAMS.mag.color);
+            document.getElementById('legend-eb').innerHTML = circleSVG(16, PROGRAMS.earthbank.color);
+            document.getElementById('legend-gp').innerHTML = squareSVG(16, PROGRAMS.gplates.color);
+        }
+
+        // ── Map initialisation ────────────────────────────────────────
+        function initMap() {
+            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3 });
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
+
+            // Search
+            var SearchControl = L.Control.extend({
+                onAdd: function() {
+                    var c = L.DomUtil.create('div', 'leaflet-control-search');
+                    var input = L.DomUtil.create('input', '', c);
+                    input.type = 'text'; input.placeholder = 'Search schools...';
+                    var res = L.DomUtil.create('div', 'search-results', c);
+                    L.DomEvent.disableClickPropagation(c);
+                    L.DomEvent.disableScrollPropagation(c);
+                    input.oninput = function() {
+                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        if (q.length < 2) return;
+                        allStations.filter(function(s) {
+                            return s.name.toLowerCase().indexOf(q) !== -1;
+                        }).slice(0, 10).forEach(function(s) {
+                            var row = document.createElement('div');
+                            row.textContent = s.name;
+                            row.onclick = function() { input.value = ''; res.innerHTML = ''; map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
+                            res.appendChild(row);
+                        });
+                    };
+                    return c;
+                }
+            });
+            new SearchControl({ position: 'topright' }).addTo(map);
+
+            // Home button
+            var HomeControl = L.Control.extend({
+                onAdd: function() {
+                    var div = L.DomUtil.create('div', 'leaflet-bar');
+                    div.innerHTML = '<a href="#" title="Zoom to all locations" style="font-size:16px; line-height:30px; display:block; width:30px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
+                    div.onclick = function(e) { e.preventDefault(); if (allMarkers.length > 0) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.05)); };
+                    return div;
+                }
+            });
+            new HomeControl({ position: 'topleft' }).addTo(map);
+
+            // Resize on zoom
+            map.on('zoomend', function() {
+                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                allStations.forEach(function(s) {
+                    if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
+                });
+            });
+        }
+
+        // ── Data: AuSIS from IRIS (live) ──────────────────────────────
+        async function fetchAuSIS() {
+            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
+            var lines = (await resp.text()).trim().split('\n');
+            var out = [];
+            for (var i = 1; i < lines.length; i++) {
+                var p = lines[i].split('|');
+                if (p.length < 7) continue;
+                var code = p[1].trim();
+                if (code === 'TEST') continue;
+                var endTime = p[7] ? p[7].trim() : '';
+                if (endTime && endTime !== '2599-12-31T23:59:59') continue;
+                out.push({ name: p[5].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), program: 'ausis', marker: null });
+            }
+            return out;
+        }
+
+        // ── Data: Static CSV from data/ folder ────────────────────────
+        // Tries to fetch a CSV file; returns empty array on failure (CORS/404).
+        // This allows local file:// testing to still work (AuSIS loads, static files gracefully skip).
+        async function fetchCSV(url, program) {
+            try {
+                var resp = await fetch(url);
+                if (!resp.ok) return [];
+                var lines = (await resp.text()).trim().split('\n');
+                var out = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var p = lines[i].split(',');
+                    if (p.length < 3) continue;
+                    out.push({ name: p[0].trim(), lat: parseFloat(p[1]), lng: parseFloat(p[2]), program: program, marker: null });
+                }
+                return out;
+            } catch (e) {
+                return [];
+            }
+        }
+
+        // ── Add markers ───────────────────────────────────────────────
+        function addMarkers() {
+            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            allStations.forEach(function(s) {
+                var icon = makeIcon(s.program, size);
+                var html = '<div class="popup-name">' + s.name + '</div>'
+                    + '<div class="popup-program">' + PROGRAMS[s.program].name + '</div>';
+                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 260 }).addTo(map);
+                s.marker = m;
+                allMarkers.push(m);
+            });
+        }
+
+        // ── Initialise ────────────────────────────────────────────────
+        setLegendIcons();
+        initMap();
+
+        Promise.all([
+            fetchAuSIS(),
+            fetchCSV('data/Magnetometers_in_Schools.txt', 'mag'),
+            fetchCSV('data/EarthBank_in_Schools.txt', 'earthbank'),
+            fetchCSV('data/GPlates_in_Schools.txt', 'gplates')
+        ]).then(function(results) {
+            allStations = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
+            addMarkers();
+            if (allMarkers.length > 0) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.05));
+
+            // Show GPlates legend only if data was loaded
+            if (results[3].length > 0) {
+                document.getElementById('legend-gp-item').style.display = 'flex';
+            }
+        }).catch(function(err) {
+            console.error('Load error:', err);
+        });
+    </script>
+</body>
+</html>
