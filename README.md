@@ -1,13 +1,14 @@
 # AuSIS Map — Australian Seismometers In Schools
 
-Interactive map displaying all station locations from the **AuSIS** (Australian Seismometers In Schools) program, part of [AuScope](https://www.auscope.org.au/).
+Interactive map displaying all station locations from the **AuSIS** (Australian Seismometers In Schools) program, part of the [AuScope](https://www.auscope.org.au/) national research infrastructure, which is funded by the Australian Government through the National Collaborative Research Infrastructure Strategy.
 
 ## Data Source
 
-Station metadata is fetched live from the [AusPass FDSN Station Service](https://auspass.edu.au):
+Station metadata and data availability are fetched live from the [IRIS FDSN Web Services](https://service.iris.edu):
 
 ```
-https://auspass.edu.au/fdsnws/station/1/query?network=S1&level=station&format=text
+https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text
+https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BHZ&format=text
 ```
 
 - **FDSN Network Code:** S1
@@ -17,7 +18,7 @@ https://auspass.edu.au/fdsnws/station/1/query?network=S1&level=station&format=te
 
 - Satellite imagery base map (Esri World Imagery)
 - Triangle markers for each seismometer station
-- Click a marker to see: school name, station code, recording start date, status, coordinates, elevation, and a link to the [IRIS Webicorder](https://www.iris.edu/app/station_monitor/) helicorder view
+- Click a marker to see: school name, station code, recording start date, streaming status, coordinates, elevation, and a link to the [IRIS Webicorder](https://www.iris.edu/app/station_monitor/) helicorder view
 - Search box to find stations by name or code
 - Home button to reset the map view
 - Marker icons scale with zoom level
@@ -46,4 +47,4 @@ Hosted on GitHub Pages to avoid Squarespace AJAX navigation issues that prevent 
 
 ## License
 
-Data provided by AusPass under the FDSN network S1. Map tiles courtesy of Esri.
+Data provided by IRIS/SAGE under the FDSN network S1. Map tiles courtesy of Esri.
