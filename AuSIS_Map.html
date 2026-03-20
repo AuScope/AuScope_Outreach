@@ -173,7 +173,7 @@
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Helicorder &#x2197;</a></div>';
+                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>';
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
                 s.marker = m; markers.push(m);
             });
