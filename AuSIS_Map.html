@@ -2,7 +2,7 @@
 <!--
     AuSIS_Map.html
     Interactive map of AuSIS (Australian Seismometers In Schools) stations.
-    Fetches station data from IRIS FDSN Station Service (network S1).
+    Fetches station and availability data from IRIS FDSN services (network S1).
     FDSN Network DOI: 10.7914/SN/S1
 -->
 <html lang="en">
@@ -114,21 +114,46 @@
         }
 
         // ── Data fetching ──────────────────────────────────────────────
-        // Queries the AusPass FDSN Station Service for all S1 network
+        // Queries the IRIS FDSN Station Service for all S1 network
         // stations. The response is pipe-delimited text:
         //   Network|Station|Latitude|Longitude|Elevation|SiteName|StartTime|EndTime
         // Returns an array of station objects.
         async function fetchStations() {
-            var resp = await fetch('https://auspass.edu.au/fdsnws/station/1/query?network=S1&level=station&format=text');
-            if (!resp.ok) throw new Error('AusPass returned HTTP ' + resp.status);
+            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
             var lines = (await resp.text()).trim().split('\n');
             var out = [];
             for (var i = 1; i < lines.length; i++) {
                 var p = lines[i].split('|');
                 if (p.length < 7) continue;
-                out.push({ code: p[1].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', marker: null });
+                out.push({ code: p[1].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', latestData: null, marker: null });
             }
             return out;
+        }
+
+        // ── Data availability ─────────────────────────────────────────
+        // Queries the IRIS FDSN Availability extent endpoint for BHZ
+        // channels across all S1 stations to determine streaming status.
+        // Columns: N S L C Q SampleRate Earliest Latest Updated TimeSpans Restriction
+        async function fetchAvailability() {
+            try {
+                var resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BHZ&format=text');
+                if (!resp.ok) return;
+                var lines = (await resp.text()).trim().split('\n');
+                var latest = {};  // code → latest Date
+                for (var i = 1; i < lines.length; i++) {
+                    var cols = lines[i].trim().split(/\s+/);
+                    if (cols.length < 8) continue;
+                    var code = cols[1];
+                    var dt = new Date(cols[7]);
+                    if (!latest[code] || dt > latest[code]) latest[code] = dt;
+                }
+                stations.forEach(function(s) {
+                    if (latest[s.code]) s.latestData = latest[s.code];
+                });
+            } catch (e) {
+                // Availability is non-critical; popups will omit the row
+            }
         }
 
         // ── Marker rendering ─────────────────────────────────────────
@@ -141,7 +166,13 @@
                 var html = '<div class="popup-title">' + s.name + '</div>'
                     + '<span class="popup-code">S1.' + s.code + '</span>'
                     + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
-                    + (s.endTime ? '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>' : '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>')
+                    + (function() {
+                        if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
+                        if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
+                        var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                        if (daysAgo <= 7) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+                        return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
+                    })()
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
@@ -155,6 +186,9 @@
         initMap();
         fetchStations().then(function(data) {
             stations = data;
+            // Fetch availability data before rendering so popups show streaming status
+            return fetchAvailability();
+        }).then(function() {
             addMarkers();
             if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
             document.getElementById('status').textContent = stations.length + ' stations loaded';
