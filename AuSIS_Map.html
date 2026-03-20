@@ -201,9 +201,21 @@
         }
 
         // ── Marker rendering ──────────────────────────────────────────
+        function stationZIndex(s) {
+            if (s.endTime) return 0;
+            if (s.latestData) {
+                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                if (daysAgo <= 7) return 2000;
+                return 1000;
+            }
+            return 2000;
+        }
+
         function addMarkers() {
             var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-            stations.forEach(function(s) {
+            // Sort: ended first, then offline, then streaming — so streaming is added last (on top)
+            var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
+            sorted.forEach(function(s) {
                 var icon = triangleIcon(size, stationStrokeColor(s));
                 var html = '<div class="popup-title">' + s.name + '</div>'
                     + '<span class="popup-code">S1.' + s.code + '</span>'
@@ -221,7 +233,7 @@
                     + (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7
                         ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
                         : '');
-                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
+                var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(html, { maxWidth: 280 }).addTo(map);
                 s.marker = m; markers.push(m);
             });
         }
