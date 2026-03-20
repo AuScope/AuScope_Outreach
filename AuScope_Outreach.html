@@ -178,7 +178,7 @@
                 onAdd: function() {
                     var div = L.DomUtil.create('div', 'leaflet-bar');
                     div.innerHTML = '<a href="#" title="Zoom to all locations" style="font-size:16px; line-height:30px; display:block; width:30px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
-                    div.onclick = function(e) { e.preventDefault(); if (allMarkers.length > 0) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.05)); };
+                    div.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
                     return div;
                 }
             });
@@ -256,7 +256,8 @@
         ]).then(function(results) {
             allStations = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
             addMarkers();
-            if (allMarkers.length > 0) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.05));
+            // Fixed view tuned for 728x500 iframe
+            map.setView([-28, 134], 4);
 
             // Update legend with school counts
             document.getElementById('legend-ausis-text').textContent = 'Seismometers in Schools (' + results[0].length + ' schools)';
