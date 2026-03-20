@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!--
+    AuSIS_Map.html
+    Interactive map of AuSIS (Australian Seismometers In Schools) stations.
+    Fetches station data from IRIS FDSN Station Service (network S1).
+    FDSN Network DOI: 10.7914/SN/S1
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AuSIS - Australian Seismometers In Schools</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; }
+        #map { width: 100%; height: 500px; }
+        #status { position: absolute; bottom: 8px; left: 8px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 4px; font-size: 12px; color: #555; z-index: 1000; }
+        .leaflet-popup-content-wrapper { opacity: 0.92 !important; }
+        .leaflet-popup-content { margin: 10px 14px !important; font-size: 13px; line-height: 1.6; }
+        .popup-title { font-weight: 700; font-size: 14px; color: #1e3a5f; margin-bottom: 4px; }
+        .popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+        .popup-row { color: #4b5563; font-size: 12px; }
+        .popup-row strong { color: #374151; }
+        .popup-doi { margin-top: 6px; font-size: 11px; }
+        .popup-doi a { color: #2563eb; text-decoration: none; }
+        .popup-doi a:hover { text-decoration: underline; }
+        .leaflet-control-search { background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; }
+        .leaflet-control-search input { border: none; outline: none; font-size: 13px; width: 200px; }
+        .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
+        .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; }
+        .search-results div:hover { background: #eff6ff; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="status">Loading stations...</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var stations = [], markers = [], map = null;
+
+        function triangleIcon(size) {
+            var h = size / 2;
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg>';
+            return L.divIcon({ html: svg, className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+        }
+
+        function initMap() {
+            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, maxBounds: [[-50, 100], [-5, 165]], maxBoundsViscosity: 0.8 });
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
+
+            // Search control
+            var SearchControl = L.Control.extend({
+                onAdd: function() {
+                    var c = L.DomUtil.create('div', 'leaflet-control-search');
+                    var input = L.DomUtil.create('input', '', c);
+                    input.type = 'text'; input.placeholder = 'Search stations...';
+                    var res = L.DomUtil.create('div', 'search-results', c);
+                    L.DomEvent.disableClickPropagation(c);
+                    L.DomEvent.disableScrollPropagation(c);
+                    input.oninput = function() {
+                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        if (q.length < 2) return;
+                        stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
+                            var row = document.createElement('div');
+                            row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + s.code + '</b> ' + s.name;
+                            row.onclick = function() { map.setView([s.lat, s.lng], 12); s.marker.openPopup(); input.value = ''; res.innerHTML = ''; };
+                            res.appendChild(row);
+                        });
+                    };
+                    return c;
+                }
+            });
+            new SearchControl({ position: 'topright' }).addTo(map);
+
+            // Home button
+            var HomeControl = L.Control.extend({
+                onAdd: function() {
+                    var div = L.DomUtil.create('div', 'leaflet-bar');
+                    div.innerHTML = '<a href="#" title="Zoom to all stations" style="font-size:16px; line-height:26px; display:block; width:26px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
+                    div.onclick = function(e) { e.preventDefault(); if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05)); };
+                    return div;
+                }
+            });
+            new HomeControl({ position: 'topleft' }).addTo(map);
+
+            map.on('zoomend', function() {
+                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                var icon = triangleIcon(size);
+                markers.forEach(function(m) { m.setIcon(icon); });
+            });
+        }
+
+        function formatDate(d) {
+            if (!d) return 'Unknown';
+            var p = d.substring(0, 10).split('-');
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
+        }
+
+        async function fetchStations() {
+            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            if (!resp.ok) throw new Error('FDSN returned HTTP ' + resp.status);
+            var lines = (await resp.text()).trim().split('\n');
+            var out = [];
+            for (var i = 1; i < lines.length; i++) {
+                var p = lines[i].split('|');
+                if (p.length < 7) continue;
+                out.push({ code: p[1].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', marker: null });
+            }
+            return out;
+        }
+
+        function addMarkers() {
+            var icon = triangleIcon(Math.max(16, Math.min(32, map.getZoom() * 2.9)));
+            stations.forEach(function(s) {
+                var html = '<div class="popup-title">' + s.name + '</div>'
+                    + '<span class="popup-code">S1.' + s.code + '</span>'
+                    + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
+                    + (s.endTime ? '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>' : '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>')
+                    + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
+                    + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
+                    + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>';
+                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
+                s.marker = m; markers.push(m);
+            });
+        }
+
+        function boot() {
+            var el = document.getElementById('map');
+            if (!el || map) return; // Already initialised or element missing
+            initMap();
+            fetchStations().then(function(data) {
+                stations = data;
+                addMarkers();
+                if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05));
+                document.getElementById('status').textContent = stations.length + ' stations loaded';
+            }).catch(function(err) {
+                document.getElementById('status').innerHTML = '<span style="color:red">Error: ' + err.message + '</span>';
+            });
+        }
+
+        // Run on normal page load
+        boot();
+        // Re-run on Squarespace AJAX navigation (Mercury loader)
+        window.addEventListener('mercury:load', boot);
+        document.addEventListener('DOMContentLoaded', boot);
+    </script>
+</body>
+</html>
