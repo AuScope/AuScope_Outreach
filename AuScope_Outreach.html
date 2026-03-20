@@ -18,9 +18,9 @@
         /* Header */
         .header {
             display: flex; align-items: center; justify-content: space-between;
-            background: #282572; color: #fff; padding: 8px 16px; min-height: 48px;
+            background: #282572; color: #fff; padding: 4px 16px; min-height: 36px;
         }
-        .header-title { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
+        .header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; }
         .header-logo img { height: 36px; }
 
         /* Map */
@@ -144,7 +144,7 @@
         // ── Map initialisation ────────────────────────────────────────
         function initMap() {
             map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3 });
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
             // Search
