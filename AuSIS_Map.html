@@ -88,7 +88,7 @@
             var HomeControl = L.Control.extend({
                 onAdd: function() {
                     var div = L.DomUtil.create('div', 'leaflet-bar');
-                    div.innerHTML = '<a href="#" title="Zoom to all stations" style="font-size:16px; line-height:26px; display:block; width:26px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
+                    div.innerHTML = '<a href="#" title="Zoom to all stations" style="font-size:16px; line-height:30px; display:block; width:30px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
                     div.onclick = function(e) { e.preventDefault(); if (markers.length > 0) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.05)); };
                     return div;
                 }
