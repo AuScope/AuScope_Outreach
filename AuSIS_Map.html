@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AuSIS - Australian Seismometers In Schools - Interactive Map</title>
+    <title>AuSIS - Australian Seismometers In Schools</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,7 +72,7 @@
                         stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
                             var row = document.createElement('div');
                             row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + s.code + '</b> ' + s.name;
-                            row.onclick = function() { map.setView([s.lat, s.lng], 12); s.marker.openPopup(); input.value = ''; res.innerHTML = ''; };
+                            row.onclick = function() { input.value = ''; res.innerHTML = ''; map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
                             res.appendChild(row);
                         });
                     };
@@ -173,7 +173,9 @@
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                    + '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>';
+                    + (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7
+                        ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
+                        : '');
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 280 }).addTo(map);
                 s.marker = m; markers.push(m);
             });
