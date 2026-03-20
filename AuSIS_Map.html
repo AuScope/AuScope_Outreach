@@ -56,7 +56,7 @@
         // Creates the Leaflet map centred on Australia with satellite tiles,
         // a search control (top-right), and a home/reset button (top-left).
         function initMap() {
-            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, maxBounds: [[-50, 100], [-5, 165]], maxBoundsViscosity: 0.8 });
+            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, maxBounds: [[-55, 95], [5, 170]], maxBoundsViscosity: 0.8 });
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '&copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
