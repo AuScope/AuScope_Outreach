@@ -33,9 +33,24 @@
         .popup-row { color: #4b5563; font-size: 12px; }
         .popup-row strong { color: #374151; }
 
-        /* Search */
-        .leaflet-control-search { background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 4px 10px; }
-        .leaflet-control-search input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
+        /* Controls — hidden by default for clean map view */
+        .leaflet-control-zoom { display: none !important; }
+        .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
+        .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.7); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
+        .tools-toggle:hover { background: rgba(255,255,255,0.95); }
+        .toolbar-buttons { display: none; margin-top: 4px; }
+        .toolbar-buttons.open { display: block; }
+        .btn-group { margin-top: 4px; }
+        .btn-group:first-child { margin-top: 0; }
+        .btn-group a { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: #fff; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; }
+        .btn-group a:first-child { border-radius: 4px 4px 0 0; }
+        .btn-group a + a { border-top: none; }
+        .btn-group a:last-child { border-radius: 0 0 4px 4px; }
+        .btn-group a:only-child { border-radius: 4px; }
+        .btn-group a:hover { background: #f0f0f0; }
+        .search-panel { display: none; background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 4px 10px; margin-top: 6px; }
+        .search-panel.open { display: block; }
+        .search-panel input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
         .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
         .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
         .search-results div:hover { background: #eff6ff; }
@@ -110,44 +125,78 @@
 
         // ── Map initialisation ────────────────────────────────────────
         function initMap() {
-            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3 });
+            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
-            // Search
-            var SearchControl = L.Control.extend({
+            // Tools button — three dots toggle
+            var ToolbarControl = L.Control.extend({
                 onAdd: function() {
-                    var c = L.DomUtil.create('div', 'leaflet-control-search');
-                    var input = L.DomUtil.create('input', '', c);
+                    var wrap = L.DomUtil.create('div', 'toolbar-wrap');
+                    L.DomEvent.disableClickPropagation(wrap);
+                    L.DomEvent.disableScrollPropagation(wrap);
+
+                    // Three-dots toggle
+                    var toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+                    toggle.href = '#'; toggle.title = 'Map tools';
+                    toggle.innerHTML = '&#x22EE;';
+
+                    // Expandable buttons
+                    var buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+
+                    var zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var zoomIn = L.DomUtil.create('a', '', zoomGroup);
+                    zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
+                    zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
+                    var zoomOut = L.DomUtil.create('a', '', zoomGroup);
+                    zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
+                    zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
+
+                    var homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var home = L.DomUtil.create('a', '', homeGroup);
+                    home.href = '#'; home.title = 'Zoom to all stations';
+                    home.innerHTML = '&#x1F3E0;'; home.style.fontSize = '16px';
+                    home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
+
+                    var searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var searchBtn = L.DomUtil.create('a', '', searchGroup);
+                    searchBtn.href = '#'; searchBtn.title = 'Search stations';
+                    searchBtn.innerHTML = '&#x1F50D;'; searchBtn.style.fontSize = '15px';
+
+                    // Search panel
+                    var panel = L.DomUtil.create('div', 'search-panel', wrap);
+                    var input = L.DomUtil.create('input', '', panel);
                     input.type = 'text'; input.placeholder = 'Search stations...';
-                    var res = L.DomUtil.create('div', 'search-results', c);
-                    L.DomEvent.disableClickPropagation(c);
-                    L.DomEvent.disableScrollPropagation(c);
+                    var res = L.DomUtil.create('div', 'search-results', panel);
+
+                    toggle.onclick = function(e) {
+                        e.preventDefault();
+                        var isOpen = buttons.classList.contains('open');
+                        buttons.classList.toggle('open');
+                        if (isOpen) { panel.classList.remove('open'); }
+                    };
+
+                    searchBtn.onclick = function(e) {
+                        e.preventDefault();
+                        panel.classList.toggle('open');
+                        if (panel.classList.contains('open')) { input.value = ''; res.innerHTML = ''; input.focus(); }
+                    };
+
                     input.oninput = function() {
                         var q = input.value.trim().toLowerCase(); res.innerHTML = '';
                         if (q.length < 2) return;
                         stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
                             var row = document.createElement('div');
                             row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + s.code + '</b> ' + s.name;
-                            row.onclick = function() { input.value = ''; res.innerHTML = ''; map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
+                            row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
                             res.appendChild(row);
                         });
                     };
-                    return c;
-                }
-            });
-            new SearchControl({ position: 'topright' }).addTo(map);
 
-            // Home button
-            var HomeControl = L.Control.extend({
-                onAdd: function() {
-                    var div = L.DomUtil.create('div', 'leaflet-bar');
-                    div.innerHTML = '<a href="#" title="Zoom to all stations" style="font-size:16px; line-height:30px; display:block; width:30px; text-align:center; text-decoration:none;">&#x1F3E0;</a>';
-                    div.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
-                    return div;
+                    return wrap;
                 }
             });
-            new HomeControl({ position: 'topleft' }).addTo(map);
+            new ToolbarControl({ position: 'topleft' }).addTo(map);
 
             // Resize markers on zoom
             map.on('zoomend', function() {
