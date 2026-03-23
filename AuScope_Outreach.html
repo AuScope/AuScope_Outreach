@@ -72,7 +72,7 @@
 </head>
 <body>
     <div class="header">
-        <span class="header-title">AuScope Outreach Locations <span id="header-total" style="font-size:13px; opacity:0.85"></span></span>
+        <span class="header-title"><span id="header-total">AuScope Outreach Locations</span></span>
         <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
     </div>
 
@@ -309,7 +309,7 @@
 
             // Update header with total school count
             var total = allStations.length;
-            document.getElementById('header-total').textContent = '(' + total + ' schools)';
+            document.getElementById('header-total').textContent = 'AuScope Outreach Locations - ' + total + ' schools';
 
             // Update legend with short labels + counts
             document.getElementById('legend-ausis-text').textContent = 'AuSIS (' + results[0].length + ')';
