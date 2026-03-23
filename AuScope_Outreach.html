@@ -9,6 +9,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuScope Outreach Locations</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -28,7 +29,7 @@
 
         /* Popups */
         .leaflet-popup-content-wrapper { opacity: 0.92 !important; }
-        .leaflet-popup-content { margin: 8px 12px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.5; }
+        .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
         .popup-name { font-weight: 700; font-size: 14px; color: #282572; }
         .popup-program { font-size: 11px; color: #6b7280; margin-top: 2px; }
 
@@ -62,7 +63,6 @@
         }
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-icon { display: inline-block; }
-        .leaflet-control-attribution { display: none !important; }
 
         @media (max-width: 600px) {
             .header-title { font-size: 14px; }
@@ -87,47 +87,53 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // ── State ──────────────────────────────────────────────────────
-        var allStations = [];
-        var allMarkers = [];
-        var map = null;
+        // ── State ─────────────────────────────────────────────────────
+        let allStations = [];
+        let map = null;
 
-        // ── Program config ─────────────────────────────────────────────
-        var PROGRAMS = {
+        // ── Program config ────────────────────────────────────────────
+        const PROGRAMS = {
             ausis:     { name: 'Seismometers in Schools (AuSIS)', color: '#22c55e' },
             mag:       { name: 'Magnetometers in Schools',        color: '#a855f7' },
             earthbank: { name: 'EarthBank in the Classroom',      color: '#3b82f6' },
             gplates:   { name: 'GPlates in Schools',              color: '#f59e0b' }
         };
 
-        // ── SVG icon generators ────────────────────────────────────────
+        // ── Helpers ──────────────────────────────────────────────────
+        function esc(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ── SVG icon generators ──────────────────────────────────────
         function triangleSVG(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function triangleIcon(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return L.divIcon({ html: triangleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
         function diamondSVG(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function diamondIcon(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return L.divIcon({ html: diamondSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
         function circleSVG(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2"/></svg>';
         }
         function circleIcon(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return L.divIcon({ html: circleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
@@ -136,12 +142,12 @@
                 + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function squareIcon(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return L.divIcon({ html: squareSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
         function makeIcon(program, size) {
-            var color = PROGRAMS[program].color;
+            const color = PROGRAMS[program].color;
             if (program === 'ausis') return triangleIcon(size, color);
             if (program === 'mag') return diamondIcon(size, color);
             if (program === 'earthbank') return circleIcon(size, color);
@@ -149,7 +155,7 @@
             return triangleIcon(size, color);
         }
 
-        // ── Legend icons ───────────────────────────────────────────────
+        // ── Legend icons ─────────────────────────────────────────────
         function setLegendIcons() {
             document.getElementById('legend-ausis').innerHTML = triangleSVG(16, PROGRAMS.ausis.color);
             document.getElementById('legend-mag').innerHTML = diamondSVG(16, PROGRAMS.mag.color);
@@ -157,55 +163,52 @@
             document.getElementById('legend-gp').innerHTML = squareSVG(16, PROGRAMS.gplates.color);
         }
 
-        // ── Map initialisation ────────────────────────────────────────
+        // ── Map initialisation ───────────────────────────────────────
         function initMap() {
             map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
             // Tools button — three dots toggle
-            var ToolbarControl = L.Control.extend({
+            const ToolbarControl = L.Control.extend({
                 onAdd: function() {
-                    var wrap = L.DomUtil.create('div', 'toolbar-wrap');
+                    const wrap = L.DomUtil.create('div', 'toolbar-wrap');
                     L.DomEvent.disableClickPropagation(wrap);
                     L.DomEvent.disableScrollPropagation(wrap);
 
-                    // Three-dots toggle
-                    var toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+                    const toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
                     toggle.href = '#'; toggle.title = 'Map tools';
                     toggle.innerHTML = '&#x22EE;';
 
-                    // Expandable buttons
-                    var buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+                    const buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
 
-                    var zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var zoomIn = L.DomUtil.create('a', '', zoomGroup);
+                    const zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const zoomIn = L.DomUtil.create('a', '', zoomGroup);
                     zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
                     zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
-                    var zoomOut = L.DomUtil.create('a', '', zoomGroup);
+                    const zoomOut = L.DomUtil.create('a', '', zoomGroup);
                     zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
                     zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
 
-                    var homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var home = L.DomUtil.create('a', '', homeGroup);
+                    const homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const home = L.DomUtil.create('a', '', homeGroup);
                     home.href = '#'; home.title = 'Zoom to all locations';
                     home.innerHTML = '&#x1F3E0;'; home.style.fontSize = '16px';
                     home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
 
-                    var searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var searchBtn = L.DomUtil.create('a', '', searchGroup);
+                    const searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const searchBtn = L.DomUtil.create('a', '', searchGroup);
                     searchBtn.href = '#'; searchBtn.title = 'Search schools';
                     searchBtn.innerHTML = '&#x1F50D;'; searchBtn.style.fontSize = '15px';
 
-                    // Search panel
-                    var panel = L.DomUtil.create('div', 'search-panel', wrap);
-                    var input = L.DomUtil.create('input', '', panel);
+                    const panel = L.DomUtil.create('div', 'search-panel', wrap);
+                    const input = L.DomUtil.create('input', '', panel);
                     input.type = 'text'; input.placeholder = 'Search schools...';
-                    var res = L.DomUtil.create('div', 'search-results', panel);
+                    const res = L.DomUtil.create('div', 'search-results', panel);
 
                     toggle.onclick = function(e) {
                         e.preventDefault();
-                        var isOpen = buttons.classList.contains('open');
+                        const isOpen = buttons.classList.contains('open');
                         buttons.classList.toggle('open');
                         if (isOpen) { panel.classList.remove('open'); }
                     };
@@ -217,12 +220,12 @@
                     };
 
                     input.oninput = function() {
-                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        const q = input.value.trim().toLowerCase(); res.innerHTML = '';
                         if (q.length < 2) return;
                         allStations.filter(function(s) {
                             return s.name.toLowerCase().indexOf(q) !== -1;
                         }).slice(0, 10).forEach(function(s) {
-                            var row = document.createElement('div');
+                            const row = document.createElement('div');
                             row.textContent = s.name;
                             row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
                             res.appendChild(row);
@@ -234,65 +237,66 @@
             });
             new ToolbarControl({ position: 'topleft' }).addTo(map);
 
-            // Resize on zoom
             map.on('zoomend', function() {
-                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
                 allStations.forEach(function(s) {
                     if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
                 });
             });
         }
 
-        // ── Data: AuSIS from IRIS (live) ──────────────────────────────
+        // ── Data: AuSIS from IRIS (live) ─────────────────────────────
         async function fetchAuSIS() {
-            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            const resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
             if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
-            var lines = (await resp.text()).trim().split('\n');
-            var out = [];
-            for (var i = 1; i < lines.length; i++) {
-                var p = lines[i].split('|');
+            const lines = (await resp.text()).trim().split('\n');
+            const out = [];
+            for (let i = 1; i < lines.length; i++) {
+                const p = lines[i].split('|');
                 if (p.length < 7) continue;
-                var code = p[1].trim();
+                const code = p[1].trim();
                 if (code === 'TEST') continue;
-                out.push({ name: p[5].trim(), lat: parseFloat(p[2]), lng: parseFloat(p[3]), program: 'ausis', marker: null });
+                const lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+                if (isNaN(lat) || isNaN(lng)) continue;
+                out.push({ name: p[5].trim(), lat: lat, lng: lng, program: 'ausis', marker: null });
             }
             return out;
         }
 
-        // ── Data: Static CSV from data/ folder ────────────────────────
-        // Tries to fetch a CSV file; returns empty array on failure (CORS/404).
-        // This allows local file:// testing to still work (AuSIS loads, static files gracefully skip).
+        // ── Data: Static CSV from data/ folder ───────────────────────
         async function fetchCSV(url, program) {
             try {
-                var resp = await fetch(url);
+                const resp = await fetch(url);
                 if (!resp.ok) return [];
-                var lines = (await resp.text()).trim().split('\n');
-                var out = [];
-                for (var i = 1; i < lines.length; i++) {
-                    var p = lines[i].split(',');
+                const lines = (await resp.text()).trim().split('\n');
+                const out = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const p = lines[i].split(',');
                     if (p.length < 3) continue;
-                    out.push({ name: p[0].trim(), lat: parseFloat(p[1]), lng: parseFloat(p[2]), program: program, marker: null });
+                    const lat = parseFloat(p[1]), lng = parseFloat(p[2]);
+                    if (isNaN(lat) || isNaN(lng)) continue;
+                    out.push({ name: p[0].trim(), lat: lat, lng: lng, program: program, marker: null });
                 }
                 return out;
             } catch (e) {
+                console.warn('Failed to load ' + url + ':', e);
                 return [];
             }
         }
 
-        // ── Add markers ───────────────────────────────────────────────
+        // ── Add markers ──────────────────────────────────────────────
         function addMarkers() {
-            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
             allStations.forEach(function(s) {
-                var icon = makeIcon(s.program, size);
-                var html = '<div class="popup-name">' + s.name + '</div>'
-                    + '<div class="popup-program">' + PROGRAMS[s.program].name + '</div>';
-                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 260 }).addTo(map);
+                const icon = makeIcon(s.program, size);
+                const html = '<div class="popup-name">' + esc(s.name) + '</div>'
+                    + '<div class="popup-program">' + esc(PROGRAMS[s.program].name) + '</div>';
+                const m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 260 }).addTo(map);
                 s.marker = m;
-                allMarkers.push(m);
             });
         }
 
-        // ── Initialise ────────────────────────────────────────────────
+        // ── Initialise ───────────────────────────────────────────────
         setLegendIcons();
         initMap();
 
@@ -304,19 +308,15 @@
         ]).then(function(results) {
             allStations = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
             addMarkers();
-            // Fixed view tuned for 728x500 iframe
             map.setView([-28, 134], 4);
 
-            // Update header with total school count
-            var total = allStations.length;
+            const total = allStations.length;
             document.getElementById('header-total').textContent = 'AuScope Outreach Locations - ' + total + ' schools';
 
-            // Update legend with short labels + counts
             document.getElementById('legend-ausis-text').textContent = 'AuSIS (' + results[0].length + ')';
             if (results[1].length > 0) document.getElementById('legend-mag-text').textContent = 'Magnetometers (' + results[1].length + ')';
             if (results[2].length > 0) document.getElementById('legend-eb-text').textContent = 'EarthBank (' + results[2].length + ')';
 
-            // Show GPlates legend only if data was loaded
             if (results[3].length > 0) {
                 document.getElementById('legend-gp-item').style.display = 'flex';
                 document.getElementById('legend-gp-text').textContent = 'GPlates (' + results[3].length + ')';

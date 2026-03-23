@@ -8,6 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuSIS Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -63,7 +64,6 @@
         }
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-icon { display: inline-block; }
-        .leaflet-control-attribution { display: none !important; }
 
         @media (max-width: 600px) {
             .header-title { font-size: 14px; }
@@ -87,89 +87,95 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // ── State ──────────────────────────────────────────────────────
-        var stations = [],
-            markers = [],
+        // ── Constants ─────────────────────────────────────────────────
+        const LIVE_THRESHOLD_DAYS = 7;
+
+        // ── State ─────────────────────────────────────────────────────
+        let stations = [],
             map     = null;
 
-        // ── Marker icon ────────────────────────────────────────────────
+        // ── Helpers ──────────────────────────────────────────────────
+        function esc(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ── Marker icon ──────────────────────────────────────────────
         function triangleSVG(size, strokeColor) {
-            var h = size / 2;
+            const h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function triangleIcon(size, strokeColor) {
-            var h = size / 2;
-            var stroke = strokeColor || '#fff';
+            const h = size / 2;
+            const stroke = strokeColor || '#fff';
             return L.divIcon({ html: triangleSVG(size, stroke), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
         function stationStrokeColor(s) {
             if (s.endTime) return '#ef4444';
             if (s.latestData) {
-                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-                if (daysAgo <= 7) return '#22c55e';
+                const daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                if (daysAgo <= LIVE_THRESHOLD_DAYS) return '#22c55e';
                 return '#facc15';
             }
             return '#22c55e';
         }
 
-        // ── Legend icons ───────────────────────────────────────────────
+        // ── Legend icons ─────────────────────────────────────────────
         function setLegendIcons() {
             document.getElementById('legend-streaming').innerHTML = triangleSVG(16, '#22c55e');
             document.getElementById('legend-offline').innerHTML = triangleSVG(16, '#facc15');
             document.getElementById('legend-ended').innerHTML = triangleSVG(16, '#ef4444');
         }
 
-        // ── Map initialisation ────────────────────────────────────────
+        // ── Map initialisation ───────────────────────────────────────
         function initMap() {
             map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
             // Tools button — three dots toggle
-            var ToolbarControl = L.Control.extend({
+            const ToolbarControl = L.Control.extend({
                 onAdd: function() {
-                    var wrap = L.DomUtil.create('div', 'toolbar-wrap');
+                    const wrap = L.DomUtil.create('div', 'toolbar-wrap');
                     L.DomEvent.disableClickPropagation(wrap);
                     L.DomEvent.disableScrollPropagation(wrap);
 
-                    // Three-dots toggle
-                    var toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+                    const toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
                     toggle.href = '#'; toggle.title = 'Map tools';
                     toggle.innerHTML = '&#x22EE;';
 
-                    // Expandable buttons
-                    var buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+                    const buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
 
-                    var zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var zoomIn = L.DomUtil.create('a', '', zoomGroup);
+                    const zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const zoomIn = L.DomUtil.create('a', '', zoomGroup);
                     zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
                     zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
-                    var zoomOut = L.DomUtil.create('a', '', zoomGroup);
+                    const zoomOut = L.DomUtil.create('a', '', zoomGroup);
                     zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
                     zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
 
-                    var homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var home = L.DomUtil.create('a', '', homeGroup);
+                    const homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const home = L.DomUtil.create('a', '', homeGroup);
                     home.href = '#'; home.title = 'Zoom to all stations';
                     home.innerHTML = '&#x1F3E0;'; home.style.fontSize = '16px';
                     home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
 
-                    var searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    var searchBtn = L.DomUtil.create('a', '', searchGroup);
+                    const searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    const searchBtn = L.DomUtil.create('a', '', searchGroup);
                     searchBtn.href = '#'; searchBtn.title = 'Search stations';
                     searchBtn.innerHTML = '&#x1F50D;'; searchBtn.style.fontSize = '15px';
 
-                    // Search panel
-                    var panel = L.DomUtil.create('div', 'search-panel', wrap);
-                    var input = L.DomUtil.create('input', '', panel);
+                    const panel = L.DomUtil.create('div', 'search-panel', wrap);
+                    const input = L.DomUtil.create('input', '', panel);
                     input.type = 'text'; input.placeholder = 'Search stations...';
-                    var res = L.DomUtil.create('div', 'search-results', panel);
+                    const res = L.DomUtil.create('div', 'search-results', panel);
 
                     toggle.onclick = function(e) {
                         e.preventDefault();
-                        var isOpen = buttons.classList.contains('open');
+                        const isOpen = buttons.classList.contains('open');
                         buttons.classList.toggle('open');
                         if (isOpen) { panel.classList.remove('open'); }
                     };
@@ -181,11 +187,11 @@
                     };
 
                     input.oninput = function() {
-                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        const q = input.value.trim().toLowerCase(); res.innerHTML = '';
                         if (q.length < 2) return;
                         stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
-                            var row = document.createElement('div');
-                            row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + s.code + '</b> ' + s.name;
+                            const row = document.createElement('div');
+                            row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + esc(s.code) + '</b> ' + esc(s.name);
                             row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
                             res.appendChild(row);
                         });
@@ -196,97 +202,100 @@
             });
             new ToolbarControl({ position: 'topleft' }).addTo(map);
 
-            // Resize markers on zoom
             map.on('zoomend', function() {
-                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
                 stations.forEach(function(s) {
                     if (s.marker) s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
                 });
             });
         }
 
-        // ── Helpers ───────────────────────────────────────────────────
+        // ── Formatting ───────────────────────────────────────────────
         function formatDate(d) {
             if (!d) return 'Unknown';
-            var p = d.substring(0, 10).split('-');
-            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const p = d.substring(0, 10).split('-');
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
         }
 
-        // ── Data fetching ─────────────────────────────────────────────
+        // ── Data fetching ────────────────────────────────────────────
         async function fetchStations() {
-            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            const resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
             if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
-            var lines = (await resp.text()).trim().split('\n');
-            var out = [];
-            for (var i = 1; i < lines.length; i++) {
-                var p = lines[i].split('|');
+            const lines = (await resp.text()).trim().split('\n');
+            const out = [];
+            for (let i = 1; i < lines.length; i++) {
+                const p = lines[i].split('|');
                 if (p.length < 7) continue;
-                var code = p[1].trim();
+                const code = p[1].trim();
                 if (code === 'TEST') continue;
-                out.push({ code: code, lat: parseFloat(p[2]), lng: parseFloat(p[3]), elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: p[7] ? p[7].trim() : '', latestData: null, marker: null });
+                const lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+                if (isNaN(lat) || isNaN(lng)) continue;
+                const endRaw = p[7] ? p[7].trim() : '';
+                out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
             }
             return out;
         }
 
         async function fetchAvailability() {
             try {
-                var resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
+                const resp = await fetch('https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
                 if (!resp.ok) return;
-                var lines = (await resp.text()).trim().split('\n');
-                var latest = {};
-                for (var i = 1; i < lines.length; i++) {
-                    var cols = lines[i].trim().split(/\s+/);
+                const lines = (await resp.text()).trim().split('\n');
+                const latest = {};
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].trim().split(/\s+/);
                     if (cols.length < 8) continue;
-                    var code = cols[1];
-                    var dt = new Date(cols[7]);
+                    const code = cols[1];
+                    const dt = new Date(cols[7]);
                     if (!latest[code] || dt > latest[code]) latest[code] = dt;
                 }
                 stations.forEach(function(s) {
                     if (latest[s.code]) s.latestData = latest[s.code];
                 });
-            } catch (e) {}
+            } catch (e) {
+                console.warn('Failed to fetch availability data:', e);
+            }
         }
 
-        // ── Marker rendering ──────────────────────────────────────────
+        // ── Marker rendering ─────────────────────────────────────────
         function stationZIndex(s) {
             if (s.endTime) return 0;
             if (s.latestData) {
-                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-                if (daysAgo <= 7) return 2000;
+                const daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                if (daysAgo <= LIVE_THRESHOLD_DAYS) return 2000;
                 return 1000;
             }
             return 2000;
         }
 
         function addMarkers() {
-            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-            // Sort: ended first, then offline, then streaming — so streaming is added last (on top)
-            var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
+            const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            const sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
             sorted.forEach(function(s) {
-                var icon = triangleIcon(size, stationStrokeColor(s));
-                var html = '<div class="popup-title">' + s.name + '</div>'
-                    + '<span class="popup-code">S1.' + s.code + '</span>'
+                const icon = triangleIcon(size, stationStrokeColor(s));
+                const daysAgo = s.latestData ? Math.floor((Date.now() - s.latestData.getTime()) / 86400000) : null;
+                const html = '<div class="popup-title">' + esc(s.name) + '</div>'
+                    + '<span class="popup-code">S1.' + esc(s.code) + '</span>'
                     + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
                     + (function() {
                         if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
                         if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
-                        var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-                        if (daysAgo <= 7) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+                        if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
                         return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
                     })()
                     + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                    + (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7
-                        ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + s.code + '/webicorder/" target="_blank" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
+                    + (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS
+                        ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + esc(s.code) + '/webicorder/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
                         : '');
-                var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(html, { maxWidth: 280 }).addTo(map);
-                s.marker = m; markers.push(m);
+                const m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(html, { maxWidth: 280 }).addTo(map);
+                s.marker = m;
             });
         }
 
-        // ── Initialise ────────────────────────────────────────────────
+        // ── Initialise ───────────────────────────────────────────────
         setLegendIcons();
         initMap();
         fetchStations().then(function(data) {
@@ -294,12 +303,10 @@
             return fetchAvailability();
         }).then(function() {
             addMarkers();
-            // Fixed view tuned for 728x500 iframe
             map.setView([-28, 134], 4);
 
-            // Update header and legend with counts
-            var active = stations.filter(function(s) { return !s.endTime; }).length;
-            var streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= 7; }).length;
+            const active = stations.filter(function(s) { return !s.endTime; }).length;
+            const streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS; }).length;
             document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
             document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
         }).catch(function(err) {
