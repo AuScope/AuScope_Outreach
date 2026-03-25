@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<!--
+    index.html
+    Combined AuScope interactive map — all programs, all layers.
+    Categorised layer panel with show/hide toggles per program
+    and per category. Designed to scale as new categories are added
+    (Seismic, MT, Geochem, VLBI, etc.).
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuScope Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+
+        /* Header */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #282572; color: #fff; padding: 4px 16px; min-height: 36px;
+        }
+        .header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; }
+        .header-logo img { height: 36px; }
+
+        /* Map */
+        #map { flex: 1; width: 100%; }
+
+        /* Popups */
+        .leaflet-popup-content-wrapper { background: rgba(255, 255, 255, 0.92) !important; }
+        .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
+        .popup-name { font-weight: 700; font-size: 14px; color: #282572; }
+        .popup-program { font-size: 11px; color: #6b7280; margin-top: 2px; }
+        .popup-detail { font-size: 12px; margin-top: 4px; }
+
+        /* Controls */
+        .leaflet-control-zoom { display: none !important; }
+        .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
+        .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
+        .tools-toggle:hover { background: rgba(255,255,255,0.95); }
+        .toolbar-buttons { display: none; margin-top: 4px; }
+        .toolbar-buttons.open { display: block; }
+        .btn-group { margin-top: 4px; }
+        .btn-group:first-child { margin-top: 0; }
+        .btn-group a { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #fff; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; }
+        .btn-group a:first-child { border-radius: 4px 4px 0 0; }
+        .btn-group a + a { border-top: none; }
+        .btn-group a:last-child { border-radius: 0 0 4px 4px; }
+        .btn-group a:only-child { border-radius: 4px; }
+        .btn-group a:hover { background: #f0f0f0; }
+
+        /* Search panel */
+        .search-panel { display: none; background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 4px 10px; margin-top: 6px; }
+        .search-panel.open { display: block; }
+        .search-panel input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
+        .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
+        .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
+        .search-results div:hover { background: #eff6ff; }
+
+        /* Layers panel */
+        .layers-panel {
+            display: none; background: #fff; border-radius: 6px;
+            border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            padding: 8px 12px; margin-top: 6px; min-width: 200px;
+            max-height: 400px; overflow-y: auto;
+        }
+        .layers-panel.open { display: block; }
+        .layers-heading {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #282572; padding: 6px 0 3px 0;
+            border-bottom: 1px solid #e5e7eb; margin-bottom: 4px; cursor: pointer;
+            display: flex; align-items: center; gap: 4px;
+            user-select: none;
+        }
+        .layers-heading:first-child { padding-top: 0; }
+        .layers-heading .toggle-arrow { font-size: 8px; color: #9ca3af; }
+        .layer-row {
+            display: flex; align-items: center; gap: 6px;
+            padding: 3px 0; font-size: 12px; cursor: pointer;
+            user-select: none;
+        }
+        .layer-row input { margin: 0; cursor: pointer; }
+        .layer-row .layer-icon { display: inline-block; flex-shrink: 0; }
+        .layer-row .layer-label { flex: 1; }
+        .layer-row .layer-count { color: #9ca3af; font-size: 11px; }
+
+        /* Footer */
+        .footer {
+            display: flex; align-items: center; justify-content: center; gap: 16px;
+            background: #282572; color: #fff; padding: 6px 16px; min-height: 36px;
+            font-family: Arial, Helvetica, sans-serif; font-size: 12px;
+        }
+        .footer-item { display: flex; align-items: center; gap: 4px; }
+        .footer-icon { display: inline-block; }
+
+        @media (max-width: 600px) {
+            .header-title { font-size: 14px; }
+            .footer { flex-wrap: wrap; gap: 8px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="header-title"><span id="header-total">AuScope Interactive Map</span></span>
+        <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="footer" id="footer"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ── Configuration ─────────────────────────────────────────────
+        // Categories and programs — add new categories/programs here
+        var CATEGORIES = [
+            {
+                id: 'outreach',
+                label: 'Outreach',
+                programs: [
+                    { id: 'ausis',     name: 'AuSIS',              shape: 'triangle', color: '#22c55e', data: 'ausis' },
+                    { id: 'mag',       name: 'Magnetometers',      shape: 'diamond',  color: '#a855f7', data: 'data/magnetometers.geojson' },
+                    { id: 'earthbank', name: 'EarthBank',          shape: 'circle',   color: '#3b82f6', data: 'data/earthbank.geojson' },
+                    { id: 'gplates',   name: 'GPlates',            shape: 'square',   color: '#f59e0b', data: 'data/gplates.geojson' }
+                ]
+            },
+            {
+                id: 'coastri',
+                label: 'CoastRI',
+                programs: [
+                    { id: 'cameras',   name: 'Camera Stations',    shape: 'triangle', color: '#ef4444', data: 'data/coastri_cameras.geojson' },
+                    { id: 'lowcost',   name: 'Low-Cost Drones',    shape: 'diamond',  color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
+                    { id: 'longrange', name: 'Long-Range Drones',  shape: 'circle',   color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
+                ]
+            }
+        ];
+
+        // ── State ─────────────────────────────────────────────────────
+        var allSites = [];
+        var map = null;
+        var programLookup = {};  // id -> program config
+        var programVisible = {}; // id -> boolean
+
+        // Build lookup
+        CATEGORIES.forEach(function(cat) {
+            cat.programs.forEach(function(prog) {
+                programLookup[prog.id] = prog;
+                programVisible[prog.id] = true;
+            });
+        });
+
+        // ── Helpers ──────────────────────────────────────────────────
+        function esc(str) {
+            var d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ── SVG icon generators ──────────────────────────────────────
+        function triangleSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function triangleIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: triangleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+        }
+
+        function diamondSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function diamondIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: diamondSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        function circleSVG(size, strokeColor) {
+            var h = size / 2;
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2"/></svg>';
+        }
+        function circleIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: circleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        function squareSVG(size, strokeColor) {
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+        }
+        function squareIcon(size, strokeColor) {
+            var h = size / 2;
+            return L.divIcon({ html: squareSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
+        var SHAPE_ICON = {
+            triangle: triangleIcon, diamond: diamondIcon,
+            circle: circleIcon, square: squareIcon
+        };
+        var SHAPE_SVG = {
+            triangle: triangleSVG, diamond: diamondSVG,
+            circle: circleSVG, square: squareSVG
+        };
+
+        function makeIcon(programId, size) {
+            var prog = programLookup[programId];
+            return SHAPE_ICON[prog.shape](size, prog.color);
+        }
+
+        function makeLegendSVG(programId) {
+            var prog = programLookup[programId];
+            return SHAPE_SVG[prog.shape](14, prog.color);
+        }
+
+        // ── Map initialisation ───────────────────────────────────────
+        function initMap() {
+            map = L.map('map', { center: [-28, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
+
+            var ToolbarControl = L.Control.extend({
+                onAdd: function() {
+                    var wrap = L.DomUtil.create('div', 'toolbar-wrap');
+                    L.DomEvent.disableClickPropagation(wrap);
+                    L.DomEvent.disableScrollPropagation(wrap);
+
+                    var toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+                    toggle.href = '#'; toggle.title = 'Map tools';
+                    toggle.innerHTML = '&#x22EE;';
+
+                    var buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+
+                    // Zoom
+                    var zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var zoomIn = L.DomUtil.create('a', '', zoomGroup);
+                    zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
+                    zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
+                    var zoomOut = L.DomUtil.create('a', '', zoomGroup);
+                    zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
+                    zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
+
+                    // Home
+                    var homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var home = L.DomUtil.create('a', '', homeGroup);
+                    home.href = '#'; home.title = 'Zoom to all sites';
+                    home.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+                    home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 5); };
+
+                    // Layers button
+                    var layersGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var layersBtn = L.DomUtil.create('a', '', layersGroup);
+                    layersBtn.href = '#'; layersBtn.title = 'Toggle layers';
+                    layersBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
+
+                    // Search button
+                    var searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var searchBtn = L.DomUtil.create('a', '', searchGroup);
+                    searchBtn.href = '#'; searchBtn.title = 'Search sites';
+                    searchBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+
+                    // Layers panel
+                    var layersPanel = L.DomUtil.create('div', 'layers-panel', wrap);
+                    buildLayersPanel(layersPanel);
+
+                    // Search panel
+                    var searchPanel = L.DomUtil.create('div', 'search-panel', wrap);
+                    var input = L.DomUtil.create('input', '', searchPanel);
+                    input.type = 'text'; input.placeholder = 'Search all sites...';
+                    var res = L.DomUtil.create('div', 'search-results', searchPanel);
+
+                    toggle.onclick = function(e) {
+                        e.preventDefault();
+                        var isOpen = buttons.classList.contains('open');
+                        buttons.classList.toggle('open');
+                        if (isOpen) { layersPanel.classList.remove('open'); searchPanel.classList.remove('open'); }
+                    };
+
+                    layersBtn.onclick = function(e) {
+                        e.preventDefault();
+                        searchPanel.classList.remove('open');
+                        layersPanel.classList.toggle('open');
+                    };
+
+                    searchBtn.onclick = function(e) {
+                        e.preventDefault();
+                        layersPanel.classList.remove('open');
+                        searchPanel.classList.toggle('open');
+                        if (searchPanel.classList.contains('open')) { input.value = ''; res.innerHTML = ''; input.focus(); }
+                    };
+
+                    input.oninput = function() {
+                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        if (q.length < 2) return;
+                        allSites.filter(function(s) {
+                            return s.name.toLowerCase().indexOf(q) !== -1 && programVisible[s.program];
+                        }).slice(0, 10).forEach(function(s) {
+                            var row = document.createElement('div');
+                            row.textContent = s.name;
+                            row.onclick = function() {
+                                input.value = ''; res.innerHTML = ''; searchPanel.classList.remove('open');
+                                map.setView([s.lat, s.lng], 12, { animate: true });
+                                setTimeout(function() { if (s.marker) s.marker.openPopup(); }, 300);
+                            };
+                            res.appendChild(row);
+                        });
+                    };
+
+                    return wrap;
+                }
+            });
+            new ToolbarControl({ position: 'topleft' }).addTo(map);
+
+            map.on('zoomend', function() {
+                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                allSites.forEach(function(s) {
+                    if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
+                });
+            });
+        }
+
+        // ── Layers panel builder ─────────────────────────────────────
+        function buildLayersPanel(container) {
+            CATEGORIES.forEach(function(cat) {
+                // Category heading (click to toggle all in category)
+                var heading = document.createElement('div');
+                heading.className = 'layers-heading';
+                heading.innerHTML = '<span class="toggle-arrow">&#x25BC;</span> ' + esc(cat.label);
+                container.appendChild(heading);
+
+                var rows = document.createElement('div');
+                rows.className = 'category-rows';
+
+                cat.programs.forEach(function(prog) {
+                    var row = document.createElement('label');
+                    row.className = 'layer-row';
+
+                    var cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.checked = true;
+                    cb.dataset.program = prog.id;
+
+                    var icon = document.createElement('span');
+                    icon.className = 'layer-icon';
+                    icon.innerHTML = SHAPE_SVG[prog.shape](14, prog.color);
+
+                    var label = document.createElement('span');
+                    label.className = 'layer-label';
+                    label.textContent = prog.name;
+
+                    var count = document.createElement('span');
+                    count.className = 'layer-count';
+                    count.id = 'layer-count-' + prog.id;
+
+                    row.appendChild(cb);
+                    row.appendChild(icon);
+                    row.appendChild(label);
+                    row.appendChild(count);
+                    rows.appendChild(row);
+
+                    cb.onchange = function() {
+                        programVisible[prog.id] = cb.checked;
+                        toggleProgramMarkers(prog.id, cb.checked);
+                        updateFooter();
+                    };
+                });
+
+                container.appendChild(rows);
+
+                // Category heading toggles all children
+                heading.onclick = function() {
+                    var checkboxes = rows.querySelectorAll('input[type="checkbox"]');
+                    var allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
+                    checkboxes.forEach(function(cb) {
+                        cb.checked = !allChecked;
+                        programVisible[cb.dataset.program] = !allChecked;
+                        toggleProgramMarkers(cb.dataset.program, !allChecked);
+                    });
+                    heading.querySelector('.toggle-arrow').innerHTML = allChecked ? '&#x25B6;' : '&#x25BC;';
+                    updateFooter();
+                };
+            });
+        }
+
+        // ── Toggle markers for a program ─────────────────────────────
+        function toggleProgramMarkers(programId, visible) {
+            allSites.forEach(function(s) {
+                if (s.program === programId && s.marker) {
+                    if (visible) {
+                        if (!map.hasLayer(s.marker)) map.addLayer(s.marker);
+                    } else {
+                        if (map.hasLayer(s.marker)) map.removeLayer(s.marker);
+                    }
+                }
+            });
+        }
+
+        // ── Data loading ─────────────────────────────────────────────
+        async function fetchGeoJSON(url, programId) {
+            try {
+                var resp = await fetch(url);
+                if (!resp.ok) return [];
+                var geojson = await resp.json();
+                return (geojson.features || []).map(function(f) {
+                    var coords = f.geometry.coordinates;
+                    var p = f.properties;
+                    return {
+                        name: p.name || p.code || '',
+                        state: p.state || '',
+                        status: p.status || '',
+                        purpose: p.purpose || '',
+                        sensor: p.camera_type || p.sensor || p.sensor_type || '',
+                        airframe: p.airframe || '',
+                        lat: coords[1],
+                        lng: coords[0],
+                        program: programId,
+                        marker: null
+                    };
+                });
+            } catch (e) {
+                return [];
+            }
+        }
+
+        async function fetchAuSISLive() {
+            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+            if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
+            var lines = (await resp.text()).trim().split('\n');
+            var out = [];
+            for (var i = 1; i < lines.length; i++) {
+                var p = lines[i].split('|');
+                if (p.length < 7) continue;
+                var code = p[1].trim();
+                if (code === 'TEST') continue;
+                var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+                if (isNaN(lat) || isNaN(lng)) continue;
+                out.push({ name: p[5].trim(), lat: lat, lng: lng, program: 'ausis', marker: null });
+            }
+            return out;
+        }
+
+        // ── Popup builder ────────────────────────────────────────────
+        function buildPopup(s) {
+            var prog = programLookup[s.program];
+            var html = '<div class="popup-name">' + esc(s.name) + '</div>'
+                + '<div class="popup-program">' + esc(prog.name) + '</div>';
+            if (s.state) html += '<div class="popup-detail"><strong>State:</strong> ' + esc(s.state) + '</div>';
+            if (s.status) html += '<div class="popup-detail"><strong>Status:</strong> ' + esc(s.status) + '</div>';
+            if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
+            if (s.airframe) html += '<div class="popup-detail"><strong>Airframe:</strong> ' + esc(s.airframe) + '</div>';
+            if (s.purpose) html += '<div class="popup-detail"><strong>Purpose:</strong> ' + esc(s.purpose) + '</div>';
+            return html;
+        }
+
+        // ── Add markers ──────────────────────────────────────────────
+        function addMarkers() {
+            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            allSites.forEach(function(s) {
+                var icon = makeIcon(s.program, size);
+                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(buildPopup(s), { maxWidth: 280 }).addTo(map);
+                s.marker = m;
+            });
+        }
+
+        // ── Footer ───────────────────────────────────────────────────
+        function updateFooter() {
+            var footer = document.getElementById('footer');
+            var html = '';
+            CATEGORIES.forEach(function(cat) {
+                cat.programs.forEach(function(prog) {
+                    if (!programVisible[prog.id]) return;
+                    var count = allSites.filter(function(s) { return s.program === prog.id; }).length;
+                    if (count === 0) return;
+                    html += '<span class="footer-item">'
+                        + '<span class="footer-icon">' + SHAPE_SVG[prog.shape](14, prog.color) + '</span> '
+                        + esc(prog.name) + ' (' + count + ')</span>';
+                });
+            });
+            footer.innerHTML = html;
+        }
+
+        function updateLayerCounts() {
+            CATEGORIES.forEach(function(cat) {
+                cat.programs.forEach(function(prog) {
+                    var count = allSites.filter(function(s) { return s.program === prog.id; }).length;
+                    var el = document.getElementById('layer-count-' + prog.id);
+                    if (el) el.textContent = count > 0 ? '(' + count + ')' : '';
+                });
+            });
+        }
+
+        // ── Initialise ───────────────────────────────────────────────
+        initMap();
+
+        // Load all GeoJSON data
+        var dataPromises = [];
+        CATEGORIES.forEach(function(cat) {
+            cat.programs.forEach(function(prog) {
+                if (prog.data === 'ausis') {
+                    // AuSIS: load backup first
+                    dataPromises.push(fetchGeoJSON('data/ausis_stations.geojson', 'ausis'));
+                } else {
+                    dataPromises.push(fetchGeoJSON(prog.data, prog.id));
+                }
+            });
+        });
+
+        Promise.all(dataPromises).then(function(results) {
+            results.forEach(function(sites) { allSites = allSites.concat(sites); });
+            addMarkers();
+            map.setView([-28, 134], 5);
+
+            var total = allSites.length;
+            document.getElementById('header-total').textContent = 'AuScope Interactive Map - ' + total + ' sites';
+            updateFooter();
+            updateLayerCounts();
+
+            // Silently refresh AuSIS count from live IRIS
+            return fetchAuSISLive();
+        }).then(function(liveAusis) {
+            if (liveAusis.length > 0 && liveAusis.length !== allSites.filter(function(s) { return s.program === 'ausis'; }).length) {
+                updateFooter();
+                updateLayerCounts();
+            }
+        }).catch(function(err) {
+            console.warn('Live AuSIS refresh failed, using backup:', err);
+        });
+    </script>
+</body>
+</html>
