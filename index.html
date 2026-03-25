@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuScope Interactive Map</title>
+    <title>AuScope Programs</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -84,6 +84,13 @@
         .layer-row .layer-icon { display: inline-block; flex-shrink: 0; }
         .layer-row .layer-label { flex: 1; }
         .layer-row .layer-count { color: #9ca3af; font-size: 11px; }
+        .layers-master {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-bottom: 6px; margin-bottom: 4px; border-bottom: 2px solid #282572;
+            font-size: 11px; font-weight: 600; color: #282572;
+        }
+        .layers-master label { display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+        .layers-master input { margin: 0; cursor: pointer; }
 
         /* Footer */
         .footer {
@@ -102,7 +109,7 @@
 </head>
 <body>
     <div class="header">
-        <span class="header-title"><span id="header-total">AuScope Interactive Map</span></span>
+        <span class="header-title"><span id="header-total">AuScope Programs</span></span>
         <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
     </div>
 
@@ -115,24 +122,27 @@
     <script>
         // ── Configuration ─────────────────────────────────────────────
         // Categories and programs — add new categories/programs here
+        // Shape = category identity, colour = program identity
         var CATEGORIES = [
             {
                 id: 'outreach',
                 label: 'Outreach',
+                shape: 'triangle',
                 programs: [
-                    { id: 'ausis',     name: 'AuSIS',              shape: 'triangle', color: '#22c55e', data: 'ausis' },
-                    { id: 'mag',       name: 'Magnetometers',      shape: 'diamond',  color: '#a855f7', data: 'data/magnetometers.geojson' },
-                    { id: 'earthbank', name: 'EarthBank',          shape: 'circle',   color: '#3b82f6', data: 'data/earthbank.geojson' },
-                    { id: 'gplates',   name: 'GPlates',            shape: 'square',   color: '#f59e0b', data: 'data/gplates.geojson' }
+                    { id: 'ausis',     name: 'AuSIS',         color: '#22c55e', data: 'ausis' },
+                    { id: 'mag',       name: 'Magnetometers',  color: '#a855f7', data: 'data/magnetometers.geojson' },
+                    { id: 'earthbank', name: 'EarthBank',      color: '#3b82f6', data: 'data/earthbank.geojson' },
+                    { id: 'gplates',   name: 'GPlates',        color: '#f59e0b', data: 'data/gplates.geojson' }
                 ]
             },
             {
                 id: 'coastri',
                 label: 'CoastRI',
+                shape: 'diamond',
                 programs: [
-                    { id: 'cameras',   name: 'Camera Stations',    shape: 'triangle', color: '#ef4444', data: 'data/coastri_cameras.geojson' },
-                    { id: 'lowcost',   name: 'Low-Cost Drones',    shape: 'diamond',  color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
-                    { id: 'longrange', name: 'Long-Range Drones',  shape: 'circle',   color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
+                    { id: 'cameras',   name: 'Camera Stations',   color: '#ef4444', data: 'data/coastri_cameras.geojson' },
+                    { id: 'lowcost',   name: 'Low-Cost Drones',   color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
+                    { id: 'longrange', name: 'Long-Range Drones', color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
                 ]
             }
         ];
@@ -143,9 +153,10 @@
         var programLookup = {};  // id -> program config
         var programVisible = {}; // id -> boolean
 
-        // Build lookup
+        // Build lookup — each program inherits shape from its category
         CATEGORIES.forEach(function(cat) {
             cat.programs.forEach(function(prog) {
+                prog.shape = cat.shape;
                 programLookup[prog.id] = prog;
                 programVisible[prog.id] = true;
             });
@@ -335,6 +346,32 @@
 
         // ── Layers panel builder ─────────────────────────────────────
         function buildLayersPanel(container) {
+            // Master toggle — select all / deselect all
+            var master = document.createElement('div');
+            master.className = 'layers-master';
+            var masterLabel = document.createElement('label');
+            var masterCb = document.createElement('input');
+            masterCb.type = 'checkbox';
+            masterCb.checked = true;
+            masterLabel.appendChild(masterCb);
+            masterLabel.appendChild(document.createTextNode(' All layers'));
+            master.appendChild(masterLabel);
+            container.appendChild(master);
+
+            masterCb.onchange = function() {
+                var allCbs = container.querySelectorAll('.layer-row input[type="checkbox"]');
+                allCbs.forEach(function(cb) {
+                    cb.checked = masterCb.checked;
+                    programVisible[cb.dataset.program] = masterCb.checked;
+                    toggleProgramMarkers(cb.dataset.program, masterCb.checked);
+                });
+                // Update category arrows
+                container.querySelectorAll('.toggle-arrow').forEach(function(arrow) {
+                    arrow.innerHTML = masterCb.checked ? '&#x25BC;' : '&#x25B6;';
+                });
+                updateFooter();
+            };
+
             CATEGORIES.forEach(function(cat) {
                 // Category heading (click to toggle all in category)
                 var heading = document.createElement('div');
@@ -554,7 +591,7 @@
             map.setView([-28, 134], 5);
 
             var total = allSites.length;
-            document.getElementById('header-total').textContent = 'AuScope Interactive Map - ' + total + ' sites';
+            document.getElementById('header-total').textContent = 'AuScope Programs -' + total + ' sites';
             updateFooter();
             updateLayerCounts();
 
