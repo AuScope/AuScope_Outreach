@@ -1,14 +1,38 @@
-# AuScope Outreach Maps
+# AuScope Interactive Maps
 
-Interactive maps for AuScope outreach programs, part of the [AuScope](https://www.auscope.org.au/) national research infrastructure funded by the Australian Government through NCRIS.
+Interactive maps for AuScope programs, part of the [AuScope](https://www.auscope.org.au/) national research infrastructure funded by the Australian Government through NCRIS.
 
 Hosted on GitHub Pages and embedded via iframe on the AuScope website.
 
 ### Live Maps
 
-- [AuSIS Station Map](https://bvkay.github.io/AuScope_Outreach/AuSIS_Map.html)
-- [AuScope Outreach Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_Outreach.html)
-- [AuScope CoastRI Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_CoastRI.html)
+- [AuScope Interactive Map](https://bvkay.github.io/AuScope_Outreach/) - All programs combined with layer toggles
+- [AuSIS Station Map](https://bvkay.github.io/AuScope_Outreach/AuSIS_Map.html) - Seismometers in Schools
+- [AuScope Outreach Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_Outreach.html) - Schools outreach programs
+- [AuScope CoastRI Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_CoastRI.html) - Coastal monitoring sites
+
+---
+
+## AuScope Interactive Map (`index.html`)
+
+Combined map showing all AuScope programs with a categorised layer control panel.
+
+### Features
+
+- All programs from every map on a single page
+- Collapsible **layers panel** in the toolbar with category headings (Outreach, CoastRI)
+- Click a category heading to toggle all programs in that group
+- Individual program checkboxes with icon, name, and site count
+- Footer dynamically updates to show only visible layers
+- Search across all visible sites
+- Designed to scale - add new categories (Seismic, MT, Geochem, VLBI, etc.) by adding entries to the `CATEGORIES` config array
+
+### Current Categories
+
+| Category | Programs |
+|----------|----------|
+| **Outreach** | AuSIS, Magnetometers, EarthBank, GPlates |
+| **CoastRI** | Camera Stations, Low-Cost Drones, Long-Range Drones |
 
 ---
 
@@ -133,13 +157,14 @@ To add a new program or data source, create a `.geojson` file in the `data/` fol
 
 ```
 AuScope_Outreach/
+  index.html                            # Combined map — all programs, layer toggles
   AuSIS_Map.html                        # AuSIS station map (live IRIS + local fallback)
-  AuScope_Outreach.html                 # Combined schools outreach map
+  AuScope_Outreach.html                 # Schools outreach map (AuSIS, Mag, EarthBank, GPlates)
   AuScope_CoastRI.html                  # CoastRI coastal monitoring map
   assets/
     auscope-logo.png                    # AuScope logo (white, for dark header)
   data/
-    ausis_stations.geojson              # AuSIS station backup (daily GitHub Action)
+    ausis_stations.geojson              # AuSIS stations + availability (daily backup)
     magnetometers.geojson               # Magnetometers in Schools locations
     earthbank.geojson                   # EarthBank in the Classroom locations
     gplates.geojson                     # GPlates in Schools (add when available)
@@ -147,7 +172,7 @@ AuScope_Outreach/
     coastri_lowcost_drones.geojson      # CoastRI low-cost drone survey sites
     coastri_longrange_drones.geojson    # CoastRI long-range drone sites
   .github/workflows/
-    ausis-backup.yml                    # Daily AuSIS station backup from IRIS
+    ausis-backup.yml                    # Daily AuSIS station + availability backup
 ```
 
 ## Tech Stack
