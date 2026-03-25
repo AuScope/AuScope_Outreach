@@ -553,7 +553,8 @@
             html2canvas(document.body, {
                 useCORS: true,
                 allowTaint: false,
-                backgroundColor: '#282572'
+                backgroundColor: '#282572',
+                scale: 3
             }).then(function(canvas) {
                 // Restore toolbar
                 if (toolbar) toolbar.style.display = '';
