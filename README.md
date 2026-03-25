@@ -4,6 +4,12 @@ Interactive maps for AuScope outreach programs, part of the [AuScope](https://ww
 
 Hosted on GitHub Pages and embedded via iframe on the AuScope website.
 
+### Live Maps
+
+- [AuSIS Station Map](https://bvkay.github.io/AuScope_Outreach/AuSIS_Map.html)
+- [AuScope Outreach Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_Outreach.html)
+- [AuScope CoastRI Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_CoastRI.html)
+
 ---
 
 ## AuSIS Station Map (`AuSIS_Map.html`)
