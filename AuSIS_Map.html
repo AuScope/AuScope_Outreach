@@ -290,40 +290,44 @@
             return 2000;
         }
 
+        function buildPopupHtml(s) {
+            var daysAgo = s.latestData ? Math.floor((Date.now() - s.latestData.getTime()) / 86400000) : null;
+            return '<div class="popup-title">' + esc(s.name) + '</div>'
+                + '<span class="popup-code">S1.' + esc(s.code) + '</span>'
+                + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
+                + (function() {
+                    if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
+                    if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
+                    if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+                    return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
+                })()
+                + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
+                + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
+                + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
+                + (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS
+                    ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + esc(s.code) + '/webicorder/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
+                    : '');
+        }
+
         function addMarkers() {
-            const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-            const sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
+            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
             sorted.forEach(function(s) {
-                const icon = triangleIcon(size, stationStrokeColor(s));
-                const daysAgo = s.latestData ? Math.floor((Date.now() - s.latestData.getTime()) / 86400000) : null;
-                const html = '<div class="popup-title">' + esc(s.name) + '</div>'
-                    + '<span class="popup-code">S1.' + esc(s.code) + '</span>'
-                    + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
-                    + (function() {
-                        if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
-                        if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
-                        if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
-                        return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
-                    })()
-                    + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
-                    + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
-                    + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                    + (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS
-                        ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + esc(s.code) + '/webicorder/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
-                        : '');
-                const m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(html, { maxWidth: 280 }).addTo(map);
+                var icon = triangleIcon(size, stationStrokeColor(s));
+                var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 280 }).addTo(map);
                 s.marker = m;
             });
         }
 
-        // ── Swap markers without gap ──────────────────────────────────
-        // Adds new markers first, then removes old ones (no visible flash)
-        function swapStations(newStations) {
-            var oldStations = stations;
-            stations = newStations;
-            addMarkers();
-            oldStations.forEach(function(s) {
-                if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
+        // Update existing markers in place — no remove/add, no flash
+        function refreshMarkers() {
+            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            stations.forEach(function(s) {
+                if (s.marker) {
+                    s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
+                    s.marker.setZIndexOffset(stationZIndex(s));
+                    s.marker.setPopupContent(buildPopupHtml(s));
+                }
             });
         }
 
@@ -347,7 +351,7 @@
                 updateHeader();
             }
 
-            // Step 2: Fetch live IRIS data in background, then refresh
+            // Step 2: Fetch live IRIS data in background, merge into existing stations
             return fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text')
                 .then(function(resp) {
                     if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
@@ -355,24 +359,27 @@
                 })
                 .then(function(text) {
                     var lines = text.trim().split('\n');
-                    var out = [];
+                    // Build lookup of live data by station code
+                    var liveByCode = {};
                     for (var i = 1; i < lines.length; i++) {
                         var p = lines[i].split('|');
                         if (p.length < 7) continue;
                         var code = p[1].trim();
                         if (code === 'TEST') continue;
-                        var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-                        if (isNaN(lat) || isNaN(lng)) continue;
                         var endRaw = p[7] ? p[7].trim() : '';
-                        out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
+                        liveByCode[code] = { startTime: p[6].trim(), endTime: endRaw || null };
                     }
-                    if (out.length > 0) {
-                        stations = out;
-                    }
+                    // Merge live data into existing stations (preserving markers)
+                    stations.forEach(function(s) {
+                        if (liveByCode[s.code]) {
+                            s.startTime = liveByCode[s.code].startTime;
+                            s.endTime = liveByCode[s.code].endTime;
+                        }
+                    });
                     return fetchAvailability();
                 })
                 .then(function() {
-                    swapStations(stations);
+                    refreshMarkers();
                     updateHeader();
                 });
         }).catch(function(err) {

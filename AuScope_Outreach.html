@@ -299,16 +299,6 @@
             });
         }
 
-        // ── Swap markers without gap ──────────────────────────────────
-        function swapAllStations(newStations) {
-            var oldStations = allStations;
-            allStations = newStations;
-            addMarkers();
-            oldStations.forEach(function(s) {
-                if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
-            });
-        }
-
         function updateLegend(ausisCount, magCount, ebCount, gpCount) {
             var total = allStations.length;
             document.getElementById('header-total').textContent = 'AuScope Outreach Locations - ' + total + ' schools';
@@ -339,12 +329,11 @@
             map.setView([-28, 134], 4);
             updateLegend(results[0].length, results[1].length, results[2].length, results[3].length);
 
-            // Step 2: Refresh AuSIS with live IRIS data in background
+            // Step 2: Silently update AuSIS count from live IRIS data
+            // Markers look identical (green triangles) so no visual rebuild needed
             return fetchAuSISLive();
         }).then(function(liveAusis) {
-            if (liveAusis.length > 0) {
-                var newAll = liveAusis.concat(staticPrograms[1]).concat(staticPrograms[2]).concat(staticPrograms[3]);
-                swapAllStations(newAll);
+            if (liveAusis.length > 0 && liveAusis.length !== staticPrograms[0].length) {
                 updateLegend(liveAusis.length, staticPrograms[1].length, staticPrograms[2].length, staticPrograms[3].length);
             }
         }).catch(function(err) {
