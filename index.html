@@ -123,13 +123,18 @@
         // ── Configuration ─────────────────────────────────────────────
         // Categories and programs — add new categories/programs here
         // Shape = category identity, colour = program identity
+        // Icon style: minSize/maxSize/zoomFactor control scaling, sw/so control stroke
+        var STYLE_DEFAULT  = { minSize: 16, maxSize: 32, zoomFactor: 2.9, sw: 2, so: 1 };
+        var STYLE_SEISMIC  = { minSize: 8,  maxSize: 18, zoomFactor: 1.6, sw: 1, so: 0.45 };
+
         var CATEGORIES = [
             {
                 id: 'seismic',
                 label: 'Seismic',
                 shape: 'triangle',
+                style: STYLE_SEISMIC,
                 programs: [
-                    { id: 'ausis',       name: 'AuSIS',              color: '#22c55e', data: 'ausis' },
+                    { id: 'ausis',       name: 'AuSIS',              color: '#22c55e', data: 'ausis', style: STYLE_DEFAULT },
                     { id: 'seis_bb',     name: 'Broadband',          color: '#ef4444', data: 'data/seismic_broadband.geojson' },
                     { id: 'seis_sp',     name: 'Short Period',       color: '#f97316', data: 'data/seismic_shortperiod.geojson' },
                     { id: 'nodal_bb',    name: 'Nodal Broadband',    color: '#06b6d4', data: 'data/seismic_nodal_broadband.geojson' },
@@ -140,6 +145,7 @@
                 id: 'outreach',
                 label: 'Outreach',
                 shape: 'circle',
+                style: STYLE_DEFAULT,
                 programs: [
                     { id: 'mag',       name: 'Magnetometers',  color: '#a855f7', data: 'data/magnetometers.geojson' },
                     { id: 'earthbank', name: 'EarthBank',      color: '#3b82f6', data: 'data/earthbank.geojson' },
@@ -150,6 +156,7 @@
                 id: 'coastri',
                 label: 'CoastRI',
                 shape: 'diamond',
+                style: STYLE_DEFAULT,
                 programs: [
                     { id: 'cameras',   name: 'Camera Stations',   color: '#ef4444', data: 'data/coastri_cameras.geojson' },
                     { id: 'lowcost',   name: 'Low-Cost Drones',   color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
@@ -164,10 +171,12 @@
         var programLookup = {};  // id -> program config
         var programVisible = {}; // id -> boolean
 
-        // Build lookup — each program inherits shape from its category
+        // Build lookup — each program inherits shape and style from its category
+        // Programs can override style individually (e.g. AuSIS uses DEFAULT in Seismic)
         CATEGORIES.forEach(function(cat) {
             cat.programs.forEach(function(prog) {
                 prog.shape = cat.shape;
+                if (!prog.style) prog.style = cat.style;
                 programLookup[prog.id] = prog;
                 programVisible[prog.id] = true;
             });
@@ -181,62 +190,63 @@
         }
 
         // ── SVG icon generators ──────────────────────────────────────
-        function triangleSVG(size, strokeColor) {
+        // SVG generators accept stroke width (sw) and stroke opacity (so)
+        function triangleSVG(size, strokeColor, sw, so) {
             var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="1.5" stroke-opacity="0.7" stroke-linejoin="round"/></svg>';
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="' + sw + '" stroke-opacity="' + so + '" stroke-linejoin="round"/></svg>';
         }
-        function triangleIcon(size, strokeColor) {
+        function triangleIcon(size, strokeColor, sw, so) {
             var h = size / 2;
-            return L.divIcon({ html: triangleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+            return L.divIcon({ html: triangleSVG(size, strokeColor, sw, so), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
-        function diamondSVG(size, strokeColor) {
+        function diamondSVG(size, strokeColor, sw, so) {
             var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="1.5" stroke-opacity="0.7" stroke-linejoin="round"/></svg>';
+                + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="' + sw + '" stroke-opacity="' + so + '" stroke-linejoin="round"/></svg>';
         }
-        function diamondIcon(size, strokeColor) {
+        function diamondIcon(size, strokeColor, sw, so) {
             var h = size / 2;
-            return L.divIcon({ html: diamondSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+            return L.divIcon({ html: diamondSVG(size, strokeColor, sw, so), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
-        function circleSVG(size, strokeColor) {
+        function circleSVG(size, strokeColor, sw, so) {
             var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="1.5" stroke-opacity="0.7"/></svg>';
+                + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="' + sw + '" stroke-opacity="' + so + '"/></svg>';
         }
-        function circleIcon(size, strokeColor) {
+        function circleIcon(size, strokeColor, sw, so) {
             var h = size / 2;
-            return L.divIcon({ html: circleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+            return L.divIcon({ html: circleSVG(size, strokeColor, sw, so), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
-        function squareSVG(size, strokeColor) {
+        function squareSVG(size, strokeColor, sw, so) {
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="1.5" stroke-opacity="0.7" stroke-linejoin="round"/></svg>';
+                + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="' + sw + '" stroke-opacity="' + so + '" stroke-linejoin="round"/></svg>';
         }
-        function squareIcon(size, strokeColor) {
+        function squareIcon(size, strokeColor, sw, so) {
             var h = size / 2;
-            return L.divIcon({ html: squareSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+            return L.divIcon({ html: squareSVG(size, strokeColor, sw, so), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
-        var SHAPE_ICON = {
-            triangle: triangleIcon, diamond: diamondIcon,
-            circle: circleIcon, square: squareIcon
-        };
-        var SHAPE_SVG = {
-            triangle: triangleSVG, diamond: diamondSVG,
-            circle: circleSVG, square: squareSVG
-        };
+        var SHAPE_ICON = { triangle: triangleIcon, diamond: diamondIcon, circle: circleIcon, square: squareIcon };
+        var SHAPE_SVG  = { triangle: triangleSVG,  diamond: diamondSVG,  circle: circleSVG,  square: squareSVG };
 
-        function makeIcon(programId, size) {
+        function getIconSize(prog, zoom) {
+            var st = prog.style;
+            return Math.max(st.minSize, Math.min(st.maxSize, zoom * st.zoomFactor));
+        }
+
+        function makeIcon(programId, zoom) {
             var prog = programLookup[programId];
-            return SHAPE_ICON[prog.shape](size, prog.color);
+            var size = getIconSize(prog, zoom);
+            return SHAPE_ICON[prog.shape](size, prog.color, prog.style.sw, prog.style.so);
         }
 
         function makeLegendSVG(programId) {
             var prog = programLookup[programId];
-            return SHAPE_SVG[prog.shape](14, prog.color);
+            return SHAPE_SVG[prog.shape](14, prog.color, 2, 1);
         }
 
         // ── Map initialisation ───────────────────────────────────────
@@ -348,9 +358,9 @@
             new ToolbarControl({ position: 'topleft' }).addTo(map);
 
             map.on('zoomend', function() {
-                var size = Math.max(10, Math.min(22, map.getZoom() * 2));
+                var zoom = map.getZoom();
                 allSites.forEach(function(s) {
-                    if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
+                    if (s.marker) s.marker.setIcon(makeIcon(s.program, zoom));
                 });
             });
         }
@@ -522,9 +532,9 @@
 
         // ── Add markers ──────────────────────────────────────────────
         function addMarkers() {
-            var size = Math.max(10, Math.min(22, map.getZoom() * 2));
+            var zoom = map.getZoom();
             allSites.forEach(function(s) {
-                var icon = makeIcon(s.program, size);
+                var icon = makeIcon(s.program, zoom);
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(buildPopup(s), { maxWidth: 280 }).addTo(map);
                 s.marker = m;
             });
