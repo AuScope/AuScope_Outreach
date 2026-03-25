@@ -1,0 +1,2350 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "AusPASS FDSN",
+    "category": "nodal_broadband",
+    "fetched": "2026-03-25T03:33:03Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB001",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 491.0,
+        "startTime": "2023-09-05T21:27:10",
+        "endTime": "2023-10-09T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.03844,
+          -38.60586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB002",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 532.0,
+        "startTime": "2023-09-07T03:31:38",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.02306,
+          -38.6566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB003",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 454.0,
+        "startTime": "2023-09-07T03:50:06",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.01033,
+          -38.68023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB004",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 418.0,
+        "startTime": "2023-09-07T04:01:38",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.98198,
+          -38.68694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB005",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 551.0,
+        "startTime": "2023-09-07T04:19:42",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.98866,
+          -38.65421
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB006",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 540.0,
+        "startTime": "2023-09-07T04:37:34",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.01854,
+          -38.6258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB007",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 551.0,
+        "startTime": "2023-09-07T21:49:46",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.02835,
+          -38.57018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB008",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 547.0,
+        "startTime": "2023-09-07T22:08:18",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.008,
+          -38.59753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB009",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 469.0,
+        "startTime": "2023-09-07T22:33:14",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.95753,
+          -38.62874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB010",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 413.0,
+        "startTime": "2023-09-07T22:57:46",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.93382,
+          -38.64607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB011",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 384.0,
+        "startTime": "2023-09-07T23:48:02",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.92674,
+          -38.65895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB012",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 580.0,
+        "startTime": "2023-09-08T00:13:06",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.87871,
+          -38.61721
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB013",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 563.0,
+        "startTime": "2023-09-08T00:24:50",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.87793,
+          -38.63895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB014",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 651.0,
+        "startTime": "2023-09-08T00:51:58",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.95442,
+          -38.586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB015",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 446.0,
+        "startTime": "2023-09-08T21:13:38",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.02527,
+          -38.7068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB016",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 408.0,
+        "startTime": "2023-09-08T21:27:58",
+        "endTime": "2023-10-14T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.0594,
+          -38.68045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB017",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 424.0,
+        "startTime": "2023-09-08T21:54:30",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.10025,
+          -38.71548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB018",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 447.0,
+        "startTime": "2023-09-08T22:18:10",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.10526,
+          -38.69912
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB019",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 406.0,
+        "startTime": "2023-09-09T02:29:45",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.06865,
+          -38.67609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB020",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 427.0,
+        "startTime": "2023-10-16T03:34:10",
+        "endTime": "2023-11-20T16:34:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.07759,
+          -38.64595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB021",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 394.0,
+        "startTime": "2023-10-16T04:20:46",
+        "endTime": "2023-11-20T23:31:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.08806,
+          -38.67505
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB022",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 491.0,
+        "startTime": "2023-10-17T00:59:26",
+        "endTime": "2023-11-21T09:34:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.06189,
+          -38.62845
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB001",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 437.0,
+        "startTime": "2023-09-06T02:56:38",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.12166,
+          -38.66491
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB002",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 484.0,
+        "startTime": "2023-09-06T03:27:42",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.13332,
+          -38.64016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB003",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 393.0,
+        "startTime": "2023-09-06T03:50:38",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.14517,
+          -38.62473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB004",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 321.0,
+        "startTime": "2023-09-06T04:16:42",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.17661,
+          -38.6149
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB005",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 337.0,
+        "startTime": "2023-09-06T04:53:58",
+        "endTime": "2023-10-10T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.26271,
+          -38.63717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB006",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 341.0,
+        "startTime": "2023-09-06T05:17:38",
+        "endTime": "2023-10-10T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.21513,
+          -38.62937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB007",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 400.0,
+        "startTime": "2023-09-06T23:09:34",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.07712,
+          -38.73957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB008",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 606.0,
+        "startTime": "2023-09-06T23:31:46",
+        "endTime": "2023-10-12T20:15:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.18164,
+          -38.73199
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB009",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 534.0,
+        "startTime": "2023-09-06T23:47:10",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.14015,
+          -38.7281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB010",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 550.0,
+        "startTime": "2023-09-07T00:03:06",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.14041,
+          -38.70579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB011",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 472.0,
+        "startTime": "2023-09-07T00:36:30",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.16867,
+          -38.67025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB012",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 417.0,
+        "startTime": "2023-09-07T01:05:46",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.18137,
+          -38.64983
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB013",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 466.0,
+        "startTime": "2023-09-07T02:39:46",
+        "endTime": "2023-10-12T21:39:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.15274,
+          -38.59218
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB014",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 363.0,
+        "startTime": "2023-09-07T02:54:10",
+        "endTime": "2023-10-13T05:28:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.20047,
+          -38.57423
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB015",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 368.0,
+        "startTime": "2023-09-07T03:08:30",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.24187,
+          -38.57968
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB016",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 322.0,
+        "startTime": "2023-09-07T03:26:02",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.26784,
+          -38.59099
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB017",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 483.0,
+        "startTime": "2023-09-07T03:57:06",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.11484,
+          -38.59143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB018",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 530.0,
+        "startTime": "2023-09-07T04:27:10",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.07187,
+          -38.58567
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB019",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 447.0,
+        "startTime": "2023-09-07T05:03:02",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.09023,
+          -38.51537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB020",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 373.0,
+        "startTime": "2023-09-07T05:17:34",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.14401,
+          -38.51144
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB021",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 368.0,
+        "startTime": "2023-09-07T21:00:50",
+        "endTime": "2023-10-11T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.0369,
+          -38.69716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB022",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 470.0,
+        "startTime": "2023-09-07T21:23:30",
+        "endTime": "2023-10-13T14:03:54"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.06108,
+          -38.65937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB023",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 322.0,
+        "startTime": "2023-09-07T22:31:58",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.1622,
+          -38.61354
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB024",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 320.0,
+        "startTime": "2023-09-07T22:43:34",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.1535,
+          -38.60963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB025",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 394.0,
+        "startTime": "2023-09-07T23:10:34",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.08922,
+          -38.71738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB026",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 374.0,
+        "startTime": "2023-09-07T23:27:34",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.08783,
+          -38.70603
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB027",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 469.0,
+        "startTime": "2023-09-08T00:28:54",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.99265,
+          -38.5431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB028",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 478.0,
+        "startTime": "2023-09-08T02:53:46",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.0253,
+          -38.70218
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB029",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 423.0,
+        "startTime": "2023-09-08T03:38:02",
+        "endTime": "2023-10-12T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.01303,
+          -38.73408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB030",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 408.0,
+        "startTime": "2023-09-08T04:31:06",
+        "endTime": "2023-10-10T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.08655,
+          -38.68922
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB031",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 535.0,
+        "startTime": "2023-09-08T21:24:50",
+        "endTime": "2023-10-14T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.00385,
+          -38.70525
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LB032",
+        "network": "2E",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 430.0,
+        "startTime": "2023-09-08T22:00:46",
+        "endTime": "2023-10-13T23:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.09836,
+          -38.69532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNA",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 220.0,
+        "startTime": "2022-01-10T03:38:46",
+        "endTime": "2022-01-31T23:59:59.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.40191,
+          -33.326057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNB",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 294.0,
+        "startTime": "2022-01-10T04:22:38",
+        "endTime": "2022-02-01T06:17:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.19092,
+          -33.36294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNC",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 250.0,
+        "startTime": "2022-01-10T08:25:02",
+        "endTime": "2022-01-31T23:59:59.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.28902,
+          -33.193886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNND",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 231.0,
+        "startTime": "2022-01-10T05:13:34",
+        "endTime": "2022-02-01T08:09:59.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.03954,
+          -33.41912
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNE",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 240.0,
+        "startTime": "2022-01-10T06:19:42",
+        "endTime": "2022-02-01T07:43:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.0303,
+          -33.284424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNF",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 210.0,
+        "startTime": "2022-01-10T07:24:22",
+        "endTime": "2022-02-01T07:12:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.9502,
+          -33.343864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNG",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 210.0,
+        "startTime": "2022-10-07T06:37:02",
+        "endTime": "2022-12-21T22:23:01.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.00788,
+          -33.41822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNH",
+        "network": "2P",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 328.0,
+        "startTime": "2022-02-07T05:34:34",
+        "endTime": "2022-02-22T05:46:59.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.8996,
+          -33.38816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNI",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 305.0,
+        "startTime": "2022-10-08T02:58:02",
+        "endTime": "2022-12-21T06:11:01.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.9755,
+          -33.35815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNJ",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 260.0,
+        "startTime": "2022-10-07T05:51:02",
+        "endTime": "2022-11-11T23:31:01.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.9908,
+          -33.36556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SWNNK",
+        "network": "2P",
+        "channel": "HHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 100.0,
+        "elevation": 305.0,
+        "startTime": "2022-10-08T01:51:22",
+        "endTime": "2022-12-23T08:07:01.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.9715,
+          -33.38099
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ01",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 107.0,
+        "startTime": "2024-07-03T05:12:46",
+        "endTime": "2024-08-02T00:17:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.2449,
+          -18.2432
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ02",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 131.0,
+        "startTime": "2024-07-03T04:32:54",
+        "endTime": "2024-08-02T00:03:18"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.3454,
+          -18.2511
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ03",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 123.0,
+        "startTime": "2024-07-03T03:57:34",
+        "endTime": "2024-08-01T23:53:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.2879,
+          -18.2334
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ04",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 161.0,
+        "startTime": "2024-07-03T03:34:18",
+        "endTime": "2024-08-01T23:43:06"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.4279,
+          -18.2353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ05",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 186.0,
+        "startTime": "2024-07-03T02:56:46",
+        "endTime": "2024-08-01T23:30:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.4868,
+          -18.237
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ06",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 190.0,
+        "startTime": "2024-07-03T02:07:46",
+        "endTime": "2024-08-01T22:56:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.7917,
+          -18.2183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ07",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 178.0,
+        "startTime": "2024-07-03T01:39:10",
+        "endTime": "2024-08-01T22:42:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.8504,
+          -18.2024
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ08",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 180.0,
+        "startTime": "2024-07-03T01:10:02",
+        "endTime": "2024-08-01T22:30:02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.902,
+          -18.1902
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ09",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 204.0,
+        "startTime": "2024-07-03T00:32:14",
+        "endTime": "2024-08-01T22:11:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.0746,
+          -18.2227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ10",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 219.0,
+        "startTime": "2024-07-03T00:04:42",
+        "endTime": "2024-08-01T21:56:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.1629,
+          -18.2563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ11",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 245.0,
+        "startTime": "2024-07-02T22:44:14",
+        "endTime": "2024-08-01T21:37:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.3104,
+          -18.2857
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ12",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 283.0,
+        "startTime": "2024-07-02T08:20:34",
+        "endTime": "2024-08-01T11:09:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.393,
+          -18.2924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ14",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 386.0,
+        "startTime": "2024-07-02T05:50:18",
+        "endTime": "2024-08-01T09:09:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.0466,
+          -18.2047
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ15",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 414.0,
+        "startTime": "2024-07-02T05:13:34",
+        "endTime": "2024-08-01T08:53:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.1554,
+          -18.2097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ16",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 421.0,
+        "startTime": "2024-07-02T04:38:06",
+        "endTime": "2024-08-01T08:41:18"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.1924,
+          -18.1907
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ17",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 430.0,
+        "startTime": "2024-07-02T04:34:38",
+        "endTime": "2024-08-01T08:10:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.2176,
+          -18.1872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ18",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 425.0,
+        "startTime": "2024-07-02T04:07:58",
+        "endTime": "2024-08-01T08:34:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.2503,
+          -18.1782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ19",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 455.0,
+        "startTime": "2024-07-02T03:35:14",
+        "endTime": "2024-08-01T08:25:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.3147,
+          -18.1561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GTQ20",
+        "network": "7A",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 464.0,
+        "startTime": "2024-07-02T03:35:14",
+        "endTime": "2024-08-01T08:25:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.3412,
+          -18.1351
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB00A",
+        "network": "8A",
+        "channel": "DHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 667.0,
+        "startTime": "2024-08-30T08:28:02",
+        "endTime": "2024-09-24T06:43:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1025,
+          -35.2728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB06A",
+        "network": "8A",
+        "channel": "DHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 667.0,
+        "startTime": "2024-08-30T08:29:14",
+        "endTime": "2024-09-24T06:43:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1025,
+          -35.2728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BB06B",
+        "network": "8A",
+        "channel": "DHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 667.0,
+        "startTime": "2024-08-30T08:29:02",
+        "endTime": "2024-09-24T06:37:02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1025,
+          -35.2728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB010",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 319.0,
+        "startTime": "2024-02-27T22:48:22",
+        "endTime": "2024-03-31T17:09:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.55056,
+          -33.44345
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB019",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 132.0,
+        "startTime": "2024-03-01T23:17:46",
+        "endTime": "2024-04-03T23:13:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.2508,
+          -33.63146
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB034",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 316.0,
+        "startTime": "2024-02-28T04:01:14",
+        "endTime": "2024-04-02T22:38:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.5573,
+          -33.53294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB035",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 341.0,
+        "startTime": "2024-02-28T04:24:30",
+        "endTime": "2024-04-03T12:31:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.52352,
+          -33.55899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB036",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 325.0,
+        "startTime": "2024-02-28T04:09:34",
+        "endTime": "2024-04-03T02:49:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.4972,
+          -33.57757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB037",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 349.0,
+        "startTime": "2024-02-29T02:12:22",
+        "endTime": "2024-04-03T00:45:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.46201,
+          -33.53294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB038",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 292.0,
+        "startTime": "2024-03-03T21:39:06",
+        "endTime": "2024-04-04T00:28:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.43661,
+          -33.62191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB045",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 278.0,
+        "startTime": "2024-02-29T01:33:18",
+        "endTime": "2024-04-02T16:03:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.6103,
+          -33.54488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB050",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 303.0,
+        "startTime": "2024-02-29T03:08:02",
+        "endTime": "2024-04-03T14:53:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.45831,
+          -33.63861
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB056",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 285.0,
+        "startTime": "2024-02-29T00:37:50",
+        "endTime": "2024-04-03T04:05:02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.64116,
+          -33.56076
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB060",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 281.0,
+        "startTime": "2024-02-28T21:13:46",
+        "endTime": "2024-04-02T21:47:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.48384,
+          -33.66351
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB067",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 334.0,
+        "startTime": "2024-02-29T00:20:10",
+        "endTime": "2024-04-03T12:16:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.66574,
+          -33.58095
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB071",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 180.0,
+        "startTime": "2024-02-29T21:04:06",
+        "endTime": "2024-04-03T02:12:06"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.50835,
+          -33.70283
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB078",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 406.0,
+        "startTime": "2024-02-29T06:07:50",
+        "endTime": "2024-04-04T02:19:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.71449,
+          -33.61023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB084",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 144.0,
+        "startTime": "2024-02-29T21:30:38",
+        "endTime": "2024-04-03T02:30:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.53272,
+          -33.73206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB091",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 220.0,
+        "startTime": "2024-03-03T22:15:14",
+        "endTime": "2024-04-05T04:50:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.72659,
+          -33.64494
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB093",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 164.0,
+        "startTime": "2024-02-29T03:53:18",
+        "endTime": "2024-04-03T11:51:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.68261,
+          -33.6856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB094",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 182.0,
+        "startTime": "2024-02-29T04:41:30",
+        "endTime": "2024-04-02T13:39:54"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.65341,
+          -33.71131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB095",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 126.0,
+        "startTime": "2024-02-29T22:40:50",
+        "endTime": "2024-04-03T04:44:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.60851,
+          -33.73218
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB096",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 112.0,
+        "startTime": "2024-02-29T22:16:18",
+        "endTime": "2024-04-03T03:01:06"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.57747,
+          -33.74448
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB101",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 165.0,
+        "startTime": "2024-03-03T03:30:46",
+        "endTime": "2024-04-05T00:17:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.73704,
+          -33.67235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB109",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 77.0,
+        "startTime": "2024-03-02T22:11:42",
+        "endTime": "2024-04-02T04:40:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.43854,
+          -33.87216
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB135",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 185.0,
+        "startTime": "2024-03-04T04:58:10",
+        "endTime": "2024-04-05T00:44:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.8252,
+          -33.45291
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB139",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 9.0,
+        "startTime": "2024-03-02T22:57:22",
+        "endTime": "2024-04-05T05:38:54"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.60935,
+          -33.88607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EB142",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 25.0,
+        "startTime": "2024-03-02T23:42:34",
+        "endTime": "2024-04-05T03:21:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.83084,
+          -33.76621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PB001",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 20.0,
+        "startTime": "2023-11-21T00:18:38",
+        "endTime": "2023-12-21T20:09:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.7941,
+          -33.79709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PB007",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 176.0,
+        "startTime": "2023-11-21T02:31:18",
+        "endTime": "2023-12-18T01:31:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.68965,
+          -33.72233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PB013",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 354.0,
+        "startTime": "2023-11-21T05:33:02",
+        "endTime": "2023-12-22T02:01:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.60512,
+          -33.64456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PB019",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 332.0,
+        "startTime": "2023-11-22T05:50:38",
+        "endTime": "2023-12-18T03:41:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.52631,
+          -33.55818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PB025",
+        "network": "9M",
+        "channel": "CHZ",
+        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (BB)",
+        "sampleRate": 250.0,
+        "elevation": 319.0,
+        "startTime": "2023-11-21T22:55:46",
+        "endTime": "2023-12-18T04:34:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.49751,
+          -33.49208
+        ]
+      }
+    }
+  ]
+}

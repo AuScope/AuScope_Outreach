@@ -1,0 +1,193 @@
+name: Weekly AusPASS Seismic Station Backup
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'  # Weekly Monday 07:00 UTC (5pm AEST)
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and classify AusPASS seismic stations
+        run: |
+          python3 << 'PYEOF'
+          import json, urllib.request, datetime, sys
+
+          AUSPASS_URL = 'https://auspass.edu.au/fdsnws/station/1/query?level=channel&format=text&nodata=404'
+
+          print('Fetching AusPASS channel-level data...')
+          try:
+              resp = urllib.request.urlopen(AUSPASS_URL, timeout=120)
+              lines = resp.read().decode('utf-8').strip().split('\n')
+          except Exception as e:
+              print(f'AusPASS fetch failed: {e}')
+              sys.exit(0)
+
+          print(f'Received {len(lines)} lines')
+
+          # Header: Network|Station|Location|Channel|Latitude|Longitude|Elevation|Depth|
+          #         Azimuth|Dip|SensorDescription|Scale|ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime
+
+          # Parse all channels, keyed by (network, station)
+          # For each station, pick the best representative channel (prefer Z component)
+          stations = {}  # key: (net, sta) -> best channel info
+
+          for line in lines[1:]:
+              parts = line.split('|')
+              if len(parts) < 17:
+                  continue
+
+              net = parts[0].strip()
+              sta = parts[1].strip()
+              chan = parts[3].strip()
+              lat = parts[4].strip()
+              lng = parts[5].strip()
+              elev = parts[6].strip()
+              sensor = parts[10].strip()
+              sample_rate = parts[14].strip()
+              start_time = parts[15].strip()
+              end_time = parts[16].strip() if len(parts) > 16 else ''
+
+              try:
+                  lat_f = float(lat)
+                  lng_f = float(lng)
+              except ValueError:
+                  continue
+
+              key = (net, sta)
+              band = chan[0] if chan else ''
+
+              # Score channels: prefer Z component, prefer higher band codes
+              is_z = chan.endswith('Z')
+              band_priority = {'H': 5, 'B': 4, 'S': 3, 'E': 3, 'D': 2, 'G': 1, 'C': 1}.get(band, 0)
+              score = (1 if is_z else 0) * 10 + band_priority
+
+              if key not in stations or score > stations[key]['score']:
+                  stations[key] = {
+                      'network': net,
+                      'station': sta,
+                      'channel': chan,
+                      'band': band,
+                      'lat': lat_f,
+                      'lng': lng_f,
+                      'elevation': float(elev) if elev else 0,
+                      'sensor': sensor,
+                      'sampleRate': float(sample_rate) if sample_rate else 0,
+                      'startTime': start_time,
+                      'endTime': end_time if end_time else None,
+                      'score': score
+                  }
+
+          print(f'Parsed {len(stations)} unique stations')
+
+          # Classify each station into one of four categories
+          def classify(s):
+              sensor_lower = s['sensor'].lower()
+              band = s['band']
+
+              # Determine if nodal
+              is_nodal = any(kw in sensor_lower for kw in ['node', 'solo', 'nodal', 'zland'])
+
+              # Determine if broadband or short period from sensor description
+              is_bb = '(bb)' in sensor_lower or 'broadband' in sensor_lower
+              is_sp = '(sp)' in sensor_lower or 'short period' in sensor_lower or 'geophone' in sensor_lower
+
+              # Fallback: use channel band code if sensor desc is unclear
+              if not is_bb and not is_sp:
+                  if band in ('B', 'H'):
+                      is_bb = True
+                  elif band in ('S', 'E'):
+                      is_sp = True
+                  elif band in ('D', 'G', 'C'):
+                      # D-band could be either; default to SP for nodal, BB otherwise
+                      if is_nodal:
+                          is_sp = True
+                      else:
+                          is_bb = True
+                  else:
+                      is_bb = True  # default
+
+              if is_nodal and is_bb:
+                  return 'nodal_broadband'
+              elif is_nodal and is_sp:
+                  return 'nodal_shortperiod'
+              elif is_bb:
+                  return 'seismic_broadband'
+              else:
+                  return 'seismic_shortperiod'
+
+          # Group stations by category
+          categories = {
+              'nodal_broadband': [],
+              'nodal_shortperiod': [],
+              'seismic_broadband': [],
+              'seismic_shortperiod': []
+          }
+
+          for s in stations.values():
+              cat = classify(s)
+              categories[cat].append(s)
+
+          # Write GeoJSON files
+          fetched = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+          filenames = {
+              'nodal_broadband': 'data/seismic_nodal_broadband.geojson',
+              'nodal_shortperiod': 'data/seismic_nodal_shortperiod.geojson',
+              'seismic_broadband': 'data/seismic_broadband.geojson',
+              'seismic_shortperiod': 'data/seismic_shortperiod.geojson'
+          }
+
+          for cat_id, station_list in categories.items():
+              features = []
+              for s in station_list:
+                  features.append({
+                      "type": "Feature",
+                      "properties": {
+                          "name": s['station'],
+                          "network": s['network'],
+                          "channel": s['channel'],
+                          "sensor": s['sensor'],
+                          "sampleRate": s['sampleRate'],
+                          "elevation": s['elevation'],
+                          "startTime": s['startTime'],
+                          "endTime": s['endTime']
+                      },
+                      "geometry": {
+                          "type": "Point",
+                          "coordinates": [s['lng'], s['lat']]
+                      }
+                  })
+
+              geojson = {
+                  "type": "FeatureCollection",
+                  "metadata": {
+                      "source": "AusPASS FDSN station service",
+                      "category": cat_id,
+                      "fetched": fetched
+                  },
+                  "features": features
+              }
+
+              with open(filenames[cat_id], 'w') as f:
+                  json.dump(geojson, f, indent=2)
+
+              print(f'{cat_id}: {len(features)} stations')
+
+          total = sum(len(v) for v in categories.values())
+          print(f'\nTotal: {total} stations across 4 categories')
+          PYEOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/seismic_*.geojson
+          git diff --cached --quiet || git commit -m "Weekly AusPASS seismic station backup $(date -u +%Y-%m-%d)"
+          git push

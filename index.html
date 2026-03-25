@@ -144,6 +144,17 @@
                     { id: 'lowcost',   name: 'Low-Cost Drones',   color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
                     { id: 'longrange', name: 'Long-Range Drones', color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
                 ]
+            },
+            {
+                id: 'seismic',
+                label: 'Seismic',
+                shape: 'circle',
+                programs: [
+                    { id: 'seis_bb',     name: 'Broadband',        color: '#ef4444', data: 'data/seismic_broadband.geojson' },
+                    { id: 'seis_sp',     name: 'Short Period',     color: '#f97316', data: 'data/seismic_shortperiod.geojson' },
+                    { id: 'nodal_bb',    name: 'Nodal Broadband',  color: '#06b6d4', data: 'data/seismic_nodal_broadband.geojson' },
+                    { id: 'nodal_sp',    name: 'Nodal Short Period', color: '#8b5cf6', data: 'data/seismic_nodal_shortperiod.geojson' }
+                ]
             }
         ];
 
@@ -457,11 +468,14 @@
                     var p = f.properties;
                     return {
                         name: p.name || p.code || '',
+                        network: p.network || '',
                         state: p.state || '',
                         status: p.status || '',
                         purpose: p.purpose || '',
                         sensor: p.camera_type || p.sensor || p.sensor_type || '',
                         airframe: p.airframe || '',
+                        startTime: p.startTime || '',
+                        endTime: p.endTime || '',
                         lat: coords[1],
                         lng: coords[0],
                         program: programId,
@@ -495,9 +509,12 @@
             var prog = programLookup[s.program];
             var html = '<div class="popup-name">' + esc(s.name) + '</div>'
                 + '<div class="popup-program">' + esc(prog.name) + '</div>';
+            if (s.network) html += '<div class="popup-detail"><strong>Network:</strong> ' + esc(s.network) + '</div>';
+            if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
+            if (s.startTime) html += '<div class="popup-detail"><strong>Start:</strong> ' + esc(s.startTime.split('T')[0]) + '</div>';
+            if (s.endTime) html += '<div class="popup-detail"><strong>End:</strong> ' + esc(s.endTime.split('T')[0]) + '</div>';
             if (s.state) html += '<div class="popup-detail"><strong>State:</strong> ' + esc(s.state) + '</div>';
             if (s.status) html += '<div class="popup-detail"><strong>Status:</strong> ' + esc(s.status) + '</div>';
-            if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
             if (s.airframe) html += '<div class="popup-detail"><strong>Airframe:</strong> ' + esc(s.airframe) + '</div>';
             if (s.purpose) html += '<div class="popup-detail"><strong>Purpose:</strong> ' + esc(s.purpose) + '</div>';
             return html;
