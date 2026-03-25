@@ -316,9 +316,13 @@
             });
         }
 
-        // ── Clear and rebuild markers ────────────────────────────────
-        function clearMarkers() {
-            stations.forEach(function(s) {
+        // ── Swap markers without gap ──────────────────────────────────
+        // Adds new markers first, then removes old ones (no visible flash)
+        function swapStations(newStations) {
+            var oldStations = stations;
+            stations = newStations;
+            addMarkers();
+            oldStations.forEach(function(s) {
                 if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
             });
         }
@@ -363,14 +367,12 @@
                         out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
                     }
                     if (out.length > 0) {
-                        clearMarkers();
                         stations = out;
                     }
                     return fetchAvailability();
                 })
                 .then(function() {
-                    clearMarkers();
-                    addMarkers();
+                    swapStations(stations);
                     updateHeader();
                 });
         }).catch(function(err) {

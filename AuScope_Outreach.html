@@ -299,9 +299,12 @@
             });
         }
 
-        // ── Clear and rebuild markers ────────────────────────────────
-        function clearMarkers() {
-            allStations.forEach(function(s) {
+        // ── Swap markers without gap ──────────────────────────────────
+        function swapAllStations(newStations) {
+            var oldStations = allStations;
+            allStations = newStations;
+            addMarkers();
+            oldStations.forEach(function(s) {
                 if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
             });
         }
@@ -340,9 +343,8 @@
             return fetchAuSISLive();
         }).then(function(liveAusis) {
             if (liveAusis.length > 0) {
-                clearMarkers();
-                allStations = liveAusis.concat(staticPrograms[1]).concat(staticPrograms[2]).concat(staticPrograms[3]);
-                addMarkers();
+                var newAll = liveAusis.concat(staticPrograms[1]).concat(staticPrograms[2]).concat(staticPrograms[3]);
+                swapAllStations(newAll);
                 updateLegend(liveAusis.length, staticPrograms[1].length, staticPrograms[2].length, staticPrograms[3].length);
             }
         }).catch(function(err) {
