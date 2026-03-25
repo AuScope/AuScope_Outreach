@@ -111,6 +111,7 @@
     <div class="footer" id="footer"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
         // ── Configuration ─────────────────────────────────────────────
         // Categories and programs — add new categories/programs here
@@ -261,6 +262,16 @@
                     var searchBtn = L.DomUtil.create('a', '', searchGroup);
                     searchBtn.href = '#'; searchBtn.title = 'Search sites';
                     searchBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+
+                    // Save as image button
+                    var saveGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var saveBtn = L.DomUtil.create('a', '', saveGroup);
+                    saveBtn.href = '#'; saveBtn.title = 'Save map as image';
+                    saveBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+                    saveBtn.onclick = function(e) {
+                        e.preventDefault();
+                        saveMapAsImage();
+                    };
 
                     // Layers panel
                     var layersPanel = L.DomUtil.create('div', 'layers-panel', wrap);
@@ -489,6 +500,35 @@
                     var el = document.getElementById('layer-count-' + prog.id);
                     if (el) el.textContent = count > 0 ? '(' + count + ')' : '';
                 });
+            });
+        }
+
+        // ── Save map as image ────────────────────────────────────────
+        function saveMapAsImage() {
+            // Hide toolbar controls
+            var toolbar = document.querySelector('.toolbar-wrap');
+            if (toolbar) toolbar.style.display = 'none';
+
+            // Close any open popups
+            map.closePopup();
+
+            // Capture the full page (header + map + footer)
+            html2canvas(document.body, {
+                useCORS: true,
+                allowTaint: false,
+                backgroundColor: '#282572'
+            }).then(function(canvas) {
+                // Restore toolbar
+                if (toolbar) toolbar.style.display = '';
+
+                // Convert to JPG and download
+                var link = document.createElement('a');
+                link.download = 'AuScope_Map_' + new Date().toISOString().slice(0, 10) + '.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.92);
+                link.click();
+            }).catch(function(err) {
+                if (toolbar) toolbar.style.display = '';
+                console.error('Screenshot failed:', err);
             });
         }
 
