@@ -250,7 +250,7 @@
                 return (geojson.features || []).map(function(f) {
                     var coords = f.geometry.coordinates;
                     var p = f.properties;
-                    return { code: p.code, lat: coords[1], lng: coords[0], elevation: p.elevation || 0, name: p.name || p.code, startTime: p.startTime || '', endTime: p.endTime || null, latestData: null, marker: null };
+                    return { code: p.code, lat: coords[1], lng: coords[0], elevation: p.elevation || 0, name: p.name || p.code, startTime: p.startTime || '', endTime: p.endTime || null, latestData: p.latestData ? new Date(p.latestData) : null, marker: null };
                 });
             } catch (e) {
                 console.warn('Local backup also failed:', e);

@@ -14,20 +14,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch AuSIS stations from IRIS FDSN
+      - name: Fetch AuSIS stations and availability from IRIS FDSN
         run: |
           python3 << 'EOF'
-          import json, urllib.request, datetime, sys
+          import json, urllib.request, datetime, sys, re
 
+          # Step 1: Fetch station metadata
           url = 'https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text'
           try:
               resp = urllib.request.urlopen(url, timeout=30)
               lines = resp.read().decode('utf-8').strip().split('\n')
           except Exception as e:
-              print(f'IRIS fetch failed: {e}')
-              sys.exit(0)  # Don't fail the workflow - keep existing backup
+              print(f'IRIS station fetch failed: {e}')
+              sys.exit(0)
 
-          features = []
+          stations = {}
           for line in lines[1:]:
               parts = line.split('|')
               if len(parts) < 7:
@@ -37,29 +38,62 @@ jobs:
                   continue
               lat = float(parts[2].strip())
               lng = float(parts[3].strip())
+              stations[code] = {
+                  "code": code,
+                  "name": parts[5].strip(),
+                  "elevation": float(parts[4].strip()),
+                  "startTime": parts[6].strip(),
+                  "endTime": parts[7].strip() if len(parts) > 7 and parts[7].strip() else None,
+                  "latestData": None,
+                  "lat": lat,
+                  "lng": lng
+              }
+
+          if len(stations) == 0:
+              print('No stations returned - keeping existing backup')
+              sys.exit(0)
+
+          # Step 2: Fetch availability (latest data timestamps)
+          avail_url = 'https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text'
+          try:
+              resp = urllib.request.urlopen(avail_url, timeout=30)
+              avail_lines = resp.read().decode('utf-8').strip().split('\n')
+              for line in avail_lines[1:]:
+                  cols = line.strip().split()
+                  if len(cols) < 8:
+                      continue
+                  code = cols[1]
+                  end_time = cols[7]
+                  if code in stations:
+                      current = stations[code]["latestData"]
+                      if current is None or end_time > current:
+                          stations[code]["latestData"] = end_time
+          except Exception as e:
+              print(f'Availability fetch failed (stations still saved): {e}')
+
+          # Step 3: Build GeoJSON
+          features = []
+          for s in stations.values():
               features.append({
                   "type": "Feature",
                   "properties": {
-                      "code": code,
-                      "name": parts[5].strip(),
-                      "elevation": float(parts[4].strip()),
-                      "startTime": parts[6].strip(),
-                      "endTime": parts[7].strip() if len(parts) > 7 and parts[7].strip() else None
+                      "code": s["code"],
+                      "name": s["name"],
+                      "elevation": s["elevation"],
+                      "startTime": s["startTime"],
+                      "endTime": s["endTime"],
+                      "latestData": s["latestData"]
                   },
                   "geometry": {
                       "type": "Point",
-                      "coordinates": [lng, lat]
+                      "coordinates": [s["lng"], s["lat"]]
                   }
               })
-
-          if len(features) == 0:
-              print('No stations returned - keeping existing backup')
-              sys.exit(0)
 
           geojson = {
               "type": "FeatureCollection",
               "metadata": {
-                  "source": "IRIS FDSN station service",
+                  "source": "IRIS FDSN station + availability services",
                   "network": "S1",
                   "fetched": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
               },
@@ -69,7 +103,8 @@ jobs:
           with open('data/ausis_stations.geojson', 'w') as f:
               json.dump(geojson, f, indent=2)
 
-          print(f'Saved {len(features)} stations')
+          avail_count = sum(1 for s in stations.values() if s["latestData"])
+          print(f'Saved {len(features)} stations ({avail_count} with availability data)')
           EOF
 
       - name: Commit if changed
