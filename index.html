@@ -125,11 +125,22 @@
         // Shape = category identity, colour = program identity
         var CATEGORIES = [
             {
-                id: 'outreach',
-                label: 'Outreach',
+                id: 'seismic',
+                label: 'Seismic',
                 shape: 'triangle',
                 programs: [
-                    { id: 'ausis',     name: 'AuSIS',         color: '#22c55e', data: 'ausis' },
+                    { id: 'ausis',       name: 'AuSIS',              color: '#22c55e', data: 'ausis' },
+                    { id: 'seis_bb',     name: 'Broadband',          color: '#ef4444', data: 'data/seismic_broadband.geojson' },
+                    { id: 'seis_sp',     name: 'Short Period',       color: '#f97316', data: 'data/seismic_shortperiod.geojson' },
+                    { id: 'nodal_bb',    name: 'Nodal Broadband',    color: '#06b6d4', data: 'data/seismic_nodal_broadband.geojson' },
+                    { id: 'nodal_sp',    name: 'Nodal Short Period', color: '#8b5cf6', data: 'data/seismic_nodal_shortperiod.geojson' }
+                ]
+            },
+            {
+                id: 'outreach',
+                label: 'Outreach',
+                shape: 'circle',
+                programs: [
                     { id: 'mag',       name: 'Magnetometers',  color: '#a855f7', data: 'data/magnetometers.geojson' },
                     { id: 'earthbank', name: 'EarthBank',      color: '#3b82f6', data: 'data/earthbank.geojson' },
                     { id: 'gplates',   name: 'GPlates',        color: '#f59e0b', data: 'data/gplates.geojson' }
@@ -143,17 +154,6 @@
                     { id: 'cameras',   name: 'Camera Stations',   color: '#ef4444', data: 'data/coastri_cameras.geojson' },
                     { id: 'lowcost',   name: 'Low-Cost Drones',   color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
                     { id: 'longrange', name: 'Long-Range Drones', color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
-                ]
-            },
-            {
-                id: 'seismic',
-                label: 'Seismic',
-                shape: 'circle',
-                programs: [
-                    { id: 'seis_bb',     name: 'Broadband',        color: '#ef4444', data: 'data/seismic_broadband.geojson' },
-                    { id: 'seis_sp',     name: 'Short Period',     color: '#f97316', data: 'data/seismic_shortperiod.geojson' },
-                    { id: 'nodal_bb',    name: 'Nodal Broadband',  color: '#06b6d4', data: 'data/seismic_nodal_broadband.geojson' },
-                    { id: 'nodal_sp',    name: 'Nodal Short Period', color: '#8b5cf6', data: 'data/seismic_nodal_shortperiod.geojson' }
                 ]
             }
         ];
@@ -348,7 +348,7 @@
             new ToolbarControl({ position: 'topleft' }).addTo(map);
 
             map.on('zoomend', function() {
-                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                var size = Math.max(10, Math.min(22, map.getZoom() * 2));
                 allSites.forEach(function(s) {
                     if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
                 });
@@ -522,7 +522,7 @@
 
         // ── Add markers ──────────────────────────────────────────────
         function addMarkers() {
-            var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+            var size = Math.max(10, Math.min(22, map.getZoom() * 2));
             allSites.forEach(function(s) {
                 var icon = makeIcon(s.program, size);
                 var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(buildPopup(s), { maxWidth: 280 }).addTo(map);
