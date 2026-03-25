@@ -218,23 +218,44 @@
             return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
         }
 
-        // ── Data fetching ────────────────────────────────────────────
+        // ── Data fetching (live IRIS with local GeoJSON fallback) ────
         async function fetchStations() {
-            const resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
-            if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
-            const lines = (await resp.text()).trim().split('\n');
-            const out = [];
-            for (let i = 1; i < lines.length; i++) {
-                const p = lines[i].split('|');
-                if (p.length < 7) continue;
-                const code = p[1].trim();
-                if (code === 'TEST') continue;
-                const lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-                if (isNaN(lat) || isNaN(lng)) continue;
-                const endRaw = p[7] ? p[7].trim() : '';
-                out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
+            try {
+                var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
+                if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
+                var lines = (await resp.text()).trim().split('\n');
+                var out = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var p = lines[i].split('|');
+                    if (p.length < 7) continue;
+                    var code = p[1].trim();
+                    if (code === 'TEST') continue;
+                    var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+                    if (isNaN(lat) || isNaN(lng)) continue;
+                    var endRaw = p[7] ? p[7].trim() : '';
+                    out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
+                }
+                return out;
+            } catch (e) {
+                console.warn('IRIS API failed, using local backup:', e);
+                return fetchStationsFromBackup();
             }
-            return out;
+        }
+
+        async function fetchStationsFromBackup() {
+            try {
+                var resp = await fetch('data/ausis_stations.geojson');
+                if (!resp.ok) return [];
+                var geojson = await resp.json();
+                return (geojson.features || []).map(function(f) {
+                    var coords = f.geometry.coordinates;
+                    var p = f.properties;
+                    return { code: p.code, lat: coords[1], lng: coords[0], elevation: p.elevation || 0, name: p.name || p.code, startTime: p.startTime || '', endTime: p.endTime || null, latestData: null, marker: null };
+                });
+            } catch (e) {
+                console.warn('Local backup also failed:', e);
+                return [];
+            }
         }
 
         async function fetchAvailability() {
@@ -295,22 +316,66 @@
             });
         }
 
+        // ── Clear and rebuild markers ────────────────────────────────
+        function clearMarkers() {
+            stations.forEach(function(s) {
+                if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
+            });
+        }
+
+        function updateHeader() {
+            var active = stations.filter(function(s) { return !s.endTime; }).length;
+            var streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS; }).length;
+            document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
+            document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
+        }
+
         // ── Initialise ───────────────────────────────────────────────
         setLegendIcons();
         initMap();
-        fetchStations().then(function(data) {
-            stations = data;
-            return fetchAvailability();
-        }).then(function() {
-            addMarkers();
-            map.setView([-28, 134], 4);
 
-            const active = stations.filter(function(s) { return !s.endTime; }).length;
-            const streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS; }).length;
-            document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
-            document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
+        // Step 1: Load local backup instantly for immediate display
+        fetchStationsFromBackup().then(function(data) {
+            if (data.length > 0) {
+                stations = data;
+                addMarkers();
+                map.setView([-28, 134], 4);
+                updateHeader();
+            }
+
+            // Step 2: Fetch live IRIS data in background, then refresh
+            return fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text')
+                .then(function(resp) {
+                    if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
+                    return resp.text();
+                })
+                .then(function(text) {
+                    var lines = text.trim().split('\n');
+                    var out = [];
+                    for (var i = 1; i < lines.length; i++) {
+                        var p = lines[i].split('|');
+                        if (p.length < 7) continue;
+                        var code = p[1].trim();
+                        if (code === 'TEST') continue;
+                        var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+                        if (isNaN(lat) || isNaN(lng)) continue;
+                        var endRaw = p[7] ? p[7].trim() : '';
+                        out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
+                    }
+                    if (out.length > 0) {
+                        clearMarkers();
+                        stations = out;
+                    }
+                    return fetchAvailability();
+                })
+                .then(function() {
+                    clearMarkers();
+                    addMarkers();
+                    updateHeader();
+                });
         }).catch(function(err) {
-            console.error('Error:', err);
+            console.warn('Live refresh failed, using backup data:', err);
+            // Backup data already displayed - nothing else to do
         });
     </script>
 </body>

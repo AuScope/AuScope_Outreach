@@ -1,0 +1,1539 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Aireys Inlet",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.11834,
+          -38.45722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Anglesea - Demons Bluff",
+        "state": "VIC",
+        "focus": "beach and cliff",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.200555,
+          -38.40646476
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Anglesea - Point Roadknight",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.18019,
+          -38.4209331
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Apollo Bay",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Daniel Ierodiaconou, daniel.ierodiaconou@deakin.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.674708,
+          -38.74308761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bells Beach/Point Addis",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.267337,
+          -38.37923917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Blairgowrie",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.776683,
+          -38.35949732
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cowes",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.269133,
+          -38.45093896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dromana/McCrae",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.938126,
+          -38.343554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eastern View",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.086108,
+          -38.4687959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Inverloch",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Daniel Ierodiaconou, daniel.ierodiaconou@deakin.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.712916,
+          -38.646226
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marengo",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.666021,
+          -38.76842558
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Martha",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.015191,
+          -38.26425181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Port Fairy",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Daniel Ierodiaconou, daniel.ierodiaconou@deakin.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.251375,
+          -38.36998128
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Portarlington",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.670609,
+          -38.11417377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Portland/Dutton Way",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.647256,
+          -38.286492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sandringham",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.006022,
+          -37.95584673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Warrnambool",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.490901,
+          -38.39346485
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Altona",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.822022,
+          -37.872496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jan Juc",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.303713,
+          -38.34994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kennet River",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.86331,
+          -38.668181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lorne",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.98046,
+          -38.532373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ocean Grove",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.532255,
+          -38.271548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Patterson River",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.119792,
+          -38.072951
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Point Impossible",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.37793,
+          -38.305263
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Point Lonsdale/Queenscliff",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.624252,
+          -38.274554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Portsea",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.720098,
+          -38.319097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Seaspray",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.197923,
+          -38.372003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Torquay",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.327107,
+          -38.332892
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wye River",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.895321,
+          -38.633392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "St Leonards",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK, DJI M3M RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Citizen Scientists, Universities, State Government",
+        "contact": "Daniel Ierodiaconou, daniel.ierodiaconou@deakin.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.7162,
+          -38.15845
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Eliza",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.08079,
+          -38.17278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mornington - Beleura Cliffs",
+        "state": "VIC",
+        "focus": "Beach and Cliff",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.05288,
+          -38.20635
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mornington - Shire Hall Beach",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.03752,
+          -38.21479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mornington - Fishermand Beach",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.0293,
+          -38.22596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rye",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.80961,
+          -38.36675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Flinders",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities, State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.02675,
+          -38.47053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Summerlands Beach",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "Various",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.14792,
+          -38.50241
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Walkerville",
+        "state": "VIC",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "P4RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government",
+        "contact": "Blake Allan, blake.allan@deeca.vic.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.99957,
+          -38.84322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Burgess Creek",
+        "state": "QLD",
+        "focus": "Beach",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": null,
+        "airframe": "DJI P4 RTK",
+        "sensor": "Factory",
+        "purpose": "Erosion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities",
+        "contact": "Javier Leon, jleon@usc.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          153.109,
+          -26.425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wooli Beach (IMOS Wave buoy at 30m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "< 1 year",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          153.26668,
+          -29.87094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Harrington Beach (DCCEEW Wave buoy at 12m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Mike Kinsela, Michael.Kinsela@newcastle.edu.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          152.72825,
+          -31.85579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jimmys Beach (BEB)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Chris Drummond, chris.drummond@environment.nsw.gov.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          152.16489,
+          -32.67938
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Stockton (DCCEEW Wave buoy at 12m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Chris Drummond, chris.drummond@environment.nsw.gov.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.78831,
+          -32.9042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Narrabeen-Collaroy (IMOS Wave buoy at 12m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Mitch Harley, m.harley@unsw.edu.au, Ian Turner, ian.turner@unsw.edu.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.30051,
+          -33.71761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maroubra",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "1 - 2 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Ana Vila Concejo, ana.vilaconcejo@sydney.edu.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.25687,
+          -33.94872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Warilla",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery, Mgmt interventions",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.86955,
+          -34.55106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Culburra",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "< 1 year",
+        "coastline_km": "3 - 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.76529,
+          -34.9175
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bengello (IMOS Wave buoy at 12m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "> 5 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Thomas Oliver, t.oliver@unsw.edu.au, Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.15487,
+          -35.87936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tathra (IMOS Wave buoy at 30m water depth)",
+        "state": "NSW",
+        "focus": "Beach & dune",
+        "status": "Existing",
+        "duration": "< 1 year",
+        "coastline_km": "2 - 3 km's",
+        "area_ha": null,
+        "airframe": "DJI M3E RTK, M300 RTK",
+        "sensor": "L2",
+        "purpose": "Erosion & recovery",
+        "mapping_type": "Photogrammetry and Lidar",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "State Government, Universities",
+        "contact": "Tom Doyle, thomas.doyle@environment.nsw.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.97943,
+          -36.71036
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tennyson",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities, State Government",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.4740178,
+          -34.8892188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "West Beach",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities, State Government",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.487987,
+          -34.955996
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brighton",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities, State Government",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.49535,
+          -35.01373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North Haven",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities, State Government",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.48019,
+          -34.8086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CY O'Connor Beach (Perth) - near potential WA stete co-invest wavebuoy",
+        "state": "WA",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "2 year",
+        "coastline_km": "1-2 km",
+        "area_ha": null,
+        "airframe": "DJI/Qunatum trinity",
+        "sensor": "Factory",
+        "purpose": "Erosion/Artificial reef",
+        "mapping_type": "Photogrammetry (ideally with some bathy lidar)",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities",
+        "contact": "jeff.hansen@uwa.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7516,
+          -32.08145
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Floreat (Perth)",
+        "state": "WA",
+        "focus": "Beach and shoreline position",
+        "status": "Existing",
+        "duration": "2 years",
+        "coastline_km": "1-2 km",
+        "area_ha": null,
+        "airframe": "DJI/Qunatum trinity",
+        "sensor": "Factory",
+        "purpose": "Erosion/Accretion",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities",
+        "contact": "jeff.hansen@uwa.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.755,
+          -31.9248
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lizard Island",
+        "state": "QLD",
+        "focus": "Reef cover and health",
+        "status": "Existing",
+        "duration": "2 years",
+        "coastline_km": " ~ 5 kms",
+        "area_ha": 30.0,
+        "airframe": "DJI various (Mavic 2, Phantom 2, Mavic 3e, Mini 3)",
+        "sensor": "Factory",
+        "purpose": "Reef health",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities",
+        "contact": "v.raoult@griffith.edu.au, karen@geonadir.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.4465529,
+          -14.68125033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Heron Island",
+        "state": "QLD",
+        "focus": "Reef cover and health",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 kms",
+        "area_ha": 10.0,
+        "airframe": "DJI various (Mavic 2, Phantom 2, Mavic 3e, Mini 3)",
+        "sensor": "Factory",
+        "purpose": "Reef health",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "Universities",
+        "contact": "v.raoult@griffith.edu.au, karen@geonadir.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.9141379,
+          -23.44410069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Groote Eylandt",
+        "state": "NT",
+        "focus": "Beach and dunes",
+        "status": "existing",
+        "duration": "1 year",
+        "coastline_km": "8 km",
+        "area_ha": null,
+        "airframe": "eBee X fixed wing",
+        "sensor": "Aria",
+        "purpose": "marine debris",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "indigenious rangers",
+        "contact": "hamish.campbell@cdu.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.762943,
+          -13.958016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Groote Eylandt",
+        "state": "NT",
+        "focus": "Mangroves",
+        "status": "existing",
+        "duration": "1 year",
+        "coastline_km": "2-5 km",
+        "area_ha": null,
+        "airframe": "eBee X fixed wing",
+        "sensor": "Aria",
+        "purpose": "marine debris",
+        "mapping_type": "Photogrammetry",
+        "outputs": "Point Cloud, DEM, Orthomosaic",
+        "collector": "indigenious rangers",
+        "contact": "hamish.campbell@cdu.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.424639,
+          -13.90196
+        ]
+      }
+    }
+  ]
+}

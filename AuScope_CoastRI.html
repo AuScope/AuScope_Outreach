@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <!--
-    AuScope_Outreach.html
-    Interactive map of AuScope outreach program locations.
-    Programs: AuSIS (Seismometers in Schools), Magnetometers in Schools,
-    EarthBank in the Classroom, GPlates in Schools.
-    Static GeoJSON data loaded from data/ folder; AuSIS fetched live from IRIS
-    with local GeoJSON fallback.
+    AuScope_CoastRI.html
+    Interactive map of AuScope-funded CoastRI coastal monitoring sites.
+    Programs: Fixed Camera Stations, Low-Cost Drone Surveys, Long-Range Drones.
+    Static GeoJSON data loaded from data/ folder.
 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuScope Outreach Locations</title>
+    <title>AuScope CoastRI Locations</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,12 +27,13 @@
         #map { flex: 1; width: 100%; }
 
         /* Popups */
-        .leaflet-popup-content-wrapper { opacity: 0.92 !important; }
+        .leaflet-popup-content-wrapper { background: rgba(255, 255, 255, 0.92) !important; }
         .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
         .popup-name { font-weight: 700; font-size: 14px; color: #282572; }
         .popup-program { font-size: 11px; color: #6b7280; margin-top: 2px; }
+        .popup-detail { font-size: 12px; margin-top: 4px; }
 
-        /* Controls — hidden by default for clean map view */
+        /* Controls */
         .leaflet-control-zoom { display: none !important; }
         .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
         .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
@@ -43,7 +42,7 @@
         .toolbar-buttons.open { display: block; }
         .btn-group { margin-top: 4px; }
         .btn-group:first-child { margin-top: 0; }
-        .btn-group a { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: #fff; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; }
+        .btn-group a { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #fff; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; }
         .btn-group a:first-child { border-radius: 4px 4px 0 0; }
         .btn-group a + a { border-top: none; }
         .btn-group a:last-child { border-radius: 0 0 4px 4px; }
@@ -73,145 +72,143 @@
 </head>
 <body>
     <div class="header">
-        <span class="header-title"><span id="header-total">AuScope Outreach Locations</span></span>
+        <span class="header-title"><span id="header-total">AuScope CoastRI Locations</span></span>
         <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
     </div>
 
     <div id="map"></div>
 
     <div class="footer">
-        <span class="legend-item"><span class="legend-icon" id="legend-ausis"></span> <span id="legend-ausis-text">AuSIS</span></span>
-        <span class="legend-item"><span class="legend-icon" id="legend-mag"></span> <span id="legend-mag-text">Magnetometers</span></span>
-        <span class="legend-item"><span class="legend-icon" id="legend-eb"></span> <span id="legend-eb-text">EarthBank</span></span>
-        <span class="legend-item" id="legend-gp-item" style="display:none"><span class="legend-icon" id="legend-gp"></span> <span id="legend-gp-text">GPlates</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-cameras"></span> <span id="legend-cameras-text">Camera Stations</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-lowcost"></span> <span id="legend-lowcost-text">Low-Cost Drones</span></span>
+        <span class="legend-item"><span class="legend-icon" id="legend-longrange"></span> <span id="legend-longrange-text">Long-Range Drones</span></span>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ── State ─────────────────────────────────────────────────────
-        let allStations = [];
-        let map = null;
+        var allSites = [];
+        var map = null;
 
         // ── Program config ────────────────────────────────────────────
-        const PROGRAMS = {
-            ausis:     { name: 'Seismometers in Schools (AuSIS)', color: '#22c55e' },
-            mag:       { name: 'Magnetometers in Schools',        color: '#a855f7' },
-            earthbank: { name: 'EarthBank in the Classroom',      color: '#3b82f6' },
-            gplates:   { name: 'GPlates in Schools',              color: '#f59e0b' }
+        var PROGRAMS = {
+            cameras:   { name: 'Fixed Camera Stations',  color: '#ef4444' },
+            lowcost:   { name: 'Low-Cost Drone Surveys',  color: '#22c55e' },
+            longrange: { name: 'Long-Range Drones',        color: '#3b82f6' }
         };
 
         // ── Helpers ──────────────────────────────────────────────────
         function esc(str) {
-            const d = document.createElement('div');
+            var d = document.createElement('div');
             d.textContent = str;
             return d.innerHTML;
         }
 
         // ── SVG icon generators ──────────────────────────────────────
         function triangleSVG(size, strokeColor) {
-            const h = size / 2;
+            var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function triangleIcon(size, strokeColor) {
-            const h = size / 2;
+            var h = size / 2;
             return L.divIcon({ html: triangleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
         }
 
         function diamondSVG(size, strokeColor) {
-            const h = size / 2;
+            var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + h + ' ' + h + ',' + (size - 2) + ' 2,' + h + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
         }
         function diamondIcon(size, strokeColor) {
-            const h = size / 2;
+            var h = size / 2;
             return L.divIcon({ html: diamondSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
         }
 
+        function circleIcon(size, strokeColor) {
+            var h = size / 2;
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+                + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2"/></svg>';
+            return L.divIcon({ html: svg, className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
+        }
+
         function circleSVG(size, strokeColor) {
-            const h = size / 2;
+            var h = size / 2;
             return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
                 + '<circle cx="' + h + '" cy="' + h + '" r="' + (h - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2"/></svg>';
         }
-        function circleIcon(size, strokeColor) {
-            const h = size / 2;
-            return L.divIcon({ html: circleSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
-        }
-
-        function squareSVG(size, strokeColor) {
-            return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-                + '<rect x="2" y="2" width="' + (size - 4) + '" height="' + (size - 4) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
-        }
-        function squareIcon(size, strokeColor) {
-            const h = size / 2;
-            return L.divIcon({ html: squareSVG(size, strokeColor), className: '', iconSize: [size, size], iconAnchor: [h, h], popupAnchor: [0, -h] });
-        }
 
         function makeIcon(program, size) {
-            const color = PROGRAMS[program].color;
-            if (program === 'ausis') return triangleIcon(size, color);
-            if (program === 'mag') return diamondIcon(size, color);
-            if (program === 'earthbank') return circleIcon(size, color);
-            if (program === 'gplates') return squareIcon(size, color);
+            var color = PROGRAMS[program].color;
+            if (program === 'cameras') return triangleIcon(size, color);
+            if (program === 'lowcost') return diamondIcon(size, color);
+            if (program === 'longrange') return circleIcon(size, color);
             return triangleIcon(size, color);
+        }
+
+        function makeLegendSVG(program) {
+            var color = PROGRAMS[program].color;
+            if (program === 'cameras') return triangleSVG(16, color);
+            if (program === 'lowcost') return diamondSVG(16, color);
+            if (program === 'longrange') return circleSVG(16, color);
+            return triangleSVG(16, color);
         }
 
         // ── Legend icons ─────────────────────────────────────────────
         function setLegendIcons() {
-            document.getElementById('legend-ausis').innerHTML = triangleSVG(16, PROGRAMS.ausis.color);
-            document.getElementById('legend-mag').innerHTML = diamondSVG(16, PROGRAMS.mag.color);
-            document.getElementById('legend-eb').innerHTML = circleSVG(16, PROGRAMS.earthbank.color);
-            document.getElementById('legend-gp').innerHTML = squareSVG(16, PROGRAMS.gplates.color);
+            document.getElementById('legend-cameras').innerHTML = makeLegendSVG('cameras');
+            document.getElementById('legend-lowcost').innerHTML = makeLegendSVG('lowcost');
+            document.getElementById('legend-longrange').innerHTML = makeLegendSVG('longrange');
         }
 
         // ── Map initialisation ───────────────────────────────────────
         function initMap() {
-            map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
+            map = L.map('map', { center: [-28, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
-            // Tools button — three dots toggle
-            const ToolbarControl = L.Control.extend({
+            // Collapsible toolbar
+            var ToolbarControl = L.Control.extend({
                 onAdd: function() {
-                    const wrap = L.DomUtil.create('div', 'toolbar-wrap');
+                    var wrap = L.DomUtil.create('div', 'toolbar-wrap');
                     L.DomEvent.disableClickPropagation(wrap);
                     L.DomEvent.disableScrollPropagation(wrap);
 
-                    const toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+                    var toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
                     toggle.href = '#'; toggle.title = 'Map tools';
                     toggle.innerHTML = '&#x22EE;';
 
-                    const buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+                    var buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
 
-                    const zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    const zoomIn = L.DomUtil.create('a', '', zoomGroup);
+                    var zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var zoomIn = L.DomUtil.create('a', '', zoomGroup);
                     zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
                     zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
-                    const zoomOut = L.DomUtil.create('a', '', zoomGroup);
+                    var zoomOut = L.DomUtil.create('a', '', zoomGroup);
                     zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
                     zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
 
-                    const homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    const home = L.DomUtil.create('a', '', homeGroup);
-                    home.href = '#'; home.title = 'Zoom to all locations';
-                    home.innerHTML = '&#x1F3E0;'; home.style.fontSize = '16px';
-                    home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
+                    var homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var home = L.DomUtil.create('a', '', homeGroup);
+                    home.href = '#'; home.title = 'Zoom to all sites';
+                    home.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+                    home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 5); };
 
-                    const searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
-                    const searchBtn = L.DomUtil.create('a', '', searchGroup);
-                    searchBtn.href = '#'; searchBtn.title = 'Search schools';
+                    var searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+                    var searchBtn = L.DomUtil.create('a', '', searchGroup);
+                    searchBtn.href = '#'; searchBtn.title = 'Search sites';
                     searchBtn.innerHTML = '&#x1F50D;'; searchBtn.style.fontSize = '15px';
 
-                    const panel = L.DomUtil.create('div', 'search-panel', wrap);
-                    const input = L.DomUtil.create('input', '', panel);
-                    input.type = 'text'; input.placeholder = 'Search schools...';
-                    const res = L.DomUtil.create('div', 'search-results', panel);
+                    var panel = L.DomUtil.create('div', 'search-panel', wrap);
+                    var input = L.DomUtil.create('input', '', panel);
+                    input.type = 'text'; input.placeholder = 'Search sites...';
+                    var res = L.DomUtil.create('div', 'search-results', panel);
 
                     toggle.onclick = function(e) {
                         e.preventDefault();
-                        const isOpen = buttons.classList.contains('open');
+                        var isOpen = buttons.classList.contains('open');
                         buttons.classList.toggle('open');
-                        if (isOpen) { panel.classList.remove('open'); }
+                        if (isOpen) panel.classList.remove('open');
                     };
 
                     searchBtn.onclick = function(e) {
@@ -221,14 +218,18 @@
                     };
 
                     input.oninput = function() {
-                        const q = input.value.trim().toLowerCase(); res.innerHTML = '';
+                        var q = input.value.trim().toLowerCase(); res.innerHTML = '';
                         if (q.length < 2) return;
-                        allStations.filter(function(s) {
+                        allSites.filter(function(s) {
                             return s.name.toLowerCase().indexOf(q) !== -1;
                         }).slice(0, 10).forEach(function(s) {
-                            const row = document.createElement('div');
+                            var row = document.createElement('div');
                             row.textContent = s.name;
-                            row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
+                            row.onclick = function() {
+                                input.value = ''; res.innerHTML = ''; panel.classList.remove('open');
+                                map.setView([s.lat, s.lng], 12, { animate: true });
+                                setTimeout(function() { s.marker.openPopup(); }, 300);
+                            };
                             res.appendChild(row);
                         });
                     };
@@ -239,29 +240,11 @@
             new ToolbarControl({ position: 'topleft' }).addTo(map);
 
             map.on('zoomend', function() {
-                const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-                allStations.forEach(function(s) {
+                var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+                allSites.forEach(function(s) {
                     if (s.marker) s.marker.setIcon(makeIcon(s.program, size));
                 });
             });
-        }
-
-        // ── Data: AuSIS from IRIS (live) ─────────────────────────────
-        async function fetchAuSISLive() {
-            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
-            if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
-            var lines = (await resp.text()).trim().split('\n');
-            var out = [];
-            for (var i = 1; i < lines.length; i++) {
-                var p = lines[i].split('|');
-                if (p.length < 7) continue;
-                var code = p[1].trim();
-                if (code === 'TEST') continue;
-                var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-                if (isNaN(lat) || isNaN(lng)) continue;
-                out.push({ name: p[5].trim(), lat: lat, lng: lng, program: 'ausis', marker: null });
-            }
-            return out;
         }
 
         // ── Data: GeoJSON from data/ folder ──────────────────────────
@@ -270,11 +253,17 @@
                 var resp = await fetch(url);
                 if (!resp.ok) return [];
                 var geojson = await resp.json();
-                var features = geojson.features || [];
-                return features.map(function(f) {
+                return (geojson.features || []).map(function(f) {
                     var coords = f.geometry.coordinates;
+                    var p = f.properties;
                     return {
-                        name: f.properties.name || f.properties.code || '',
+                        name: p.name || '',
+                        state: p.state || '',
+                        status: p.status || '',
+                        purpose: p.purpose || '',
+                        sensor: p.camera_type || p.sensor || p.sensor_type || '',
+                        airframe: p.airframe || '',
+                        contact: p.contact || '',
                         lat: coords[1],
                         lng: coords[0],
                         program: program,
@@ -287,66 +276,49 @@
             }
         }
 
+        // ── Popup content ────────────────────────────────────────────
+        function buildPopup(s) {
+            var html = '<div class="popup-name">' + esc(s.name) + '</div>'
+                + '<div class="popup-program">' + esc(PROGRAMS[s.program].name) + '</div>';
+            if (s.state) html += '<div class="popup-detail"><strong>State:</strong> ' + esc(s.state) + '</div>';
+            if (s.status) html += '<div class="popup-detail"><strong>Status:</strong> ' + esc(s.status) + '</div>';
+            if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
+            if (s.airframe) html += '<div class="popup-detail"><strong>Airframe:</strong> ' + esc(s.airframe) + '</div>';
+            if (s.purpose) html += '<div class="popup-detail"><strong>Purpose:</strong> ' + esc(s.purpose) + '</div>';
+            return html;
+        }
+
         // ── Add markers ──────────────────────────────────────────────
         function addMarkers() {
             var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
-            allStations.forEach(function(s) {
+            allSites.forEach(function(s) {
                 var icon = makeIcon(s.program, size);
-                var html = '<div class="popup-name">' + esc(s.name) + '</div>'
-                    + '<div class="popup-program">' + esc(PROGRAMS[s.program].name) + '</div>';
-                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(html, { maxWidth: 260 }).addTo(map);
+                var m = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(buildPopup(s), { maxWidth: 280 }).addTo(map);
                 s.marker = m;
             });
-        }
-
-        // ── Clear and rebuild markers ────────────────────────────────
-        function clearMarkers() {
-            allStations.forEach(function(s) {
-                if (s.marker) { map.removeLayer(s.marker); s.marker = null; }
-            });
-        }
-
-        function updateLegend(ausisCount, magCount, ebCount, gpCount) {
-            var total = allStations.length;
-            document.getElementById('header-total').textContent = 'AuScope Outreach Locations - ' + total + ' schools';
-            document.getElementById('legend-ausis-text').textContent = 'AuSIS (' + ausisCount + ')';
-            if (magCount > 0) document.getElementById('legend-mag-text').textContent = 'Magnetometers (' + magCount + ')';
-            if (ebCount > 0) document.getElementById('legend-eb-text').textContent = 'EarthBank (' + ebCount + ')';
-            if (gpCount > 0) {
-                document.getElementById('legend-gp-item').style.display = 'flex';
-                document.getElementById('legend-gp-text').textContent = 'GPlates (' + gpCount + ')';
-            }
         }
 
         // ── Initialise ───────────────────────────────────────────────
         setLegendIcons();
         initMap();
 
-        // Step 1: Load all from local GeoJSON (instant display)
-        var staticPrograms;
         Promise.all([
-            fetchGeoJSON('data/ausis_stations.geojson', 'ausis'),
-            fetchGeoJSON('data/magnetometers.geojson', 'mag'),
-            fetchGeoJSON('data/earthbank.geojson', 'earthbank'),
-            fetchGeoJSON('data/gplates.geojson', 'gplates')
+            fetchGeoJSON('data/coastri_cameras.geojson', 'cameras'),
+            fetchGeoJSON('data/coastri_lowcost_drones.geojson', 'lowcost'),
+            fetchGeoJSON('data/coastri_longrange_drones.geojson', 'longrange')
         ]).then(function(results) {
-            staticPrograms = results;
-            allStations = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
+            allSites = results[0].concat(results[1]).concat(results[2]);
             addMarkers();
-            map.setView([-28, 134], 4);
-            updateLegend(results[0].length, results[1].length, results[2].length, results[3].length);
+            map.setView([-28, 134], 5);
 
-            // Step 2: Refresh AuSIS with live IRIS data in background
-            return fetchAuSISLive();
-        }).then(function(liveAusis) {
-            if (liveAusis.length > 0) {
-                clearMarkers();
-                allStations = liveAusis.concat(staticPrograms[1]).concat(staticPrograms[2]).concat(staticPrograms[3]);
-                addMarkers();
-                updateLegend(liveAusis.length, staticPrograms[1].length, staticPrograms[2].length, staticPrograms[3].length);
-            }
+            var total = allSites.length;
+            document.getElementById('header-total').textContent = 'AuScope CoastRI Locations - ' + total + ' sites';
+
+            document.getElementById('legend-cameras-text').textContent = 'Camera Stations (' + results[0].length + ')';
+            document.getElementById('legend-lowcost-text').textContent = 'Low-Cost Drones (' + results[1].length + ')';
+            document.getElementById('legend-longrange-text').textContent = 'Long-Range Drones (' + results[2].length + ')';
         }).catch(function(err) {
-            console.warn('Live AuSIS refresh failed, using backup:', err);
+            console.error('Load error:', err);
         });
     </script>
 </body>

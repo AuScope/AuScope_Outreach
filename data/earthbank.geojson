@@ -1,0 +1,252 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Apple-cross Senior High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8349,
+          -32.0295
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Lawley Senior High School (Upper)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.87,
+          -31.9213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Lawley Senior High School (Middle)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.87,
+          -31.9223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Willetton Senior High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8789,
+          -32.0598
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kelmscott Senior High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0124,
+          -32.1187
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Subiaco Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8229,
+          -31.9488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Newman College (Secondary Campus)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7933,
+          -31.906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBC Fremantle"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7498,
+          -32.0522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Palmyra Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7854,
+          -32.0449
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Churchlands Senior High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7815,
+          -31.921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kardinya Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8158,
+          -32.0665
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rostrata Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8953,
+          -32.0687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "John XXIII College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7962,
+          -31.9582
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Penrhos College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8353,
+          -32.0246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Aveley Secondary College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.9876,
+          -31.7817
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Melville Senior High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8012,
+          -32.0378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Melville Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8048,
+          -32.0433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shenton College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.7933,
+          -31.9576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "O'Connor Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.469,
+          -30.747
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Narrabeen",
+        "state": "NSW",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "camera_type": "Argus",
+        "purpose": "Erosion",
+        "outputs": "Half-hourly imagery/video",
+        "contact": "m.harley@unsw.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.3000588,
+          -33.72803852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "The Cut",
+        "state": "WA",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "camera_type": "Argus",
+        "purpose": "Erosion",
+        "outputs": "Half-hourly imagery/video",
+        "contact": "michael.cuttler@uwa.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.6287662,
+          -32.61109773
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gold Coast",
+        "state": "QLD",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "camera_type": "Argus",
+        "purpose": "Erosion",
+        "outputs": "Half-hourly imagery/video",
+        "contact": "j.chan@unsw.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          153.4299067,
+          -27.99488384
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Victor Harbor",
+        "state": "SA",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "2 - 3 km's",
+        "camera_type": "CoastSnap",
+        "purpose": "Erosion",
+        "outputs": "Half-hourly imagery/video",
+        "contact": "bsymmonds@victor.sa.gov.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.611065,
+          -35.567658
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Henley Beach",
+        "state": "SA",
+        "focus": "Green LiDAR bathymetry",
+        "status": "Existing",
+        "duration": "< 1 year",
+        "coastline_km": "< 1 km",
+        "area_ha": null,
+        "airframe": "M300",
+        "sensor_type": "Green LiDAR",
+        "sensor_model": "TDOT",
+        "purpose": null,
+        "outputs": null,
+        "collector": "Universities",
+        "contact": "graziela.miotdasilva@flinders.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.488598,
+          -34.915301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tennyson",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor_type": "RGB, Multispectral ",
+        "sensor_model": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.4740178,
+          -34.8892188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "West Beach",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor_type": "RGB, Multispectral ",
+        "sensor_model": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.487987,
+          -34.955996
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brighton",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "> 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor_type": "RGB, Multispectral ",
+        "sensor_model": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.49535,
+          -35.01373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North Haven",
+        "state": "SA",
+        "focus": "Subtidal, landward of blue line",
+        "status": "Existing",
+        "duration": "1 - 3 years",
+        "coastline_km": "< 1 km",
+        "area_ha": 50.0,
+        "airframe": "DJI M3E RTK, M3M RTK, M300 RTK",
+        "sensor_type": "RGB, Multispectral ",
+        "sensor_model": "Factory, DJI Zenmuse P1",
+        "purpose": "Seagrass dynamics",
+        "outputs": "Orthomosaics, Multispectral Bands",
+        "collector": "Universities",
+        "contact": "molly.hennekam@adelaide.edu.au, dillon.campbell@adelaide.edu.au"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.4801877,
+          -34.8085963
+        ]
+      }
+    }
+  ]
+}

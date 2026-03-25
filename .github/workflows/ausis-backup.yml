@@ -1,0 +1,81 @@
+name: Daily AuSIS Station Backup
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC (4pm AEST)
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch AuSIS stations from IRIS FDSN
+        run: |
+          python3 << 'EOF'
+          import json, urllib.request, datetime, sys
+
+          url = 'https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text'
+          try:
+              resp = urllib.request.urlopen(url, timeout=30)
+              lines = resp.read().decode('utf-8').strip().split('\n')
+          except Exception as e:
+              print(f'IRIS fetch failed: {e}')
+              sys.exit(0)  # Don't fail the workflow - keep existing backup
+
+          features = []
+          for line in lines[1:]:
+              parts = line.split('|')
+              if len(parts) < 7:
+                  continue
+              code = parts[1].strip()
+              if code == 'TEST':
+                  continue
+              lat = float(parts[2].strip())
+              lng = float(parts[3].strip())
+              features.append({
+                  "type": "Feature",
+                  "properties": {
+                      "code": code,
+                      "name": parts[5].strip(),
+                      "elevation": float(parts[4].strip()),
+                      "startTime": parts[6].strip(),
+                      "endTime": parts[7].strip() if len(parts) > 7 and parts[7].strip() else None
+                  },
+                  "geometry": {
+                      "type": "Point",
+                      "coordinates": [lng, lat]
+                  }
+              })
+
+          if len(features) == 0:
+              print('No stations returned - keeping existing backup')
+              sys.exit(0)
+
+          geojson = {
+              "type": "FeatureCollection",
+              "metadata": {
+                  "source": "IRIS FDSN station service",
+                  "network": "S1",
+                  "fetched": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+              },
+              "features": features
+          }
+
+          with open('data/ausis_stations.geojson', 'w') as f:
+              json.dump(geojson, f, indent=2)
+
+          print(f'Saved {len(features)} stations')
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ausis_stations.geojson
+          git diff --cached --quiet || git commit -m "Daily AuSIS station backup $(date -u +%Y-%m-%d)"
+          git push

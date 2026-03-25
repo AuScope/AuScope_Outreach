@@ -1,0 +1,161 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dover High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.013058,
+          -43.31065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Huonville High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.045449,
+          -43.02392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bothwell District"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.01464,
+          -42.38352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Oatlands District"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.370735,
+          -42.30126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Glenora District"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.889837,
+          -42.69674
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "New Norfolk High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.061188,
+          -42.78772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tasman District"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.745627,
+          -43.09774
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Clarence High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.389162,
+          -42.87878
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rose Bay High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.358571,
+          -42.86186
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Taroona High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.355391,
+          -42.94298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kingston High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.28824,
+          -42.97064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hobart City High"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.300037,
+          -42.85574
+        ]
+      }
+    }
+  ]
+}
