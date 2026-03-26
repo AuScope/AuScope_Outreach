@@ -179,6 +179,16 @@
                     { id: 'lowcost',   name: 'Low-Cost Drones',   color: '#14b8a6', data: 'data/coastri_lowcost_drones.geojson' },
                     { id: 'longrange', name: 'Long-Range Drones', color: '#06b6d4', data: 'data/coastri_longrange_drones.geojson' }
                 ]
+            },
+            {
+                id: 'geodesy',
+                label: 'Geodesy',
+                shape: 'circle',
+                style: STYLE_DEFAULT,
+                programs: [
+                    { id: 'gnss',  name: 'GNSS Stations',  color: '#22c55e', data: 'data/gnss_auscope.geojson' },
+                    { id: 'vlbi',  name: 'VLBI Telescopes', color: '#ef4444', data: 'data/vlbi.geojson' }
+                ]
             }
         ];
 
@@ -510,6 +520,12 @@
                         datasetCreated: p.datasetCreated || '',
                         project: p.project || '',
                         custodian: p.custodian || '',
+                        code: p.code || p.fourCharacterId || '',
+                        domesNumber: p.domesNumber || '',
+                        monument: p.monument || '',
+                        diameter: p.diameter || '',
+                        operator: p.operator || '',
+                        dateInstalled: p.dateInstalled || '',
                         lat: coords[1],
                         lng: coords[0],
                         program: programId,
@@ -543,9 +559,15 @@
             var prog = programLookup[s.program];
             var html = '<div class="popup-name">' + esc(s.name) + '</div>'
                 + '<div class="popup-program">' + esc(prog.name) + '</div>';
+            if (s.code) html += '<div class="popup-detail"><strong>Code:</strong> ' + esc(s.code) + '</div>';
             if (s.network) html += '<div class="popup-detail"><strong>Network:</strong> ' + esc(s.network) + '</div>';
             if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
             if (s.instrument) html += '<div class="popup-detail"><strong>Instrument:</strong> ' + esc(s.instrument) + '</div>';
+            if (s.diameter) html += '<div class="popup-detail"><strong>Diameter:</strong> ' + esc(s.diameter) + '</div>';
+            if (s.operator) html += '<div class="popup-detail"><strong>Operator:</strong> ' + esc(s.operator) + '</div>';
+            if (s.monument) html += '<div class="popup-detail"><strong>Monument:</strong> ' + esc(s.monument) + '</div>';
+            if (s.domesNumber) html += '<div class="popup-detail"><strong>DOMES:</strong> ' + esc(s.domesNumber) + '</div>';
+            if (s.dateInstalled) html += '<div class="popup-detail"><strong>Installed:</strong> ' + esc(s.dateInstalled) + '</div>';
             if (s.boreholeLength) html += '<div class="popup-detail"><strong>Depth:</strong> ' + esc(String(s.boreholeLength)) + ' m</div>';
             if (s.scannedMetres) html += '<div class="popup-detail"><strong>Scanned:</strong> ' + esc(String(s.scannedMetres)) + ' m</div>';
             if (s.drillDate) html += '<div class="popup-detail"><strong>Drilled:</strong> ' + esc(s.drillDate) + '</div>';

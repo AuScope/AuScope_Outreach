@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "ITRF2014 VLBI SSC + IVS station catalog",
+    "description": "AuScope VLBI Array - three 12m radio telescopes",
+    "created": "2026-03-26"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hobart 12m",
+        "code": "HOBART12",
+        "ivsCode": "Hb",
+        "diameter": "12m",
+        "operator": "University of Tasmania",
+        "location": "Mt Pleasant Observatory, Tasmania",
+        "state": "TAS",
+        "dateInstalled": "2011"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [147.438140, -42.805574]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Katherine 12m",
+        "code": "KATH12M",
+        "ivsCode": "Ke",
+        "diameter": "12m",
+        "operator": "University of Tasmania / Charles Darwin University",
+        "location": "Charles Darwin University, Northern Territory",
+        "state": "NT",
+        "dateInstalled": "2011"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [132.152373, -14.375464]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yarragadee 12m",
+        "code": "YARRA12M",
+        "ivsCode": "Yg",
+        "diameter": "12m",
+        "operator": "University of Tasmania / Geoscience Australia",
+        "location": "Yarragadee Geodetic Supersite, Western Australia",
+        "state": "WA",
+        "dateInstalled": "2011"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [115.345626, -29.047146]
+      }
+    }
+  ]
+}

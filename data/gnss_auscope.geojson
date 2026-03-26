@@ -1,0 +1,2130 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "Geoscience Australia CORS Sites API",
+    "network": "AUSCOPE (ID 101)",
+    "fetched": "2026-03-26T04:31:54Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Albany",
+        "code": "ALBY",
+        "domesNumber": "50191M001",
+        "dateInstalled": "2008-06-10",
+        "elevation": 36.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.810191089,
+          -34.950221258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Andamooka",
+        "code": "ANDA",
+        "domesNumber": "59971M001",
+        "dateInstalled": "2010-02-23",
+        "elevation": 101.4,
+        "monument": "Pillar",
+        "foundation": null,
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.160104458333,
+          -30.453283202778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Aramac",
+        "code": "ARMC",
+        "domesNumber": "59902M001",
+        "dateInstalled": "2014-08-26",
+        "elevation": 274.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.245455838889,
+          -22.956811016667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Arubiddy",
+        "code": "ARUB",
+        "domesNumber": "59946M001",
+        "dateInstalled": "2011-03-23",
+        "elevation": 104.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.924357214,
+          -31.809107228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Balladonia",
+        "code": "BALA",
+        "domesNumber": "59947M001",
+        "dateInstalled": "2011-03-17",
+        "elevation": 130.8,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.868057397,
+          -32.460770339
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buckleboo",
+        "code": "BBOO",
+        "domesNumber": "59997M001",
+        "dateInstalled": "2009-08-04",
+        "elevation": 288.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.058676472222,
+          -32.810343638889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bairnsdale",
+        "code": "BDLE",
+        "domesNumber": "50196M001",
+        "dateInstalled": "2009-03-24",
+        "elevation": 125.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.656028683,
+          -37.758601519
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Birdsville",
+        "code": "BDVL",
+        "domesNumber": "59931M001",
+        "dateInstalled": "2012-06-28",
+        "elevation": 69.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.347912719444,
+          -25.900412208333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beechworth",
+        "code": "BEEC",
+        "domesNumber": "59986M001",
+        "dateInstalled": "2009-07-06",
+        "elevation": 442.9,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.657743053,
+          -36.346433967
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bingleburra",
+        "code": "BING",
+        "domesNumber": "59942M001",
+        "dateInstalled": "2012-04-11",
+        "elevation": 486.8,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.652331464,
+          -32.411768225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Broken Hill",
+        "code": "BKNL",
+        "domesNumber": "59951M001",
+        "dateInstalled": "2011-09-01",
+        "elevation": 307.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.470102928,
+          -31.996288178
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Blinman",
+        "code": "BMAN",
+        "domesNumber": "59906M001",
+        "dateInstalled": "2014-05-08",
+        "elevation": 616.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.707023277778,
+          -31.106317422222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Borroloola",
+        "code": "BRLA",
+        "domesNumber": "59896M001",
+        "dateInstalled": "2015-08-14",
+        "elevation": 90.8,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.30227185,
+          -16.054504547222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Broome",
+        "code": "BRO1",
+        "domesNumber": "50176M003",
+        "dateInstalled": "2010-07-09",
+        "elevation": 42.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.209090086111,
+          -18.003967766667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bald Rock",
+        "code": "BROC",
+        "domesNumber": "59955M001",
+        "dateInstalled": "2011-05-05",
+        "elevation": 131.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.204014666667,
+          -36.031397505556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boulia",
+        "code": "BULA",
+        "domesNumber": "59930M001",
+        "dateInstalled": "2013-02-28",
+        "elevation": 200.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.903063494444,
+          -22.913535277778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Burakin",
+        "code": "BURA",
+        "domesNumber": "50193M001",
+        "dateInstalled": "2008-11-03",
+        "elevation": 327.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.174646813889,
+          -30.525515319444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Coonabarabran",
+        "code": "CNBN",
+        "domesNumber": "59949M001",
+        "dateInstalled": "2011-11-22",
+        "elevation": 674.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.269575641667,
+          -31.333310411111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Coen",
+        "code": "COEN",
+        "domesNumber": "59921M001",
+        "dateInstalled": "2012-07-28",
+        "elevation": 254.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.176710697222,
+          -13.958760869444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Coober Pedy",
+        "code": "COOB",
+        "domesNumber": "59970M001",
+        "dateInstalled": "2010-02-23",
+        "elevation": 230.3,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.722578263889,
+          -29.034706311111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cooladdi",
+        "code": "COOL",
+        "domesNumber": "59933M001",
+        "dateInstalled": "2013-02-05",
+        "elevation": 333.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.680340911111,
+          -26.742099319444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Douglas Daly",
+        "code": "DODA",
+        "domesNumber": "59985M001",
+        "dateInstalled": "2009-10-23",
+        "elevation": 90.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bored pier",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.186831036,
+          -13.834571614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eidsvold",
+        "code": "EDSV",
+        "domesNumber": "59904M001",
+        "dateInstalled": "2014-08-01",
+        "elevation": 288.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.119786830556,
+          -25.375798975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eromanga",
+        "code": "ERMG",
+        "domesNumber": "59897M001",
+        "dateInstalled": "2014-08-30",
+        "elevation": 200.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.26230465,
+          -26.712203205556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Esperance",
+        "code": "ESPA",
+        "domesNumber": "50177M002",
+        "dateInstalled": "2008-06-13",
+        "elevation": 32.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.894329055556,
+          -33.874313055556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Exmouth",
+        "code": "EXMT",
+        "domesNumber": "59939M001",
+        "dateInstalled": "2012-06-03",
+        "elevation": 16.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.113379916667,
+          -21.96066725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Flinders Island",
+        "code": "FLND",
+        "domesNumber": "59936M001",
+        "dateInstalled": "2012-05-24",
+        "elevation": 7.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.241582052778,
+          -40.21437855
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fitzroy Crossing",
+        "code": "FROY",
+        "domesNumber": "59937M001",
+        "dateInstalled": "2012-03-23",
+        "elevation": 155.9,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.800454077778,
+          -18.125951902778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabo Island",
+        "code": "GABO",
+        "domesNumber": "59983M001",
+        "dateInstalled": "2009-09-10",
+        "elevation": 23.9,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / GRANITE ROCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.915201281,
+          -37.568121681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gascoyne Junction",
+        "code": "GASC",
+        "domesNumber": "59911M001",
+        "dateInstalled": "2013-10-31",
+        "elevation": 182.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.338615966667,
+          -24.632623525
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Georgetown AuScope",
+        "code": "GGTN",
+        "domesNumber": "59920M001",
+        "dateInstalled": "2012-07-28",
+        "elevation": 367.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.540635561111,
+          -18.305958275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Groote Eylandt",
+        "code": "GROT",
+        "domesNumber": "50173M004",
+        "dateInstalled": "2014-11-20",
+        "elevation": 69.6,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS, CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.421415988889,
+          -13.856741052778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hernani",
+        "code": "HERN",
+        "domesNumber": "59907M001",
+        "dateInstalled": "2013-12-16",
+        "elevation": 1241.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          152.486863413889,
+          -30.326615577778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Horn Island",
+        "code": "HNIS",
+        "domesNumber": "59959M001",
+        "dateInstalled": "2010-08-20",
+        "elevation": 87.7,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.296215069,
+          -10.590366358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hughenden",
+        "code": "HUGH",
+        "domesNumber": "59929M001",
+        "dateInstalled": "2011-11-18",
+        "elevation": 524.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.204470938889,
+          -20.947430097222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hyden",
+        "code": "HYDN",
+        "domesNumber": "50195M001",
+        "dateInstalled": "2009-03-24",
+        "elevation": 300.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.891881436111,
+          -32.449375925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ivanhoe",
+        "code": "IHOE",
+        "domesNumber": "59962M001",
+        "dateInstalled": "2010-06-22",
+        "elevation": 150.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.492064866667,
+          -32.864131897222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jervois Station",
+        "code": "JERV",
+        "domesNumber": "59923M001",
+        "dateInstalled": "2013-03-15",
+        "elevation": 381.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.100671005556,
+          -22.860521391667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Julia Creek",
+        "code": "JLCK",
+        "domesNumber": "59928M001",
+        "dateInstalled": "2011-11-14",
+        "elevation": 169.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bored pier",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.738997383333,
+          -20.669267088889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kalgoorlie",
+        "code": "KALG",
+        "domesNumber": "50188M001",
+        "dateInstalled": "2008-06-10",
+        "elevation": 338.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.459260427778,
+          -30.784385877778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kellerberrin",
+        "code": "KELN",
+        "domesNumber": "50197M001",
+        "dateInstalled": "2009-02-13",
+        "elevation": 253.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.702639688889,
+          -31.622314072222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "King Island",
+        "code": "KGIS",
+        "domesNumber": "59910M001",
+        "dateInstalled": "2013-11-28",
+        "elevation": 6.1,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.847075183,
+          -39.941845069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kilkivan AuScope",
+        "code": "KILK",
+        "domesNumber": "59918M001",
+        "dateInstalled": "2013-06-19",
+        "elevation": 250.8,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          152.252068058,
+          -26.084215133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kidman Springs",
+        "code": "KMAN",
+        "domesNumber": "59895M001",
+        "dateInstalled": "2015-08-27",
+        "elevation": 128.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.955544303,
+          -16.117717222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kununurra",
+        "code": "KUNU",
+        "domesNumber": "59995M001",
+        "dateInstalled": "2009-05-22",
+        "elevation": 91.9,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.762627033,
+          -15.676956114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lambina",
+        "code": "LAMB",
+        "domesNumber": "59925M001",
+        "dateInstalled": "2013-03-15",
+        "elevation": 311.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.062935669444,
+          -26.938607919444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Larrimah",
+        "code": "LARR",
+        "domesNumber": "59984M001",
+        "dateInstalled": "2009-10-23",
+        "elevation": 229.3,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.212760861,
+          -15.573151939
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Liawenee",
+        "code": "LIAW",
+        "domesNumber": "50192M001",
+        "dateInstalled": "2007-12-12",
+        "elevation": 1054.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.673083758333,
+          -41.902258669444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Larrakeyah",
+        "code": "LKYA",
+        "domesNumber": "59952M001",
+        "dateInstalled": "2011-08-04",
+        "elevation": 69.3,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.82473147,
+          -12.45546185
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Leonora",
+        "code": "LONA",
+        "domesNumber": "59957M001",
+        "dateInstalled": "2011-03-03",
+        "elevation": 354.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.319059905556,
+          -28.878427975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Leonora",
+        "code": "LORA",
+        "domesNumber": "59999M001",
+        "dateInstalled": "2009-07-01",
+        "elevation": 431.3,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.337270067,
+          -28.9062449194
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Laura AuScope",
+        "code": "LURA",
+        "domesNumber": "59917M001",
+        "dateInstalled": "2012-07-28",
+        "elevation": 150.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.456980830556,
+          -15.577502358333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mainoru",
+        "code": "MAIN",
+        "domesNumber": "59944M001",
+        "dateInstalled": "2012-02-16",
+        "elevation": 162.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.09287855,
+          -14.046196436111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Meadow",
+        "code": "MEDO",
+        "domesNumber": "59919M001",
+        "dateInstalled": "2013-05-31",
+        "elevation": 109.8,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.609555433,
+          -26.757384756
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marengo",
+        "code": "MNGO",
+        "domesNumber": "59948M001",
+        "dateInstalled": "2011-12-01",
+        "elevation": 62.6,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.651724875,
+          -38.779783169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mareeba AuScope",
+        "code": "MRBA",
+        "domesNumber": "59924M001",
+        "dateInstalled": "2012-07-24",
+        "elevation": 645.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.323836402778,
+          -17.017942486111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Cavenagh",
+        "code": "MTCV",
+        "domesNumber": "59965M001",
+        "dateInstalled": "2010-04-29",
+        "elevation": 544.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.206706930556,
+          -25.945684455556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mt Doreen Station",
+        "code": "MTDN",
+        "domesNumber": "59922M001",
+        "dateInstalled": "2013-03-29",
+        "elevation": 672.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.492727083333,
+          -22.132798836111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Emu",
+        "code": "MTEM",
+        "domesNumber": "59954M001",
+        "dateInstalled": "2011-05-12",
+        "elevation": 518.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.448907744,
+          -37.587615906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MOUNT ISA",
+        "code": "MTIS",
+        "domesNumber": "59908M001",
+        "dateInstalled": "2013-11-20",
+        "elevation": 397.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.486432241667,
+          -20.690399708333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Magnet",
+        "code": "MTMA",
+        "domesNumber": "59958M001",
+        "dateInstalled": "2011-02-11",
+        "elevation": 389.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.843099269444,
+          -28.115311641667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mulgathing",
+        "code": "MULG",
+        "domesNumber": "59898M001",
+        "dateInstalled": "2014-09-09",
+        "elevation": 215.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.058575230556,
+          -30.2819709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North Bourke",
+        "code": "NBRK",
+        "domesNumber": "59915M001",
+        "dateInstalled": "2013-06-25",
+        "elevation": 181.4,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.764041389,
+          -29.677147094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Northcliffe",
+        "code": "NCLF",
+        "domesNumber": "59916M001",
+        "dateInstalled": "2013-05-24",
+        "elevation": 71.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.123275039,
+          -34.708371703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nebo",
+        "code": "NEBO",
+        "domesNumber": "59903M001",
+        "dateInstalled": "2014-08-05",
+        "elevation": 341.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.698552325,
+          -21.640278533333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nhill",
+        "code": "NHIL",
+        "domesNumber": "59960M001",
+        "dateInstalled": "2010-08-04",
+        "elevation": 139.0,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.646011978,
+          -36.308416142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NORMANTON",
+        "code": "NMTN",
+        "domesNumber": "59909M001",
+        "dateInstalled": "2013-11-15",
+        "elevation": 60.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.069170461111,
+          -17.671676980556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Norseman",
+        "code": "NORS",
+        "domesNumber": "50194M001",
+        "dateInstalled": "2008-11-03",
+        "elevation": 461.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.787244247222,
+          -32.260014669444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North Star",
+        "code": "NSTA",
+        "domesNumber": "59934M001",
+        "dateInstalled": "2012-12-17",
+        "elevation": 458.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.444107167,
+          -29.045541406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Neutral Junction",
+        "code": "NTJN",
+        "domesNumber": "59927M001",
+        "dateInstalled": "2013-03-01",
+        "elevation": 619.3,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.970044266667,
+          -21.457232202778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Port Hedland",
+        "code": "PTHL",
+        "domesNumber": "59912M001",
+        "dateInstalled": "2013-09-03",
+        "elevation": 41.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.678860469444,
+          -20.539744447222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Port Kembla",
+        "code": "PTKL",
+        "domesNumber": "50145M004",
+        "dateInstalled": "2009-09-23",
+        "elevation": 34.4,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.913700231,
+          -34.475541711
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Portland",
+        "code": "PTLD",
+        "domesNumber": "50158M003",
+        "dateInstalled": "2009-08-26",
+        "elevation": 0.8,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS / CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.6134747,
+          -38.344390858
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Port Stanvac",
+        "code": "PTSV",
+        "domesNumber": "50178M003",
+        "dateInstalled": "2010-07-23",
+        "elevation": 57.7,
+        "monument": "Rock",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.485718814,
+          -35.094696792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ravensthorpe",
+        "code": "RAVN",
+        "domesNumber": "59967M001",
+        "dateInstalled": "2010-03-26",
+        "elevation": 205.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.070891880556,
+          -33.596741144444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Riveren",
+        "code": "RIVN",
+        "domesNumber": "59893M001",
+        "dateInstalled": "2016-06-09",
+        "elevation": 447.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.992206291667,
+          -17.711599436111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rocklands",
+        "code": "RKLD",
+        "domesNumber": "59941M001",
+        "dateInstalled": "2012-07-21",
+        "elevation": 276.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.834801803,
+          -19.967613081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Renner Springs",
+        "code": "RNSP",
+        "domesNumber": "59943M001",
+        "dateInstalled": "2012-01-01",
+        "elevation": 348.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.816542994,
+          -18.387879403
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rosslyn Bay",
+        "code": "RSBY",
+        "domesNumber": "59953M001",
+        "dateInstalled": "2011-07-20",
+        "elevation": 58.1,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE PILE",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.790085205556,
+          -23.160983975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Saltia",
+        "code": "SA45",
+        "domesNumber": "59987M001",
+        "dateInstalled": "2009-08-19",
+        "elevation": 201.9,
+        "monument": "Concrete block",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.934331691667,
+          -32.470285513889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Spring Bay",
+        "code": "SPBY",
+        "domesNumber": "50162M004",
+        "dateInstalled": "2008-10-10",
+        "elevation": 1.1,
+        "monument": "Stainless steel frame/plate",
+        "foundation": "Concrete pylon",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.930851894444,
+          -42.546433075
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Stonehenge",
+        "code": "STHG",
+        "domesNumber": "59932M001",
+        "dateInstalled": "2011-11-18",
+        "elevation": 195.8,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS ENGAGED IN ROCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.285287964,
+          -24.350242711
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Stony Point",
+        "code": "STNY",
+        "domesNumber": "50160M002",
+        "dateInstalled": "2011-05-31",
+        "elevation": 29.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bored pier",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.214039372222,
+          -38.375174405556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tibooburra",
+        "code": "TBOB",
+        "domesNumber": "59963M001",
+        "dateInstalled": "2010-06-07",
+        "elevation": 191.0,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.057425636,
+          -29.450155142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Thevenard",
+        "code": "THEV",
+        "domesNumber": "59940M001",
+        "dateInstalled": "2012-07-29",
+        "elevation": 7.5,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.696828088889,
+          -32.128618327778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tambo AuScope",
+        "code": "TMBO",
+        "domesNumber": "59901M001",
+        "dateInstalled": "2014-08-22",
+        "elevation": 589.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.284096,
+          -24.771699094444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TOM PRICE",
+        "code": "TOMP",
+        "domesNumber": "59935M001",
+        "dateInstalled": "2012-12-06",
+        "elevation": 434.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.400314244444,
+          -22.846449861111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Toowoomba AuScope",
+        "code": "TOOW",
+        "domesNumber": "59982M001",
+        "dateInstalled": "2009-09-23",
+        "elevation": 685.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.928459736,
+          -27.534432669
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tuross Head",
+        "code": "TURO",
+        "domesNumber": "59956M001",
+        "dateInstalled": "2011-04-13",
+        "elevation": 53.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.122198586,
+          -36.035138464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eucla",
+        "code": "UCLA",
+        "domesNumber": "50153M002",
+        "dateInstalled": "2011-03-20",
+        "elevation": 68.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.883155353,
+          -31.679580769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wagin",
+        "code": "WAGN",
+        "domesNumber": "59966M001",
+        "dateInstalled": "2010-03-22",
+        "elevation": 288.9,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.410101286,
+          -33.333059147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Walhallow",
+        "code": "WALH",
+        "domesNumber": "59894M001",
+        "dateInstalled": "2016-05-26",
+        "elevation": 274.3,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bored pier",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.6432781,
+          -17.776330047222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wiluna",
+        "code": "WILU",
+        "domesNumber": "59964M001",
+        "dateInstalled": "2010-05-18",
+        "elevation": 491.4,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.218371047,
+          -26.625674711
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wallal",
+        "code": "WLAL",
+        "domesNumber": "59950M001",
+        "dateInstalled": "2011-11-23",
+        "elevation": 21.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.643500241667,
+          -19.778603263889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Warramunga",
+        "code": "WMGA",
+        "domesNumber": "59961M001",
+        "dateInstalled": "2010-08-04",
+        "elevation": 416.3,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.354529752778,
+          -19.933360733333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "West Wyalong",
+        "code": "WWLG",
+        "domesNumber": "59988M001",
+        "dateInstalled": "2009-08-17",
+        "elevation": 359.6,
+        "monument": "PILLAR",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.32168105,
+          -33.703422294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yeelanna",
+        "code": "YEEL",
+        "domesNumber": "59996M001",
+        "dateInstalled": "2009-08-06",
+        "elevation": 169.7,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.784382438889,
+          -34.144145502778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yellowdine",
+        "code": "YELO",
+        "domesNumber": "50199M001",
+        "dateInstalled": "2009-03-18",
+        "elevation": 347.1,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.645803763889,
+          -31.290686905556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yanakie3",
+        "code": "YNKI",
+        "domesNumber": "59914M001",
+        "dateInstalled": "2012-12-01",
+        "elevation": 34.6,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bored pier",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.218212094,
+          -38.812228747
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yulara",
+        "code": "YULA",
+        "domesNumber": "59926M001",
+        "dateInstalled": "2013-03-04",
+        "elevation": 512.2,
+        "monument": "Concrete pillar/stainless steel plate",
+        "foundation": "Bedrock",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.941573486111,
+          -25.231047891667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Miles Airport",
+        "code": "MLAP",
+        "domesNumber": "59889M001",
+        "dateInstalled": "2018-09-13",
+        "elevation": 344.2,
+        "monument": "PILLAR",
+        "foundation": "REINFORCED CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.158798492,
+          -26.813583364
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rubyvale",
+        "code": "RBYL",
+        "domesNumber": "59888M001",
+        "dateInstalled": "2014-08-30",
+        "elevation": 333.2,
+        "monument": "PILLAR",
+        "foundation": "REINFORCED CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.587288433,
+          -23.426424172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Winton",
+        "code": "WNTN",
+        "domesNumber": "59887M001",
+        "dateInstalled": "2018-09-21",
+        "elevation": 232.1,
+        "monument": "PILLAR",
+        "foundation": "REINFORCED CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.006287117,
+          -22.469160986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wyaralong",
+        "code": "WYRL",
+        "domesNumber": "59701M001",
+        "dateInstalled": "2019-02-09",
+        "elevation": 127.7,
+        "monument": "PILLAR",
+        "foundation": "REINFORCED CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          152.790118978,
+          -27.927462214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nullarbor",
+        "code": "NULA",
+        "domesNumber": "59891M001",
+        "dateInstalled": "2017-09-01",
+        "elevation": 48.2,
+        "monument": "CONCRETE PILLAR CONSTRUCTED ON SHALLOW BEDROCK",
+        "foundation": "CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.893803572222,
+          -31.438675044444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Toowoomba AuScope 1",
+        "code": "TOO1",
+        "domesNumber": "59982M002",
+        "dateInstalled": "2009-09-23",
+        "elevation": 685.8,
+        "monument": "PILLAR",
+        "foundation": "STEEL RODS, CONCRETE BLOCK",
+        "siteStatus": "PUBLIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.928368556,
+          -27.5343947361
+        ]
+      }
+    }
+  ]
+}
