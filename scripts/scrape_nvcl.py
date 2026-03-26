@@ -200,7 +200,7 @@ def fetch_dataset_info(bh_id, nvcl_base):
 
         # Parse embedded TSG metadata XML from description field
         instrument = ''
-        scan_date = ''
+        drill_date = ''
         project = ''
         owner = ''
 
@@ -210,7 +210,7 @@ def fetch_dataset_info(bh_id, nvcl_base):
             try:
                 meta = ET.fromstring(desc_clean)
                 instrument = meta.findtext('InstrumentName', '') or ''
-                scan_date = meta.findtext('DrillDate', '') or ''
+                drill_date = meta.findtext('DrillDate', '') or ''
                 project = meta.findtext('Project', '') or ''
                 owner = meta.findtext('Owner', '') or ''
             except ET.ParseError:
@@ -220,11 +220,16 @@ def fetch_dataset_info(bh_id, nvcl_base):
         if instrument in ('', 'NA or Unknown', 'Unknown', 'NA'):
             instrument = None
 
-        # Clean up scan date
-        if scan_date:
-            scan_date = scan_date.strip()
-            if len(scan_date) > 10:
-                scan_date = scan_date[:10]  # Keep just date part
+        # Clean up drill date (from TSG DrillDate field - this is when the core was drilled)
+        if drill_date:
+            drill_date = drill_date.strip()
+            if len(drill_date) > 10:
+                drill_date = drill_date[:10]  # Keep just date part
+
+        # Clean up dataset created date (when data was uploaded to NVCL system)
+        dataset_created = None
+        if created:
+            dataset_created = created[:10]
 
         scanned_metres = None
         try:
@@ -235,11 +240,11 @@ def fetch_dataset_info(bh_id, nvcl_base):
 
         return {
             'instrument': instrument,
-            'scanDate': scan_date if scan_date else None,
+            'drillDate': drill_date if drill_date else None,
+            'datasetCreated': dataset_created,
             'project': project if project else None,
             'owner': owner if owner else None,
             'scannedMetres': scanned_metres,
-            'datasetCreated': created[:10] if created else None,
             'numDatasets': len(datasets),
         }
 
@@ -269,7 +274,8 @@ def enrich_boreholes(boreholes, nvcl_base, state_id, cache=None):
             enriched += 1
         else:
             bh['instrument'] = None
-            bh['scanDate'] = None
+            bh['drillDate'] = None
+            bh['datasetCreated'] = None
             bh['scannedMetres'] = None
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -286,15 +292,37 @@ def enrich_boreholes(boreholes, nvcl_base, state_id, cache=None):
 
 # ── Output: GeoJSON + Stats ───────────────────────────────────────
 
+def load_first_seen(state_id):
+    """Load firstSeen dates from existing GeoJSON to preserve them across updates."""
+    filepath = os.path.join(DATA_DIR, f'nvcl_{state_id}.geojson')
+    first_seen = {}
+    if os.path.exists(filepath):
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        for feat in data.get('features', []):
+            p = feat['properties']
+            bh_id = p.get('boreholeId', '')
+            if bh_id and p.get('firstSeen'):
+                first_seen[bh_id] = p['firstSeen']
+    return first_seen
+
+
 def build_geojson(boreholes, state_id, state_label, fetched):
     """Build a GeoJSON FeatureCollection from enriched boreholes."""
+    # Preserve firstSeen dates from previous runs
+    existing_first_seen = load_first_seen(state_id)
+    today = fetched[:10]  # YYYY-MM-DD
+
     features = []
     for bh in boreholes:
+        bh_id = bh['id']
+        first_seen = existing_first_seen.get(bh_id, today)
+
         features.append({
             'type': 'Feature',
             'properties': {
                 'name': bh['name'],
-                'boreholeId': bh['id'],
+                'boreholeId': bh_id,
                 'boreholeLength': bh.get('boreholeLength'),
                 'elevation': bh.get('elevation'),
                 'custodian': bh.get('custodian', ''),
@@ -302,7 +330,9 @@ def build_geojson(boreholes, state_id, state_label, fetched):
                 'drillEndDate': bh.get('drillEndDate', ''),
                 'purpose': bh.get('description', '') or bh.get('purpose', ''),
                 'instrument': bh.get('instrument'),
-                'scanDate': bh.get('scanDate'),
+                'drillDate': bh.get('drillDate'),
+                'datasetCreated': bh.get('datasetCreated'),
+                'firstSeen': first_seen,
                 'scannedMetres': bh.get('scannedMetres'),
                 'project': bh.get('project'),
                 'owner': bh.get('owner'),
@@ -345,7 +375,7 @@ def build_stats(all_boreholes, fetched):
         instrument = bh.get('instrument') or 'Unknown'
         bh_length = bh.get('boreholeLength') or 0
         scanned = bh.get('scannedMetres') or 0
-        scan_date = bh.get('scanDate') or ''
+        dataset_created = bh.get('datasetCreated') or ''
 
         total_boreholes += 1
         try:
@@ -384,11 +414,9 @@ def build_stats(all_boreholes, fetched):
         except (ValueError, TypeError):
             pass
 
-        # Monthly breakdown (by scan date)
-        if scan_date and len(scan_date) >= 7:
-            month_key = scan_date[:7]  # "YYYY-MM"
-        elif bh.get('datasetCreated') and len(bh['datasetCreated']) >= 7:
-            month_key = bh['datasetCreated'][:7]
+        # Monthly breakdown (by datasetCreated - when added to NVCL system)
+        if dataset_created and len(dataset_created) >= 7:
+            month_key = dataset_created[:7]  # "YYYY-MM"
         else:
             month_key = 'unknown'
 
@@ -450,11 +478,11 @@ def load_cache(state_id):
             if bh_id and p.get('instrument') is not None:
                 cache[bh_id] = {
                     'instrument': p['instrument'],
-                    'scanDate': p.get('scanDate'),
+                    'drillDate': p.get('drillDate') or p.get('scanDate'),  # backward compat
+                    'datasetCreated': p.get('datasetCreated'),
                     'scannedMetres': p.get('scannedMetres'),
                     'project': p.get('project'),
                     'owner': p.get('owner'),
-                    'datasetCreated': None,
                     'numDatasets': None,
                 }
     return cache

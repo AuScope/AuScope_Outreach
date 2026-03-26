@@ -19,11 +19,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
-        "scanDate": null,
         "scannedMetres": 57.49,
         "project": null,
         "owner": null,
-        "state": "CSIRO"
+        "state": "CSIRO",
+        "drillDate": null,
+        "firstSeen": "2026-03-26",
+        "datasetCreated": null
       },
       "geometry": {
         "type": "Point",
@@ -45,11 +47,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
-        "scanDate": null,
         "scannedMetres": 45.19,
         "project": null,
         "owner": null,
-        "state": "CSIRO"
+        "state": "CSIRO",
+        "drillDate": null,
+        "firstSeen": "2026-03-26",
+        "datasetCreated": null
       },
       "geometry": {
         "type": "Point",
@@ -71,11 +75,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
-        "scanDate": null,
         "scannedMetres": 39.75,
         "project": null,
         "owner": null,
-        "state": "CSIRO"
+        "state": "CSIRO",
+        "drillDate": null,
+        "firstSeen": "2026-03-26",
+        "datasetCreated": null
       },
       "geometry": {
         "type": "Point",
@@ -97,11 +103,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
-        "scanDate": null,
         "scannedMetres": 47.19,
         "project": null,
         "owner": null,
-        "state": "CSIRO"
+        "state": "CSIRO",
+        "drillDate": null,
+        "firstSeen": "2026-03-26",
+        "datasetCreated": null
       },
       "geometry": {
         "type": "Point",
@@ -123,11 +131,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
-        "scanDate": null,
         "scannedMetres": 30.79,
         "project": null,
         "owner": null,
-        "state": "CSIRO"
+        "state": "CSIRO",
+        "drillDate": null,
+        "firstSeen": "2026-03-26",
+        "datasetCreated": null
       },
       "geometry": {
         "type": "Point",

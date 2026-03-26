@@ -506,7 +506,8 @@
                         instrument: p.instrument || '',
                         boreholeLength: p.boreholeLength || '',
                         scannedMetres: p.scannedMetres || '',
-                        scanDate: p.scanDate || '',
+                        drillDate: p.drillDate || p.scanDate || '',
+                        datasetCreated: p.datasetCreated || '',
                         project: p.project || '',
                         custodian: p.custodian || '',
                         lat: coords[1],
@@ -547,7 +548,8 @@
             if (s.instrument) html += '<div class="popup-detail"><strong>Instrument:</strong> ' + esc(s.instrument) + '</div>';
             if (s.boreholeLength) html += '<div class="popup-detail"><strong>Depth:</strong> ' + esc(String(s.boreholeLength)) + ' m</div>';
             if (s.scannedMetres) html += '<div class="popup-detail"><strong>Scanned:</strong> ' + esc(String(s.scannedMetres)) + ' m</div>';
-            if (s.scanDate) html += '<div class="popup-detail"><strong>Scan date:</strong> ' + esc(s.scanDate) + '</div>';
+            if (s.drillDate) html += '<div class="popup-detail"><strong>Drilled:</strong> ' + esc(s.drillDate) + '</div>';
+            if (s.datasetCreated) html += '<div class="popup-detail"><strong>Dataset created:</strong> ' + esc(s.datasetCreated) + '</div>';
             if (s.project) html += '<div class="popup-detail"><strong>Project:</strong> ' + esc(s.project) + '</div>';
             if (s.custodian) html += '<div class="popup-detail"><strong>Custodian:</strong> ' + esc(s.custodian) + '</div>';
             if (s.startTime) html += '<div class="popup-detail"><strong>Start:</strong> ' + esc(s.startTime.split('T')[0]) + '</div>';
