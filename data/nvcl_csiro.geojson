@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "NVCL WFS + NVCLDataServices",
+    "state": "csiro",
+    "stateLabel": "CSIRO",
+    "fetched": "2026-03-26T01:20:44Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RKD001",
+        "boreholeId": "RKD001",
+        "boreholeLength": 57.5,
+        "elevation": 467.9,
+        "custodian": "CSIRO",
+        "drillingMethod": "Diamond",
+        "drillEndDate": "",
+        "purpose": "",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": 57.49,
+        "project": null,
+        "owner": null,
+        "state": "CSIRO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4722025,
+          -22.81589535
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RKD002",
+        "boreholeId": "RKD002",
+        "boreholeLength": 45.2,
+        "elevation": 467.4,
+        "custodian": "CSIRO",
+        "drillingMethod": "Diamond",
+        "drillEndDate": "",
+        "purpose": "",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": 45.19,
+        "project": null,
+        "owner": null,
+        "state": "CSIRO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4708088,
+          -22.81581907
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RKD003",
+        "boreholeId": "RKD003",
+        "boreholeLength": 48.56,
+        "elevation": 462.9,
+        "custodian": "CSIRO",
+        "drillingMethod": "Diamond",
+        "drillEndDate": "",
+        "purpose": "",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": 39.75,
+        "project": null,
+        "owner": null,
+        "state": "CSIRO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4677447,
+          -22.81940082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RKD004",
+        "boreholeId": "RKD004",
+        "boreholeLength": 53,
+        "elevation": 462.3,
+        "custodian": "CSIRO",
+        "drillingMethod": "Diamond",
+        "drillEndDate": "",
+        "purpose": "",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": 47.19,
+        "project": null,
+        "owner": null,
+        "state": "CSIRO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4686851,
+          -22.81940077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RKD005",
+        "boreholeId": "RKD005",
+        "boreholeLength": 42.4,
+        "elevation": 461.6,
+        "custodian": "CSIRO",
+        "drillingMethod": "Diamond",
+        "drillEndDate": "",
+        "purpose": "",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": 30.79,
+        "project": null,
+        "owner": null,
+        "state": "CSIRO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4629631,
+          -22.82664425
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,765 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "NVCL WFS + NVCLDataServices",
+    "state": "vic",
+    "stateLabel": "Victoria",
+    "fetched": "2026-03-26T01:20:44Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PROSP-KINGSTON; LOCAL-KIND168",
+        "boreholeId": "PROSP-KINGSTON; LOCAL-KIND168",
+        "boreholeLength": 169.7,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-03-24",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.998868,
+          -36.84752704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BL214; PROSP-HARROW-DOUGLAS",
+        "boreholeId": "LOCAL-BL214; PROSP-HARROW-DOUGLAS",
+        "boreholeLength": 102,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-02-03",
+        "purpose": "Minerals general",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.71429,
+          -37.10286004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BL262",
+        "boreholeId": "LOCAL-BL262",
+        "boreholeLength": 117.5,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-05-02",
+        "purpose": "Minerals general",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.72772,
+          -37.03608004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BL215; LOCAL-DD88BL215",
+        "boreholeId": "LOCAL-BL215; LOCAL-DD88BL215",
+        "boreholeLength": 99,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-02-06",
+        "purpose": "Minerals general",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.619703,
+          -37.02498004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BL260",
+        "boreholeId": "LOCAL-BL260",
+        "boreholeLength": 67,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-04-26",
+        "purpose": "Minerals general",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.81897,
+          -37.04179004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BL263",
+        "boreholeId": "LOCAL-BL263",
+        "boreholeLength": 87.5,
+        "elevation": 0,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "1988-05-05",
+        "purpose": "Minerals general",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.66569,
+          -37.14371004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-RCD001",
+        "boreholeId": "LOCAL-RCD001",
+        "boreholeLength": 504,
+        "elevation": 729,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2008-05-12",
+        "purpose": "Minerals - base metals",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.39924,
+          -37.38040004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-RCD002",
+        "boreholeId": "LOCAL-RCD002",
+        "boreholeLength": 246,
+        "elevation": 729,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2008-12-21",
+        "purpose": "Minerals - base metals",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.39926,
+          -37.38038004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-RCD005",
+        "boreholeId": "LOCAL-RCD005",
+        "boreholeLength": 223.1,
+        "elevation": 696,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Bedrock drilling",
+        "drillEndDate": "2010-02-26",
+        "purpose": "Minerals - base metals",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.39963,
+          -37.37738004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-BEU162",
+        "boreholeId": "LOCAL-BEU162",
+        "boreholeLength": 389.8,
+        "elevation": 176.74,
+        "custodian": "Unknown",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2007-02-06",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.864625,
+          -37.57447404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-NBD119",
+        "boreholeId": "LOCAL-NBD119",
+        "boreholeLength": 152,
+        "elevation": -469.974,
+        "custodian": "Unknown",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2006-06-09",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.300417,
+          -36.76945504
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-MH002; LOCAL-DDHMH002",
+        "boreholeId": "LOCAL-MH002; LOCAL-DDHMH002",
+        "boreholeLength": 200.9,
+        "elevation": 177.67,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2001-05-17",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.801739,
+          -36.89677204
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-SPD150",
+        "boreholeId": "LOCAL-SPD150",
+        "boreholeLength": 899.8,
+        "elevation": 164.927,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2003-03-07",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.501753,
+          -36.72378304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-DDH120",
+        "boreholeId": "LOCAL-DDH120",
+        "boreholeLength": 404.5,
+        "elevation": 344.34,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2006-06-30",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.072291,
+          -36.99752904
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-WWD025",
+        "boreholeId": "LOCAL-WWD025",
+        "boreholeLength": 313,
+        "elevation": 164.5,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2005-06-04",
+        "purpose": "Minerals - gold",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.659194,
+          -36.86033604
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 2",
+        "boreholeId": "LOCAL-STAVELY 2",
+        "boreholeLength": 159.5,
+        "elevation": 164.545,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2014-06-11",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.712302,
+          -37.90194704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 4",
+        "boreholeId": "LOCAL-STAVELY 4",
+        "boreholeLength": 102.8,
+        "elevation": 208.222,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2014-07-15",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.251289,
+          -37.16442704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 5",
+        "boreholeId": "LOCAL-STAVELY 5",
+        "boreholeLength": 71.5,
+        "elevation": 182.822,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-07-19",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.016402,
+          -37.09681804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 6",
+        "boreholeId": "LOCAL-STAVELY 6",
+        "boreholeLength": 117.7,
+        "elevation": 219.616,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-09-16",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.273963,
+          -37.05034304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 7",
+        "boreholeId": "LOCAL-STAVELY 7",
+        "boreholeLength": 501.6,
+        "elevation": 186.346,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-08-08",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.322723,
+          -36.99392404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 8",
+        "boreholeId": "LOCAL-STAVELY 8",
+        "boreholeLength": 122,
+        "elevation": 190.93,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Sonic",
+        "drillEndDate": "2014-05-13",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.66997,
+          -36.90981104
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 9",
+        "boreholeId": "LOCAL-STAVELY 9",
+        "boreholeLength": 165.5,
+        "elevation": 144.153,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-05-31",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.1592,
+          -36.79967704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 10",
+        "boreholeId": "LOCAL-STAVELY 10",
+        "boreholeLength": 107.4,
+        "elevation": 129.753,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-05-20",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.129689,
+          -36.80444104
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 11",
+        "boreholeId": "LOCAL-STAVELY 11",
+        "boreholeLength": 164.6,
+        "elevation": 139.129,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-05-26",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.966994,
+          -36.76724904
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 12",
+        "boreholeId": "LOCAL-STAVELY 12",
+        "boreholeLength": 180.5,
+        "elevation": 129.152,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-05-16",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.153275,
+          -36.70944804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 14",
+        "boreholeId": "LOCAL-STAVELY 14",
+        "boreholeLength": 339,
+        "elevation": 156.63,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-09-11",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.655454,
+          -36.43728404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 16",
+        "boreholeId": "LOCAL-STAVELY 16",
+        "boreholeLength": 357.7,
+        "elevation": 93.753,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core, Sonic",
+        "drillEndDate": "2014-08-28",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.920607,
+          -36.26474304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 17",
+        "boreholeId": "LOCAL-STAVELY 17",
+        "boreholeLength": 156,
+        "elevation": 269.17,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2014-06-26",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.640688,
+          -37.68296804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LOCAL-STAVELY 1",
+        "boreholeId": "LOCAL-STAVELY 1",
+        "boreholeLength": 249.5,
+        "elevation": 150.157,
+        "custodian": " Geological Survey of Victoria",
+        "drillingMethod": "Diamond core",
+        "drillEndDate": "2014-07-09",
+        "purpose": "General Geological",
+        "instrument": null,
+        "scanDate": null,
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "VIC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          142.878372,
+          -38.01753904
+        ]
+      }
+    }
+  ]
+}

@@ -126,6 +126,7 @@
         // Icon style: minSize/maxSize/zoomFactor control scaling, sw/so control stroke
         var STYLE_DEFAULT  = { minSize: 16, maxSize: 32, zoomFactor: 2.9, sw: 2, so: 1 };
         var STYLE_SEISMIC  = { minSize: 10, maxSize: 20, zoomFactor: 1.6, sw: 1, so: 0.45 };
+        var STYLE_NVCL     = { minSize: 8,  maxSize: 16, zoomFactor: 1.4, sw: 1, so: 0.4 };
 
         var CATEGORIES = [
             {
@@ -139,6 +140,22 @@
                     { id: 'seis_sp',     name: 'Short Period',       color: '#f97316', data: 'data/seismic_shortperiod.geojson' },
                     { id: 'nodal_bb',    name: 'Nodal Broadband',    color: '#06b6d4', data: 'data/seismic_nodal_broadband.geojson' },
                     { id: 'nodal_sp',    name: 'Nodal Short Period', color: '#8b5cf6', data: 'data/seismic_nodal_shortperiod.geojson' }
+                ]
+            },
+            {
+                id: 'nvcl',
+                label: 'NVCL HyLogger',
+                shape: 'square',
+                style: STYLE_NVCL,
+                programs: [
+                    { id: 'nvcl_sa',    name: 'South Australia',    color: '#ef4444', data: 'data/nvcl_sa.geojson' },
+                    { id: 'nvcl_wa',    name: 'Western Australia',  color: '#f97316', data: 'data/nvcl_wa.geojson' },
+                    { id: 'nvcl_nsw',   name: 'New South Wales',    color: '#22c55e', data: 'data/nvcl_nsw.geojson' },
+                    { id: 'nvcl_qld',   name: 'Queensland',         color: '#3b82f6', data: 'data/nvcl_qld.geojson' },
+                    { id: 'nvcl_tas',   name: 'Tasmania',           color: '#8b5cf6', data: 'data/nvcl_tas.geojson' },
+                    { id: 'nvcl_vic',   name: 'Victoria',           color: '#14b8a6', data: 'data/nvcl_vic.geojson' },
+                    { id: 'nvcl_nt',    name: 'Northern Territory',  color: '#eab308', data: 'data/nvcl_nt.geojson' },
+                    { id: 'nvcl_csiro', name: 'CSIRO',              color: '#6b7280', data: 'data/nvcl_csiro.geojson' }
                 ]
             },
             {
@@ -486,6 +503,12 @@
                         airframe: p.airframe || '',
                         startTime: p.startTime || '',
                         endTime: p.endTime || '',
+                        instrument: p.instrument || '',
+                        boreholeLength: p.boreholeLength || '',
+                        scannedMetres: p.scannedMetres || '',
+                        scanDate: p.scanDate || '',
+                        project: p.project || '',
+                        custodian: p.custodian || '',
                         lat: coords[1],
                         lng: coords[0],
                         program: programId,
@@ -521,6 +544,12 @@
                 + '<div class="popup-program">' + esc(prog.name) + '</div>';
             if (s.network) html += '<div class="popup-detail"><strong>Network:</strong> ' + esc(s.network) + '</div>';
             if (s.sensor) html += '<div class="popup-detail"><strong>Sensor:</strong> ' + esc(s.sensor) + '</div>';
+            if (s.instrument) html += '<div class="popup-detail"><strong>Instrument:</strong> ' + esc(s.instrument) + '</div>';
+            if (s.boreholeLength) html += '<div class="popup-detail"><strong>Depth:</strong> ' + esc(String(s.boreholeLength)) + ' m</div>';
+            if (s.scannedMetres) html += '<div class="popup-detail"><strong>Scanned:</strong> ' + esc(String(s.scannedMetres)) + ' m</div>';
+            if (s.scanDate) html += '<div class="popup-detail"><strong>Scan date:</strong> ' + esc(s.scanDate) + '</div>';
+            if (s.project) html += '<div class="popup-detail"><strong>Project:</strong> ' + esc(s.project) + '</div>';
+            if (s.custodian) html += '<div class="popup-detail"><strong>Custodian:</strong> ' + esc(s.custodian) + '</div>';
             if (s.startTime) html += '<div class="popup-detail"><strong>Start:</strong> ' + esc(s.startTime.split('T')[0]) + '</div>';
             if (s.endTime) html += '<div class="popup-detail"><strong>End:</strong> ' + esc(s.endTime.split('T')[0]) + '</div>';
             if (s.state) html += '<div class="popup-detail"><strong>State:</strong> ' + esc(s.state) + '</div>';
