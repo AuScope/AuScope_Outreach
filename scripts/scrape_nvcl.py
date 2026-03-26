@@ -35,6 +35,16 @@ STATES = {
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 MAX_WORKERS = 8  # Concurrent dataset queries per state
 TIMEOUT = 30
+USER_AGENT = 'AuScope-Outreach/1.0 (https://github.com/bvkay/AuScope_Outreach)'
+
+
+def urlopen_ua(url, timeout=TIMEOUT, method='GET', data=None, content_type=None):
+    """Open URL with proper User-Agent (TAS blocks default Python UA)."""
+    headers = {'User-Agent': USER_AGENT}
+    if content_type:
+        headers['Content-Type'] = content_type
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    return urllib.request.urlopen(req, timeout=timeout)
 
 # ── WFS: Fetch borehole locations ─────────────────────────────────
 
@@ -53,7 +63,7 @@ def fetch_boreholes_wfs(state_id, config):
     boreholes = []
 
     try:
-        resp = urllib.request.urlopen(url, timeout=TIMEOUT * 2)
+        resp = urlopen_ua(url, timeout=TIMEOUT * 2)
         data = json.loads(resp.read().decode('utf-8'))
 
         for f in data.get('features', []):
@@ -116,11 +126,7 @@ def fetch_boreholes_wfs_post(state_id, config):
     boreholes = []
 
     try:
-        req = urllib.request.Request(
-            url, data=xml_body.encode('utf-8'),
-            headers={'Content-Type': 'application/xml'}
-        )
-        resp = urllib.request.urlopen(req, timeout=TIMEOUT * 2)
+        resp = urlopen_ua(url, timeout=TIMEOUT * 2, data=xml_body.encode('utf-8'), content_type='application/xml')
         data = json.loads(resp.read().decode('utf-8'))
 
         for f in data.get('features', []):
@@ -167,7 +173,7 @@ def fetch_dataset_info(bh_id, nvcl_base):
     url = f'{nvcl_base}/getDatasetCollection.html?holeidentifier={urllib.parse.quote(bh_id)}'
 
     try:
-        resp = urllib.request.urlopen(url, timeout=TIMEOUT)
+        resp = urlopen_ua(url)
         xml_str = resp.read().decode('utf-8')
 
         root = ET.fromstring(xml_str)
