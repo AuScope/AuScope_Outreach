@@ -1,12 +1,12 @@
 {
-  "generated": "2026-03-26T02:01:41Z",
+  "generated": "2026-03-26T02:24:08Z",
   "summary": {
-    "totalBoreholes": 6236,
-    "totalBoreholeLengthMetres": 2416531.53,
-    "totalBoreholeLengthKm": 2416.53,
+    "totalBoreholes": 6782,
+    "totalBoreholeLengthMetres": 2634939.02,
+    "totalBoreholeLengthKm": 2634.94,
     "totalScannedMetres": 940836.55,
     "totalScannedKm": 940.84,
-    "boreholesWithInstrumentData": 5373
+    "boreholesWithInstrumentData": 5528
   },
   "byState": {
     "CSIRO": {
@@ -20,6 +20,12 @@
       "boreholeLengthMetres": 335716.31,
       "scannedMetres": 279379.84,
       "withInstrumentData": 933
+    },
+    "NT": {
+      "boreholes": 546,
+      "boreholeLengthMetres": 218407.49,
+      "scannedMetres": 0.0,
+      "withInstrumentData": 155
     },
     "QLD": {
       "boreholes": 581,
@@ -93,6 +99,10 @@
       "boreholes": 102,
       "scannedMetres": 29188.64
     },
+    "HyLogger 2-7": {
+      "boreholes": 33,
+      "scannedMetres": 0.0
+    },
     "HyLogger 3-2": {
       "boreholes": 1793,
       "scannedMetres": 0.0
@@ -113,6 +123,10 @@
       "boreholes": 299,
       "scannedMetres": 87510.49
     },
+    "HyLogger 3-7": {
+      "boreholes": 121,
+      "scannedMetres": 0.0
+    },
     "HyLogger 3-76": {
       "boreholes": 1,
       "scannedMetres": 908.83
@@ -132,6 +146,10 @@
     "HyLogger3-6": {
       "boreholes": 2,
       "scannedMetres": 274.39
+    },
+    "HyLogger3-7": {
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     "HyLogger6-3": {
       "boreholes": 1,
@@ -154,7 +172,7 @@
       "scannedMetres": 434.68
     },
     "Unknown": {
-      "boreholes": 863,
+      "boreholes": 1254,
       "scannedMetres": 101321.24
     },
     "hyLogger 3-6": {
@@ -438,6 +456,13 @@
     },
     {
       "month": "1966-01",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1966-01",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 3,
@@ -542,6 +567,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1967-07",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1967-11",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -601,6 +633,13 @@
       "month": "1968-12",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1969-01",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -788,8 +827,22 @@
     },
     {
       "month": "1972-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1972-09",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1972-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -799,6 +852,13 @@
       "instrument": "HyLogger 2-5",
       "boreholes": 1,
       "scannedMetres": 429.54
+    },
+    {
+      "month": "1972-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1972-12",
@@ -830,10 +890,38 @@
     },
     {
       "month": "1973-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1973-09",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 236.93
+    },
+    {
+      "month": "1973-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1973-10",
+      "state": "NT",
+      "instrument": "HyLogger3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1973-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1974-01",
@@ -850,11 +938,25 @@
       "scannedMetres": 141.5
     },
     {
+      "month": "1975-04",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1975-06",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 145.22
+    },
+    {
+      "month": "1976-04",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1976-07",
@@ -892,6 +994,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1977-07",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1978-01",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -913,11 +1022,60 @@
       "scannedMetres": 316.94
     },
     {
+      "month": "1978-05",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1978-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1978-06",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1978-06",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 87.83
+    },
+    {
+      "month": "1978-07",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1978-08",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1978-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1978-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
+      "scannedMetres": 0.0
     },
     {
       "month": "1978-12",
@@ -942,9 +1100,37 @@
     },
     {
       "month": "1979-04",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-04",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-06",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-07",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 3,
       "scannedMetres": 0.0
     },
     {
@@ -955,6 +1141,20 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1979-08",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-09",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1979-09",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
@@ -962,11 +1162,39 @@
       "scannedMetres": 824.54
     },
     {
+      "month": "1979-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1979-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1980-01",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1980-03",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 142.95
+    },
+    {
+      "month": "1980-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1980-06",
@@ -1005,6 +1233,13 @@
     },
     {
       "month": "1981-01",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-01",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
@@ -1014,6 +1249,13 @@
       "month": "1981-02",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-03",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -1033,9 +1275,30 @@
     },
     {
       "month": "1981-04",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-04",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-05",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
       "scannedMetres": 0.0
     },
     {
@@ -1050,6 +1313,20 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-06",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-06",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
       "scannedMetres": 0.0
     },
     {
@@ -1071,6 +1348,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1981-08",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -1179,6 +1463,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1982-10",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1983-02",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -1221,6 +1512,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1983-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1984-02",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
@@ -1238,6 +1536,13 @@
       "month": "1984-04",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1984-06",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 2,
       "scannedMetres": 0.0
     },
@@ -1452,6 +1757,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1987-11",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1987-12",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -1491,6 +1803,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 4,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1988-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -1606,6 +1925,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1991-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1991-06",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -1618,6 +1944,13 @@
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 224.49
+    },
+    {
+      "month": "1991-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1991-12",
@@ -1674,6 +2007,13 @@
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 18.46
+    },
+    {
+      "month": "1993-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
     },
     {
       "month": "1993-08",
@@ -1754,8 +2094,22 @@
     },
     {
       "month": "1994-07",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1994-07",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1994-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -1900,6 +2254,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "1996-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "1996-09",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -1988,6 +2349,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "1997-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
       "scannedMetres": 0.0
     },
     {
@@ -2285,6 +2653,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "2002-11",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "2003-02",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -2432,10 +2807,24 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "2005-06",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "2005-07",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2005-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -2547,6 +2936,13 @@
       "month": "2007-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2007-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -2684,6 +3080,20 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "2009-06",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-07",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "2009-07",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
@@ -2713,6 +3123,13 @@
     },
     {
       "month": "2009-09",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-09",
       "state": "QLD",
       "instrument": "HyLogger 2",
       "boreholes": 1,
@@ -2734,6 +3151,13 @@
     },
     {
       "month": "2009-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-10",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
@@ -2748,9 +3172,37 @@
     },
     {
       "month": "2009-11",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-11",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-12",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2009-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
       "scannedMetres": 0.0
     },
     {
@@ -2790,6 +3242,13 @@
     },
     {
       "month": "2010-04",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2010-04",
       "state": "QLD",
       "instrument": "HyLogger 2-5",
       "boreholes": 1,
@@ -2825,6 +3284,13 @@
     },
     {
       "month": "2010-07",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2010-07",
       "state": "WA",
       "instrument": "Unknown",
       "boreholes": 1,
@@ -2834,6 +3300,13 @@
       "month": "2010-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2010-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 2,
       "scannedMetres": 0.0
     },
@@ -2862,6 +3335,13 @@
       "month": "2010-11",
       "state": "WA",
       "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2010-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -2937,6 +3417,13 @@
     },
     {
       "month": "2011-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2011-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 4,
@@ -2965,6 +3452,13 @@
     },
     {
       "month": "2011-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2011-10",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 3,
@@ -2975,6 +3469,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2011-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3070,6 +3571,13 @@
     },
     {
       "month": "2012-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 4,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2012-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 4,
@@ -3077,9 +3585,23 @@
     },
     {
       "month": "2012-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2012-09",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 4,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2012-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3147,6 +3669,13 @@
     },
     {
       "month": "2013-04",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2013-04",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 5,
@@ -3181,6 +3710,13 @@
       "scannedMetres": 0.0
     },
     {
+      "month": "2013-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
       "month": "2013-10",
       "state": "WA",
       "instrument": "HyLogger 3-2",
@@ -3196,6 +3732,13 @@
     },
     {
       "month": "2013-12",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2013-12",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 8,
@@ -3206,6 +3749,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 11,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2014-02",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3266,6 +3816,13 @@
     },
     {
       "month": "2014-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2014-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 4,
@@ -3273,8 +3830,22 @@
     },
     {
       "month": "2014-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2014-09",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2014-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 1,
       "scannedMetres": 0.0
     },
@@ -3357,6 +3928,20 @@
     },
     {
       "month": "2015-09",
+      "state": "NT",
+      "instrument": "HyLogger 2-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2015-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2015-09",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
@@ -3378,6 +3963,13 @@
     },
     {
       "month": "2015-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2015-11",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
@@ -3395,6 +3987,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 3,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-02",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3455,6 +4054,13 @@
     },
     {
       "month": "2016-07",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-07",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
@@ -3469,9 +4075,23 @@
     },
     {
       "month": "2016-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 7,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-08",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 6,
       "scannedMetres": 0.0
     },
     {
@@ -3490,6 +4110,13 @@
     },
     {
       "month": "2016-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-10",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
@@ -3499,6 +4126,13 @@
       "month": "2016-10",
       "state": "WA",
       "instrument": "HyLogger 3-2",
+      "boreholes": 4,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2016-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
       "boreholes": 4,
       "scannedMetres": 0.0
     },
@@ -3560,6 +4194,13 @@
     },
     {
       "month": "2017-05",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2017-05",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 2,
@@ -3588,6 +4229,13 @@
     },
     {
       "month": "2017-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 5,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2017-08",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 2,
@@ -3602,6 +4250,13 @@
     },
     {
       "month": "2017-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2017-09",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
@@ -3612,6 +4267,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 11,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2017-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3693,6 +4355,13 @@
     },
     {
       "month": "2018-08",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2018-08",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 2,
@@ -3707,9 +4376,23 @@
     },
     {
       "month": "2018-09",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 4,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2018-09",
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 11,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2018-10",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -3724,6 +4407,13 @@
       "state": "WA",
       "instrument": "HyLogger 3-2",
       "boreholes": 5,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "2018-11",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 1,
       "scannedMetres": 0.0
     },
     {
@@ -4313,6 +5003,20 @@
       "instrument": "Unknown",
       "boreholes": 265,
       "scannedMetres": 69613.62
+    },
+    {
+      "month": "unknown",
+      "state": "NT",
+      "instrument": "HyLogger 3-7",
+      "boreholes": 2,
+      "scannedMetres": 0.0
+    },
+    {
+      "month": "unknown",
+      "state": "NT",
+      "instrument": "Unknown",
+      "boreholes": 391,
+      "scannedMetres": 0.0
     },
     {
       "month": "unknown",

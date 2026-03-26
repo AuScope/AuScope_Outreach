@@ -104,64 +104,72 @@ def fetch_boreholes_wfs(state_id, config):
     return boreholes
 
 
-def fetch_boreholes_wfs_post(state_id, config):
-    """Fetch NVCL boreholes via POST (for NT where CQL is disabled)."""
-    xml_body = """<?xml version="1.0" encoding="UTF-8"?>
-    <wfs:GetFeature service="WFS" version="1.1.0"
-        xmlns:wfs="http://www.opengis.net/wfs"
-        xmlns:ogc="http://www.opengis.net/ogc"
-        xmlns:gsmlp="http://xmlns.geosciml.org/geosciml-portrayal/4.0"
-        outputFormat="json">
-        <wfs:Query typeName="gsmlp:BoreholeView">
-            <ogc:Filter>
-                <ogc:PropertyIsEqualTo>
-                    <ogc:PropertyName>nvclCollection</ogc:PropertyName>
-                    <ogc:Literal>true</ogc:Literal>
-                </ogc:PropertyIsEqualTo>
-            </ogc:Filter>
-        </wfs:Query>
-    </wfs:GetFeature>"""
-
+def fetch_boreholes_wfs_paged(state_id, config):
+    """Fetch NVCL boreholes by paging through ALL boreholes and filtering locally.
+    Required for NT where CQL filtering is disabled on GeoServer.
+    Uses WFS v1.0.0 POST with form data (matching nvcl_kit approach)."""
     url = config['wfs']
     boreholes = []
+    start_index = 0
+    page_size = 10000
 
     try:
-        resp = urlopen_ua(url, timeout=TIMEOUT * 2, data=xml_body.encode('utf-8'), content_type='application/xml')
-        data = json.loads(resp.read().decode('utf-8'))
+        while True:
+            form_data = urllib.parse.urlencode({
+                'service': 'WFS', 'version': '1.0.0', 'request': 'GetFeature',
+                'typeName': 'gsmlp:BoreholeView', 'outputFormat': 'json',
+                'maxFeatures': str(page_size), 'startIndex': str(start_index)
+            }).encode('utf-8')
 
-        for f in data.get('features', []):
-            props = f.get('properties', {})
-            geom = f.get('geometry', {})
-            coords = geom.get('coordinates', [0, 0])
+            resp = urlopen_ua(url, timeout=TIMEOUT * 4, data=form_data,
+                              content_type='application/x-www-form-urlencoded')
+            data = json.loads(resp.read().decode('utf-8'))
+            features = data.get('features', [])
 
-            identifier = props.get('identifier', '')
-            bh_id = identifier.rstrip('/').split('/')[-1] if identifier else ''
-            if not bh_id:
-                continue
+            if not features:
+                break
 
-            lng = coords[0] if len(coords) > 0 else 0
-            lat = coords[1] if len(coords) > 1 else 0
-            if lat == 0 and lng == 0:
-                continue
+            for f in features:
+                props = f.get('properties', {})
+                if props.get('nvclCollection') != 'true':
+                    continue
 
-            boreholes.append({
-                'id': bh_id,
-                'identifier': identifier,
-                'name': props.get('name', bh_id),
-                'lat': lat,
-                'lng': lng,
-                'elevation': props.get('elevation_m'),
-                'boreholeLength': props.get('boreholeLength_m'),
-                'custodian': props.get('boreholeMaterialCustodian', ''),
-                'drillingMethod': props.get('drillingMethod', ''),
-                'drillEndDate': props.get('drillEndDate', ''),
-                'description': props.get('description', ''),
-                'purpose': props.get('purpose', ''),
-                'state': state_id.upper(),
-            })
+                geom = f.get('geometry', {})
+                coords = geom.get('coordinates', [0, 0])
+                identifier = props.get('identifier', '')
+                bh_id = identifier.rstrip('/').split('/')[-1] if identifier else ''
+                if not bh_id:
+                    continue
+
+                lng = coords[0] if len(coords) > 0 else 0
+                lat = coords[1] if len(coords) > 1 else 0
+                if lat == 0 and lng == 0:
+                    continue
+
+                boreholes.append({
+                    'id': bh_id,
+                    'identifier': identifier,
+                    'name': props.get('name', bh_id),
+                    'lat': lat,
+                    'lng': lng,
+                    'elevation': props.get('elevation_m'),
+                    'boreholeLength': props.get('boreholeLength_m'),
+                    'custodian': props.get('boreholeMaterialCustodian', ''),
+                    'drillingMethod': props.get('drillingMethod', ''),
+                    'drillEndDate': props.get('drillEndDate', ''),
+                    'description': props.get('description', ''),
+                    'purpose': props.get('purpose', ''),
+                    'state': state_id.upper(),
+                })
+
+            start_index += len(features)
+            print(f'  Paged {start_index} boreholes, {len(boreholes)} NVCL found...')
+
+            if len(features) < page_size:
+                break
 
     except Exception as e:
-        print(f'  WFS POST error for {state_id}: {e}')
+        print(f'  WFS paged error for {state_id}: {e}')
 
     return boreholes
 
@@ -467,9 +475,9 @@ def main():
     for state_id, config in STATES.items():
         print(f'[{state_id.upper()}] Fetching boreholes from WFS...')
 
-        # NT needs POST filter (CQL disabled)
+        # NT needs paging through all boreholes (CQL disabled on their GeoServer)
         if state_id == 'nt':
-            boreholes = fetch_boreholes_wfs_post(state_id, config)
+            boreholes = fetch_boreholes_wfs_paged(state_id, config)
         else:
             boreholes = fetch_boreholes_wfs(state_id, config)
 
