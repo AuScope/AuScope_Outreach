@@ -1,0 +1,103 @@
+name: Hourly AuSIS Status Check
+
+on:
+  schedule:
+    - cron: '15 * * * *'  # Every hour at :15
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check intermittent stations via dataselect
+        run: |
+          python3 << 'EOF'
+          import json, urllib.request, datetime, sys
+
+          LIVE_THRESHOLD_DAYS = 7
+          now = datetime.datetime.utcnow()
+          checked = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+          # Step 1: Get latest availability for all stations
+          url = 'https://service.iris.edu/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text'
+          try:
+              resp = urllib.request.urlopen(url, timeout=30)
+              lines = resp.read().decode('utf-8').strip().split('\n')
+          except Exception as e:
+              print(f'Availability fetch failed: {e}')
+              sys.exit(0)
+
+          latest = {}
+          for line in lines[1:]:
+              cols = line.strip().split()
+              if len(cols) < 8:
+                  continue
+              code = cols[1]
+              dt = datetime.datetime.fromisoformat(cols[7].replace('Z', ''))
+              if code not in latest or dt > latest[code]:
+                  latest[code] = dt
+
+          # Step 2: Find stations that appear stale (>7 days)
+          stale = []
+          for code, dt in latest.items():
+              if code == 'TEST':
+                  continue
+              days_ago = (now - dt).days
+              if days_ago > LIVE_THRESHOLD_DAYS:
+                  stale.append(code)
+
+          if not stale:
+              print('No stale stations to check')
+              # Still write the file to confirm we checked
+              status = {'checked': checked, 'stations': {}}
+              with open('data/ausis_status.json', 'w') as f:
+                  json.dump(status, f, indent=2)
+              sys.exit(0)
+
+          print(f'Checking {len(stale)} stale stations: {", ".join(stale)}')
+
+          # Step 3: For each stale station, check dataselect for last 24hrs
+          yesterday = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT00:00:00')
+          today = now.strftime('%Y-%m-%dT%H:%M:%S')
+
+          stations = {}
+          for code in stale:
+              url = (f'https://service.iris.edu/fdsnws/dataselect/1/query'
+                     f'?network=S1&station={code}&channel=HHZ&nodata=404'
+                     f'&starttime={yesterday}&endtime={today}')
+              try:
+                  req = urllib.request.Request(url, method='HEAD')
+                  resp = urllib.request.urlopen(req, timeout=15)
+                  streaming = (resp.status == 200)
+              except urllib.error.HTTPError as e:
+                  streaming = False
+              except Exception:
+                  streaming = False
+
+              stations[code] = {
+                  'streaming': streaming,
+                  'checkedAt': checked
+              }
+              status_text = 'STREAMING' if streaming else 'DOWN'
+              print(f'  {code}: {status_text}')
+
+          # Step 4: Write status file
+          status = {'checked': checked, 'stations': stations}
+          with open('data/ausis_status.json', 'w') as f:
+              json.dump(status, f, indent=2)
+
+          print(f'\nSaved status for {len(stations)} stations')
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ausis_status.json
+          git diff --cached --quiet || git commit -m "Hourly AuSIS status check $(date -u +%Y-%m-%dT%H:%M)"
+          git push

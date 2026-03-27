@@ -88,15 +88,12 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ── Constants ─────────────────────────────────────────────────
-        // IRIS availability archive can lag 2-3 weeks behind the live stream.
-        // 21 days avoids false "intermittent" flags for stations that are
-        // actually streaming (e.g. AUCAR showed intermittent at 15 days
-        // while its webicorder confirmed live data).
-        const LIVE_THRESHOLD_DAYS = 21;
+        const LIVE_THRESHOLD_DAYS = 7;
 
         // ── State ─────────────────────────────────────────────────────
         let stations = [],
-            map     = null;
+            map     = null,
+            verifiedStatus = {};  // from ausis_status.json (hourly GitHub Action)
 
         // ── Helpers ──────────────────────────────────────────────────
         function esc(str) {
@@ -119,8 +116,10 @@
 
         function stationStrokeColor(s) {
             if (s.endTime) return '#ef4444';
+            // Hourly status check overrides stale IRIS availability data
+            if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '#22c55e';
             if (s.latestData) {
-                const daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
                 if (daysAgo <= LIVE_THRESHOLD_DAYS) return '#22c55e';
                 return '#facc15';
             }
@@ -287,8 +286,9 @@
         // ── Marker rendering ─────────────────────────────────────────
         function stationZIndex(s) {
             if (s.endTime) return 0;
+            if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return 2000;
             if (s.latestData) {
-                const daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+                var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
                 if (daysAgo <= LIVE_THRESHOLD_DAYS) return 2000;
                 return 1000;
             }
@@ -302,6 +302,7 @@
                 + '<div class="popup-row"><strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
                 + (function() {
                     if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
+                    if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
                     if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
                     if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
                     return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
@@ -336,19 +337,41 @@
             });
         }
 
+        function isStationStreaming(s) {
+            if (s.endTime) return false;
+            if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return true;
+            if (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS) return true;
+            return false;
+        }
+
         function updateHeader() {
             var active = stations.filter(function(s) { return !s.endTime; }).length;
-            var streaming = stations.filter(function(s) { return s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS; }).length;
+            var streaming = stations.filter(isStationStreaming).length;
             document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
             document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
+        }
+
+        // Load hourly verified status from GitHub-hosted JSON
+        async function loadVerifiedStatus() {
+            try {
+                var resp = await fetch('data/ausis_status.json');
+                if (!resp.ok) return;
+                var data = await resp.json();
+                verifiedStatus = data.stations || {};
+            } catch (e) {
+                // No status file yet - that's fine
+            }
         }
 
         // ── Initialise ───────────────────────────────────────────────
         setLegendIcons();
         initMap();
 
+        // Step 0: Load verified status file (hourly GitHub Action)
         // Step 1: Load local backup instantly for immediate display
-        fetchStationsFromBackup().then(function(data) {
+        loadVerifiedStatus().then(function() {
+            return fetchStationsFromBackup();
+        }).then(function(data) {
             if (data.length > 0) {
                 stations = data;
                 addMarkers();
