@@ -88,7 +88,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ── Constants ─────────────────────────────────────────────────
-        const LIVE_THRESHOLD_DAYS = 7;
+        // IRIS availability archive can lag 2-3 weeks behind the live stream.
+        // 21 days avoids false "intermittent" flags for stations that are
+        // actually streaming (e.g. AUCAR showed intermittent at 15 days
+        // while its webicorder confirmed live data).
+        const LIVE_THRESHOLD_DAYS = 21;
 
         // ── State ─────────────────────────────────────────────────────
         let stations = [],
@@ -275,44 +279,9 @@
                     if (latest[s.code]) s.latestData = latest[s.code];
                 });
 
-                // Secondary check: for stations that appear intermittent,
-                // verify against dataselect (real-time) in case the
-                // availability archive is stale
-                await verifyIntermittentStations();
             } catch (e) {
                 console.warn('Failed to fetch availability data:', e);
             }
-        }
-
-        // Check intermittent stations against IRIS dataselect for real-time status.
-        // The availability/extent endpoint can lag behind the live stream by days/weeks.
-        // Dataselect returns 200 if data exists in the last 24hrs, 404 if not.
-        async function verifyIntermittentStations() {
-            var now = new Date();
-            var yesterday = new Date(now.getTime() - 86400000);
-            var start = yesterday.toISOString().split('.')[0];
-            var end = now.toISOString().split('.')[0];
-
-            var checks = stations.filter(function(s) {
-                if (s.endTime) return false;
-                if (!s.latestData) return false;
-                var daysAgo = Math.floor((now.getTime() - s.latestData.getTime()) / 86400000);
-                return daysAgo > LIVE_THRESHOLD_DAYS;
-            });
-
-            if (checks.length === 0) return;
-
-            var promises = checks.map(function(s) {
-                var url = 'https://service.iris.edu/fdsnws/dataselect/1/query?network=S1&station=' + s.code + '&channel=HHZ&starttime=' + start + '&endtime=' + end + '&nodata=404';
-                return fetch(url, { method: 'HEAD' }).then(function(resp) {
-                    if (resp.ok) {
-                        // Station is actually streaming - update latestData to now
-                        s.latestData = now;
-                    }
-                }).catch(function() {});
-            });
-
-            await Promise.all(promises);
         }
 
         // ── Marker rendering ─────────────────────────────────────────
