@@ -310,7 +310,7 @@
                 + '<div class="popup-row"><strong>Latitude:</strong> ' + s.lat.toFixed(4) + '</div>'
                 + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
                 + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
-                + (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS
+                + (isStationStreaming(s)
                     ? '<div class="popup-row" style="margin-top:6px"><a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + esc(s.code) + '/webicorder/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;font-size:12px">View Live Webicorder &#x2197;</a></div>'
                     : '');
         }
