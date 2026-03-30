@@ -1,9 +1,9 @@
 {
   "type": "FeatureCollection",
   "metadata": {
-    "source": "AusPASS FDSN",
+    "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-03-25T03:33:03Z"
+    "fetched": "2026-03-30T08:22:57Z"
   },
   "features": [
     {
@@ -21629,6 +21629,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "GOOGA",
+        "network": "OZ",
+        "channel": "CNZ",
+        "sensor": "",
+        "sampleRate": 250.0,
+        "elevation": 738.0,
+        "startTime": "2021-02-23T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.25754,
+          -35.42312
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "GRASY",
         "network": "OZ",
         "channel": "HHZ",
@@ -32223,6 +32243,146 @@
         "coordinates": [
           118.19593333333333,
           -34.80141666666667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA11",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 100.0,
+        "elevation": 249.0,
+        "startTime": "2024-08-23T06:57:00.62",
+        "endTime": "2025-03-03T06:53:32.74"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4837,
+          -31.63259
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA12",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 100.0,
+        "elevation": 306.0,
+        "startTime": "2024-08-23T06:57:01.42",
+        "endTime": "2025-03-03T06:49:36.09"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.3769,
+          -31.20283
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA13",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 100.0,
+        "elevation": 306.0,
+        "startTime": "2024-08-23T06:56:00.44",
+        "endTime": "2025-03-03T06:56:34.12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.7952,
+          -31.11491
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA21",
+        "network": "WG",
+        "channel": "CHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 250.0,
+        "elevation": 360.0,
+        "startTime": "2025-08-18T00:31:00.548",
+        "endTime": "2025-10-22T10:49:51.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.6511,
+          -31.29708
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA22",
+        "network": "WG",
+        "channel": "CHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 250.0,
+        "elevation": 333.0,
+        "startTime": "2025-08-18T00:31:00.696",
+        "endTime": "2025-10-28T03:33:29.076"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.5849,
+          -31.30768
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA24",
+        "network": "WG",
+        "channel": "CHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 250.0,
+        "elevation": 356.0,
+        "startTime": "2025-08-18T00:31:01.288",
+        "endTime": "2025-09-19T07:43:40.768"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.6497,
+          -31.25497
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WYA26",
+        "network": "WG",
+        "channel": "CHZ",
+        "sensor": "Guralp Certis 120s (1000 v/m/s) (BB)",
+        "sampleRate": 250.0,
+        "elevation": 358.0,
+        "startTime": "2025-08-18T00:31:00.388",
+        "endTime": "2025-10-02T09:39:51.792"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.5835,
+          -31.26211
         ]
       }
     },

@@ -1,9 +1,9 @@
 {
   "type": "FeatureCollection",
   "metadata": {
-    "source": "AusPASS FDSN",
+    "source": "AusPASS FDSN station service",
     "category": "seismic_shortperiod",
-    "fetched": "2026-03-25T03:33:03Z"
+    "fetched": "2026-03-30T08:22:57Z"
   },
   "features": [
     {
@@ -18163,26 +18163,6 @@
         "coordinates": [
           129.53145,
           -25.15507
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "GOOGA",
-        "network": "OZ",
-        "channel": "CNZ",
-        "sensor": "",
-        "sampleRate": 250.0,
-        "elevation": 738.0,
-        "startTime": "2021-02-23T00:00:00",
-        "endTime": null
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          149.25754,
-          -35.42312
         ]
       }
     },
