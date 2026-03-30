@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "csiro",
     "stateLabel": "CSIRO",
-    "fetched": "2026-03-26T01:20:44Z"
+    "fetched": "2026-03-30T09:22:09Z"
   },
   "features": [
     {
@@ -19,13 +19,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2025-12-23",
+        "firstSeen": "2026-03-26",
         "scannedMetres": 57.49,
         "project": null,
         "owner": null,
-        "state": "CSIRO",
-        "drillDate": null,
-        "firstSeen": "2026-03-26",
-        "datasetCreated": null
+        "state": "CSIRO"
       },
       "geometry": {
         "type": "Point",
@@ -47,13 +47,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2025-12-23",
+        "firstSeen": "2026-03-26",
         "scannedMetres": 45.19,
         "project": null,
         "owner": null,
-        "state": "CSIRO",
-        "drillDate": null,
-        "firstSeen": "2026-03-26",
-        "datasetCreated": null
+        "state": "CSIRO"
       },
       "geometry": {
         "type": "Point",
@@ -75,13 +75,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2025-12-23",
+        "firstSeen": "2026-03-26",
         "scannedMetres": 39.75,
         "project": null,
         "owner": null,
-        "state": "CSIRO",
-        "drillDate": null,
-        "firstSeen": "2026-03-26",
-        "datasetCreated": null
+        "state": "CSIRO"
       },
       "geometry": {
         "type": "Point",
@@ -103,13 +103,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2025-12-23",
+        "firstSeen": "2026-03-26",
         "scannedMetres": 47.19,
         "project": null,
         "owner": null,
-        "state": "CSIRO",
-        "drillDate": null,
-        "firstSeen": "2026-03-26",
-        "datasetCreated": null
+        "state": "CSIRO"
       },
       "geometry": {
         "type": "Point",
@@ -131,13 +131,13 @@
         "drillEndDate": "",
         "purpose": "",
         "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2025-12-23",
+        "firstSeen": "2026-03-26",
         "scannedMetres": 30.79,
         "project": null,
         "owner": null,
-        "state": "CSIRO",
-        "drillDate": null,
-        "firstSeen": "2026-03-26",
-        "datasetCreated": null
+        "state": "CSIRO"
       },
       "geometry": {
         "type": "Point",
