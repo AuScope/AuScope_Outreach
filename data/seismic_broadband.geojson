@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-03-30T08:22:57Z"
+    "fetched": "2026-04-06T08:23:17Z"
   },
   "features": [
     {
@@ -20803,6 +20803,26 @@
         "coordinates": [
           118.39563,
           -33.86366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RUGBY",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sampleRate": 100.0,
+        "elevation": 600.0,
+        "startTime": "2026-04-09T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.0,
+          -35.0
         ]
       }
     },
