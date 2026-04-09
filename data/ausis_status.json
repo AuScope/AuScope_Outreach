@@ -1,17 +1,21 @@
 {
-  "checked": "2026-04-09T21:00:56Z",
+  "checked": "2026-04-09T21:55:57Z",
   "stations": {
+    "AUCAS": {
+      "streaming": false,
+      "checkedAt": "2026-04-09T21:55:57Z"
+    },
     "AUJCS": {
       "streaming": false,
-      "checkedAt": "2026-04-09T21:00:56Z"
+      "checkedAt": "2026-04-09T21:55:57Z"
     },
     "AUMUL": {
       "streaming": false,
-      "checkedAt": "2026-04-09T21:00:56Z"
+      "checkedAt": "2026-04-09T21:55:57Z"
     },
     "AUSIS": {
       "streaming": false,
-      "checkedAt": "2026-04-09T21:00:56Z"
+      "checkedAt": "2026-04-09T21:55:57Z"
     }
   }
 }
