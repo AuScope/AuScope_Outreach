@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-04-06T08:23:17Z"
+    "fetched": "2026-04-13T09:03:09Z"
   },
   "features": [
     {
@@ -20814,15 +20814,15 @@
         "channel": "HHZ",
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
-        "elevation": 600.0,
+        "elevation": 724.0,
         "startTime": "2026-04-09T00:00:00",
         "endTime": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          149.0,
-          -35.0
+          148.94292,
+          -34.36646
         ]
       }
     },
