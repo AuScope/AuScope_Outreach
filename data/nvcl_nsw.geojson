@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-03-30T09:22:09Z"
+    "fetched": "2026-04-13T10:02:10Z"
   },
   "features": [
     {
@@ -4442,13 +4442,13 @@
         "drillingMethod": "diamond drill",
         "drillEndDate": "1977",
         "purpose": "Metallic minerals",
-        "instrument": null,
+        "instrument": "HyLogger 3-4",
         "drillDate": null,
-        "datasetCreated": "2014-11-03",
+        "datasetCreated": "2019-08-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 333.77,
-        "project": null,
-        "owner": null,
+        "scannedMetres": 333.79,
+        "project": "Browns Reef - Lake Cargelligo",
+        "owner": "GSNSW",
         "state": "NSW"
       },
       "geometry": {
@@ -4470,13 +4470,13 @@
         "drillingMethod": "diamond drill",
         "drillEndDate": "1977",
         "purpose": "Metallic minerals",
-        "instrument": null,
+        "instrument": "HyLogger 3-4",
         "drillDate": null,
-        "datasetCreated": "2014-11-04",
+        "datasetCreated": "2019-08-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 26.99,
-        "project": null,
-        "owner": null,
+        "scannedMetres": 26.98,
+        "project": "Browns Reef - Lake Cargelligo",
+        "owner": "GSNSW",
         "state": "NSW"
       },
       "geometry": {
@@ -18554,13 +18554,13 @@
         "drillingMethod": "diamond drill",
         "drillEndDate": "1988",
         "purpose": "Metallic minerals",
-        "instrument": null,
+        "instrument": "HyLogger 3-4",
         "drillDate": null,
-        "datasetCreated": "2014-06-04",
+        "datasetCreated": "2019-08-13",
         "firstSeen": "2026-03-26",
         "scannedMetres": 108.29,
-        "project": null,
-        "owner": null,
+        "project": "Mount Hope - Mount Allen Gold Mine",
+        "owner": "GSNSW",
         "state": "NSW"
       },
       "geometry": {
@@ -31448,34 +31448,6 @@
         "coordinates": [
           148.0497,
           -35.2769
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "National Drilling Initiative - Delamarian: NDILLK01",
-        "boreholeId": "MIN_371931",
-        "boreholeLength": 173,
-        "elevation": null,
-        "custodian": "Geological Survey of NSW",
-        "drillingMethod": "",
-        "drillEndDate": "2023",
-        "purpose": "",
-        "instrument": "HyLogger 3-4",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 149.88,
-        "project": "National Drilling Initiative - Delamarian",
-        "owner": "GSNSW",
-        "state": "NSW"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          141.0909,
-          -32.5681
         ]
       }
     },
