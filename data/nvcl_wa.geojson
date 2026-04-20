@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-04-13T10:02:10Z"
+    "fetched": "2026-04-20T10:05:00Z"
   },
   "features": [
     {
@@ -18723,12 +18723,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2010-07-01",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Ernest Giles",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -24183,12 +24183,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2011-01-19",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Eucla",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -35579,12 +35579,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2010-11-29",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Eucla",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -44959,12 +44959,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2023-03-03",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Snake Rock ",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -44987,12 +44987,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2023-03-04",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Snake Rock",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -45015,12 +45015,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2022-03-05",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Snake Rock",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -45043,12 +45043,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2023-03-06",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Snake Rock",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
@@ -45071,12 +45071,12 @@
         "drillEndDate": "unknown",
         "purpose": "",
         "instrument": null,
-        "drillDate": null,
+        "drillDate": "2023-03-06",
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
         "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "project": "Snake Rock",
+        "owner": "GSWA",
         "state": "WA"
       },
       "geometry": {
