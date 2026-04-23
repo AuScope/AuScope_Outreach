@@ -3,7 +3,7 @@
   "metadata": {
     "source": "IRIS FDSN station + availability services",
     "network": "S1",
-    "fetched": "2026-04-22T07:57:41Z"
+    "fetched": "2026-04-23T08:03:26Z"
   },
   "features": [
     {
@@ -14,7 +14,7 @@
         "elevation": 50.0,
         "startTime": "2013-09-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:16.300000Z"
+        "latestData": "2026-04-23T00:00:19.900000Z"
       },
       "geometry": {
         "type": "Point",
@@ -32,7 +32,7 @@
         "elevation": 573.0,
         "startTime": "2015-08-19T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:37.500000Z"
+        "latestData": "2026-04-23T00:00:33.500000Z"
       },
       "geometry": {
         "type": "Point",
@@ -50,7 +50,7 @@
         "elevation": 555.0,
         "startTime": "2022-11-01T11:32:11.5000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:24.500000Z"
+        "latestData": "2026-04-23T00:00:14.100000Z"
       },
       "geometry": {
         "type": "Point",
@@ -68,7 +68,7 @@
         "elevation": 670.0,
         "startTime": "2019-08-07T01:46:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:02.760000Z"
+        "latestData": "2026-04-23T00:00:35.500000Z"
       },
       "geometry": {
         "type": "Point",
@@ -86,7 +86,7 @@
         "elevation": 13.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:06.000000Z"
+        "latestData": "2026-04-23T00:00:11.600000Z"
       },
       "geometry": {
         "type": "Point",
@@ -104,7 +104,7 @@
         "elevation": 20.0,
         "startTime": "2019-07-14T03:52:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:20.300000Z"
+        "latestData": "2026-04-23T00:00:14.800000Z"
       },
       "geometry": {
         "type": "Point",
@@ -122,7 +122,7 @@
         "elevation": 10.0,
         "startTime": "2017-07-06T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:29.000000Z"
+        "latestData": "2026-04-23T00:00:29.000000Z"
       },
       "geometry": {
         "type": "Point",
@@ -140,7 +140,7 @@
         "elevation": 26.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:04.700000Z"
+        "latestData": "2026-04-23T00:00:25.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -158,7 +158,7 @@
         "elevation": 13.0,
         "startTime": "2013-10-20T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.800000Z"
+        "latestData": "2026-04-23T00:00:05.300000Z"
       },
       "geometry": {
         "type": "Point",
@@ -176,7 +176,7 @@
         "elevation": 17.0,
         "startTime": "2013-09-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:19.300000Z"
+        "latestData": "2026-04-23T00:00:15.500000Z"
       },
       "geometry": {
         "type": "Point",
@@ -212,7 +212,7 @@
         "elevation": 17.0,
         "startTime": "2013-09-03T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:12.000000Z"
+        "latestData": "2026-04-23T00:00:18.000000Z"
       },
       "geometry": {
         "type": "Point",
@@ -230,7 +230,7 @@
         "elevation": 575.0,
         "startTime": "2012-04-11T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:01.950000Z"
+        "latestData": "2026-04-23T00:00:01.750000Z"
       },
       "geometry": {
         "type": "Point",
@@ -248,7 +248,7 @@
         "elevation": 276.0,
         "startTime": "2013-05-30T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.300000Z"
+        "latestData": "2026-04-23T00:00:14.100000Z"
       },
       "geometry": {
         "type": "Point",
@@ -266,7 +266,7 @@
         "elevation": 26.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:24.600000Z"
+        "latestData": "2026-04-23T00:00:25.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -284,7 +284,7 @@
         "elevation": 132.0,
         "startTime": "2019-04-01T00:15:53.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:17.300000Z"
+        "latestData": "2026-04-23T00:00:24.700000Z"
       },
       "geometry": {
         "type": "Point",
@@ -302,7 +302,7 @@
         "elevation": 39.0,
         "startTime": "2014-09-18T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:15.400000Z"
+        "latestData": "2026-04-23T00:00:19.900000Z"
       },
       "geometry": {
         "type": "Point",
@@ -320,7 +320,7 @@
         "elevation": 11.0,
         "startTime": "2013-05-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:17.200000Z"
+        "latestData": "2026-04-23T00:00:14.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -356,7 +356,7 @@
         "elevation": 373.0,
         "startTime": "2013-09-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:02.800000Z"
+        "latestData": "2026-04-23T00:00:10.700000Z"
       },
       "geometry": {
         "type": "Point",
@@ -392,7 +392,7 @@
         "elevation": 122.0,
         "startTime": "2013-08-29T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:29.200000Z"
+        "latestData": "2026-04-23T00:00:23.100000Z"
       },
       "geometry": {
         "type": "Point",
@@ -410,7 +410,7 @@
         "elevation": 27.0,
         "startTime": "2013-05-28T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.700000Z"
+        "latestData": "2026-04-23T00:00:10.700000Z"
       },
       "geometry": {
         "type": "Point",
@@ -428,7 +428,7 @@
         "elevation": 50.0,
         "startTime": "2013-05-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.200000Z"
+        "latestData": "2026-04-23T00:00:07.400000Z"
       },
       "geometry": {
         "type": "Point",
@@ -446,7 +446,7 @@
         "elevation": 312.0,
         "startTime": "2013-11-21T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:25.700000Z"
+        "latestData": "2026-04-23T00:00:14.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -464,7 +464,7 @@
         "elevation": 173.0,
         "startTime": "2013-10-31T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:25.200000Z"
+        "latestData": "2026-04-23T00:00:24.400000Z"
       },
       "geometry": {
         "type": "Point",
@@ -482,7 +482,7 @@
         "elevation": 145.0,
         "startTime": "2013-08-29T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.300000Z"
+        "latestData": "2026-04-23T00:00:19.800000Z"
       },
       "geometry": {
         "type": "Point",
@@ -500,7 +500,7 @@
         "elevation": 127.0,
         "startTime": "2013-05-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:16.700000Z"
+        "latestData": "2026-04-23T00:00:19.000000Z"
       },
       "geometry": {
         "type": "Point",
@@ -518,7 +518,7 @@
         "elevation": 153.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:10.900000Z"
+        "latestData": "2026-04-23T00:00:19.000000Z"
       },
       "geometry": {
         "type": "Point",
@@ -536,7 +536,7 @@
         "elevation": 263.0,
         "startTime": "2013-12-04T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:13.100000Z"
+        "latestData": "2026-04-23T00:00:20.800000Z"
       },
       "geometry": {
         "type": "Point",
@@ -554,7 +554,7 @@
         "elevation": 50.0,
         "startTime": "2016-06-20T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:15.600000Z"
+        "latestData": "2026-04-23T00:00:11.600000Z"
       },
       "geometry": {
         "type": "Point",
@@ -572,7 +572,7 @@
         "elevation": 615.0,
         "startTime": "2012-04-11T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:24.300000Z"
+        "latestData": "2026-04-23T00:00:32.400000Z"
       },
       "geometry": {
         "type": "Point",
@@ -590,7 +590,7 @@
         "elevation": 153.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:22.600000Z"
+        "latestData": "2026-04-23T00:00:23.800000Z"
       },
       "geometry": {
         "type": "Point",
@@ -608,7 +608,7 @@
         "elevation": 48.0,
         "startTime": "2013-05-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:22.800000Z"
+        "latestData": "2026-04-23T00:00:17.000000Z"
       },
       "geometry": {
         "type": "Point",
@@ -626,7 +626,7 @@
         "elevation": 667.0,
         "startTime": "2011-09-01T02:22:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:26.500000Z"
+        "latestData": "2026-04-23T00:00:34.100000Z"
       },
       "geometry": {
         "type": "Point",
@@ -662,7 +662,7 @@
         "elevation": 20.0,
         "startTime": "2013-08-28T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:27.800000Z"
+        "latestData": "2026-04-23T00:00:25.300000Z"
       },
       "geometry": {
         "type": "Point",
@@ -680,7 +680,7 @@
         "elevation": 38.0,
         "startTime": "2013-09-01T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:23.900000Z"
+        "latestData": "2026-04-23T00:00:27.700000Z"
       },
       "geometry": {
         "type": "Point",
@@ -698,7 +698,7 @@
         "elevation": 404.0,
         "startTime": "2013-05-30T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:28.300000Z"
+        "latestData": "2026-04-23T00:00:18.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -716,7 +716,7 @@
         "elevation": 171.0,
         "startTime": "2016-11-25T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-17T07:29:13.850000Z"
+        "latestData": "2026-04-22T04:00:27.990000Z"
       },
       "geometry": {
         "type": "Point",
@@ -734,7 +734,7 @@
         "elevation": 26.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:14.700000Z"
+        "latestData": "2026-04-23T00:00:15.900000Z"
       },
       "geometry": {
         "type": "Point",
@@ -752,7 +752,7 @@
         "elevation": 106.0,
         "startTime": "2013-09-02T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.700000Z"
+        "latestData": "2026-04-23T00:00:23.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -770,7 +770,7 @@
         "elevation": 23.0,
         "startTime": "2013-05-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:13.300000Z"
+        "latestData": "2026-04-23T00:00:15.700000Z"
       },
       "geometry": {
         "type": "Point",
@@ -806,7 +806,7 @@
         "elevation": 951.0,
         "startTime": "2013-03-18T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:28.100000Z"
+        "latestData": "2026-04-23T00:00:34.800000Z"
       },
       "geometry": {
         "type": "Point",
@@ -824,7 +824,7 @@
         "elevation": 19.0,
         "startTime": "2013-11-21T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:18.700000Z"
+        "latestData": "2026-04-23T00:00:16.400000Z"
       },
       "geometry": {
         "type": "Point",
@@ -860,7 +860,7 @@
         "elevation": 95.0,
         "startTime": "2014-02-27T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:22.500000Z"
+        "latestData": "2026-04-23T00:00:16.200000Z"
       },
       "geometry": {
         "type": "Point",
@@ -878,7 +878,7 @@
         "elevation": 687.0,
         "startTime": "2013-08-26T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:20.000000Z"
+        "latestData": "2026-04-23T00:00:15.400000Z"
       },
       "geometry": {
         "type": "Point",
@@ -896,7 +896,7 @@
         "elevation": 44.0,
         "startTime": "2013-09-15T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:14.800000Z"
+        "latestData": "2026-04-23T00:00:20.600000Z"
       },
       "geometry": {
         "type": "Point",
@@ -914,7 +914,7 @@
         "elevation": 60.0,
         "startTime": "2013-06-24T00:00:00.0000",
         "endTime": null,
-        "latestData": "2026-04-22T00:00:16.100000Z"
+        "latestData": "2026-04-23T00:00:18.000000Z"
       },
       "geometry": {
         "type": "Point",
