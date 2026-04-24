@@ -1,25 +1,25 @@
 {
-  "checked": "2026-04-24T19:58:17Z",
+  "checked": "2026-04-24T21:02:31Z",
   "stations": {
     "AUCAS": {
       "streaming": false,
-      "checkedAt": "2026-04-24T19:58:17Z"
+      "checkedAt": "2026-04-24T21:02:31Z"
     },
     "AUJCS": {
       "streaming": false,
-      "checkedAt": "2026-04-24T19:58:17Z"
+      "checkedAt": "2026-04-24T21:02:31Z"
     },
     "AUKAR": {
       "streaming": true,
-      "checkedAt": "2026-04-24T19:58:17Z"
+      "checkedAt": "2026-04-24T21:02:31Z"
     },
     "AUMUL": {
       "streaming": false,
-      "checkedAt": "2026-04-24T19:58:17Z"
+      "checkedAt": "2026-04-24T21:02:31Z"
     },
     "AUSIS": {
       "streaming": false,
-      "checkedAt": "2026-04-24T19:58:17Z"
+      "checkedAt": "2026-04-24T21:02:31Z"
     }
   }
 }
