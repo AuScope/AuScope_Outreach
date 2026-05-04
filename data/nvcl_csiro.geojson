@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "csiro",
     "stateLabel": "CSIRO",
-    "fetched": "2026-04-27T10:24:02Z"
+    "fetched": "2026-05-04T10:20:15Z"
   },
   "features": [
     {
@@ -20,9 +20,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2025-12-23",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 57.49,
         "project": null,
         "owner": null,
         "state": "CSIRO"
@@ -48,9 +48,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2025-12-23",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 45.19,
         "project": null,
         "owner": null,
         "state": "CSIRO"
@@ -76,9 +76,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2025-12-23",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 39.75,
         "project": null,
         "owner": null,
         "state": "CSIRO"
@@ -104,9 +104,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2025-12-23",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 47.19,
         "project": null,
         "owner": null,
         "state": "CSIRO"
@@ -132,9 +132,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2025-12-23",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 30.79,
         "project": null,
         "owner": null,
         "state": "CSIRO"
