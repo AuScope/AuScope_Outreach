@@ -3,9 +3,29 @@
   "metadata": {
     "source": "Geoscience Australia CORS Sites API",
     "network": "AUSCOPE (ID 101)",
-    "fetched": "2026-04-28T09:15:52Z"
+    "fetched": "2026-05-05T09:05:10Z"
   },
   "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ridgelands",
+        "code": "RDGL",
+        "domesNumber": "AUM000692",
+        "dateInstalled": "2021-01-15",
+        "elevation": 127.4,
+        "monument": "STEEL TRIPOD WITH 5/8 MALE THREAD",
+        "foundation": "SILO",
+        "siteStatus": "PRIVATE"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          150.2091046,
+          -23.28764542
+        ]
+      }
+    },
     {
       "type": "Feature",
       "properties": {
