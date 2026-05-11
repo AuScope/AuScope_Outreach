@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-05-04T10:20:15Z"
+    "fetched": "2026-05-11T11:31:28Z"
   },
   "features": [
     {
@@ -4378,6 +4378,90 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH9",
+        "boreholeId": "MIN_004814",
+        "boreholeLength": 232.8,
+        "elevation": 582,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1978",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 224.83,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7736,
+          -32.6378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH10",
+        "boreholeId": "MIN_004815",
+        "boreholeLength": 230,
+        "elevation": 584,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1978",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 214.33,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7739,
+          -32.6381
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH11",
+        "boreholeId": "MIN_004816",
+        "boreholeLength": 247.9,
+        "elevation": 589,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1979",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 229.68,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7745,
+          -32.6391
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Browns Reef - Lake Cargelligo: BR1",
         "boreholeId": "MIN_004935",
         "boreholeLength": 239.7,
@@ -5862,6 +5946,90 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Dead Horse - Mudgee: BMNSW-78-1",
+        "boreholeId": "MIN_006212",
+        "boreholeLength": 224,
+        "elevation": 925,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1978",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 124.78,
+        "project": "Dead Horse - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7676,
+          -32.6674
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dead Horse - Mudgee: SDH-1",
+        "boreholeId": "MIN_006215",
+        "boreholeLength": 150,
+        "elevation": 954,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1980",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 136.0,
+        "project": "Dead Horse - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7674,
+          -32.6662
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dead Horse - Mudgee: SDH-2",
+        "boreholeId": "MIN_006216",
+        "boreholeLength": 198.95,
+        "elevation": 703,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1981",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-07",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 79.09,
+        "project": "Dead Horse - Mudgee",
+        "owner": "Geological Survey of NSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7587,
+          -32.6718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Boona Hill Top: 79BC1",
         "boreholeId": "MIN_006219",
         "boreholeLength": 198.8,
@@ -6444,6 +6612,34 @@
         "coordinates": [
           146.1471,
           -32.8779
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tallebung Tin Field: TALLEBUNG01",
+        "boreholeId": "MIN_007405",
+        "boreholeLength": 93.6,
+        "elevation": 277,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1968",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2024-12-02",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 90.38,
+        "project": "Tallebung",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.5766,
+          -32.7432
         ]
       }
     },
@@ -19246,6 +19442,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Icely - Orange: ALP2",
+        "boreholeId": "MIN_040991",
+        "boreholeLength": 162.8,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1971",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 156.69,
+        "project": "Icely - Orange",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.2948,
+          -33.3165
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Woodlawn: DDHW129",
         "boreholeId": "MIN_042383",
         "boreholeLength": 600,
@@ -30698,6 +30922,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Lake Cargelligo: A3RC005",
+        "boreholeId": "MIN_357625",
+        "boreholeLength": 210,
+        "elevation": 156,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2021",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-09-05",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 209.92,
+        "project": "Lake Cargelligo",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.2011,
+          -33.1615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Blue Mountain: 20BMDD011",
         "boreholeId": "MIN_362418",
         "boreholeLength": 1447.05,
@@ -33162,6 +33414,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "The Meadows: 23MEA001",
+        "boreholeId": "MIN_414506",
+        "boreholeLength": 498.6000061035156,
+        "elevation": 146,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2023-10-15",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-20",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 498.59,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.3516,
+          -31.7639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Bowdens Silver Deposit: BD23003",
         "boreholeId": "MIN_415082",
         "boreholeLength": 375.54998779296875,
@@ -33296,6 +33576,174 @@
         "coordinates": [
           149.8707,
           -32.6377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD006",
+        "boreholeId": "MIN_604704",
+        "boreholeLength": 40.43000030517578,
+        "elevation": 368,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-25",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 39.34,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6229,
+          -32.463
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD007",
+        "boreholeId": "MIN_604705",
+        "boreholeLength": 66.55000305175781,
+        "elevation": 395.3,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-26",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 66.54,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6236,
+          -32.4652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD008",
+        "boreholeId": "MIN_604706",
+        "boreholeLength": 60,
+        "elevation": 388,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-26",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 59.39,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6256,
+          -32.4633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD009",
+        "boreholeId": "MIN_604707",
+        "boreholeLength": 55.75,
+        "elevation": 382,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-25",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 52.74,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6264,
+          -32.4664
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD010",
+        "boreholeId": "MIN_604708",
+        "boreholeLength": 55.849998474121094,
+        "elevation": 383,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-26",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 52.78,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6285,
+          -32.4637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dubbo Project: TOD011",
+        "boreholeId": "MIN_604709",
+        "boreholeLength": 50.75,
+        "elevation": 379,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2024",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2025-08-26",
+        "firstSeen": "2026-05-11",
+        "scannedMetres": 50.53,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.6283,
+          -32.4657
         ]
       }
     },
