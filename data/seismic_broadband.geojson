@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-05-04T09:24:40Z"
+    "fetched": "2026-05-11T10:39:56Z"
   },
   "features": [
     {
@@ -20489,6 +20489,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AQ33",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 534.0,
+        "startTime": "2025-05-08T09:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.1238,
+          -23.9423
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "AQ41",
         "network": "M8",
         "channel": "HHZ",
@@ -20503,6 +20523,46 @@
         "coordinates": [
           118.5997,
           -27.9997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AU33",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 560.0,
+        "startTime": "2025-05-06T05:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.9807,
+          -24.0077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AU37",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 530.0,
+        "startTime": "2025-05-09T09:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.9943,
+          -26.006
         ]
       }
     },
@@ -20569,6 +20629,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AY37",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 451.0,
+        "startTime": "2025-05-10T07:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.9955,
+          -26.0033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "AY41",
         "network": "M8",
         "channel": "HHZ",
@@ -20603,6 +20683,26 @@
         "coordinates": [
           123.00861,
           -33.46036
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BC33",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 390.0,
+        "startTime": "2025-05-07T09:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.8249,
+          -24.1915
         ]
       }
     },
@@ -20814,15 +20914,15 @@
         "channel": "HHZ",
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
-        "elevation": 144.0,
-        "startTime": "2026-05-05T00:00:00",
+        "elevation": 149.0,
+        "startTime": "2026-05-05T04:00:00",
         "endTime": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          137.2114,
-          -33.321
+          137.21126,
+          -33.32131
         ]
       }
     },
@@ -22416,7 +22516,7 @@
         "sampleRate": 100.0,
         "elevation": 72.0,
         "startTime": "2013-08-26T00:00:00",
-        "endTime": null
+        "endTime": "2026-05-04T00:00:00"
       },
       "geometry": {
         "type": "Point",
