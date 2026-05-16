@@ -1,17 +1,21 @@
 {
-  "checked": "2026-05-16T06:31:36Z",
+  "checked": "2026-05-16T08:58:02Z",
   "stations": {
     "AUMUL": {
       "streaming": false,
-      "checkedAt": "2026-05-16T06:31:36Z"
+      "checkedAt": "2026-05-16T08:58:02Z"
     },
     "AUSIS": {
       "streaming": false,
-      "checkedAt": "2026-05-16T06:31:36Z"
+      "checkedAt": "2026-05-16T08:58:02Z"
     },
     "AUTOO": {
       "streaming": false,
-      "checkedAt": "2026-05-16T06:31:36Z"
+      "checkedAt": "2026-05-16T08:58:02Z"
+    },
+    "AUUHS": {
+      "streaming": false,
+      "checkedAt": "2026-05-16T08:58:02Z"
     }
   }
 }
