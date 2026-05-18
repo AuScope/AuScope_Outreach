@@ -4,13 +4,6 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
-
-  Enhancements:
-   - Click a streaming station to see its last hour of waveform data
-     (IRIS/EarthScope timeseriesplot service, vertical component).
-   - "Earthquakes" layer: recent earthquakes in the Australian region that
-     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
-     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -141,7 +134,7 @@ const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to d
 // Data is the 6-month rolling store built hourly from Geoscience Australia
 // (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
 // no cross-origin call to GA from the browser.
-const QUAKE_STORE = 'data/earthquakes_6mo.geojson';
+const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
 const QUAKE_DISPLAY_DAYS = 30;          // how much of the store to plot
 const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
 const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
