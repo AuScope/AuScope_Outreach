@@ -56,6 +56,13 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-near b { color: #282572; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
+/* Dashed quake→station connector labels */
+.leaflet-tooltip.q-link-label {
+  background: rgba(255,255,255,0.92); border: 1px solid #fecaca; color: #7f1d1d;
+  font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25); white-space: nowrap;
+}
+.leaflet-tooltip.q-link-label::before { display: none; }
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
@@ -114,14 +121,15 @@ const LIVE_THRESHOLD_DAYS = 7;
 const IRIS_BASE = 'https://service.iris.edu';
 
 // Waveform (last-hour) settings
+// S1 is an Australian network: its live data lives at AusPass, not IRIS, so
+// the plots are pre-rendered hourly by a GitHub Action (scripts/render_waveforms.py)
+// and published to the force-pushed `waveforms` branch. We just show the PNG.
 const WAVEFORM_MINUTES = 60;                       // length of trace shown
-const CHANNEL_PRIORITY = ['BHZ', 'HHZ', 'EHZ', 'SHZ']; // preferred vertical channel
-const WF_WIDTH = 440, WF_HEIGHT = 200;             // timeseriesplot image size (min 400 x 200)
-// Fallbacks tried (in order) if exact channel/location metadata is unavailable
-const WF_FALLBACKS = [
-  { cha: 'BHZ', loc: '--' }, { cha: 'HHZ', loc: '--' },
-  { cha: 'BHZ', loc: '00' }, { cha: 'HHZ', loc: '00' }
-];
+const WAVEFORM_REPO    = 'bvkay/AuScope_Outreach'; // owner/repo
+const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
+const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
+                       + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
+const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to link a quake to
 
 // Earthquake layer settings (USGS FDSN event service — CORS-enabled)
 const QUAKE_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query';
@@ -134,9 +142,10 @@ const SHOW_QUAKES_DEFAULT = true; // earthquakes layer on by default
 // ── State ─────────────────────────────────────────────────────
 let stations = [],
     map = null,
-    verifiedStatus = {},  // from ausis_status.json (hourly GitHub Action)
-    channelMeta = {},     // station code -> { loc, cha } for waveform requests
+    verifiedStatus = {},   // from ausis_status.json (hourly GitHub Action)
+    waveformManifest = {}, // from waveforms branch: { generated, stations:{CODE:{...}} }
     quakeLayer = null,
+    quakeLinkLayer = null, // dashed connectors from an open quake to nearby stations
     quakeData = [],
     quakesVisible = SHOW_QUAKES_DEFAULT;
 
@@ -147,7 +156,7 @@ function esc(str) {
   return d.innerHTML;
 }
 
-// UTC timestamp in the form YYYY-MM-DDThh:mm:ss (what the IRIS services expect)
+// UTC timestamp in the form YYYY-MM-DDThh:mm:ss (FDSN event service format)
 function isoUTC(d) {
   return d.toISOString().replace(/\.\d+Z$/, '');
 }
@@ -199,6 +208,7 @@ function initMap() {
 
   // Earthquake layer group (added/removed by the toolbar toggle)
   quakeLayer = L.layerGroup();
+  quakeLinkLayer = L.layerGroup().addTo(map); // connectors to nearby stations
   if (quakesVisible) quakeLayer.addTo(map);
 
   // Tools button — three dots toggle
@@ -277,10 +287,16 @@ function initMap() {
     });
   });
 
-  // When a station popup opens, lazily load its last hour of waveform data
+  // Popup open: stations load their waveform; quakes draw links to nearby stations
   map.on('popupopen', function(e) {
-    var s = e.popup && e.popup._source && e.popup._source._station;
-    if (s) loadWaveform(s, e.popup);
+    var src = e.popup && e.popup._source;
+    if (!src) return;
+    if (src._station) { loadWaveform(src._station, e.popup); }
+    else if (src._quake) { drawQuakeLinks(src._quake.lat, src._quake.lng); }
+  });
+  map.on('popupclose', function(e) {
+    var src = e.popup && e.popup._source;
+    if (src && src._quake) clearQuakeLinks();
   });
 }
 
@@ -359,103 +375,80 @@ async function fetchAvailability() {
   }
 }
 
-// Fetch channel-level metadata once so waveform requests use the exact
-// vertical channel + location code each station actually has.
-async function fetchChannelMeta() {
+// Fetch the waveform manifest from the `waveforms` branch. Tells us which
+// stations have a fresh plot and when it was generated. Optional: if it
+// fails we still try the image and just omit the "as of" label.
+async function fetchWaveformManifest() {
   try {
-    var url = IRIS_BASE + '/fdsnws/station/1/query?network=S1&channel='
-            + CHANNEL_PRIORITY.join(',') + '&level=channel&format=text';
-    var resp = await fetch(url);
+    var resp = await fetch(WAVEFORM_BASE + 'manifest.json?v=' + hourStamp());
     if (!resp.ok) return;
-    var lines = (await resp.text()).trim().split('\n');
-    // columns: Net|Sta|Loc|Cha|Lat|Lon|Elev|Depth|Az|Dip|Sensor|Scale|ScaleFreq|ScaleUnits|SampleRate|Start|End
-    var byStation = {};
-    for (var i = 1; i < lines.length; i++) {
-      var p = lines[i].split('|');
-      if (p.length < 16) continue;
-      var sta = p[1].trim();
-      var loc = p[2].trim();
-      var cha = p[3].trim();
-      var end = (p[16] || '').trim();
-      var start = (p[15] || '').trim();
-      var prio = CHANNEL_PRIORITY.indexOf(cha);
-      if (prio === -1) continue;
-      var open = (end === '' || end.toLowerCase().indexOf('2599') === 0);
-      var cand = { loc: loc, cha: cha, prio: prio, open: open, start: start };
-      var cur = byStation[sta];
-      // Prefer: currently-open channel, then higher priority, then later start
-      if (!cur
-          || (cand.open && !cur.open)
-          || (cand.open === cur.open && cand.prio < cur.prio)
-          || (cand.open === cur.open && cand.prio === cur.prio && cand.start > cur.start)) {
-        byStation[sta] = cand;
-      }
-    }
-    Object.keys(byStation).forEach(function(sta) {
-      channelMeta[sta] = { loc: byStation[sta].loc, cha: byStation[sta].cha };
-    });
+    waveformManifest = await resp.json();
   } catch (e) {
-    console.warn('Channel metadata fetch failed (waveforms will use fallbacks):', e);
+    // Branch may not exist yet (first Action run pending) — that's fine.
   }
 }
 
-// ── Waveform plot URL (IRIS/EarthScope timeseriesplot) ───────
-function waveformUrl(s, override) {
-  var meta = override || channelMeta[s.code] || WF_FALLBACKS[0];
-  var loc = (meta.loc === '' || meta.loc == null) ? '--' : meta.loc;
-  var end = new Date();
-  var start = new Date(end.getTime() - WAVEFORM_MINUTES * 60000);
-  return IRIS_BASE + '/irisws/timeseriesplot/1/query'
-    + '?net=S1&sta=' + encodeURIComponent(s.code)
-    + '&loc=' + encodeURIComponent(loc)
-    + '&cha=' + encodeURIComponent(meta.cha)
-    + '&starttime=' + isoUTC(start)
-    + '&endtime=' + isoUTC(end)
-    + '&width=' + WF_WIDTH + '&height=' + WF_HEIGHT
-    + '&demean=true&showtitle=false&showscale=false&format=png';
+// Cache-buster that changes once per UTC hour (matches the hourly job)
+function hourStamp() {
+  return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
 }
 
-// Load the waveform image into an open popup, trying fallbacks on error
+// Load the pre-rendered last-hour PNG into an open station popup
 function loadWaveform(s, popup) {
   var el = popup.getElement();
   if (!el) return;
   var frame = el.querySelector('.wf-frame[data-code="' + s.code + '"]');
   if (!frame) return; // not a streaming station / no waveform block
 
-  // Build the list of candidates: known metadata first, then fallbacks
-  var candidates = [];
-  if (channelMeta[s.code]) candidates.push(channelMeta[s.code]);
-  WF_FALLBACKS.forEach(function(f) { candidates.push(f); });
-
-  var idx = 0;
   var status = frame.querySelector('.wf-status');
   var oldImg = frame.querySelector('img');
   if (oldImg) oldImg.remove();
   status.style.display = 'flex';
   status.textContent = 'Loading last hour…';
 
-  function tryNext() {
-    if (idx >= candidates.length) {
-      status.textContent = 'Live waveform unavailable (no recent data for this station).';
-      return;
+  var img = new Image();
+  img.alt = 'Last hour of ground motion at ' + s.code;
+  img.onload = function() {
+    status.style.display = 'none';
+    var existing = frame.querySelector('img');
+    if (existing) existing.remove();
+    frame.insertBefore(img, status);
+    var note = el.querySelector('.wf-foot[data-code="' + s.code + '"]');
+    if (note) {
+      var meta = (waveformManifest.stations || {})[s.code];
+      note.textContent = (meta && meta.channel ? meta.channel : 'S1.' + s.code)
+        + ' · last ' + WAVEFORM_MINUTES + ' min · vertical ground motion · source: AusPass'
+        + (waveformManifest.generated ? ' · updated ' + waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC') : '');
     }
-    var meta = candidates[idx++];
-    var img = new Image();
-    img.alt = 'Last hour of ground motion at ' + s.code;
-    img.onload = function() {
-      status.style.display = 'none';
-      var existing = frame.querySelector('img');
-      if (existing) existing.remove();
-      frame.insertBefore(img, status);
-      var note = el.querySelector('.wf-foot[data-code="' + s.code + '"]');
-      if (note) note.textContent = 'S1.' + s.code + '.' + (meta.loc === '' || meta.loc == null ? '--' : meta.loc) + '.' + meta.cha
-        + ' · last ' + WAVEFORM_MINUTES + ' min · vertical ground motion · source: IRIS/EarthScope';
-      popup.update();
-    };
-    img.onerror = function() { tryNext(); };
-    img.src = waveformUrl(s, meta);
-  }
-  tryNext();
+    popup.update();
+  };
+  img.onerror = function() {
+    status.textContent = 'No waveform yet for this station (the hourly job builds one only while it is streaming).';
+  };
+  img.src = WAVEFORM_BASE + encodeURIComponent(s.code) + '.png?v=' + hourStamp();
+}
+
+// ── Quake → station connector lines ──────────────────────────
+function clearQuakeLinks() {
+  if (quakeLinkLayer) quakeLinkLayer.clearLayers();
+}
+
+// Draw faint dashed lines from a quake to its nearest AuSIS stations,
+// each labelled with the station name, code and distance.
+function drawQuakeLinks(lat, lng) {
+  if (!quakeLinkLayer) return;
+  quakeLinkLayer.clearLayers();
+  nearestStations(lat, lng, WAVEFORM_NEAR_LINKS).forEach(function(x) {
+    var s = x.station;
+    var line = L.polyline([[lat, lng], [s.lat, s.lng]], {
+      color: '#b91c1c', weight: 1, opacity: 0.45, dashArray: '4 6', interactive: false
+    });
+    line.bindTooltip(
+      esc(s.name) + ' (S1.' + esc(s.code) + ') — ~' + x.dist + ' km',
+      { permanent: true, direction: 'center', className: 'q-link-label', opacity: 0.95 }
+    );
+    quakeLinkLayer.addLayer(line);
+  });
 }
 
 // ── Marker rendering ─────────────────────────────────────────
@@ -491,10 +484,10 @@ function buildPopupHtml(s) {
           + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span>'
           + '<span class="wf-actions">'
           + '<a href="#" class="wf-refresh" data-code="' + esc(s.code) + '">&#x21BB; refresh</a>'
-          + '<a href="https://www.iris.edu/app/station_monitor/#Today/S1-' + esc(s.code) + '/webicorder/" target="_blank" rel="noopener">full day &#x2197;</a>'
+          + '<a href="https://auspass.edu.au/SeisComP/?net=S1&sta=' + esc(s.code) + '" target="_blank" rel="noopener">AusPass &#x2197;</a>'
           + '</span></div>'
           + '<div class="wf-frame" data-code="' + esc(s.code) + '"><div class="wf-status">Loading last hour…</div></div>'
-          + '<div class="wf-foot" data-code="' + esc(s.code) + '">Vertical ground motion · source: IRIS/EarthScope</div>'
+          + '<div class="wf-foot" data-code="' + esc(s.code) + '">Vertical ground motion · source: AusPass (updated hourly)</div>'
           + '</div>'
         : '');
 }
@@ -582,7 +575,7 @@ async function fetchQuakes() {
 function nearestStations(lat, lng, n) {
   return stations
     .filter(function(s) { return !s.endTime; })
-    .map(function(s) { return { code: s.code, name: s.name, dist: haversineKm(lat, lng, s.lat, s.lng) }; })
+    .map(function(s) { return { station: s, code: s.code, name: s.name, dist: haversineKm(lat, lng, s.lat, s.lng) }; })
     .sort(function(a, b) { return a.dist - b.dist; })
     .slice(0, n);
 }
@@ -620,6 +613,7 @@ function renderQuakes() {
       fillColor: quakeColor(m),
       fillOpacity: ageDays < 1 ? 0.9 : 0.55
     }).bindPopup(buildQuakePopup(f), { maxWidth: 280 });
+    marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
   });
 }
@@ -661,8 +655,9 @@ document.getElementById('legend-quakes').onclick = function() {
   if (btn) btn.classList.toggle('active', quakesVisible);
 };
 
-// Fetch channel metadata + earthquakes in the background (independent of stations)
-fetchChannelMeta();
+// Fetch waveform manifest + earthquakes in the background (independent of stations)
+fetchWaveformManifest();
+setInterval(fetchWaveformManifest, 15 * 60 * 1000); // refresh "as of" every 15 min
 fetchQuakes();
 setInterval(fetchQuakes, QUAKE_REFRESH_MS);
 
