@@ -66,10 +66,11 @@ MIN_MAG      = 3.0
 AU_BBOX      = {"minlat": -46.0, "maxlat": -8.0, "minlon": 110.0, "maxlon": 156.0}
 
 # ── Window & stations ────────────────────────────────────────
-PRE_MIN      = 10        # minutes of pre-roll before origin time
-POST_MIN     = 30        # minutes after origin time  (40-min total window)
+PRE_MIN      = 5         # minutes of pre-roll before origin time
+POST_MIN     = 25        # minutes after origin time  (30-min total window)
 N_CANDIDATES = 10        # nearest streaming stations considered per event
 N_KEEP       = 5         # stations drawn in the section
+MAX_DIST_KM  = 1500      # hard cap: a station further than this is never shown
 MIN_TRACES   = 2         # skip the event if fewer than this have data
 
 NETWORK      = "S1"
@@ -86,7 +87,7 @@ BACKOFF_CAP    = 180
 
 PLOT_W       = 7.0
 ROW_H        = 0.95      # inches per station lane
-PLOT_DPI     = 96
+PLOT_DPI     = 192       # 2x so sections stay sharp when the map is enlarged
 BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
 
@@ -183,8 +184,24 @@ def qualifying_events(now):
     return out
 
 
+def clean_site_name(raw, code):
+    """Return a tidy school name, or None if the metadata name is unusable."""
+    if not raw:
+        return None
+    name = " ".join(str(raw).split()).strip()
+    # Reject junk / non-descriptive site names so we fall back to the code.
+    if len(name) < 3 or name.upper() == code.upper():
+        return None
+    low = name.lower()
+    if low in ("n/a", "na", "unknown", "none", "-", "tbd", "test"):
+        return None
+    if len(name) > 42:                 # keep lane labels from overflowing
+        name = name[:41].rstrip() + "…"
+    return name
+
+
 def load_inventory(client):
-    """Station-level inventory for S1 (coords for nearest-N selection)."""
+    """Station-level inventory for S1: code -> (lat, lon, site_name|None)."""
     inv = retrying("S1 stations", lambda: client.get_stations(
         network=NETWORK, channel=CHANNEL_GLOB, level="station"))
     sites = {}
@@ -192,7 +209,13 @@ def load_inventory(client):
         return sites
     for net in inv:
         for sta in net:
-            sites[sta.code] = (sta.latitude, sta.longitude)
+            site = None
+            try:
+                site = clean_site_name(
+                    getattr(getattr(sta, "site", None), "name", None), sta.code)
+            except Exception:
+                site = None
+            sites[sta.code] = (sta.latitude, sta.longitude, site)
     return sites
 
 
@@ -206,10 +229,11 @@ def pick_channel(channels):
 def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, place):
     """Fetch nearest candidates, keep best N_KEEP with data, render section."""
     ranked = sorted(
-        ((code, haversine_km(ev_lat, ev_lon, la, lo))
-         for code, (la, lo) in sites.items()),
+        ((code, haversine_km(ev_lat, ev_lon, v[0], v[1]))
+         for code, v in sites.items()),
         key=lambda x: x[1],
-    )[:N_CANDIDATES]
+    )
+    ranked = [(c, d) for c, d in ranked if d <= MAX_DIST_KM][:N_CANDIDATES]
     if not ranked:
         print(f"  {eid}: no candidate stations")
         return None
@@ -252,7 +276,8 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, pla
         except Exception as exc:
             print(f"  {eid}/{code}: response/filter failed ({short(exc)})")
             continue
-        lanes.append((code, dist_by_code[code], cha, tr))
+        site_name = sites.get(code, (None, None, None))[2]
+        lanes.append((code, dist_by_code[code], cha, tr, site_name))
         if len(lanes) >= N_KEEP:
             break
 
@@ -268,8 +293,9 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, pla
         "origin": origin.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "mag": mag,
         "place": place,
-        "stations": [{"code": c, "dist_km": round(d), "channel": ch}
-                     for c, d, ch, _ in lanes],
+        "stations": [{"code": c, "dist_km": round(d), "channel": ch,
+                       "site": nm}
+                     for c, d, ch, _, nm in lanes],
     }
 
 
@@ -280,26 +306,41 @@ def render_section(eid, origin, mag, place, lanes, out_path):
     axes = axes[:, 0]
     o_mpl = mdates.date2num(origin)
 
-    for ax, (code, dist, cha, tr) in zip(axes, lanes):
+    for ax, (code, dist, cha, tr, site) in zip(axes, lanes):
         ax.plot(tr.times("matplotlib"), tr.data, linewidth=0.5, color=BRAND)
         ax.axvline(o_mpl, color=ORIGIN_CLR, linewidth=1.0, alpha=0.8)
         ax.set_yticks([])
-        ax.margins(x=0, y=0.08)
+        # Tighten the trace into a central band so edge labels never overlap it
+        ax.margins(x=0)
+        peak = float(max(abs(tr.data.min()), abs(tr.data.max()))) or 1.0
+        ax.set_ylim(-peak * 1.9, peak * 1.9)
         for sp in ("top", "right", "left"):
             ax.spines[sp].set_visible(False)
         ax.grid(True, axis="x", color="#e5e7eb", linewidth=0.5)
-        ax.text(0.005, 0.5, f"S1.{code}  ·  {round(dist)} km",
-                transform=ax.transAxes, va="center", ha="left",
-                fontsize=8.5, color="#333",
-                bbox=dict(boxstyle="round,pad=0.2", fc="white",
-                          ec="none", alpha=0.7))
+        # TOP edge: school name prominent; station code small/grey beneath.
+        # If metadata had no usable name, fall back to the code as the label.
+        if site:
+            ax.text(0.006, 0.96, site,
+                    transform=ax.transAxes, va="top", ha="left",
+                    fontsize=10.5, fontweight="bold", color="#282572")
+            ax.text(0.006, 0.70, f"S1.{code}",
+                    transform=ax.transAxes, va="top", ha="left",
+                    fontsize=8, color="#94a3b8")
+        else:
+            ax.text(0.006, 0.96, f"S1.{code}",
+                    transform=ax.transAxes, va="top", ha="left",
+                    fontsize=10.5, fontweight="bold", color="#282572")
+        # BOTTOM edge: distance
+        ax.text(0.006, 0.06, f"{round(dist)} km",
+                transform=ax.transAxes, va="bottom", ha="left",
+                fontsize=9.5, color="#555")
 
     axes[-1].xaxis_date()
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[-1].tick_params(labelsize=8, length=2)
     axes[0].set_title(
-        f"M{mag:.1f}  {place}\n{origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
-        f"  ·  nearest {n} AuSIS stations  ·  red line = origin time"
+        f"M{mag:.1f}  {place}  ·  {origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
+        f"\nnearest {n} AuSIS stations  ·  red line = origin time"
         f"  ·  1 Hz high-pass (µm/s)",
         fontsize=9, color="#333", pad=8,
     )
@@ -382,6 +423,7 @@ def main():
             "min_age_hours": MIN_AGE_HOURS,
             "max_age_days": MAX_AGE_DAYS,
             "window_min": [-PRE_MIN, POST_MIN],
+            "max_dist_km": MAX_DIST_KM,
             "filter": f"{LOCAL_HP_HZ:g} Hz high-pass",
         },
         "events": sorted(rendered.values(),
