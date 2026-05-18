@@ -4,6 +4,13 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
+
+  Enhancements:
+   - Click a streaming station to see its last hour of waveform data
+     (IRIS/EarthScope timeseriesplot service, vertical component).
+   - "Earthquakes" layer: recent earthquakes in the Australian region that
+     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
+     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -24,7 +31,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 /* Map */
 #map { flex: 1; width: 100%; }
 /* Popups */
-.leaflet-popup-content-wrapper { opacity: 0.92 !important; }
+.leaflet-popup-content-wrapper { opacity: 0.85 !important; }
 .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
 .popup-title { font-weight: 700; font-size: 14px; color: #282572; margin-bottom: 4px; }
 .popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
@@ -36,7 +43,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-label { font-size: 11px; font-weight: 700; color: #282572; text-transform: uppercase; letter-spacing: 0.4px; }
 .wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
 .wf-actions a:hover { text-decoration: underline; }
-.wf-frame { position: relative; width: 100%; min-height: 110px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; }
+.wf-frame { position: relative; width: 300px; max-width: 100%; min-height: 92px; margin: 0 auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; }
 .wf-frame img.wf-img { display: block; width: 100%; height: auto; opacity: 0; transition: opacity 0.2s; }
 .wf-frame.loaded img.wf-img { opacity: 1; }
 .wf-frame.loaded .wf-status { display: none; }
@@ -129,7 +136,8 @@ const WAVEFORM_REPO    = 'bvkay/AuScope_Outreach'; // owner/repo
 const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
-const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to link a quake to
+const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
+const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to draw dashed lines to
 
 // Earthquake layer settings (USGS FDSN event service — CORS-enabled)
 const QUAKE_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query';
@@ -411,10 +419,10 @@ function drawQuakeLinks(lat, lng) {
   nearestStations(lat, lng, WAVEFORM_NEAR_LINKS).forEach(function(x) {
     var s = x.station;
     var line = L.polyline([[lat, lng], [s.lat, s.lng]], {
-      color: '#b91c1c', weight: 1, opacity: 0.45, dashArray: '4 6', interactive: false
+      color: '#b91c1c', weight: 1.5, opacity: 0.8, dashArray: '4 6', interactive: false
     });
     line.bindTooltip(
-      esc(s.name) + ' (S1.' + esc(s.code) + ') — ~' + x.dist + ' km',
+      esc(s.name) + ' (S1.' + esc(s.code) + ') ~' + x.dist + ' km',
       { permanent: true, direction: 'center', className: 'q-link-label', opacity: 0.95 }
     );
     quakeLinkLayer.addLayer(line);
@@ -458,11 +466,7 @@ function buildPopupHtml(s) {
               + (waveformManifest.generated ? ' · updated ' + esc(waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC')) : ' (updated hourly)');
             var imgUrl = WAVEFORM_BASE + encodeURIComponent(s.code) + '.png?v=' + hourStamp();
             return '<div class="wf">'
-              + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span>'
-              + '<span class="wf-actions">'
-              + '<a href="' + imgUrl + '" target="_blank" rel="noopener">enlarge &#x2197;</a>'
-              + '<a href="https://auspass.edu.au/SeisComP/?net=S1&sta=' + esc(s.code) + '" target="_blank" rel="noopener">AusPass &#x2197;</a>'
-              + '</span></div>'
+              + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span></div>'
               + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
               + '<div class="wf-status">Loading last hour…</div>'
               + '<img class="wf-img" alt="Last hour of ground motion at ' + esc(s.code) + '" '
@@ -481,7 +485,7 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 470, minWidth: 240 }).addTo(map);
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 340, minWidth: 240 }).addTo(map);
     m._station = s;
     s.marker = m;
   });
@@ -559,10 +563,10 @@ function buildQuakePopup(f) {
   var c = f.geometry.coordinates; // [lon, lat, depth]
   var p = f.properties;
   var when = new Date(p.time);
-  var near = nearestStations(c[1], c[0], 3);
+  var near = nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
   var nearHtml = near.length
     ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
-        return esc(x.name) + ' (S1.' + esc(x.code) + ') — ~' + x.dist + ' km';
+        return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
       }).join('<br>') + '</div>'
     : '';
   return '<div class="q-title">M ' + (p.mag != null ? p.mag.toFixed(1) : '?') + '</div>'
@@ -570,8 +574,7 @@ function buildQuakePopup(f) {
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (c[2] != null ? c[2].toFixed(0) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
-    + nearHtml
-    + (p.url ? '<a class="q-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">Event details &#x2197;</a>' : '');
+    + nearHtml;
 }
 
 function renderQuakes() {
