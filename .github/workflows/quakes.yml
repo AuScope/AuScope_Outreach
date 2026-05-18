@@ -37,8 +37,8 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- data/earthquakes_6mo.geojson; then
-            git add data/earthquakes_6mo.geojson
+          if ! git diff --quiet -- data/earthquakes_12mo.geojson; then
+            git add data/earthquakes_12mo.geojson
             git commit -q -m "earthquake store $(date -u +%FT%TZ)"
             git push
           else
