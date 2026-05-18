@@ -26,13 +26,13 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 /* Popups */
 .leaflet-popup-content-wrapper { opacity: 0.85 !important; }
 .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
-.popup-title { font-weight: 700; font-size: 14px; color: #282572; margin-bottom: 4px; }
+.popup-title { font-weight: 700; font-size: 14px; color: #282572; margin-bottom: 4px; text-align: center; }
 .popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-right: 6px; }
 .popup-row { color: #4b5563; font-size: 12px; }
 .popup-row strong { color: #374151; }
 /* Waveform block inside station popups */
-.wf { margin-top: 8px; width: 300px; max-width: 100%; }
-.wf-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.wf { margin-top: 8px; width: 332px; max-width: 100%; }
+.wf-head { display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
 .wf-label { font-size: 11px; font-weight: 700; color: #282572; text-transform: uppercase; letter-spacing: 0.4px; }
 .wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
 .wf-actions a:hover { text-decoration: underline; }
@@ -139,7 +139,7 @@ const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to d
 // (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
 // no cross-origin call to GA from the browser.
 const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
-var quakeWindowDays = 30;               // display window; set by the toolbar selector
+var quakeWindowDays = 7;                // display window; set by the toolbar selector
 const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
 const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 
@@ -252,8 +252,8 @@ function initMap() {
       quakeWin.innerHTML = '<label for="quake-window">Earthquakes — show</label>'
         + '<select id="quake-window" aria-label="Earthquake time window">'
         + '<option value="1">Last 24 hours</option>'
-        + '<option value="7">Last 7 days</option>'
-        + '<option value="30" selected>Last 30 days</option>'
+        + '<option value="7" selected>Last 7 days</option>'
+        + '<option value="30">Last 30 days</option>'
         + '<option value="730">Last 24 months</option>'
         + '</select>';
       quakeWin.classList.toggle('open', quakesVisible);
@@ -462,7 +462,7 @@ function buildPopupHtml(s) {
         ? (function() {
             var src  = (waveformManifest.source) ? esc(waveformManifest.source) : 'EarthScope';
             var upd  = waveformManifest.generated
-              ? ' · updated ' + esc(waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC'))
+              ? ' · updated ' + esc(waveformManifest.generated.slice(0, 13).replace('T', ' ') + ':00 UTC')
               : ' (updated hourly)';
             var base = WAVEFORM_BASE + encodeURIComponent(s.code) + '_';
             var stamp = hourStamp();
@@ -509,7 +509,7 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 340, minWidth: 240 }).addTo(map);
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 360, minWidth: 240 }).addTo(map);
     m._station = s;
     s.marker = m;
   });
