@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<!--
+  AuSIS_Map.html
+  Interactive map of AuSIS (Australian Seismometers In Schools) stations.
+  Fetches station and availability data from IRIS FDSN services (network S1).
+  FDSN Network DOI: 10.7914/SN/S1
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuSIS Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+/* Header */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #282572; color: #fff; padding: 4px 16px; min-height: 36px;
+}
+.header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; }
+.header-logo img { height: 36px; }
+/* Map */
+#map { flex: 1; width: 100%; }
+/* Popups */
+.leaflet-popup-content-wrapper { opacity: 0.85 !important; }
+.leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
+.popup-title { font-weight: 700; font-size: 14px; color: #282572; margin-bottom: 4px; text-align: center; }
+.popup-code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-right: 6px; }
+.popup-row { color: #4b5563; font-size: 12px; }
+.popup-row strong { color: #374151; }
+/* Waveform block inside station popups */
+.wf { margin-top: 8px; width: 332px; max-width: 100%; }
+.wf-head { display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+.wf-label { font-size: 11px; font-weight: 700; color: #282572; text-transform: uppercase; letter-spacing: 0.4px; }
+.wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
+.wf-actions a:hover { text-decoration: underline; }
+.wf-seg { display: flex; width: auto; margin: 0 -14px 4px; border: 1px solid #cbd5e1; border-left: none; border-right: none; border-radius: 0; overflow: hidden; }
+.wf-seg-btn { flex: 1; font-family: inherit; font-size: 11px; padding: 4px 0; border: none; border-left: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; }
+.wf-seg-btn:first-child { border-left: none; }
+.wf-seg-btn:hover { background: #eff6ff; }
+.wf-seg-btn.active { background: #282572; color: #fff; font-weight: 700; }
+.wf-frame { position: relative; width: auto; min-height: 92px; margin: 0 -14px; background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; overflow: hidden; }
+.wf-frame img.wf-img { display: block; width: 100%; height: auto; opacity: 0; transition: opacity 0.2s; }
+.wf-frame.loaded img.wf-img { opacity: 1; }
+.wf-frame.loaded .wf-status { display: none; }
+.wf-frame.failed img.wf-img { display: none; }
+.wf-frame.failed .wf-status::after { content: "No waveform yet — the hourly job only builds one while a station is streaming."; }
+.wf-frame.failed .wf-status { font-style: normal; }
+.wf-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; text-align: center; padding: 8px; }
+.wf-frame.failed .wf-status { font-size: 0; }
+.wf-frame.failed .wf-status::after { font-size: 11px; }
+.wf-foot { font-size: 10px; color: #94a3b8; margin-top: 3px; }
+/* Earthquake popups */
+.q-title { font-weight: 700; font-size: 15px; color: #b91c1c; margin-bottom: 2px; }
+.q-place { font-size: 12px; color: #374151; margin-bottom: 6px; }
+.q-row { font-size: 12px; color: #4b5563; }
+.q-row strong { color: #374151; }
+.q-near { margin-top: 6px; font-size: 11px; color: #4b5563; }
+.q-near b { color: #282572; }
+.q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
+.q-link:hover { text-decoration: underline; }
+/* Controls — hidden by default for clean map view */
+.leaflet-control-zoom { display: none !important; }
+.toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
+.tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
+.tools-toggle:hover { background: rgba(255,255,255,0.95); }
+.toolbar-buttons { display: none; margin-top: 4px; }
+.toolbar-buttons.open { display: block; }
+.btn-group { margin-top: 4px; }
+.btn-group:first-child { margin-top: 0; }
+.btn-group a { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: #fff; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; text-decoration: none; }
+.btn-group a:first-child { border-radius: 4px 4px 0 0; }
+.btn-group a + a { border-top: none; }
+.btn-group a:last-child { border-radius: 0 0 4px 4px; }
+.btn-group a:only-child { border-radius: 4px; }
+.btn-group a:hover { background: #f0f0f0; }
+.btn-group a.active { background: #fee2e2; }
+.search-panel { display: none; background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 4px 10px; margin-top: 6px; }
+.search-panel.open { display: block; }
+.search-panel input { border: none; outline: none; font-family: Arial, Helvetica, sans-serif; font-size: 13px; width: 200px; }
+.search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
+.search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
+.search-results div:hover { background: #eff6ff; }
+.quake-win-panel { display: none; background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; margin-top: 6px; font-family: Arial, Helvetica, sans-serif; }
+.quake-win-panel.open { display: block; }
+.quake-win-panel label { display: block; font-size: 11px; color: #6b7280; margin-bottom: 3px; }
+.quake-win-panel select { font-family: inherit; font-size: 13px; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #282572; cursor: pointer; width: 100%; }
+/* Footer / Legend */
+.footer {
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  background: #282572; color: #fff; padding: 6px 16px; min-height: 36px;
+  font-family: Arial, Helvetica, sans-serif; font-size: 12px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-icon { display: inline-block; }
+.legend-quakes { cursor: pointer; transition: opacity 0.15s; }
+.legend-quakes.off { opacity: 0.45; }
+.quake-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #fff; }
+@media (max-width: 600px) {
+  .header-title { font-size: 14px; }
+  .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="header-title"><span id="header-title">AuSIS Map</span></span>
+  <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
+</div>
+<div id="map"></div>
+<div class="footer">
+  <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
+  <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
+  <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
+  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes"><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Constants ─────────────────────────────────────────────────
+const LIVE_THRESHOLD_DAYS = 7;
+const IRIS_BASE = 'https://service.iris.edu';
+
+// Waveform (last-hour) settings
+// The plots are pre-rendered hourly by a GitHub Action
+// (scripts/render_waveforms.py, data from EarthScope) and published to the
+// force-pushed `waveforms` branch. The map just shows the PNG.
+// NOTE: WAVEFORM_REPO is the ONE value that must match the hosting repo.
+// It must be the exact owner/repo as it appears in the GitHub URL
+// (case-sensitive on raw.githubusercontent.com) and the repo must be PUBLIC.
+const WAVEFORM_MINUTES = 60;                       // length of trace shown
+const WAVEFORM_REPO    = 'AuScope/AuScope_Outreach'; // owner/repo — VERIFY exact casing
+const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
+const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
+                       + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
+const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
+const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to draw dashed lines to
+
+// Earthquake layer settings.
+// Data is the 24-month rolling store built hourly from Geoscience Australia
+// (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
+// no cross-origin call to GA from the browser.
+const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
+var quakeWindowDays = 7;                // display window; set by the toolbar selector
+const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
+const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
+
+// ── State ─────────────────────────────────────────────────────
+let stations = [],
+    map = null,
+    verifiedStatus = {},   // from ausis_status.json (hourly GitHub Action)
+    waveformManifest = {}, // from waveforms branch: { generated, stations:{CODE:{...}} }
+    quakeLayer = null,
+    quakeLinkLayer = null, // dashed connectors from an open quake to nearby stations
+    quakeData = [],
+    quakesVisible = SHOW_QUAKES_DEFAULT;
+
+// ── Helpers ──────────────────────────────────────────────────
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// UTC timestamp in the form YYYY-MM-DDThh:mm:ss (FDSN event service format)
+function isoUTC(d) {
+  return d.toISOString().replace(/\.\d+Z$/, '');
+}
+
+// Great-circle distance in km
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371, toRad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * toRad, dLon = (lon2 - lon1) * toRad;
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) ** 2;
+  return Math.round(2 * R * Math.asin(Math.sqrt(a)));
+}
+
+// ── Marker icon ──────────────────────────────────────────────
+function triangleSVG(size, strokeColor) {
+  const h = size / 2;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2) + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+}
+function triangleIcon(size, strokeColor) {
+  const h = size / 2;
+  const stroke = strokeColor || '#fff';
+  return L.divIcon({ html: triangleSVG(size, stroke), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
+}
+function stationStrokeColor(s) {
+  if (s.endTime) return '#ef4444';
+  // Hourly status check overrides stale IRIS availability data
+  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '#22c55e';
+  if (s.latestData) {
+    var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+    if (daysAgo <= LIVE_THRESHOLD_DAYS) return '#22c55e';
+    return '#facc15';
+  }
+  return '#22c55e';
+}
+
+// ── Legend icons ─────────────────────────────────────────────
+function setLegendIcons() {
+  document.getElementById('legend-streaming').innerHTML = triangleSVG(16, '#22c55e');
+  document.getElementById('legend-offline').innerHTML = triangleSVG(16, '#facc15');
+  document.getElementById('legend-ended').innerHTML = triangleSVG(16, '#ef4444');
+}
+
+// ── Map initialisation ───────────────────────────────────────
+function initMap() {
+  map = L.map('map', { center: [-26, 134], zoom: 5, maxZoom: 18, minZoom: 3, zoomControl: false });
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
+
+  // Earthquake layer group (added/removed by the toolbar toggle)
+  quakeLayer = L.layerGroup();
+  quakeLinkLayer = L.layerGroup().addTo(map); // connectors to nearby stations
+  if (quakesVisible) quakeLayer.addTo(map);
+
+  // Tools button — three dots toggle
+  const ToolbarControl = L.Control.extend({
+    onAdd: function() {
+      const wrap = L.DomUtil.create('div', 'toolbar-wrap');
+      L.DomEvent.disableClickPropagation(wrap);
+      L.DomEvent.disableScrollPropagation(wrap);
+      const toggle = L.DomUtil.create('a', 'tools-toggle', wrap);
+      toggle.href = '#'; toggle.title = 'Map tools';
+      toggle.innerHTML = '&#x22EE;';
+      const buttons = L.DomUtil.create('div', 'toolbar-buttons', wrap);
+
+      const zoomGroup = L.DomUtil.create('div', 'btn-group', buttons);
+      const zoomIn = L.DomUtil.create('a', '', zoomGroup);
+      zoomIn.href = '#'; zoomIn.title = 'Zoom in'; zoomIn.innerHTML = '+'; zoomIn.style.fontSize = '18px';
+      zoomIn.onclick = function(e) { e.preventDefault(); map.zoomIn(); };
+      const zoomOut = L.DomUtil.create('a', '', zoomGroup);
+      zoomOut.href = '#'; zoomOut.title = 'Zoom out'; zoomOut.innerHTML = '&minus;'; zoomOut.style.fontSize = '18px';
+      zoomOut.onclick = function(e) { e.preventDefault(); map.zoomOut(); };
+
+      const homeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+      const home = L.DomUtil.create('a', '', homeGroup);
+      home.href = '#'; home.title = 'Zoom to all stations';
+      home.innerHTML = '&#x1F3E0;'; home.style.fontSize = '16px';
+      home.onclick = function(e) { e.preventDefault(); map.setView([-28, 134], 4); };
+
+      // Earthquake layer toggle
+      const quakeGroup = L.DomUtil.create('div', 'btn-group', buttons);
+      const quakeBtn = L.DomUtil.create('a', quakesVisible ? 'active' : '', quakeGroup);
+      quakeBtn.href = '#'; quakeBtn.title = 'Show/hide recent earthquakes';
+      quakeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:middle">'
+        + '<path d="M1 8 L4 8 L6 3 L8 13 L10 5 L12 8 L15 8" fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+
+      // Time-window selector — a small flyout shown while earthquakes are on
+      const quakeWin = L.DomUtil.create('div', 'quake-win-panel', buttons);
+      quakeWin.innerHTML = '<label for="quake-window">Earthquakes — show</label>'
+        + '<select id="quake-window" aria-label="Earthquake time window">'
+        + '<option value="1">Last 24 hours</option>'
+        + '<option value="7" selected>Last 7 days</option>'
+        + '<option value="30">Last 30 days</option>'
+        + '<option value="730">Last 24 months</option>'
+        + '</select>';
+      quakeWin.classList.toggle('open', quakesVisible);
+
+      quakeBtn.onclick = function(e) {
+        e.preventDefault();
+        setQuakesVisible(!quakesVisible);
+        quakeBtn.classList.toggle('active', quakesVisible);
+        quakeWin.classList.toggle('open', quakesVisible);
+      };
+
+      const searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
+      const searchBtn = L.DomUtil.create('a', '', searchGroup);
+      searchBtn.href = '#'; searchBtn.title = 'Search stations';
+      searchBtn.innerHTML = '&#x1F50D;'; searchBtn.style.fontSize = '15px';
+
+      const panel = L.DomUtil.create('div', 'search-panel', wrap);
+      const input = L.DomUtil.create('input', '', panel);
+      input.type = 'text'; input.placeholder = 'Search stations...';
+      const res = L.DomUtil.create('div', 'search-results', panel);
+
+      toggle.onclick = function(e) {
+        e.preventDefault();
+        const isOpen = buttons.classList.contains('open');
+        buttons.classList.toggle('open');
+        if (isOpen) { panel.classList.remove('open'); }
+      };
+      searchBtn.onclick = function(e) {
+        e.preventDefault();
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open')) { input.value = ''; res.innerHTML = ''; input.focus(); }
+      };
+      input.oninput = function() {
+        const q = input.value.trim().toLowerCase(); res.innerHTML = '';
+        if (q.length < 2) return;
+        stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
+          const row = document.createElement('div');
+          row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + esc(s.code) + '</b> ' + esc(s.name);
+          row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
+          res.appendChild(row);
+        });
+      };
+      return wrap;
+    }
+  });
+  new ToolbarControl({ position: 'topleft' }).addTo(map);
+
+  map.on('zoomend', function() {
+    const size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+    stations.forEach(function(s) {
+      if (s.marker) s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
+    });
+  });
+
+  // Popup open: quakes draw dashed links to nearby stations.
+  // Station waveforms need no JS here — the <img> is embedded in the popup
+  // HTML with its src preset, so the browser loads it in place.
+  map.on('popupopen', function(e) {
+    var src = e.popup && e.popup._source;
+    if (src && src._quake) drawQuakeLinks(src._quake.lat, src._quake.lng);
+  });
+  map.on('popupclose', function(e) {
+    var src = e.popup && e.popup._source;
+    if (src && src._quake) clearQuakeLinks();
+  });
+}
+
+// ── Formatting ───────────────────────────────────────────────
+function formatDate(d) {
+  if (!d) return 'Unknown';
+  const p = d.substring(0, 10).split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
+}
+function formatDateTime(d) {
+  // d is a Date — show UTC and local browser time, compactly
+  var utc = d.toISOString().replace('T', ' ').replace(/:\d\d\.\d+Z$/, ' UTC');
+  var loc = d.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  return utc + ' &middot; ' + loc + ' local';
+}
+
+// ── Data fetching (live IRIS with local GeoJSON fallback) ────
+// Parse IRIS FDSN station text (level=station, pipe-delimited) into records.
+// Used by the live-refresh step; the same format is documented at
+// service.iris.edu/fdsnws/station/1/
+function parseStationText(text) {
+  var lines = text.trim().split('\n');
+  var out = [];
+  for (var i = 1; i < lines.length; i++) {
+    var p = lines[i].split('|');
+    if (p.length < 7) continue;
+    var code = p[1].trim();
+    if (code === 'TEST') continue;
+    var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+    if (isNaN(lat) || isNaN(lng)) continue;
+    var endRaw = p[7] ? p[7].trim() : '';
+    out.push({
+      code: code, lat: lat, lng: lng,
+      elevation: parseFloat(p[4]), name: p[5].trim(),
+      startTime: p[6].trim(), endTime: endRaw || null
+    });
+  }
+  return out;
+}
+
+async function fetchStationsFromBackup() {
+  try {
+    var resp = await fetch('data/ausis_stations.geojson');
+    if (!resp.ok) return [];
+    var geojson = await resp.json();
+    return (geojson.features || []).map(function(f) {
+      var coords = f.geometry.coordinates;
+      var p = f.properties;
+      return { code: p.code, lat: coords[1], lng: coords[0], elevation: p.elevation || 0, name: p.name || p.code, startTime: p.startTime || '', endTime: p.endTime || null, latestData: p.latestData ? new Date(p.latestData) : null, marker: null };
+    });
+  } catch (e) {
+    console.warn('Local backup also failed:', e);
+    return [];
+  }
+}
+
+async function fetchAvailability() {
+  try {
+    var resp = await fetch(IRIS_BASE + '/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
+    if (!resp.ok) return;
+    var lines = (await resp.text()).trim().split('\n');
+    var latest = {};
+    for (var i = 1; i < lines.length; i++) {
+      var cols = lines[i].trim().split(/\s+/);
+      if (cols.length < 8) continue;
+      var code = cols[1];
+      var dt = new Date(cols[7]);
+      if (!latest[code] || dt > latest[code]) latest[code] = dt;
+    }
+    stations.forEach(function(s) {
+      if (latest[s.code]) s.latestData = latest[s.code];
+    });
+  } catch (e) {
+    console.warn('Failed to fetch availability data:', e);
+  }
+}
+
+// Fetch the waveform manifest from the `waveforms` branch. Tells us which
+// stations have a fresh plot and when it was generated. Optional: if it
+// fails we still try the image and just omit the "as of" label.
+async function fetchWaveformManifest() {
+  try {
+    var resp = await fetch(WAVEFORM_BASE + 'manifest.json?v=' + hourStamp());
+    if (!resp.ok) return;
+    waveformManifest = await resp.json();
+  } catch (e) {
+    // Branch may not exist yet (first Action run pending) — that's fine.
+  }
+}
+
+// Cache-buster that changes once per UTC hour (matches the hourly job)
+function hourStamp() {
+  return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
+}
+
+// ── Quake → station connector lines ──────────────────────────
+function clearQuakeLinks() {
+  if (quakeLinkLayer) quakeLinkLayer.clearLayers();
+}
+
+// Draw faint dashed lines from a quake to its nearest AuSIS stations,
+// each labelled with the station name, code and distance.
+function drawQuakeLinks(lat, lng) {
+  if (!quakeLinkLayer) return;
+  quakeLinkLayer.clearLayers();
+  nearestStations(lat, lng, WAVEFORM_NEAR_LINKS).forEach(function(x) {
+    var s = x.station;
+    var line = L.polyline([[lat, lng], [s.lat, s.lng]], {
+      color: '#b91c1c', weight: 1.5, opacity: 0.8, dashArray: '4 6', interactive: false
+    });
+    quakeLinkLayer.addLayer(line);
+  });
+}
+
+// ── Marker rendering ─────────────────────────────────────────
+function stationZIndex(s) {
+  if (s.endTime) return 0;
+  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return 2000;
+  if (s.latestData) {
+    var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
+    if (daysAgo <= LIVE_THRESHOLD_DAYS) return 2000;
+    return 1000;
+  }
+  return 2000;
+}
+
+function buildPopupHtml(s) {
+  var daysAgo = s.latestData ? Math.floor((Date.now() - s.latestData.getTime()) / 86400000) : null;
+  var streaming = isStationStreaming(s);
+  return '<div class="popup-title">' + esc(s.name) + '</div>'
+    + '<div class="popup-row"><span class="popup-code">S1.' + esc(s.code) + '</span> <strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
+    + (function() {
+        if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
+        if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+        if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
+        if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+        return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
+      })()
+    + '<div class="popup-row"><strong>Coordinates:</strong> ' + s.lat.toFixed(3) + ', ' + s.lng.toFixed(3) + '</div>'
+    + (streaming
+        ? (function() {
+            var src  = (waveformManifest.source) ? esc(waveformManifest.source) : 'EarthScope';
+            var upd  = waveformManifest.generated
+              ? ' · updated ' + esc(waveformManifest.generated.slice(0, 13).replace('T', ' ') + ':00 UTC')
+              : ' (updated hourly)';
+            var base = WAVEFORM_BASE + encodeURIComponent(s.code) + '_';
+            var stamp = hourStamp();
+            function seg(v, label) {
+              return '<button type="button" class="wf-seg-btn' + (v === 'raw' ? ' active' : '')
+                + '" onclick="wfSwitch(this,\'' + esc(s.code) + '\',\'' + v + '\')">' + label + '</button>';
+            }
+            return '<div class="wf">'
+              + '<div class="wf-head"><span class="wf-label">Waveform last hour</span></div>'
+              + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
+              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
+              + '</div>'
+              + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
+              + '<div class="wf-status">Loading last hour…</div>'
+              + '<img class="wf-img" alt="Last hour of ground velocity at ' + esc(s.code) + '" '
+              + 'src="' + base + 'raw.png?v=' + stamp + '" '
+              + 'onload="this.parentNode.classList.add(\'loaded\')" '
+              + 'onerror="this.parentNode.classList.add(\'failed\')">'
+              + '</div>'
+              + '<div class="wf-foot" data-code="' + esc(s.code) + '">'
+              + 'source: ' + src + upd + '</div>'
+              + '</div>';
+          })()
+        : '');
+}
+
+// Switch the waveform image between raw / local / distant filter variants.
+// Called inline from the segmented buttons in the station popup.
+function wfSwitch(btn, code, variant) {
+  var seg = btn.parentNode;
+  var wf = seg.parentNode;
+  var frame = wf.querySelector('.wf-frame');
+  var img = frame && frame.querySelector('.wf-img');
+  if (!img) return;
+  var btns = seg.querySelectorAll('.wf-seg-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  frame.classList.remove('loaded', 'failed');
+  img.src = seg.getAttribute('data-base') + variant + '.png?v=' + seg.getAttribute('data-stamp');
+}
+
+function addMarkers() {
+  var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+  var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
+  sorted.forEach(function(s) {
+    var icon = triangleIcon(size, stationStrokeColor(s));
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 360, minWidth: 240 }).addTo(map);
+    m._station = s;
+    s.marker = m;
+  });
+}
+
+// Update existing markers in place — no remove/add, no flash
+function refreshMarkers() {
+  var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
+  stations.forEach(function(s) {
+    if (s.marker) {
+      s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
+      s.marker.setZIndexOffset(stationZIndex(s));
+      s.marker.setPopupContent(buildPopupHtml(s));
+    }
+  });
+}
+
+function isStationStreaming(s) {
+  if (s.endTime) return false;
+  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return true;
+  if (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS) return true;
+  return false;
+}
+
+function updateHeader() {
+  var active = stations.filter(function(s) { return !s.endTime; }).length;
+  var streaming = stations.filter(isStationStreaming).length;
+  document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
+  document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
+}
+
+// ── Earthquakes (USGS FDSN event service) ────────────────────
+function quakeColor(m) {
+  if (m >= 5) return '#7f1d1d';
+  if (m >= 4) return '#dc2626';
+  if (m >= 3) return '#f97316';
+  return '#facc15';
+}
+function quakeRadius(m) {
+  return 0.8 * Math.max(4, Math.min(22, 3 + m * 2.6));
+}
+
+var quakeStoreFeatures = [];   // full store as fetched (filtered to window for display)
+
+function applyQuakeWindow() {
+  var cutoff = Date.now() - quakeWindowDays * 86400000;
+  quakeData = quakeStoreFeatures.filter(function(f) {
+    if (!f.geometry || !f.geometry.coordinates || !f.properties) return false;
+    if (f.properties.mag == null) return false;
+    var t = Date.parse(f.properties.time);
+    return !isNaN(t) && t >= cutoff;
+  });
+  renderQuakes();
+  updateQuakeLegend();
+}
+
+async function fetchQuakes() {
+  try {
+    var resp = await fetch(QUAKE_STORE + '?v=' + hourStamp());
+    if (!resp.ok) throw new Error('quake store HTTP ' + resp.status);
+    var gj = await resp.json();
+    quakeStoreFeatures = gj.features || [];
+    applyQuakeWindow();
+  } catch (e) {
+    console.warn('Earthquake store load failed:', e);
+    updateQuakeLegend();
+  }
+}
+
+function nearestStations(lat, lng, n) {
+  return stations
+    .filter(function(s) { return !s.endTime; })
+    .map(function(s) { return { station: s, code: s.code, name: s.name, dist: haversineKm(lat, lng, s.lat, s.lng) }; })
+    .sort(function(a, b) { return a.dist - b.dist; })
+    .slice(0, n);
+}
+
+function buildQuakePopup(f) {
+  var c = f.geometry.coordinates; // [lon, lat]
+  var p = f.properties;
+  var when = new Date(p.time);
+  var near = nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
+  var nearHtml = near.length
+    ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
+        return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
+      }).join('<br>') + '</div>'
+    : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>';
+  var magStr = (p.mag != null ? p.mag.toFixed(1) : '?')
+    + (p.magType ? ' ' + esc(p.magType) : '');
+  return '<div class="q-title">M ' + magStr + '</div>'
+    + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
+    + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
+    + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
+    + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
+    + '<div class="q-row" style="color:#94a3b8;font-size:11px">Source: ' + esc(p.source || 'GA') + '</div>'
+    + nearHtml;
+}
+
+function renderQuakes() {
+  if (!quakeLayer) return;
+  quakeLayer.clearLayers();
+  quakeData.forEach(function(f) {
+    var c = f.geometry.coordinates;
+    var m = f.properties.mag;
+    var ageDays = (Date.now() - Date.parse(f.properties.time)) / 86400000;
+    var marker = L.circleMarker([c[1], c[0]], {
+      radius: quakeRadius(m),
+      color: '#fff',
+      weight: 1,
+      fillColor: quakeColor(m),
+      fillOpacity: ageDays < 1 ? 0.9 : 0.55
+    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 280 });
+    marker._quake = { lat: c[1], lng: c[0] };
+    quakeLayer.addLayer(marker);
+  });
+}
+
+function setQuakesVisible(v) {
+  quakesVisible = v;
+  if (v) { quakeLayer.addTo(map); } else { map.removeLayer(quakeLayer); }
+  updateQuakeLegend();
+}
+
+function updateQuakeLegend() {
+  var el = document.getElementById('legend-quakes');
+  var txt = document.getElementById('legend-quakes-text');
+  el.classList.toggle('off', !quakesVisible);
+  txt.textContent = 'Earthquakes';
+}
+
+// Load hourly verified status from GitHub-hosted JSON
+async function loadVerifiedStatus() {
+  try {
+    var resp = await fetch('data/ausis_status.json');
+    if (!resp.ok) return;
+    var data = await resp.json();
+    verifiedStatus = data.stations || {};
+  } catch (e) {
+    // No status file yet - that's fine
+  }
+}
+
+// ── Initialise ───────────────────────────────────────────────
+setLegendIcons();
+initMap();
+updateQuakeLegend();
+
+// Earthquake layer toggle from the footer legend item
+document.getElementById('legend-quakes').onclick = function() {
+  setQuakesVisible(!quakesVisible);
+  var btn = document.querySelector('.btn-group a.active, .toolbar-buttons .btn-group a[title="Show/hide recent earthquakes"]');
+  if (btn) btn.classList.toggle('active', quakesVisible);
+  var panel = document.querySelector('.quake-win-panel');
+  if (panel) panel.classList.toggle('open', quakesVisible);
+};
+
+// Earthquake time-window selector (client-side filter over the loaded store)
+(function() {
+  var sel = document.getElementById('quake-window');
+  if (!sel) return;
+  sel.value = String(quakeWindowDays);
+  sel.addEventListener('change', function() {
+    quakeWindowDays = parseInt(sel.value, 10) || 30;
+    applyQuakeWindow();
+  });
+})();
+
+// Fetch waveform manifest + earthquakes in the background (independent of stations)
+fetchWaveformManifest();
+setInterval(fetchWaveformManifest, 15 * 60 * 1000); // refresh "as of" every 15 min
+fetchQuakes();
+setInterval(fetchQuakes, QUAKE_REFRESH_MS);
+
+// Step 0: Load verified status file (hourly GitHub Action)
+// Step 1: Load local backup instantly for immediate display
+loadVerifiedStatus().then(function() {
+  return fetchStationsFromBackup();
+}).then(function(data) {
+  if (data.length > 0) {
+    stations = data;
+    addMarkers();
+    map.setView([-28, 134], 4);
+    updateHeader();
+  }
+  // Step 2: Fetch live IRIS data in background, merge into existing stations
+  return fetch(IRIS_BASE + '/fdsnws/station/1/query?network=S1&level=station&format=text')
+    .then(function(resp) {
+      if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
+      return resp.text();
+    })
+    .then(function(text) {
+      // Merge live IRIS data into existing stations (preserving markers)
+      var liveByCode = {};
+      parseStationText(text).forEach(function(r) { liveByCode[r.code] = r; });
+      stations.forEach(function(s) {
+        if (liveByCode[s.code]) {
+          s.startTime = liveByCode[s.code].startTime;
+          s.endTime = liveByCode[s.code].endTime;
+        }
+      });
+      return fetchAvailability();
+    })
+    .then(function() {
+      refreshMarkers();
+      updateHeader();
+    });
+}).catch(function(err) {
+  console.warn('Live refresh failed, using backup data:', err);
+  // Backup data already displayed - nothing else to do
+});
+</script>
+</body>
+</html>
