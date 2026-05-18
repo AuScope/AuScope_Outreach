@@ -44,3 +44,24 @@ jobs:
           else
             echo "No change to the earthquake store this run."
           fi
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "--- file on disk ---"
+          ls -la data/ || echo "NO data/ DIRECTORY"
+          echo "--- is it gitignored? ---"
+          git check-ignore -v data/earthquakes_24mo.geojson || echo "not ignored"
+          echo "--- git status ---"
+          git status --porcelain
+          echo "--------------------"
+          git add -f data/earthquakes_24mo.geojson
+          if ! git diff --cached --quiet; then
+            git commit -q -m "earthquake store $(date -u +%FT%TZ)"
+            git push
+          else
+            echo "Nothing staged to commit."
+          fi
+
+
