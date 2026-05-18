@@ -49,7 +49,7 @@ from obspy.clients.fdsn.header import FDSNNoDataException
 # ── Age window ───────────────────────────────────────────────
 # TESTING values (use recent events so you don't wait a day):
 MIN_AGE_HOURS = 1
-MAX_AGE_DAYS  = 3
+MAX_AGE_DAYS  = 14
 # PRODUCTION values — switch to these before going live:
 #   MIN_AGE_HOURS = 24
 #   MAX_AGE_DAYS  = 14
