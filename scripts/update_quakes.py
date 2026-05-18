@@ -2,7 +2,7 @@
 """
 update_quakes.py
 
-Maintains a 6-month rolling earthquake catalogue for the AuSIS map.
+Maintains a 24-month rolling earthquake catalogue for the AuSIS map.
 
 Each hour:
   1. Fetch Geoscience Australia's pre-built recent-earthquakes feed
