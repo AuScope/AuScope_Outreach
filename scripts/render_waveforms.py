@@ -5,8 +5,9 @@ render_waveforms.py
 Generates a compact PNG of the last hour of vertical ground motion for every
 streaming AuSIS (network S1) station.
 
-ONE bulk FDSN dataselect POST request for the whole network
-(`S1 * * ?HZ <start> <end>`).
+Strategy: ONE bulk FDSN dataselect POST request for the whole network
+(`S1 * * ?HZ <start> <end>`). Data comes from EarthScope, which carries the
+S1 network.
 
 Output (./out/):
     out/<STATION>.png       e.g. out/AUKUL.png
@@ -45,8 +46,11 @@ MAX_RETRIES    = 5                        # attempts for the single bulk request
 BACKOFF_BASE   = 15                       # seconds; wait = BACKOFF_BASE * 2**(n-1)
 BACKOFF_CAP    = 240                      # max single backoff wait (seconds)
 
-# Try AusPass first (authoritative for S1); fall back to IRIS dataselect mirror
-DATA_CENTRES   = ["AUSPASS", "IRIS"]
+# Data centre(s) to try, in order. EarthScope (formerly "IRIS") carries S1 and
+# is what works in practice. AusPass is the authoritative S1 archive but its
+# public endpoint has not reliably served this bulk request; if you want to
+# prefer it, prepend "AUSPASS" here and confirm it returns data in the logs.
+DATA_CENTRES   = ["EARTHSCOPE"]
 
 PLOT_W, PLOT_H = 5.0, 2.1                 # inches
 PLOT_DPI       = 96                       # ~480 x 200 px
@@ -67,12 +71,7 @@ def is_transient(exc):
 
 
 def make_client(name):
-    try:
-        return Client(name, timeout=CLIENT_TIMEOUT)
-    except Exception:
-        if name == "AUSPASS":
-            return Client(base_url="http://auspass.edu.au", timeout=CLIENT_TIMEOUT)
-        raise
+    return Client(name, timeout=CLIENT_TIMEOUT)
 
 
 def bulk_fetch(t1, t2):
