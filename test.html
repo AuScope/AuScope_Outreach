@@ -83,10 +83,24 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-near { margin-top: 6px; font-size: 11px; color: #4b5563; }
 .q-near b { color: #282572; }
 .q-section { margin-top: 8px; }
-.q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; }
-.q-section-img { display: block; width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 4px; }
+.q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
+.q-section-img { display: block; width: calc(100% + 28px); max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
+
+/* Size tiers. The Leaflet popup maxWidth option is raised (700) so the
+   enlarged tier has room; by default we constrain the content back to the
+   compact ~360 look, then release it to ~2x when the map is `.enlarged`
+   (wide: true fullscreen, the new-tab fallback, or a large desktop embed).
+   Source PNGs are rendered at 2x DPI, so the enlarged view is sharp. */
+.leaflet-popup-content { max-width: 332px; }          /* compact default */
+#map.enlarged .leaflet-popup-content { max-width: 664px; }   /* ~2x */
+#map.enlarged .wf { width: 636px; }                          /* 664 - 28 flush */
+/* .q-section-img is width:calc(100% + 28px) so it tracks the popup itself */
+@media (max-width: 700px) {
+  #map.enlarged .leaflet-popup-content { max-width: 332px; } /* never exceed a small screen */
+  #map.enlarged .wf { width: 332px; }
+}
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
@@ -161,7 +175,7 @@ const IRIS_BASE = 'https://service.iris.edu';
 // It must be the exact owner/repo as it appears in the GitHub URL
 // (case-sensitive on raw.githubusercontent.com) and the repo must be PUBLIC.
 const WAVEFORM_MINUTES = 60;                       // length of trace shown
-const WAVEFORM_REPO    = 'bvkay/AuScope_Outreach'; // owner/repo — VERIFY exact casing
+const WAVEFORM_REPO    = 'AuScope/AuScope_Outreach'; // owner/repo — VERIFY exact casing
 const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
@@ -562,7 +576,7 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 360, minWidth: 240 }).addTo(map);
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 700, minWidth: 240 }).addTo(map);
     m._station = s;
     s.marker = m;
   });
@@ -644,30 +658,32 @@ function buildQuakePopup(f) {
   var c = f.geometry.coordinates; // [lon, lat]
   var p = f.properties;
   var when = new Date(p.time);
-  var near = nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
-  var nearHtml = near.length
-    ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
-        return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
-      }).join('<br>') + '</div>'
-    : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>';
   var magStr = (p.mag != null ? p.mag.toFixed(1) : '?')
     + (p.magType ? ' ' + esc(p.magType) : '');
   var section = (p.id && eventSections[p.id]) ? eventSections[p.id] : null;
   var sectionHtml = section
     ? '<div class="q-section">'
-      + '<div class="q-section-label">Recorded by AuSIS — nearest '
-      + section.stations.length + ' stations (wave arrives later further away)</div>'
+      + '<div class="q-section-label">Recorded by AuSIS</div>'
       + '<img class="q-section-img" loading="lazy" '
       + 'alt="Record section for ' + esc(p.id) + '" '
       + 'src="' + EVENT_WF_BASE + encodeURIComponent(p.id) + '.png?v=' + hourStamp() + '">'
       + '</div>'
     : '';
+  // The nearest-stations list is only shown when there is NO record section
+  // (the section already names the stations, better). Without a section it is
+  // the only AuSIS context, so it stays for remote / small / capped quakes.
+  var near = section ? [] : nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
+  var nearHtml = section ? ''
+    : (near.length
+        ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
+            return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
+          }).join('<br>') + '</div>'
+        : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>');
   return '<div class="q-title">M ' + magStr + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
-    + '<div class="q-row" style="color:#94a3b8;font-size:11px">Source: ' + esc(p.source || 'GA') + '</div>'
     + sectionHtml
     + nearHtml;
 }
@@ -685,7 +701,7 @@ function renderQuakes() {
       weight: 1,
       fillColor: quakeColor(m),
       fillOpacity: ageDays < 1 ? 0.9 : 0.55
-    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 280 });
+    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 700, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
   });
@@ -823,6 +839,45 @@ loadVerifiedStatus().then(function() {
     btn.title = fsElement() ? 'Exit fullscreen' : 'Fullscreen';
     if (window.map && map.invalidateSize) setTimeout(function() { map.invalidateSize(); }, 100);
   });
+})();
+
+// Size tier: when the map is wide (true fullscreen, the new-tab fallback, OR
+// just a large desktop embed) add an `enlarged` class so CSS can show the
+// waveform images at ~2x. Size-based, not fullscreen-based, so it works on
+// the live iframe site where the Fullscreen API is blocked. Hysteresis (two
+// thresholds) stops flicker when the width sits near the boundary.
+(function() {
+  var el = document.getElementById('map');
+  if (!el) return;
+  var ENLARGE_AT = 760;   // px: cross above this -> enlarged
+  var SHRINK_AT  = 680;   // px: drop below this  -> compact (gap = hysteresis)
+  var enlarged = false;
+
+  function apply() {
+    var w = el.clientWidth || 0;
+    if (!enlarged && w >= ENLARGE_AT) enlarged = true;
+    else if (enlarged && w < SHRINK_AT) enlarged = false;
+    else return;                       // no tier change
+    el.classList.toggle('enlarged', enlarged);
+    // Re-open the active popup so Leaflet recomputes its width at the new tier
+    if (window.map && map._popup && map._popup.isOpen()) {
+      var p = map._popup;
+      if (p._source && p._source.openPopup) {
+        map.closePopup(p);
+        setTimeout(function() { p._source.openPopup(); }, 60);
+      }
+    }
+  }
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(apply).observe(el);
+  } else {
+    window.addEventListener('resize', apply);
+  }
+  document.addEventListener('fullscreenchange', function() {
+    setTimeout(apply, 150);
+  });
+  apply();
 })();
 
 </script>
