@@ -581,8 +581,6 @@ function buildQuakePopup(f) {
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
-    + (p.inAU ? '<div class="q-row"><strong>In Australia:</strong> yes</div>' : '')
-    + (p.feltCount > 0 ? '<div class="q-row"><strong>Felt reports:</strong> ' + p.feltCount + '</div>' : '')
     + '<div class="q-row" style="color:#94a3b8;font-size:11px">Source: ' + esc(p.source || 'GA') + '</div>'
     + nearHtml;
 }
