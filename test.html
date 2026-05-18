@@ -90,6 +90,10 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .search-results { max-height: 200px; overflow-y: auto; margin-top: 4px; }
 .search-results div { padding: 4px 6px; cursor: pointer; font-size: 12px; border-radius: 3px; font-family: Arial, Helvetica, sans-serif; }
 .search-results div:hover { background: #eff6ff; }
+.quake-win-panel { display: none; background: #fff; border-radius: 6px; border: 2px solid rgba(0,0,0,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.4); padding: 6px 10px; margin-top: 6px; font-family: Arial, Helvetica, sans-serif; }
+.quake-win-panel.open { display: block; }
+.quake-win-panel label { display: block; font-size: 11px; color: #6b7280; margin-bottom: 3px; }
+.quake-win-panel select { font-family: inherit; font-size: 13px; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #282572; cursor: pointer; width: 100%; }
 /* Footer / Legend */
 .footer {
   display: flex; align-items: center; justify-content: center; gap: 24px;
@@ -101,8 +105,6 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .legend-quakes { cursor: pointer; transition: opacity 0.15s; }
 .legend-quakes.off { opacity: 0.45; }
 .quake-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #fff; }
-.qw-label { color: #fff; font-size: 12px; }
-#quake-window { font-family: inherit; font-size: 12px; padding: 1px 4px; border: 1px solid rgba(255,255,255,0.5); border-radius: 3px; background: #fff; color: #282572; cursor: pointer; }
 @media (max-width: 600px) {
   .header-title { font-size: 14px; }
   .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
@@ -120,15 +122,6 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
   <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
   <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes"><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
-  <span class="legend-item" id="legend-quake-window" title="How far back to show earthquakes">
-    <label for="quake-window" class="qw-label">Window</label>
-    <select id="quake-window" aria-label="Earthquake time window">
-      <option value="1">24 h</option>
-      <option value="7">7 d</option>
-      <option value="30" selected>30 d</option>
-      <option value="730">24 mo</option>
-    </select>
-  </span>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -153,7 +146,7 @@ const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to d
 // (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
 // no cross-origin call to GA from the browser.
 const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
-var quakeWindowDays = 30;               // display window; set by the footer selector
+var quakeWindowDays = 30;               // display window; set by the toolbar selector
 const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
 const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 
@@ -260,7 +253,24 @@ function initMap() {
       quakeBtn.href = '#'; quakeBtn.title = 'Show/hide recent earthquakes';
       quakeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:middle">'
         + '<path d="M1 8 L4 8 L6 3 L8 13 L10 5 L12 8 L15 8" fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
-      quakeBtn.onclick = function(e) { e.preventDefault(); setQuakesVisible(!quakesVisible); quakeBtn.classList.toggle('active', quakesVisible); };
+
+      // Time-window selector — a small flyout shown while earthquakes are on
+      const quakeWin = L.DomUtil.create('div', 'quake-win-panel', buttons);
+      quakeWin.innerHTML = '<label for="quake-window">Earthquakes — show</label>'
+        + '<select id="quake-window" aria-label="Earthquake time window">'
+        + '<option value="1">Last 24 hours</option>'
+        + '<option value="7">Last 7 days</option>'
+        + '<option value="30" selected>Last 30 days</option>'
+        + '<option value="730">Last 24 months</option>'
+        + '</select>';
+      quakeWin.classList.toggle('open', quakesVisible);
+
+      quakeBtn.onclick = function(e) {
+        e.preventDefault();
+        setQuakesVisible(!quakesVisible);
+        quakeBtn.classList.toggle('active', quakesVisible);
+        quakeWin.classList.toggle('open', quakesVisible);
+      };
 
       const searchGroup = L.DomUtil.create('div', 'btn-group', buttons);
       const searchBtn = L.DomUtil.create('a', '', searchGroup);
@@ -473,7 +483,7 @@ function buildPopupHtml(s) {
                 + '" onclick="wfSwitch(this,\'' + esc(s.code) + '\',\'' + v + '\')">' + label + '</button>';
             }
             return '<div class="wf">'
-              + '<div class="wf-head"><span class="wf-label">Waveform - last hour (µm/s)</span></div>'
+              + '<div class="wf-head"><span class="wf-label">Waveform — last hour (µm/s)</span></div>'
               + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
               + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
               + '</div>'
@@ -485,7 +495,7 @@ function buildPopupHtml(s) {
               + 'onerror="this.parentNode.classList.add(\'failed\')">'
               + '</div>'
               + '<div class="wf-foot" data-code="' + esc(s.code) + '">'
-              + chan + ' · source: ' + src + upd + '</div>'
+              + chan + ' · ground velocity · source: ' + src + upd + '</div>'
               + '</div>';
           })()
         : '');
@@ -664,6 +674,8 @@ document.getElementById('legend-quakes').onclick = function() {
   setQuakesVisible(!quakesVisible);
   var btn = document.querySelector('.btn-group a.active, .toolbar-buttons .btn-group a[title="Show/hide recent earthquakes"]');
   if (btn) btn.classList.toggle('active', quakesVisible);
+  var panel = document.querySelector('.quake-win-panel');
+  if (panel) panel.classList.toggle('open', quakesVisible);
 };
 
 // Earthquake time-window selector (client-side filter over the loaded store)
@@ -674,10 +686,6 @@ document.getElementById('legend-quakes').onclick = function() {
   sel.addEventListener('change', function() {
     quakeWindowDays = parseInt(sel.value, 10) || 30;
     applyQuakeWindow();
-  });
-  // Clicks on the selector shouldn't toggle the earthquakes layer
-  document.getElementById('legend-quake-window').addEventListener('click', function(e) {
-    e.stopPropagation();
   });
 })();
 
