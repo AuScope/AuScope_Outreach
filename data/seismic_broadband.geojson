@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-05-11T10:39:56Z"
+    "fetched": "2026-05-18T11:09:16Z"
   },
   "features": [
     {
@@ -8236,7 +8236,7 @@
         "sampleRate": 100.0,
         "elevation": 32.0,
         "startTime": "2023-03-28T00:33:00",
-        "endTime": "2026-06-01T00:00:00"
+        "endTime": "2026-05-06T00:22:43.37"
       },
       "geometry": {
         "type": "Point",
@@ -8295,8 +8295,8 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 144.0,
-        "startTime": "2023-03-26T23:41:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-26T23:34:39.66",
+        "endTime": "2026-03-18T03:03:48.95"
       },
       "geometry": {
         "type": "Point",
@@ -8315,8 +8315,8 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 314.0,
-        "startTime": "2023-03-28T04:50:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-28T05:23:00",
+        "endTime": "2025-06-03T03:10:47.47"
       },
       "geometry": {
         "type": "Point",
@@ -8335,7 +8335,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 263.0,
-        "startTime": "2023-03-28T00:00:00",
+        "startTime": "2023-03-28T00:18:00",
         "endTime": "2024-09-28T01:39:59.99"
       },
       "geometry": {
@@ -8355,7 +8355,7 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 20.0,
-        "startTime": "2023-03-27T04:30:00",
+        "startTime": "2023-03-27T04:35:00",
         "endTime": "2024-04-09T00:19:59.99"
       },
       "geometry": {
@@ -8375,7 +8375,7 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 199.0,
-        "startTime": "2023-03-26T05:15:00",
+        "startTime": "2023-03-26T05:31:00",
         "endTime": "2024-09-28T06:29:59.99"
       },
       "geometry": {
@@ -8395,8 +8395,8 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 6.0,
-        "startTime": "2023-03-29T03:20:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-29T03:19:59",
+        "endTime": "2025-06-22T12:16:41.27"
       },
       "geometry": {
         "type": "Point",
@@ -8416,7 +8416,7 @@
         "sampleRate": 100.0,
         "elevation": 240.0,
         "startTime": "2023-03-26T05:39:00",
-        "endTime": "2025-05-24T03:20:00"
+        "endTime": "2025-05-24T01:38:36.11"
       },
       "geometry": {
         "type": "Point",
@@ -8435,8 +8435,8 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 190.0,
-        "startTime": "2023-03-30T01:38:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-30T02:09:00",
+        "endTime": "2026-05-01T04:03:56.09"
       },
       "geometry": {
         "type": "Point",
@@ -8455,8 +8455,8 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 269.0,
-        "startTime": "2023-03-29T22:58:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-29T23:29:00",
+        "endTime": "2026-05-01T05:34:24.91"
       },
       "geometry": {
         "type": "Point",
@@ -8475,8 +8475,8 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 14.0,
-        "startTime": "2023-03-29T02:05:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-29T02:42:00",
+        "endTime": "2026-05-01T02:02:02.03"
       },
       "geometry": {
         "type": "Point",
@@ -8495,7 +8495,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 29.0,
-        "startTime": "2023-03-28T23:40:00",
+        "startTime": "2023-03-28T23:48:00",
         "endTime": "2024-04-11T07:44:59.99"
       },
       "geometry": {
@@ -8556,7 +8556,7 @@
         "sampleRate": 100.0,
         "elevation": 27.0,
         "startTime": "2023-03-30T03:34:00",
-        "endTime": "2026-06-01T00:00:00"
+        "endTime": "2025-09-21T06:02:54.54"
       },
       "geometry": {
         "type": "Point",
@@ -8575,8 +8575,8 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 58.0,
-        "startTime": "2023-03-26T22:00:00",
-        "endTime": "2026-06-01T00:00:00"
+        "startTime": "2023-03-26T22:35:00",
+        "endTime": "2026-05-02T22:38:15.84"
       },
       "geometry": {
         "type": "Point",
@@ -20475,7 +20475,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 353.0,
-        "startTime": "2025-05-04T09:00:00",
+        "startTime": "2025-05-04T09:21:00",
         "endTime": null
       },
       "geometry": {
@@ -20495,7 +20495,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 534.0,
-        "startTime": "2025-05-08T09:00:00",
+        "startTime": "2025-05-09T05:17:00",
         "endTime": null
       },
       "geometry": {
@@ -20575,7 +20575,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 482.0,
-        "startTime": "2025-03-25T00:00:00",
+        "startTime": "2025-03-25T01:06:00",
         "endTime": null
       },
       "geometry": {
@@ -20615,7 +20615,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 555.0,
-        "startTime": "2024-12-16T00:00:00",
+        "startTime": "2024-12-16T05:26:00",
         "endTime": null
       },
       "geometry": {
@@ -20675,7 +20675,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 130.0,
-        "startTime": "2024-11-14T02:00:00",
+        "startTime": "2024-11-14T01:40:00",
         "endTime": null
       },
       "geometry": {
@@ -20715,7 +20715,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 99.0,
-        "startTime": "2024-10-29T00:00:00",
+        "startTime": "2024-11-02T03:13:00",
         "endTime": null
       },
       "geometry": {
@@ -20775,7 +20775,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 180.0,
-        "startTime": "2024-10-29T00:00:00",
+        "startTime": "2024-10-30T05:46:00",
         "endTime": null
       },
       "geometry": {
@@ -20795,7 +20795,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 247.0,
-        "startTime": "2025-05-24T05:00:00",
+        "startTime": "2025-05-24T05:07:00",
         "endTime": null
       },
       "geometry": {
@@ -20895,7 +20895,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 130.0,
-        "startTime": "2025-12-11T01:28:00",
+        "startTime": "2025-12-11T01:26:00",
         "endTime": null
       },
       "geometry": {
@@ -20915,7 +20915,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 149.0,
-        "startTime": "2026-05-05T04:00:00",
+        "startTime": "2026-05-05T03:56:00",
         "endTime": null
       },
       "geometry": {
@@ -20949,13 +20949,33 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "PBOOZ",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sampleRate": 100.0,
+        "elevation": 443.0,
+        "startTime": "2026-05-12T05:12:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4001,
+          -22.84673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "RUGBY",
         "network": "M8",
         "channel": "HHZ",
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 724.0,
-        "startTime": "2026-04-09T00:00:00",
+        "startTime": "2026-04-10T03:12:00",
         "endTime": null
       },
       "geometry": {
@@ -20975,7 +20995,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": -718.0,
-        "startTime": "2025-04-03T03:08:00",
+        "startTime": "2025-04-03T03:07:00",
         "endTime": "2025-06-10T00:40:00"
       },
       "geometry": {
@@ -20983,6 +21003,26 @@
         "coordinates": [
           142.7865,
           -37.0479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TEFOZ",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sampleRate": 100.0,
+        "elevation": 327.0,
+        "startTime": "2026-05-13T08:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.5786,
+          -22.8162
         ]
       }
     },
