@@ -36,6 +36,11 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-label { font-size: 11px; font-weight: 700; color: #282572; text-transform: uppercase; letter-spacing: 0.4px; }
 .wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
 .wf-actions a:hover { text-decoration: underline; }
+.wf-seg { display: flex; width: 300px; max-width: 100%; margin: 0 auto 4px; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; }
+.wf-seg-btn { flex: 1; font-family: inherit; font-size: 11px; padding: 4px 0; border: none; border-left: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; }
+.wf-seg-btn:first-child { border-left: none; }
+.wf-seg-btn:hover { background: #eff6ff; }
+.wf-seg-btn.active { background: #282572; color: #fff; font-weight: 700; }
 .wf-frame { position: relative; width: 300px; max-width: 100%; min-height: 92px; margin: 0 auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; }
 .wf-frame img.wf-img { display: block; width: 100%; height: auto; opacity: 0; transition: opacity 0.2s; }
 .wf-frame.loaded img.wf-img { opacity: 1; }
@@ -437,24 +442,49 @@ function buildPopupHtml(s) {
     + (streaming
         ? (function() {
             var meta = (waveformManifest.stations || {})[s.code];
-            var foot = (meta && meta.channel ? meta.channel : 'S1.' + s.code)
-              + ' · last ' + WAVEFORM_MINUTES + ' min · vertical ground motion · source: '
-              + ((waveformManifest.source) ? esc(waveformManifest.source) : 'AusPass')
-              + (waveformManifest.generated ? ' · updated ' + esc(waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC')) : ' (updated hourly)');
-            var imgUrl = WAVEFORM_BASE + encodeURIComponent(s.code) + '.png?v=' + hourStamp();
+            var chan = (meta && meta.channel) ? meta.channel : 'S1.' + s.code;
+            var src  = (waveformManifest.source) ? esc(waveformManifest.source) : 'EarthScope';
+            var upd  = waveformManifest.generated
+              ? ' · updated ' + esc(waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC'))
+              : ' (updated hourly)';
+            var base = WAVEFORM_BASE + encodeURIComponent(s.code) + '_';
+            var stamp = hourStamp();
+            function seg(v, label) {
+              return '<button type="button" class="wf-seg-btn' + (v === 'raw' ? ' active' : '')
+                + '" onclick="wfSwitch(this,\'' + esc(s.code) + '\',\'' + v + '\')">' + label + '</button>';
+            }
             return '<div class="wf">'
-              + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span></div>'
+              + '<div class="wf-head"><span class="wf-label">Waveform — last hour (µm/s)</span></div>'
+              + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
+              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
+              + '</div>'
               + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
               + '<div class="wf-status">Loading last hour…</div>'
-              + '<img class="wf-img" alt="Last hour of ground motion at ' + esc(s.code) + '" '
-              + 'src="' + imgUrl + '" '
+              + '<img class="wf-img" alt="Last hour of ground velocity at ' + esc(s.code) + '" '
+              + 'src="' + base + 'raw.png?v=' + stamp + '" '
               + 'onload="this.parentNode.classList.add(\'loaded\')" '
               + 'onerror="this.parentNode.classList.add(\'failed\')">'
               + '</div>'
-              + '<div class="wf-foot" data-code="' + esc(s.code) + '">' + foot + '</div>'
+              + '<div class="wf-foot" data-code="' + esc(s.code) + '">'
+              + chan + ' · ground velocity · source: ' + src + upd + '</div>'
               + '</div>';
           })()
         : '');
+}
+
+// Switch the waveform image between raw / local / distant filter variants.
+// Called inline from the segmented buttons in the station popup.
+function wfSwitch(btn, code, variant) {
+  var seg = btn.parentNode;
+  var wf = seg.parentNode;
+  var frame = wf.querySelector('.wf-frame');
+  var img = frame && frame.querySelector('.wf-img');
+  if (!img) return;
+  var btns = seg.querySelectorAll('.wf-seg-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  frame.classList.remove('loaded', 'failed');
+  img.src = seg.getAttribute('data-base') + variant + '.png?v=' + seg.getAttribute('data-stamp');
 }
 
 function addMarkers() {
