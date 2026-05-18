@@ -84,22 +84,29 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-near b { color: #282572; }
 .q-section { margin-top: 8px; }
 .q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
-.q-section-img { display: block; width: calc(100% + 28px); max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+.q-section-img { display: block; width: 360px; max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
 
-/* Size tiers. The Leaflet popup maxWidth option is raised (700) so the
-   enlarged tier has room; by default we constrain the content back to the
-   compact ~360 look, then release it to ~2x when the map is `.enlarged`
-   (wide: true fullscreen, the new-tab fallback, or a large desktop embed).
-   Source PNGs are rendered at 2x DPI, so the enlarged view is sharp. */
-.leaflet-popup-content { max-width: 332px; }          /* compact default */
-#map.enlarged .leaflet-popup-content { max-width: 664px; }   /* ~2x */
-#map.enlarged .wf { width: 636px; }                          /* 664 - 28 flush */
-/* .q-section-img is width:calc(100% + 28px) so it tracks the popup itself */
-@media (max-width: 700px) {
-  #map.enlarged .leaflet-popup-content { max-width: 332px; } /* never exceed a small screen */
-  #map.enlarged .wf { width: 332px; }
+/* Three size tiers, driven by the `medium` / `enlarged` classes the size
+   detector puts on #map. The Leaflet popup maxWidth option is raised (700)
+   so the larger tiers have room; CSS constrains content per tier. Source
+   PNGs are rendered at 2x DPI so even the large tier stays sharp.
+     compact  (embed ~644)         : 332 / 360   — unchanged baseline
+     medium   (small laptop)       : 424 / 452   — scaled middle step
+     large    (fullscreen/new-tab) : 509 / 531   — was 636/664, −20%        */
+.leaflet-popup-content { max-width: 332px; }                       /* compact */
+#map.medium   .leaflet-popup-content { max-width: 452px; }
+#map.medium   .wf            { width: 424px; }
+#map.medium   .q-section-img { width: 452px; }
+#map.enlarged .leaflet-popup-content { max-width: 531px; }
+#map.enlarged .wf            { width: 509px; }
+#map.enlarged .q-section-img { width: 531px; }
+@media (max-width: 700px) {       /* never exceed a small physical screen */
+  #map.medium .leaflet-popup-content,
+  #map.enlarged .leaflet-popup-content { max-width: 332px; }
+  #map.medium .wf, #map.enlarged .wf { width: 332px; }
+  #map.medium .q-section-img, #map.enlarged .q-section-img { width: 360px; }
 }
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
@@ -183,7 +190,7 @@ const EVENT_WF_BRANCH  = 'event-waveforms';        // branch holding event recor
 const EVENT_WF_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + EVENT_WF_BRANCH + '/';
 const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
-const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to draw dashed lines to
+const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to draw dashed lines to
 
 // Earthquake layer settings.
 // Data is the 24-month rolling store built hourly from Geoscience Australia
@@ -849,16 +856,34 @@ loadVerifiedStatus().then(function() {
 (function() {
   var el = document.getElementById('map');
   if (!el) return;
-  var ENLARGE_AT = 760;   // px: cross above this -> enlarged
-  var SHRINK_AT  = 680;   // px: drop below this  -> compact (gap = hysteresis)
-  var enlarged = false;
+  // Three tiers with hysteresis bands so width near a boundary doesn't flicker:
+  //   compact  : < ~720         (the ~644 embed lives here)
+  //   medium   : ~770 – ~1100   (small laptop / partial window)
+  //   large    : > ~1150        (fullscreen / new-tab / big desktop)
+  var MED_UP = 770, MED_DN = 720, LG_UP = 1150, LG_DN = 1080;
+  var tier = 'compact';
+
+  function pick(w) {
+    if (tier === 'compact') {
+      if (w >= LG_UP) return 'large';
+      if (w >= MED_UP) return 'medium';
+    } else if (tier === 'medium') {
+      if (w >= LG_UP) return 'large';
+      if (w < MED_DN) return 'compact';
+    } else { // large
+      if (w < MED_DN) return 'compact';
+      if (w < LG_DN) return 'medium';
+    }
+    return tier;
+  }
 
   function apply() {
     var w = el.clientWidth || 0;
-    if (!enlarged && w >= ENLARGE_AT) enlarged = true;
-    else if (enlarged && w < SHRINK_AT) enlarged = false;
-    else return;                       // no tier change
-    el.classList.toggle('enlarged', enlarged);
+    var next = pick(w);
+    if (next === tier) return;            // no tier change
+    tier = next;
+    el.classList.toggle('medium',   tier === 'medium');
+    el.classList.toggle('enlarged', tier === 'large');
     // Re-open the active popup so Leaflet recomputes its width at the new tier
     if (window.map && map._popup && map._popup.isOpen()) {
       var p = map._popup;
