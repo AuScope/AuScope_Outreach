@@ -4,6 +4,13 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
+
+  Enhancements:
+   - Click a streaming station to see its last hour of waveform data
+     (IRIS/EarthScope timeseriesplot service, vertical component).
+   - "Earthquakes" layer: recent earthquakes in the Australian region that
+     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
+     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -94,6 +101,8 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .legend-quakes { cursor: pointer; transition: opacity 0.15s; }
 .legend-quakes.off { opacity: 0.45; }
 .quake-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #fff; }
+.qw-label { color: #fff; font-size: 12px; }
+#quake-window { font-family: inherit; font-size: 12px; padding: 1px 4px; border: 1px solid rgba(255,255,255,0.5); border-radius: 3px; background: #fff; color: #282572; cursor: pointer; }
 @media (max-width: 600px) {
   .header-title { font-size: 14px; }
   .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
@@ -111,6 +120,15 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
   <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
   <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes"><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+  <span class="legend-item" id="legend-quake-window" title="How far back to show earthquakes">
+    <label for="quake-window" class="qw-label">Window</label>
+    <select id="quake-window" aria-label="Earthquake time window">
+      <option value="1">24 h</option>
+      <option value="7">7 d</option>
+      <option value="30" selected>30 d</option>
+      <option value="730">24 mo</option>
+    </select>
+  </span>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -128,14 +146,14 @@ const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
 const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
-const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to draw dashed lines to
+const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to draw dashed lines to
 
 // Earthquake layer settings.
 // Data is the 6-month rolling store built hourly from Geoscience Australia
 // (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
 // no cross-origin call to GA from the browser.
 const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
-const QUAKE_DISPLAY_DAYS = 30;          // how much of the store to plot
+var quakeWindowDays = 30;               // display window; set by the footer selector
 const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
 const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 
@@ -455,7 +473,7 @@ function buildPopupHtml(s) {
                 + '" onclick="wfSwitch(this,\'' + esc(s.code) + '\',\'' + v + '\')">' + label + '</button>';
             }
             return '<div class="wf">'
-              + '<div class="wf-head"><span class="wf-label">Waveform — last hour (µm/s)</span></div>'
+              + '<div class="wf-head"><span class="wf-label">Waveform - last hour (µm/s)</span></div>'
               + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
               + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
               + '</div>'
@@ -467,7 +485,7 @@ function buildPopupHtml(s) {
               + 'onerror="this.parentNode.classList.add(\'failed\')">'
               + '</div>'
               + '<div class="wf-foot" data-code="' + esc(s.code) + '">'
-              + chan + ' · ground velocity · source: ' + src + upd + '</div>'
+              + chan + ' · source: ' + src + upd + '</div>'
               + '</div>';
           })()
         : '');
@@ -536,20 +554,27 @@ function quakeRadius(m) {
   return Math.max(4, Math.min(22, 3 + m * 2.6));
 }
 
+var quakeStoreFeatures = [];   // full store as fetched (filtered to window for display)
+
+function applyQuakeWindow() {
+  var cutoff = Date.now() - quakeWindowDays * 86400000;
+  quakeData = quakeStoreFeatures.filter(function(f) {
+    if (!f.geometry || !f.geometry.coordinates || !f.properties) return false;
+    if (f.properties.mag == null) return false;
+    var t = Date.parse(f.properties.time);
+    return !isNaN(t) && t >= cutoff;
+  });
+  renderQuakes();
+  updateQuakeLegend();
+}
+
 async function fetchQuakes() {
   try {
     var resp = await fetch(QUAKE_STORE + '?v=' + hourStamp());
     if (!resp.ok) throw new Error('quake store HTTP ' + resp.status);
     var gj = await resp.json();
-    var cutoff = Date.now() - QUAKE_DISPLAY_DAYS * 86400000;
-    quakeData = (gj.features || []).filter(function(f) {
-      if (!f.geometry || !f.geometry.coordinates || !f.properties) return false;
-      if (f.properties.mag == null) return false;
-      var t = Date.parse(f.properties.time);
-      return !isNaN(t) && t >= cutoff;
-    });
-    renderQuakes();
-    updateQuakeLegend();
+    quakeStoreFeatures = gj.features || [];
+    applyQuakeWindow();
   } catch (e) {
     console.warn('Earthquake store load failed:', e);
     updateQuakeLegend();
@@ -614,7 +639,7 @@ function updateQuakeLegend() {
   var el = document.getElementById('legend-quakes');
   var txt = document.getElementById('legend-quakes-text');
   el.classList.toggle('off', !quakesVisible);
-  txt.textContent = 'Earthquakes' + (quakeData.length ? ' (' + quakeData.length + ' / ' + QUAKE_DISPLAY_DAYS + ' d)' : '');
+  txt.textContent = 'Earthquakes';
 }
 
 // Load hourly verified status from GitHub-hosted JSON
@@ -640,6 +665,21 @@ document.getElementById('legend-quakes').onclick = function() {
   var btn = document.querySelector('.btn-group a.active, .toolbar-buttons .btn-group a[title="Show/hide recent earthquakes"]');
   if (btn) btn.classList.toggle('active', quakesVisible);
 };
+
+// Earthquake time-window selector (client-side filter over the loaded store)
+(function() {
+  var sel = document.getElementById('quake-window');
+  if (!sel) return;
+  sel.value = String(quakeWindowDays);
+  sel.addEventListener('change', function() {
+    quakeWindowDays = parseInt(sel.value, 10) || 30;
+    applyQuakeWindow();
+  });
+  // Clicks on the selector shouldn't toggle the earthquakes layer
+  document.getElementById('legend-quake-window').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+})();
 
 // Fetch waveform manifest + earthquakes in the background (independent of stations)
 fetchWaveformManifest();
