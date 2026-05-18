@@ -37,18 +37,6 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- data/earthquakes_24mo.geojson; then
-            git add data/earthquakes_24mo.geojson
-            git commit -q -m "earthquake store $(date -u +%FT%TZ)"
-            git push
-          else
-            echo "No change to the earthquake store this run."
-          fi
-
-      - name: Commit if changed
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           echo "--- file on disk ---"
           ls -la data/ || echo "NO data/ DIRECTORY"
           echo "--- is it gitignored? ---"
