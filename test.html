@@ -4,13 +4,6 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
-
-  Enhancements:
-   - Click a streaming station to see its last hour of waveform data
-     (IRIS/EarthScope timeseriesplot service, vertical component).
-   - "Earthquakes" layer: recent earthquakes in the Australian region that
-     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
-     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -44,8 +37,15 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
 .wf-actions a:hover { text-decoration: underline; }
 .wf-frame { position: relative; width: 100%; min-height: 110px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; }
-.wf-frame img { display: block; width: 100%; height: auto; }
+.wf-frame img.wf-img { display: block; width: 100%; height: auto; opacity: 0; transition: opacity 0.2s; }
+.wf-frame.loaded img.wf-img { opacity: 1; }
+.wf-frame.loaded .wf-status { display: none; }
+.wf-frame.failed img.wf-img { display: none; }
+.wf-frame.failed .wf-status::after { content: "No waveform yet — the hourly job only builds one while a station is streaming."; }
+.wf-frame.failed .wf-status { font-style: normal; }
 .wf-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; text-align: center; padding: 8px; }
+.wf-frame.failed .wf-status { font-size: 0; }
+.wf-frame.failed .wf-status::after { font-size: 11px; }
 .wf-foot { font-size: 10px; color: #94a3b8; margin-top: 3px; }
 /* Earthquake popups */
 .q-title { font-weight: 700; font-size: 15px; color: #b91c1c; margin-bottom: 2px; }
@@ -393,40 +393,10 @@ function hourStamp() {
   return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
 }
 
-// Load the pre-rendered last-hour PNG into an open station popup
-function loadWaveform(s, popup) {
-  var el = popup.getElement();
-  if (!el) return;
-  var frame = el.querySelector('.wf-frame[data-code="' + s.code + '"]');
-  if (!frame) return; // not a streaming station / no waveform block
-
-  var status = frame.querySelector('.wf-status');
-  var oldImg = frame.querySelector('img');
-  if (oldImg) oldImg.remove();
-  status.style.display = 'flex';
-  status.textContent = 'Loading last hour…';
-
-  var img = new Image();
-  img.alt = 'Last hour of ground motion at ' + s.code;
-  img.onload = function() {
-    status.style.display = 'none';
-    var existing = frame.querySelector('img');
-    if (existing) existing.remove();
-    frame.insertBefore(img, status);
-    var note = el.querySelector('.wf-foot[data-code="' + s.code + '"]');
-    if (note) {
-      var meta = (waveformManifest.stations || {})[s.code];
-      note.textContent = (meta && meta.channel ? meta.channel : 'S1.' + s.code)
-        + ' · last ' + WAVEFORM_MINUTES + ' min · vertical ground motion · source: AusPass'
-        + (waveformManifest.generated ? ' · updated ' + waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC') : '');
-    }
-    popup.update();
-  };
-  img.onerror = function() {
-    status.textContent = 'No waveform yet for this station (the hourly job builds one only while it is streaming).';
-  };
-  img.src = WAVEFORM_BASE + encodeURIComponent(s.code) + '.png?v=' + hourStamp();
-}
+// Waveform image is now embedded directly in the popup HTML (src preset),
+// so the browser loads it in place — no async DOM injection that Leaflet
+// can invalidate. Nothing to do on popup open.
+function loadWaveform(s, popup) { /* image loads itself; see buildPopupHtml */ }
 
 // ── Quake → station connector lines ──────────────────────────
 function clearQuakeLinks() {
@@ -480,15 +450,29 @@ function buildPopupHtml(s) {
     + '<div class="popup-row"><strong>Longitude:</strong> ' + s.lng.toFixed(4) + '</div>'
     + '<div class="popup-row"><strong>Elevation:</strong> ' + s.elevation.toFixed(0) + ' m</div>'
     + (streaming
-        ? '<div class="wf">'
-          + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span>'
-          + '<span class="wf-actions">'
-          + '<a href="#" class="wf-refresh" data-code="' + esc(s.code) + '">&#x21BB; refresh</a>'
-          + '<a href="https://auspass.edu.au/SeisComP/?net=S1&sta=' + esc(s.code) + '" target="_blank" rel="noopener">AusPass &#x2197;</a>'
-          + '</span></div>'
-          + '<div class="wf-frame" data-code="' + esc(s.code) + '"><div class="wf-status">Loading last hour…</div></div>'
-          + '<div class="wf-foot" data-code="' + esc(s.code) + '">Vertical ground motion · source: AusPass (updated hourly)</div>'
-          + '</div>'
+        ? (function() {
+            var meta = (waveformManifest.stations || {})[s.code];
+            var foot = (meta && meta.channel ? meta.channel : 'S1.' + s.code)
+              + ' · last ' + WAVEFORM_MINUTES + ' min · vertical ground motion · source: '
+              + ((waveformManifest.source) ? esc(waveformManifest.source) : 'AusPass')
+              + (waveformManifest.generated ? ' · updated ' + esc(waveformManifest.generated.replace('T', ' ').replace('Z', ' UTC')) : ' (updated hourly)');
+            var imgUrl = WAVEFORM_BASE + encodeURIComponent(s.code) + '.png?v=' + hourStamp();
+            return '<div class="wf">'
+              + '<div class="wf-head"><span class="wf-label">Waveform — last hour</span>'
+              + '<span class="wf-actions">'
+              + '<a href="' + imgUrl + '" target="_blank" rel="noopener">enlarge &#x2197;</a>'
+              + '<a href="https://auspass.edu.au/SeisComP/?net=S1&sta=' + esc(s.code) + '" target="_blank" rel="noopener">AusPass &#x2197;</a>'
+              + '</span></div>'
+              + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
+              + '<div class="wf-status">Loading last hour…</div>'
+              + '<img class="wf-img" alt="Last hour of ground motion at ' + esc(s.code) + '" '
+              + 'src="' + imgUrl + '" '
+              + 'onload="this.parentNode.classList.add(\'loaded\')" '
+              + 'onerror="this.parentNode.classList.add(\'failed\')">'
+              + '</div>'
+              + '<div class="wf-foot" data-code="' + esc(s.code) + '">' + foot + '</div>'
+              + '</div>';
+          })()
         : '');
 }
 
@@ -499,17 +483,8 @@ function addMarkers() {
     var icon = triangleIcon(size, stationStrokeColor(s));
     var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 470, minWidth: 240 }).addTo(map);
     m._station = s;
-    m.on('popupopen', function(e) { wireWaveformRefresh(s, e.popup); });
     s.marker = m;
   });
-}
-
-// Wire the "refresh" link inside a station popup
-function wireWaveformRefresh(s, popup) {
-  var el = popup.getElement();
-  if (!el) return;
-  var link = el.querySelector('.wf-refresh[data-code="' + s.code + '"]');
-  if (link) link.onclick = function(ev) { ev.preventDefault(); loadWaveform(s, popup); };
 }
 
 // Update existing markers in place — no remove/add, no flash
