@@ -4,6 +4,13 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
+
+  Enhancements:
+   - Click a streaming station to see its last hour of waveform data
+     (IRIS/EarthScope timeseriesplot service, vertical component).
+   - "Earthquakes" layer: recent earthquakes in the Australian region that
+     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
+     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -130,13 +137,14 @@ const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
 const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
 const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to draw dashed lines to
 
-// Earthquake layer settings (USGS FDSN event service — CORS-enabled)
-const QUAKE_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query';
-const QUAKE_BBOX = { minlat: -48, maxlat: -5, minlon: 108, maxlon: 162 }; // Australian region
-const QUAKE_DAYS = 30;            // look-back window
-const QUAKE_MIN_MAG = 2.5;        // minimum magnitude
-const QUAKE_REFRESH_MS = 5 * 60 * 1000; // auto-refresh every 5 min
-const SHOW_QUAKES_DEFAULT = true; // earthquakes layer on by default
+// Earthquake layer settings.
+// Data is the 6-month rolling store built hourly from Geoscience Australia
+// (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
+// no cross-origin call to GA from the browser.
+const QUAKE_STORE = 'data/earthquakes_6mo.geojson';
+const QUAKE_DISPLAY_DAYS = 30;          // how much of the store to plot
+const QUAKE_REFRESH_MS = 15 * 60 * 1000; // re-read the local store every 15 min
+const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 
 // ── State ─────────────────────────────────────────────────────
 let stations = [],
@@ -537,23 +545,20 @@ function quakeRadius(m) {
 
 async function fetchQuakes() {
   try {
-    var start = new Date(Date.now() - QUAKE_DAYS * 86400000);
-    var url = QUAKE_URL + '?format=geojson'
-      + '&starttime=' + isoUTC(start)
-      + '&minmagnitude=' + QUAKE_MIN_MAG
-      + '&minlatitude=' + QUAKE_BBOX.minlat + '&maxlatitude=' + QUAKE_BBOX.maxlat
-      + '&minlongitude=' + QUAKE_BBOX.minlon + '&maxlongitude=' + QUAKE_BBOX.maxlon
-      + '&orderby=time&limit=500';
-    var resp = await fetch(url);
-    if (!resp.ok) throw new Error('USGS returned HTTP ' + resp.status);
+    var resp = await fetch(QUAKE_STORE + '?v=' + hourStamp());
+    if (!resp.ok) throw new Error('quake store HTTP ' + resp.status);
     var gj = await resp.json();
+    var cutoff = Date.now() - QUAKE_DISPLAY_DAYS * 86400000;
     quakeData = (gj.features || []).filter(function(f) {
-      return f.geometry && f.geometry.coordinates && f.properties && f.properties.mag != null;
+      if (!f.geometry || !f.geometry.coordinates || !f.properties) return false;
+      if (f.properties.mag == null) return false;
+      var t = Date.parse(f.properties.time);
+      return !isNaN(t) && t >= cutoff;
     });
     renderQuakes();
     updateQuakeLegend();
   } catch (e) {
-    console.warn('Earthquake data fetch failed:', e);
+    console.warn('Earthquake store load failed:', e);
     updateQuakeLegend();
   }
 }
@@ -567,7 +572,7 @@ function nearestStations(lat, lng, n) {
 }
 
 function buildQuakePopup(f) {
-  var c = f.geometry.coordinates; // [lon, lat, depth]
+  var c = f.geometry.coordinates; // [lon, lat]
   var p = f.properties;
   var when = new Date(p.time);
   var near = nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
@@ -576,11 +581,16 @@ function buildQuakePopup(f) {
         return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
       }).join('<br>') + '</div>'
     : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>';
-  return '<div class="q-title">M ' + (p.mag != null ? p.mag.toFixed(1) : '?') + '</div>'
+  var magStr = (p.mag != null ? p.mag.toFixed(1) : '?')
+    + (p.magType ? ' ' + esc(p.magType) : '');
+  return '<div class="q-title">M ' + magStr + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
-    + '<div class="q-row"><strong>Depth:</strong> ' + (c[2] != null ? c[2].toFixed(0) + ' km' : 'n/a') + '</div>'
+    + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
+    + (p.inAU ? '<div class="q-row"><strong>In Australia:</strong> yes</div>' : '')
+    + (p.feltCount > 0 ? '<div class="q-row"><strong>Felt reports:</strong> ' + p.feltCount + '</div>' : '')
+    + '<div class="q-row" style="color:#94a3b8;font-size:11px">Source: ' + esc(p.source || 'GA') + '</div>'
     + nearHtml;
 }
 
@@ -590,7 +600,7 @@ function renderQuakes() {
   quakeData.forEach(function(f) {
     var c = f.geometry.coordinates;
     var m = f.properties.mag;
-    var ageDays = (Date.now() - f.properties.time) / 86400000;
+    var ageDays = (Date.now() - Date.parse(f.properties.time)) / 86400000;
     var marker = L.circleMarker([c[1], c[0]], {
       radius: quakeRadius(m),
       color: '#fff',
@@ -613,7 +623,7 @@ function updateQuakeLegend() {
   var el = document.getElementById('legend-quakes');
   var txt = document.getElementById('legend-quakes-text');
   el.classList.toggle('off', !quakesVisible);
-  txt.textContent = 'Earthquakes' + (quakeData.length ? ' (' + quakeData.length + ' / ' + QUAKE_DAYS + ' d)' : '');
+  txt.textContent = 'Earthquakes' + (quakeData.length ? ' (' + quakeData.length + ' / ' + QUAKE_DISPLAY_DAYS + ' d)' : '');
 }
 
 // Load hourly verified status from GitHub-hosted JSON
