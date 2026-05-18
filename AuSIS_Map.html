@@ -22,7 +22,19 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; }
 .header-logo img { height: 36px; }
 /* Map */
-#map { flex: 1; width: 100%; }
+#map { flex: 1; width: 100%; position: relative; }
+#fs-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 1000;
+  width: 34px; height: 34px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.92); border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 4px; cursor: pointer; color: #282572;
+}
+#fs-btn:hover { background: #fff; }
+#fs-btn svg { display: block; }
+:fullscreen #fs-btn .fs-open { display: none; }
+:fullscreen #fs-btn .fs-close { display: block; }
+#fs-btn .fs-close { display: none; }
 /* Popups */
 .leaflet-popup-content-wrapper { opacity: 0.85 !important; }
 .leaflet-popup-content { margin: 10px 14px !important; font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.6; }
@@ -59,6 +71,9 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-row strong { color: #374151; }
 .q-near { margin-top: 6px; font-size: 11px; color: #4b5563; }
 .q-near b { color: #282572; }
+.q-section { margin-top: 8px; }
+.q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
+.q-section-img { display: block; width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 4px; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
 /* Controls — hidden by default for clean map view */
@@ -109,7 +124,12 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="header-title"><span id="header-title">AuSIS Map</span></span>
   <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
 </div>
-<div id="map"></div>
+<div id="map">
+  <button id="fs-btn" type="button" title="Fullscreen" aria-label="Toggle fullscreen">
+    <svg class="fs-open" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5V2.5h4M16 6.5V2.5h-4M2 11.5v4h4M16 11.5v4h-4"/></svg>
+    <svg class="fs-close" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5v4H2M12 2.5v4h4M6 15.5v-4H2M12 15.5v-4h4"/></svg>
+  </button>
+</div>
 <div class="footer">
   <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
@@ -134,6 +154,9 @@ const WAVEFORM_REPO    = 'AuScope/AuScope_Outreach'; // owner/repo — VERIFY ex
 const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
+const EVENT_WF_BRANCH  = 'event-waveforms';        // branch holding event record sections
+const EVENT_WF_BASE    = 'https://raw.githubusercontent.com/'
+                       + WAVEFORM_REPO + '/' + EVENT_WF_BRANCH + '/';
 const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
 const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to draw dashed lines to
 
@@ -151,6 +174,7 @@ let stations = [],
     map = null,
     verifiedStatus = {},   // from ausis_status.json (hourly GitHub Action)
     waveformManifest = {}, // from waveforms branch: { generated, stations:{CODE:{...}} }
+    eventSections = {},    // from event-waveforms branch: { event_id: {...} }
     quakeLayer = null,
     quakeLinkLayer = null, // dashed connectors from an open quake to nearby stations
     quakeData = [],
@@ -412,6 +436,21 @@ async function fetchWaveformManifest() {
   }
 }
 
+// Event record-section manifest: { events: [ {event_id, stations:[...], ...} ] }
+// Indexed by event_id so a quake popup can show its section if one exists.
+async function fetchEventSections() {
+  try {
+    var resp = await fetch(EVENT_WF_BASE + 'manifest.json?v=' + hourStamp());
+    if (!resp.ok) return;
+    var m = await resp.json();
+    var byId = {};
+    (m.events || []).forEach(function(e) { byId[e.event_id] = e; });
+    eventSections = byId;
+  } catch (e) {
+    // event-waveforms branch may not exist yet — fine, popups just omit it.
+  }
+}
+
 // Cache-buster that changes once per UTC hour (matches the hourly job)
 function hourStamp() {
   return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
@@ -594,20 +633,34 @@ function buildQuakePopup(f) {
   var c = f.geometry.coordinates; // [lon, lat]
   var p = f.properties;
   var when = new Date(p.time);
-  var near = nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
-  var nearHtml = near.length
-    ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
-        return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
-      }).join('<br>') + '</div>'
-    : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>';
   var magStr = (p.mag != null ? p.mag.toFixed(1) : '?')
     + (p.magType ? ' ' + esc(p.magType) : '');
+  var section = (p.id && eventSections[p.id]) ? eventSections[p.id] : null;
+  var sectionHtml = section
+    ? '<div class="q-section">'
+      + '<div class="q-section-label">Recorded by AuSIS</div>'
+      + '<img class="q-section-img" loading="lazy" '
+      + 'alt="Record section for ' + esc(p.id) + '" '
+      + 'src="' + EVENT_WF_BASE + encodeURIComponent(p.id) + '.png?v=' + hourStamp() + '">'
+      + '</div>'
+    : '';
+  // The nearest-stations list is only shown when there is NO record section
+  // (the section already names the stations, better). Without a section it is
+  // the only AuSIS context, so it stays for remote / small / capped quakes.
+  var near = section ? [] : nearestStations(c[1], c[0], WAVEFORM_NEAR_LIST);
+  var nearHtml = section ? ''
+    : (near.length
+        ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
+            return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
+          }).join('<br>') + '</div>'
+        : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>');
   return '<div class="q-title">M ' + magStr + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
     + '<div class="q-row" style="color:#94a3b8;font-size:11px">Source: ' + esc(p.source || 'GA') + '</div>'
+    + sectionHtml
     + nearHtml;
 }
 
@@ -624,7 +677,7 @@ function renderQuakes() {
       weight: 1,
       fillColor: quakeColor(m),
       fillOpacity: ageDays < 1 ? 0.9 : 0.55
-    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 280 });
+    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 360, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
   });
@@ -682,7 +735,9 @@ document.getElementById('legend-quakes').onclick = function() {
 
 // Fetch waveform manifest + earthquakes in the background (independent of stations)
 fetchWaveformManifest();
+fetchEventSections();
 setInterval(fetchWaveformManifest, 15 * 60 * 1000); // refresh "as of" every 15 min
+setInterval(fetchEventSections, 15 * 60 * 1000);
 fetchQuakes();
 setInterval(fetchQuakes, QUAKE_REFRESH_MS);
 
@@ -723,6 +778,45 @@ loadVerifiedStatus().then(function() {
   console.warn('Live refresh failed, using backup data:', err);
   // Backup data already displayed - nothing else to do
 });
+
+// Fullscreen button: use the Fullscreen API where the parent iframe permits
+// it (allow="fullscreen"); otherwise open the map standalone in a new tab so
+// the button is never dead even inside a cross-origin iframe.
+(function() {
+  var btn = document.getElementById('fs-btn');
+  if (!btn) return;
+  var target = document.documentElement;
+
+  function fsElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+  function canFullscreen() {
+    return !!(target.requestFullscreen || target.webkitRequestFullscreen)
+      && (document.fullscreenEnabled !== false);
+  }
+  function openStandalone() {
+    // The map served directly (no iframe) renders full-window already.
+    window.open(window.location.href, '_blank', 'noopener');
+  }
+
+  btn.addEventListener('click', function() {
+    if (fsElement()) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      return;
+    }
+    if (!canFullscreen()) { openStandalone(); return; }
+    var req = target.requestFullscreen || target.webkitRequestFullscreen;
+    var p;
+    try { p = req.call(target); } catch (e) { openStandalone(); return; }
+    if (p && p.catch) { p.catch(function() { openStandalone(); }); }
+  });
+
+  document.addEventListener('fullscreenchange', function() {
+    btn.title = fsElement() ? 'Exit fullscreen' : 'Fullscreen';
+    if (window.map && map.invalidateSize) setTimeout(function() { map.invalidateSize(); }, 100);
+  });
+})();
+
 </script>
 </body>
 </html>
