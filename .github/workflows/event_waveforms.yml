@@ -1,0 +1,66 @@
+name: Event waveform sections
+
+# Renders one composite "record section" PNG per qualifying Australian-region
+# earthquake (nearest AuSIS stations, time-aligned so the wave is visibly
+# later at more distant stations). Reads data/earthquakes_24mo.geojson, so it
+# runs a little after the earthquake-store job. Render-once: only genuinely
+# new qualifying events are fetched each run.
+#
+# Published to a FORCE-PUSHED flat `event-waveforms` branch — one fresh commit
+# each run, history never accumulates.
+
+on:
+  schedule:
+    - cron: "40 */3 * * *"   # every 3 h, offset from waveforms/quakes jobs
+  workflow_dispatch:
+
+concurrency:
+  group: event-waveforms
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout (main, for the script + quake store)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install --quiet -r scripts/requirements.txt
+
+      - name: Restore existing event-waveforms (for render-once)
+        run: |
+          mkdir -p out
+          if git ls-remote --exit-code --heads origin event-waveforms >/dev/null 2>&1; then
+            git fetch -q origin event-waveforms
+            git --work-tree=out checkout origin/event-waveforms -- . 2>/dev/null || true
+            echo "Restored $(ls out/*.png 2>/dev/null | wc -l) existing section(s)."
+          else
+            echo "No event-waveforms branch yet — first run."
+          fi
+
+      - name: Render event sections
+        run: python scripts/render_event_waveforms.py
+
+      - name: Publish to flat-history `event-waveforms` branch
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b event-waveforms
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "event waveforms $(date -u +%FT%TZ)"
+          git push -f \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            event-waveforms
