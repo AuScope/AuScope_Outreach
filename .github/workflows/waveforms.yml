@@ -1,0 +1,52 @@
+name: Hourly AuSIS waveforms
+
+# Renders the last hour of ground motion for every streaming S1 station
+# (data from AusPass) and publishes the PNGs to the `waveforms` branch.
+#
+# The `waveforms` branch is FORCE-PUSHED with a single fresh commit every run,
+# so it never accumulates history — the repository footprint stays flat
+# (~1 MB total, forever) no matter how long this runs.
+
+on:
+  schedule:
+    - cron: "0 * * * *"      # top of every hour (UTC)
+  workflow_dispatch:          # allow manual runs for testing
+
+concurrency:
+  group: waveforms
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout (main, for the script)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet obspy matplotlib
+
+      - name: Render waveforms
+        run: python scripts/render_waveforms.py
+
+      - name: Publish to flat-history `waveforms` branch
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b waveforms
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "waveforms $(date -u +%FT%TZ)"
+          git push -f \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            waveforms
