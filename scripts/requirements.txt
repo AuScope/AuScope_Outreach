@@ -1,0 +1,4 @@
+# Pinned to major versions so an upstream breaking change can't silently
+# break the hourly waveform job. Bump deliberately when needed.
+obspy>=1.4,<2
+matplotlib>=3.8,<4
