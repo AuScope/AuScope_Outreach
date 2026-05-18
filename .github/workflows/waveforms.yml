@@ -31,9 +31,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install dependencies
-        run: pip install --quiet obspy matplotlib
+        run: pip install --quiet -r scripts/requirements.txt
 
       - name: Render waveforms
         run: python scripts/render_waveforms.py
