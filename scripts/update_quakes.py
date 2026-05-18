@@ -96,7 +96,6 @@ def normalise_ga(gj):
             "time": p.get("origin_time") or p.get("epicentral_time"),
             "depth": p.get("depth"),
             "inAU": in_au,
-            "feltCount": p.get("felt_reports_count") or 0,
             "source": p.get("source") or "GA",
             "modified": p.get("event_modification_time")
                         or p.get("event_creation_time")
@@ -134,7 +133,6 @@ def normalise_usgs(gj):
             "time": tiso,
             "depth": coords[2] if len(coords) > 2 else None,
             "inAU": in_au,
-            "feltCount": p.get("felt") or 0,
             "source": "USGS",
             "modified": miso,
         }))
