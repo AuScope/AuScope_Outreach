@@ -4,13 +4,6 @@
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
   Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
-
-  Enhancements:
-   - Click a streaming station to see its last hour of waveform data
-     (IRIS/EarthScope timeseriesplot service, vertical component).
-   - "Earthquakes" layer: recent earthquakes in the Australian region that
-     AuSIS stations record (USGS FDSN event service), toggled from the toolbar.
-     Each quake popup lists the nearest AuSIS stations that would have recorded it.
 -->
 <html lang="en">
 <head>
@@ -63,13 +56,6 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-near b { color: #282572; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
-/* Dashed quake→station connector labels */
-.leaflet-tooltip.q-link-label {
-  background: rgba(255,255,255,0.92); border: 1px solid #fecaca; color: #7f1d1d;
-  font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25); white-space: nowrap;
-}
-.leaflet-tooltip.q-link-label::before { display: none; }
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
@@ -421,10 +407,6 @@ function drawQuakeLinks(lat, lng) {
     var line = L.polyline([[lat, lng], [s.lat, s.lng]], {
       color: '#b91c1c', weight: 1.5, opacity: 0.8, dashArray: '4 6', interactive: false
     });
-    line.bindTooltip(
-      esc(s.name) + ' (S1.' + esc(s.code) + ') ~' + x.dist + ' km',
-      { permanent: true, direction: 'center', className: 'q-link-label', opacity: 0.95 }
-    );
     quakeLinkLayer.addLayer(line);
   });
 }
@@ -568,7 +550,7 @@ function buildQuakePopup(f) {
     ? '<div class="q-near"><b>Nearest AuSIS stations</b><br>' + near.map(function(x) {
         return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
       }).join('<br>') + '</div>'
-    : '';
+    : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>';
   return '<div class="q-title">M ' + (p.mag != null ? p.mag.toFixed(1) : '?') + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
@@ -590,7 +572,7 @@ function renderQuakes() {
       weight: 1,
       fillColor: quakeColor(m),
       fillOpacity: ageDays < 1 ? 0.9 : 0.55
-    }).bindPopup(buildQuakePopup(f), { maxWidth: 280 });
+    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 280 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
   });
