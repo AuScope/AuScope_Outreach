@@ -63,7 +63,10 @@ DISTANT_BP_HZ  = (0.02, 0.1)                     # band-pass (distant teleseisms
 VARIANTS       = ["raw", "local", "distant"]
 
 PLOT_W, PLOT_H = 5.0, 2.1                        # inches
-PLOT_DPI       = 96                              # ~480 x 200 px
+PLOT_DPI       = 192                             # 2x (~960px wide) so the
+                                                 # image stays sharp when the
+                                                 # map is enlarged; downscales
+                                                 # crisply in the small embed
 BRAND          = "#282572"                       # AuScope purple
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
