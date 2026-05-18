@@ -9,7 +9,7 @@ Each hour:
      (https://earthquakes.ga.gov.au/cache/recent-earthquakes.json — a rolling
      ~7-day GeoJSON FeatureCollection, GA-authoritative).
   2. Normalise each event to a small, source-agnostic shape.
-  3. MERGE into data/earthquakes_12mo.geojson keyed by event_id, keeping the
+  3. MERGE into data/earthquakes_24mo.geojson keyed by event_id, keeping the
      most-recently-modified version of each quake (GA revises magnitude /
      depth / review status over time).
   4. Prune anything older than RETENTION_DAYS by origin time.
@@ -35,8 +35,8 @@ USGS_URL = ("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
             "&minlatitude=-48&maxlatitude=-5&minlongitude=108&maxlongitude=162"
             "&orderby=time&limit=500")
 
-STORE_PATH     = "data/earthquakes_12mo.geojson"
-RETENTION_DAYS = 365                 # ~12 months
+STORE_PATH     = "data/earthquakes_24mo.geojson"
+RETENTION_DAYS = 730                 # ~24 months
 GLOBAL_MIN_MAG = 4.5                 # keep global quakes only if at least this
 TIMEOUT        = 60
 
