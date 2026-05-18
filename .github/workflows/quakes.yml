@@ -1,7 +1,7 @@
 name: Hourly earthquake store
 
 # Fetches Geoscience Australia's recent-earthquakes feed, merges it (by event
-# id, newest version wins) into a 12-month rolling store, and commits the
+# id, newest version wins) into a 6-month rolling store, and commits the
 # result to main. Kept separate from the waveforms workflow because this is a
 # normal commit to main, whereas waveforms force-pushes a flat orphan branch.
 
@@ -37,8 +37,8 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- data/earthquakes_12mo.geojson; then
-            git add data/earthquakes_12mo.geojson
+          if ! git diff --quiet -- data/earthquakes_24mo.geojson; then
+            git add data/earthquakes_24mo.geojson
             git commit -q -m "earthquake store $(date -u +%FT%TZ)"
             git push
           else
