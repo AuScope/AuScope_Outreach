@@ -281,12 +281,12 @@ function initMap() {
     });
   });
 
-  // Popup open: stations load their waveform; quakes draw links to nearby stations
+  // Popup open: quakes draw dashed links to nearby stations.
+  // Station waveforms need no JS here — the <img> is embedded in the popup
+  // HTML with its src preset, so the browser loads it in place.
   map.on('popupopen', function(e) {
     var src = e.popup && e.popup._source;
-    if (!src) return;
-    if (src._station) { loadWaveform(src._station, e.popup); }
-    else if (src._quake) { drawQuakeLinks(src._quake.lat, src._quake.lng); }
+    if (src && src._quake) drawQuakeLinks(src._quake.lat, src._quake.lng);
   });
   map.on('popupclose', function(e) {
     var src = e.popup && e.popup._source;
@@ -309,27 +309,27 @@ function formatDateTime(d) {
 }
 
 // ── Data fetching (live IRIS with local GeoJSON fallback) ────
-async function fetchStations() {
-  try {
-    var resp = await fetch(IRIS_BASE + '/fdsnws/station/1/query?network=S1&level=station&format=text');
-    if (!resp.ok) throw new Error('IRIS returned HTTP ' + resp.status);
-    var lines = (await resp.text()).trim().split('\n');
-    var out = [];
-    for (var i = 1; i < lines.length; i++) {
-      var p = lines[i].split('|');
-      if (p.length < 7) continue;
-      var code = p[1].trim();
-      if (code === 'TEST') continue;
-      var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-      if (isNaN(lat) || isNaN(lng)) continue;
-      var endRaw = p[7] ? p[7].trim() : '';
-      out.push({ code: code, lat: lat, lng: lng, elevation: parseFloat(p[4]), name: p[5].trim(), startTime: p[6].trim(), endTime: endRaw || null, latestData: null, marker: null });
-    }
-    return out;
-  } catch (e) {
-    console.warn('IRIS API failed, using local backup:', e);
-    return fetchStationsFromBackup();
+// Parse IRIS FDSN station text (level=station, pipe-delimited) into records.
+// Used by the live-refresh step; the same format is documented at
+// service.iris.edu/fdsnws/station/1/
+function parseStationText(text) {
+  var lines = text.trim().split('\n');
+  var out = [];
+  for (var i = 1; i < lines.length; i++) {
+    var p = lines[i].split('|');
+    if (p.length < 7) continue;
+    var code = p[1].trim();
+    if (code === 'TEST') continue;
+    var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
+    if (isNaN(lat) || isNaN(lng)) continue;
+    var endRaw = p[7] ? p[7].trim() : '';
+    out.push({
+      code: code, lat: lat, lng: lng,
+      elevation: parseFloat(p[4]), name: p[5].trim(),
+      startTime: p[6].trim(), endTime: endRaw || null
+    });
   }
+  return out;
 }
 
 async function fetchStationsFromBackup() {
@@ -386,11 +386,6 @@ async function fetchWaveformManifest() {
 function hourStamp() {
   return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
 }
-
-// Waveform image is now embedded directly in the popup HTML (src preset),
-// so the browser loads it in place — no async DOM injection that Leaflet
-// can invalidate. Nothing to do on popup open.
-function loadWaveform(s, popup) { /* image loads itself; see buildPopupHtml */ }
 
 // ── Quake → station connector lines ──────────────────────────
 function clearQuakeLinks() {
@@ -639,18 +634,9 @@ loadVerifiedStatus().then(function() {
       return resp.text();
     })
     .then(function(text) {
-      var lines = text.trim().split('\n');
-      // Build lookup of live data by station code
+      // Merge live IRIS data into existing stations (preserving markers)
       var liveByCode = {};
-      for (var i = 1; i < lines.length; i++) {
-        var p = lines[i].split('|');
-        if (p.length < 7) continue;
-        var code = p[1].trim();
-        if (code === 'TEST') continue;
-        var endRaw = p[7] ? p[7].trim() : '';
-        liveByCode[code] = { startTime: p[6].trim(), endTime: endRaw || null };
-      }
-      // Merge live data into existing stations (preserving markers)
+      parseStationText(text).forEach(function(r) { liveByCode[r.code] = r; });
       stations.forEach(function(s) {
         if (liveByCode[s.code]) {
           s.startTime = liveByCode[s.code].startTime;
