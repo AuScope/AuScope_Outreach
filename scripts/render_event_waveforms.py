@@ -7,18 +7,22 @@ For each qualifying Australian-region earthquake, renders ONE composite
 (S1) stations that have data, stacked nearest-to-furthest on a shared time
 axis so the wavefront is visibly later at more distant stations.
 
-Selection (from data/earthquakes_24mo.geojson):
-  - Australian region: GA inAU flag OR within a generous near-coast bbox
-  - magnitude >= MIN_MAG
-  - origin age between MIN_AGE_HOURS and MAX_AGE_DAYS
-    (data-latency floor + how far back to look)
+Selection (from data/earthquakes_24mo.geojson), two classes:
+  - LOCAL: Australian region (GA inAU flag OR near-coast bbox),
+    magnitude >= LOCAL_MIN_MAG. Nearby stations (<=1500 km), short window
+    (origin-5 .. origin+15), 1 Hz high-pass — sharp regional arrival.
+  - TELE : international, magnitude >= TELE_MIN_MAG. A big distant quake
+    whose long-period surface waves reach Australia. No distance cap, long
+    window (origin .. origin+60), 0.02-0.1 Hz band-pass. Threshold is high
+    on purpose: below ~M6.5 a teleseism is not visible on a school sensor.
+  - both: origin age between MIN_AGE_HOURS and MAX_AGE_DAYS.
 
 Per event:
-  - 10 nearest streaming stations are candidates
-  - ONE bulk FDSN request for the 40-min window (origin-10 .. origin+30)
+  - 10 nearest streaming stations are candidates (capped by mode)
+  - ONE bulk FDSN request for the mode's window
   - keep the 5 closest that returned usable data (fall-through is implicit);
     skip the event if fewer than MIN_TRACES have data
-  - response removed -> um/s, 1 Hz high-pass (local), one PNG per event
+  - response removed -> um/s, mode-appropriate filter, one PNG per event
 
 Render-once: a manifest on the event-waveforms branch lists rendered event
 ids. Only new qualifying events are fetched; revisions are NOT chased; events
@@ -47,37 +51,53 @@ from obspy.clients.fdsn import Client
 from obspy.clients.fdsn.header import FDSNNoDataException
 
 # ── Age window ───────────────────────────────────────────────
-# TESTING values (use recent events so you don't wait a day):
-MIN_AGE_HOURS = 1
+MIN_AGE_HOURS = 6
 MAX_AGE_DAYS  = 14
-# PRODUCTION values — switch to these before going live:
-#   MIN_AGE_HOURS = 24
-#   MAX_AGE_DAYS  = 14
 # (At a 1 h floor, expect many events to be skipped for missing data — that
-#  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 during testing if
+#  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 if
 #  too few events have complete data to validate the renderer.)
 
 # ── Selection ────────────────────────────────────────────────
 STORE_PATH   = "data/earthquakes_24mo.geojson"
-MIN_MAG      = 3.0
+
+# Two classes of event get a record section:
+#   LOCAL  — Australian region, magnitude >= LOCAL_MIN_MAG. Nearby school
+#            stations, short window, 1 Hz high-pass (sharp regional arrival).
+#   TELE   — anywhere else (international), magnitude >= TELE_MIN_MAG. A big
+#            distant quake whose long-period surface waves reach Australia.
+#            No distance cap, long window, long-period band-pass. Below ~M6.5
+#            a teleseism is not visible on a school sensor, so the threshold
+#            is high on purpose — do NOT lower it or sections become flat noise.
+LOCAL_MIN_MAG = 3.0
+TELE_MIN_MAG  = 6.5
 # Generous continental + near-coast bounding box (pragmatic stand-in for a
 # true 200 km-from-coastline buffer; combined with GA's regional focus this
 # captures onshore + near-offshore events without a coastline dataset).
 AU_BBOX      = {"minlat": -46.0, "maxlat": -8.0, "minlon": 110.0, "maxlon": 156.0}
 
-# ── Window & stations ────────────────────────────────────────
-PRE_MIN      = 5         # minutes of pre-roll before origin time
-POST_MIN     = 25        # minutes after origin time  (30-min total window)
+# ── Window & stations (per mode) ─────────────────────────────
+# LOCAL: origin-5 .. origin+15  (20-min window), stations within 1500 km,
+#        1 Hz high-pass.
+# TELE : origin .. origin+60    (surface waves arrive ~10-20 min later and
+#        ring for many minutes), NO distance cap, 0.02-0.1 Hz band-pass.
+LOCAL_PRE_MIN   = 5
+LOCAL_POST_MIN  = 15
+LOCAL_MAX_DIST  = 1500   # km cap for local events
+LOCAL_HP_HZ     = 1.0    # high-pass corner — emphasises regional arrivals
+
+TELE_PRE_MIN    = 0
+TELE_POST_MIN   = 60
+TELE_MAX_DIST   = None   # no cap — the whole point is "even from far away"
+TELE_BP_HZ      = (0.02, 0.1)  # long-period band-pass — teleseism surface waves
+
 N_CANDIDATES = 10        # nearest streaming stations considered per event
 N_KEEP       = 5         # stations drawn in the section
-MAX_DIST_KM  = 1500      # hard cap: a station further than this is never shown
 MIN_TRACES   = 2         # skip the event if fewer than this have data
 
 NETWORK      = "S1"
 CHANNEL_GLOB = "?HZ"
 CHANNEL_PREF = ["BHZ", "HHZ", "EHZ", "SHZ"]
 DATA_CENTRES = ["EARTHSCOPE"]
-LOCAL_HP_HZ  = 1.0       # high-pass corner — emphasises regional arrivals
 
 OUT_DIR      = "out"
 CLIENT_TIMEOUT = 180
@@ -87,7 +107,7 @@ BACKOFF_CAP    = 180
 
 PLOT_W       = 7.0
 ROW_H        = 0.95      # inches per station lane
-PLOT_DPI     = 96
+PLOT_DPI     = 192       # 2x so sections stay sharp when the map is enlarged
 BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
 
@@ -153,7 +173,9 @@ def in_region(props, lat, lon):
 
 
 def qualifying_events(now):
-    """Return [(event_id, origin_dt, lat, lon, mag, place)] meeting all rules."""
+    """Return [(event_id, origin_dt, lat, lon, mag, place, mode)] where mode
+    is 'local' (AU region, M>=LOCAL_MIN_MAG) or 'tele' (international,
+    M>=TELE_MIN_MAG)."""
     if not os.path.exists(STORE_PATH):
         print(f"No quake store at {STORE_PATH}")
         return []
@@ -169,18 +191,23 @@ def qualifying_events(now):
         if len(c) < 2 or p.get("mag") is None or p.get("id") is None:
             continue
         try:
-            if float(p["mag"]) < MIN_MAG:
-                continue
+            mag = float(p["mag"])
         except (TypeError, ValueError):
             continue
         t = iso(p.get("time"))
         if t is None or not (lo <= t <= hi):
             continue
         lon, lat = c[0], c[1]
-        if not in_region(p, lat, lon):
-            continue
-        out.append((p["id"], t, lat, lon, float(p["mag"]),
-                    p.get("place") or "Unknown location"))
+        if in_region(p, lat, lon):
+            if mag < LOCAL_MIN_MAG:
+                continue
+            mode = "local"
+        else:
+            if mag < TELE_MIN_MAG:
+                continue
+            mode = "tele"
+        out.append((p["id"], t, lat, lon, mag,
+                    p.get("place") or "Unknown location", mode))
     return out
 
 
@@ -226,20 +253,31 @@ def pick_channel(channels):
     return sorted(channels)[0] if channels else None
 
 
-def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, place):
-    """Fetch nearest candidates, keep best N_KEEP with data, render section."""
+def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
+                  mag, place, mode):
+    """Fetch nearest candidates, keep best N_KEEP with data, render section.
+    `mode` is 'local' or 'tele' and selects distance cap / window / filter."""
+    if mode == "tele":
+        max_dist = TELE_MAX_DIST
+        pre_min, post_min = TELE_PRE_MIN, TELE_POST_MIN
+    else:
+        max_dist = LOCAL_MAX_DIST
+        pre_min, post_min = LOCAL_PRE_MIN, LOCAL_POST_MIN
+
     ranked = sorted(
         ((code, haversine_km(ev_lat, ev_lon, v[0], v[1]))
          for code, v in sites.items()),
         key=lambda x: x[1],
     )
-    ranked = [(c, d) for c, d in ranked if d <= MAX_DIST_KM][:N_CANDIDATES]
+    if max_dist is not None:
+        ranked = [(c, d) for c, d in ranked if d <= max_dist]
+    ranked = ranked[:N_CANDIDATES]
     if not ranked:
         print(f"  {eid}: no candidate stations")
         return None
 
-    t1 = UTCDateTime(origin) - PRE_MIN * 60
-    t2 = UTCDateTime(origin) + POST_MIN * 60
+    t1 = UTCDateTime(origin) - pre_min * 60
+    t2 = UTCDateTime(origin) + post_min * 60
     bulk = [(NETWORK, code, "*", CHANNEL_GLOB, t1, t2) for code, _ in ranked]
     st = retrying(f"{eid} waveforms",
                   lambda: client.get_waveforms_bulk(bulk))
@@ -272,7 +310,12 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, pla
                                water_level=60, zero_mean=True,
                                taper=False, plot=False)
             tr.data = tr.data * 1.0e6
-            tr.filter("highpass", freq=LOCAL_HP_HZ, corners=4, zerophase=True)
+            if mode == "tele":
+                tr.filter("bandpass", freqmin=TELE_BP_HZ[0],
+                          freqmax=TELE_BP_HZ[1], corners=4, zerophase=True)
+            else:
+                tr.filter("highpass", freq=LOCAL_HP_HZ, corners=4,
+                          zerophase=True)
         except Exception as exc:
             print(f"  {eid}/{code}: response/filter failed ({short(exc)})")
             continue
@@ -286,20 +329,21 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon, mag, pla
         return None
 
     lanes.sort(key=lambda x: x[1])  # nearest -> furthest
-    render_section(eid, origin, mag, place, lanes,
+    render_section(eid, origin, mag, place, lanes, mode,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     return {
         "event_id": eid,
         "origin": origin.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "mag": mag,
         "place": place,
+        "mode": mode,
         "stations": [{"code": c, "dist_km": round(d), "channel": ch,
                        "site": nm}
                      for c, d, ch, _, nm in lanes],
     }
 
 
-def render_section(eid, origin, mag, place, lanes, out_path):
+def render_section(eid, origin, mag, place, lanes, mode, out_path):
     n = len(lanes)
     fig, axes = plt.subplots(n, 1, figsize=(PLOT_W, ROW_H * n + 0.8),
                              sharex=True, squeeze=False)
@@ -338,10 +382,16 @@ def render_section(eid, origin, mag, place, lanes, out_path):
     axes[-1].xaxis_date()
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[-1].tick_params(labelsize=8, length=2)
+    if mode == "tele":
+        sub = (f"\n{n} AuSIS stations  ·  red line = origin time"
+               f"  ·  long-period {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz "
+               f"band-pass (µm/s)  ·  distant earthquake")
+    else:
+        sub = (f"\nnearest {n} AuSIS stations  ·  red line = origin time"
+               f"  ·  {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
     axes[0].set_title(
         f"M{mag:.1f}  {place}  ·  {origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
-        f"\nnearest {n} AuSIS stations  ·  red line = origin time"
-        f"  ·  1 Hz high-pass (µm/s)",
+        + sub,
         fontsize=9, color="#333", pad=8,
     )
     fig.tight_layout(pad=0.5)
@@ -366,8 +416,11 @@ def main():
     now = datetime.now(timezone.utc)
 
     events = qualifying_events(now)
-    print(f"{len(events)} event(s) qualify "
-          f"(M>={MIN_MAG}, {MIN_AGE_HOURS}h–{MAX_AGE_DAYS}d, AU region)")
+    n_local = sum(1 for e in events if e[6] == "local")
+    n_tele = sum(1 for e in events if e[6] == "tele")
+    print(f"{len(events)} event(s) qualify — {n_local} local "
+          f"(AU, M>={LOCAL_MIN_MAG}), {n_tele} international "
+          f"(M>={TELE_MIN_MAG}); age {MIN_AGE_HOURS}h–{MAX_AGE_DAYS}d")
 
     # Render-once: keep already-rendered events whose PNG still exists and
     # which still fall inside the age window; only fetch genuinely new ones.
@@ -397,13 +450,13 @@ def main():
             print("ERROR: could not load S1 response metadata; aborting.")
             sys.exit(1)
 
-        for eid, origin, lat, lon, mag, place in todo:
+        for eid, origin, lat, lon, mag, place, mode in todo:
             try:
                 rec = process_event(client, resp_inv, sites, eid,
-                                     origin, lat, lon, mag, place)
+                                     origin, lat, lon, mag, place, mode)
                 if rec:
                     rendered[eid] = rec
-                    print(f"  {eid}: rendered "
+                    print(f"  {eid}: rendered [{mode}] "
                           f"({len(rec['stations'])} stations)")
             except Exception as exc:
                 print(f"  {eid}: error ({short(exc)})")
@@ -419,12 +472,20 @@ def main():
     manifest = {
         "generated": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "selection": {
-            "min_mag": MIN_MAG,
             "min_age_hours": MIN_AGE_HOURS,
             "max_age_days": MAX_AGE_DAYS,
-            "window_min": [-PRE_MIN, POST_MIN],
-            "max_dist_km": MAX_DIST_KM,
-            "filter": f"{LOCAL_HP_HZ:g} Hz high-pass",
+            "local": {
+                "min_mag": LOCAL_MIN_MAG,
+                "window_min": [-LOCAL_PRE_MIN, LOCAL_POST_MIN],
+                "max_dist_km": LOCAL_MAX_DIST,
+                "filter": f"{LOCAL_HP_HZ:g} Hz high-pass",
+            },
+            "tele": {
+                "min_mag": TELE_MIN_MAG,
+                "window_min": [-TELE_PRE_MIN, TELE_POST_MIN],
+                "max_dist_km": TELE_MAX_DIST,
+                "filter": f"{TELE_BP_HZ[0]:g}-{TELE_BP_HZ[1]:g} Hz band-pass",
+            },
         },
         "events": sorted(rendered.values(),
                          key=lambda e: e["origin"], reverse=True),
