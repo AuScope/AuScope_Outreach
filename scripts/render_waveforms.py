@@ -63,7 +63,10 @@ DISTANT_BP_HZ  = (0.02, 0.1)                     # band-pass (distant teleseisms
 VARIANTS       = ["raw", "local", "distant"]
 
 PLOT_W, PLOT_H = 5.0, 2.1                        # inches
-PLOT_DPI       = 96                              # ~480 x 200 px
+PLOT_DPI       = 192                             # 2x (~960px wide) so the
+                                                 # image stays sharp when the
+                                                 # map is enlarged; downscales
+                                                 # crisply in the small embed
 BRAND          = "#282572"                       # AuScope purple
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
@@ -273,6 +276,27 @@ def main():
 
     with open(os.path.join(OUT_DIR, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)
+
+    # Diagnostics: which S1 stations EarthScope knows about (from the response
+    # inventory we already fetched — no extra request) but that returned no
+    # usable data this run. Turns "got N" into "got N of M, missing: ...".
+    expected = set()
+    try:
+        for net in inv:
+            for sta in net:
+                expected.add(sta.code)
+    except Exception:
+        pass
+    rendered_codes = set(manifest["stations"].keys())
+    if expected:
+        missing = sorted(expected - rendered_codes)
+        print(f"Coverage: {len(rendered_codes)} rendered of "
+              f"{len(expected)} S1 stations known to {centre}.")
+        if missing:
+            print(f"  no data this run ({len(missing)}): {', '.join(missing)}")
+    else:
+        print(f"Coverage: {len(rendered_codes)} rendered "
+              f"(station inventory unavailable for a missing-list diff).")
 
     print(f"Done: {ok} stations rendered from {centre}.")
     if ok == 0:
