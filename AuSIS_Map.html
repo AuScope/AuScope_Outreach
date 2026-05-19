@@ -73,9 +73,30 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-near b { color: #282572; }
 .q-section { margin-top: 8px; }
 .q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
-.q-section-img { display: block; width: calc(100% + 28px); margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+.q-section-img { display: block; width: 360px; max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
 .q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
 .q-link:hover { text-decoration: underline; }
+
+/* Three size tiers, driven by the `medium` / `enlarged` classes the size
+   detector puts on #map. The Leaflet popup maxWidth option is raised (700)
+   so the larger tiers have room; CSS constrains content per tier. Source
+   PNGs are rendered at 2x DPI so even the large tier stays sharp.
+     compact  (embed ~644)         : 332 / 360   — unchanged baseline
+     medium   (small laptop)       : 424 / 452   — scaled middle step
+     large    (fullscreen/new-tab) : 509 / 531   — was 636/664, −20%        */
+.leaflet-popup-content { max-width: 332px; }                       /* compact */
+#map.medium   .leaflet-popup-content { max-width: 452px; }
+#map.medium   .wf            { width: 424px; }
+#map.medium   .q-section-img { width: 452px; }
+#map.enlarged .leaflet-popup-content { max-width: 531px; }
+#map.enlarged .wf            { width: 509px; }
+#map.enlarged .q-section-img { width: 531px; }
+@media (max-width: 700px) {       /* never exceed a small physical screen */
+  #map.medium .leaflet-popup-content,
+  #map.enlarged .leaflet-popup-content { max-width: 332px; }
+  #map.medium .wf, #map.enlarged .wf { width: 332px; }
+  #map.medium .q-section-img, #map.enlarged .q-section-img { width: 360px; }
+}
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
@@ -158,7 +179,7 @@ const EVENT_WF_BRANCH  = 'event-waveforms';        // branch holding event recor
 const EVENT_WF_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + EVENT_WF_BRANCH + '/';
 const WAVEFORM_NEAR_LIST  = 3;                     // # of nearest stations listed in a quake popup
-const WAVEFORM_NEAR_LINKS = 3;                     // # of nearest stations to draw dashed lines to
+const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to draw dashed lines to
 
 // Earthquake layer settings.
 // Data is the 24-month rolling store built hourly from Geoscience Australia
@@ -551,7 +572,7 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 360, minWidth: 240 }).addTo(map);
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 700, minWidth: 240 }).addTo(map);
     m._station = s;
     s.marker = m;
   });
@@ -676,7 +697,7 @@ function renderQuakes() {
       weight: 1,
       fillColor: quakeColor(m),
       fillOpacity: ageDays < 1 ? 0.9 : 0.55
-    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 400, minWidth: 360 });
+    }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 700, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
   });
@@ -814,6 +835,63 @@ loadVerifiedStatus().then(function() {
     btn.title = fsElement() ? 'Exit fullscreen' : 'Fullscreen';
     if (window.map && map.invalidateSize) setTimeout(function() { map.invalidateSize(); }, 100);
   });
+})();
+
+// Size tier: when the map is wide (true fullscreen, the new-tab fallback, OR
+// just a large desktop embed) add an `enlarged` class so CSS can show the
+// waveform images at ~2x. Size-based, not fullscreen-based, so it works on
+// the live iframe site where the Fullscreen API is blocked. Hysteresis (two
+// thresholds) stops flicker when the width sits near the boundary.
+(function() {
+  var el = document.getElementById('map');
+  if (!el) return;
+  // Three tiers with hysteresis bands so width near a boundary doesn't flicker:
+  //   compact  : < ~720         (the ~644 embed lives here)
+  //   medium   : ~770 – ~1100   (small laptop / partial window)
+  //   large    : > ~1150        (fullscreen / new-tab / big desktop)
+  var MED_UP = 770, MED_DN = 720, LG_UP = 1150, LG_DN = 1080;
+  var tier = 'compact';
+
+  function pick(w) {
+    if (tier === 'compact') {
+      if (w >= LG_UP) return 'large';
+      if (w >= MED_UP) return 'medium';
+    } else if (tier === 'medium') {
+      if (w >= LG_UP) return 'large';
+      if (w < MED_DN) return 'compact';
+    } else { // large
+      if (w < MED_DN) return 'compact';
+      if (w < LG_DN) return 'medium';
+    }
+    return tier;
+  }
+
+  function apply() {
+    var w = el.clientWidth || 0;
+    var next = pick(w);
+    if (next === tier) return;            // no tier change
+    tier = next;
+    el.classList.toggle('medium',   tier === 'medium');
+    el.classList.toggle('enlarged', tier === 'large');
+    // Re-open the active popup so Leaflet recomputes its width at the new tier
+    if (window.map && map._popup && map._popup.isOpen()) {
+      var p = map._popup;
+      if (p._source && p._source.openPopup) {
+        map.closePopup(p);
+        setTimeout(function() { p._source.openPopup(); }, 60);
+      }
+    }
+  }
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(apply).observe(el);
+  } else {
+    window.addEventListener('resize', apply);
+  }
+  document.addEventListener('fullscreenchange', function() {
+    setTimeout(apply, 150);
+  });
+  apply();
 })();
 
 </script>
