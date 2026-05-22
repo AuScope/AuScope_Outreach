@@ -3,14 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>National Virtual Core Library — AuScope</title>
-
-  <!--
-    Font stack: prefer Calibre (sans) and Karmina (serif) if loaded by the
-    parent page; fall back to Arial / Georgia (system fonts, universal).
-    No external font loading — keeps the iframe lightweight and avoids
-    licensing issues with commercial typefaces.
-  -->
+  <title>National Virtual Core Library - AuScope</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -101,9 +94,12 @@
       opacity: 0.85;
     }
     .auscope-watermark img {
-      height: 32px;
+      height: 64px;
       width: auto;
       display: block;
+      image-rendering: auto;
+      image-rendering: high-quality;
+      image-rendering: smooth;
     }
 
     /* When the page container is in fullscreen, fill the screen and let
@@ -114,18 +110,75 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
+      padding: 24px 32px 16px;
+      box-sizing: border-box;
     }
     .page:fullscreen .map-wrap { flex: 1; }
     .page:fullscreen #map { height: 100%; }
+
+    /* Bigger stats in fullscreen */
+    .page:fullscreen .stats { margin-bottom: 14px; }
+    .page:fullscreen .stat   { padding: 16px 24px; }
+    .page:fullscreen .stat-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .page:fullscreen .stat-value { font-size: 32px; }
+    .page:fullscreen .stat-unit  { font-size: 15px; margin-left: 5px; }
+
+    /* Centred, larger legend in fullscreen */
+    .page:fullscreen .legend {
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    .page:fullscreen .legend-title { font-size: 11px; letter-spacing: 0.14em; }
+    .page:fullscreen .legend-dot { width: 12px; height: 12px; }
+
+    /* Bigger controls in fullscreen */
+    .page:fullscreen .controls { padding: 14px 20px; gap: 18px; }
+    .page:fullscreen .play-btn { width: 42px; height: 42px; }
+    .page:fullscreen .play-btn svg { width: 14px; height: 14px; }
+    .page:fullscreen .time-label { font-size: 22px; min-width: 140px; }
+    .page:fullscreen .speed-toggle button {
+      height: 32px; padding: 0 14px; font-size: 11px;
+    }
+
+    /* Bigger footer in fullscreen */
+    .page:fullscreen .footer { padding: 14px 20px; font-size: 13px; }
+
+    /* WebKit prefixed copy — Safari + older Chromium needs this since
+       :fullscreen and :-webkit-full-screen can't be combined in one selector */
     .page:-webkit-full-screen {
       background: var(--bg);
       width: 100vw;
       height: 100vh;
       display: flex;
       flex-direction: column;
+      padding: 24px 32px 16px;
+      box-sizing: border-box;
     }
     .page:-webkit-full-screen .map-wrap { flex: 1; }
     .page:-webkit-full-screen #map { height: 100%; }
+    .page:-webkit-full-screen .stats { margin-bottom: 14px; }
+    .page:-webkit-full-screen .stat   { padding: 16px 24px; }
+    .page:-webkit-full-screen .stat-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .page:-webkit-full-screen .stat-value { font-size: 32px; }
+    .page:-webkit-full-screen .stat-unit  { font-size: 15px; margin-left: 5px; }
+    .page:-webkit-full-screen .legend {
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    .page:-webkit-full-screen .legend-title { font-size: 11px; letter-spacing: 0.14em; }
+    .page:-webkit-full-screen .legend-dot { width: 12px; height: 12px; }
+    .page:-webkit-full-screen .controls { padding: 14px 20px; gap: 18px; }
+    .page:-webkit-full-screen .play-btn { width: 42px; height: 42px; }
+    .page:-webkit-full-screen .play-btn svg { width: 14px; height: 14px; }
+    .page:-webkit-full-screen .time-label { font-size: 22px; min-width: 140px; }
+    .page:-webkit-full-screen .speed-toggle button {
+      height: 32px; padding: 0 14px; font-size: 11px;
+    }
+    .page:-webkit-full-screen .footer { padding: 14px 20px; font-size: 13px; }
 
     .page {
       max-width: 1180px;
@@ -161,11 +214,14 @@
     .stat-value {
       font-family: 'Karmina', Georgia, serif;
       font-size: 19px;
-      font-weight: 500;
+      font-weight: 400;
       line-height: 1;
       color: var(--navy);
-      letter-spacing: -0.01em;
+      letter-spacing: 0;
       white-space: nowrap;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
     .stat-unit {
       font-family: 'Calibre', Arial, sans-serif;
@@ -197,15 +253,15 @@
       z-index: 400;
     }
     .callout-line {
-      stroke: var(--navy);
-      stroke-width: 1;
+      stroke: #a63d40;
+      stroke-width: 1.5;
       opacity: 0;
       transition: opacity 600ms ease;
       stroke-dasharray: 4 3;
     }
-    .callout-line.visible { opacity: 0.55; }
+    .callout-line.visible { opacity: 0.8; }
     .callout-dot {
-      fill: var(--teal-deep);
+      fill: #a63d40;
       opacity: 0;
       transition: opacity 600ms ease;
     }
@@ -232,18 +288,27 @@
       pointer-events: auto;
     }
     .facility-logo.visible { opacity: 1; }
+    .facility-logo.visible.zoomed-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .callout-line.visible.zoomed-hidden { opacity: 0; }
+    .callout-dot.visible.zoomed-hidden { opacity: 0; }
     .facility-logo img {
-      height: 29px;
+      height: 35px;
       width: auto;
       display: block;
+      image-rendering: auto;
+      image-rendering: high-quality;
+      image-rendering: smooth;
     }
     /* Per-facility size overrides */
-    .facility-logo[data-state="NSW"] img   { height: 42px; }
-    .facility-logo[data-state="TAS"] img   { height: 42px; }
-    .facility-logo[data-state="CSIRO"] img { height: 42px; }
-    .facility-logo[data-state="WA"] img    { height: 42px; }
+    .facility-logo[data-state="NSW"] img   { height: 51px; }
+    .facility-logo[data-state="TAS"] img   { height: 51px; }
+    .facility-logo[data-state="CSIRO"] img { height: 51px; }
+    .facility-logo[data-state="WA"] img    { height: 51px; }
     /* QLD logo is trimmed — wide aspect, constrain by width instead of height */
-    .facility-logo[data-state="QLD"] img   { height: auto; width: 83px; }
+    .facility-logo[data-state="QLD"] img   { height: auto; width: 100px; }
 
     /* ─── Legend ─────────────────────────── */
 
@@ -251,6 +316,7 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
       gap: 14px;
       font-size: 11px;
       color: var(--fg-muted);
@@ -339,12 +405,15 @@
     .time-label {
       font-family: 'Karmina', Georgia, serif;
       font-size: 16px;
-      font-weight: 500;
+      font-weight: 400;
       color: var(--navy);
       min-width: 100px;
       text-align: right;
       line-height: 1;
-      letter-spacing: -0.01em;
+      letter-spacing: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     .speed-toggle {
@@ -505,8 +574,9 @@
   </div>
 
   <footer class="footer">
-    Locations from State and Territory NVCL WFS endpoints. Scan dates from CSIRO-developed TSG metadata
-    (TAS, SA), <a href="https://www.dmirs.wa.gov.au">GSWA</a>'s <em>Hylogger Drillholes</em> shapefile (WA),
+    Locations from State and Territory NVCL WFS endpoints. Scan dates from TSG metadata
+    at <a href="https://thredds.nci.org.au">NCI THREDDS</a>,
+    <a href="https://www.dmirs.wa.gov.au">GSWA</a>'s <em>Hylogger Drillholes</em> shapefile (WA),
     <a href="https://geoscience.nt.gov.au">NTGS</a>'s GEMIS register (NT), and NVCL <code>createdDate</code>
     otherwise.
     <span id="generated"></span>
@@ -558,11 +628,11 @@
     // Adelaide — west, line drops at ~15° below horizontal
     { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX: -110, offsetY: 30 },
     // Darwin — west of the city, horizontal line
-    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.jpg',    offsetX: -110, offsetY: 0 },
+    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -140, offsetY: 0 },
     // East coast
-    { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.jpg',   offsetX:   55, offsetY: 0 },
-    { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -80 },
-    { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.jpg',   offsetX:   80, offsetY: -30 },
+    { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.png',   offsetX:   55, offsetY: 0 },
+    { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -130 },
+    { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30 },
   ];
 
   let boreholes = [], timeline = [], summary = {};
@@ -646,10 +716,15 @@
 
     function onFsChange() {
       icon.innerHTML = isFs() ? compressIcon : expandIcon;
-      // Leaflet needs to recompute its size after the container resizes
+      // Leaflet needs to recompute its size after the container resizes;
+      // then re-fit to Australia bounds for the new viewport. The offset
+      // scaling in repositionFacilities will adapt to the new zoom level.
       setTimeout(() => {
-        if (map) map.invalidateSize();
-        if (typeof repositionFacilities === 'function') repositionFacilities();
+        if (!map) return;
+        map.invalidateSize();
+        const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
+        map.fitBounds(ausBounds, { padding: [4, 4], animate: false });
+        repositionFacilities();
       }, 100);
     }
     document.addEventListener('fullscreenchange', onFsChange);
@@ -716,12 +791,35 @@
     window.addEventListener('resize', resize);
   }
 
+  let initialHomeZoom = null;  // captured once at startup
+
   function repositionFacilities() {
+    // Capture the initial fit-to-Australia zoom on first call. This is the
+    // baseline for our offset scaling — at this zoom we use the FACILITIES
+    // offsets as authored. At higher zooms (e.g. going to fullscreen, or
+    // user zoom-in) we scale the offsets up so logos stay anchored in
+    // geographic space rather than pixel space.
+    if (initialHomeZoom === null) {
+      initialHomeZoom = map.getZoom();
+    }
+    const currentZoom = map.getZoom();
+
+    // Each Leaflet zoom level doubles the pixel resolution, so the offset
+    // multiplier doubles with each level above the initial home zoom.
+    const offsetScale = Math.pow(2, currentZoom - initialHomeZoom);
+
+    // Hide once zoomed more than 2 levels past the initial home zoom —
+    // drill-hole detail wins.
+    const zoomedIn = currentZoom > initialHomeZoom + 2;
+
+    // DIAGNOSTIC — remove once tuning is finished
+    console.log(`zoom=${currentZoom}, initial=${initialHomeZoom}, scale=${offsetScale.toFixed(2)}, hidden=${zoomedIn}`);
+
     for (const [state, els] of facilityEls.entries()) {
       const f = els.conf;
       const pt = map.latLngToContainerPoint([f.lat, f.lng]);
-      const logoX = pt.x + f.offsetX;
-      const logoY = pt.y + f.offsetY;
+      const logoX = pt.x + f.offsetX * offsetScale;
+      const logoY = pt.y + f.offsetY * offsetScale;
       els.div.style.left = logoX + 'px';
       els.div.style.top = logoY + 'px';
       els.line.setAttribute('x1', pt.x);
@@ -730,6 +828,10 @@
       els.line.setAttribute('y2', logoY);
       els.dot.setAttribute('cx', pt.x);
       els.dot.setAttribute('cy', pt.y);
+
+      els.div.classList.toggle('zoomed-hidden', zoomedIn);
+      els.line.classList.toggle('zoomed-hidden', zoomedIn);
+      els.dot.classList.toggle('zoomed-hidden', zoomedIn);
     }
   }
 
