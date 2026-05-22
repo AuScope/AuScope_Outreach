@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>National Virtual Core Library — AuScope</title>
+
+  <!--
+    Font stack: prefer Calibre (sans) and Karmina (serif) if loaded by the
+    parent page; fall back to Arial / Georgia (system fonts, universal).
+    No external font loading — keeps the iframe lightweight and avoids
+    licensing issues with commercial typefaces.
+  -->
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+  <style>
+    :root {
+      --navy:        #282572;
+      --navy-deep:   #1a1850;
+      --teal:        #59c2aa;
+      --teal-deep:   #3ea88f;
+      --white:       #ffffff;
+      --grey:        #d8d9d7;
+      --grey-pale:   #f0f0ee;
+      --black:       #231f20;
+
+      --fg:          var(--black);
+      --fg-muted:    #5a575e;
+      --fg-faint:    #8e8b92;
+      --bg:          var(--white);
+      --bg-soft:     #faf9f8;
+      --border:      rgba(35,31,32,0.10);
+      --border-strong: rgba(35,31,32,0.22);
+
+      --v1: #b5b3d4;
+      --v2: #6f6cb0;
+      --v3: var(--navy);
+      --v4: var(--navy-deep);
+      --v6: var(--teal-deep);
+      --vUnknown: var(--grey);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Calibre', Arial, system-ui, sans-serif;
+      font-size: 15px; line-height: 1.55;
+      color: var(--fg);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fullscreen button — top-right corner of the map */
+    .fullscreen-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 600;
+      width: 30px; height: 30px;
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 2px 6px rgba(35,31,32,0.10);
+      transition: background 160ms ease, opacity 160ms ease;
+      opacity: 0.5;
+    }
+    .fullscreen-btn:hover {
+      background: var(--grey-pale);
+      opacity: 1;
+    }
+    .fullscreen-btn svg {
+      width: 16px; height: 16px;
+      fill: none;
+      stroke: var(--navy);
+      stroke-width: 2;
+    }
+
+    /* Leaflet zoom controls — semi-transparent, full opacity on hover */
+    .leaflet-control-zoom {
+      opacity: 0.5;
+      transition: opacity 160ms ease;
+    }
+    .leaflet-control-zoom:hover { opacity: 1; }
+
+    /* AuScope logo — bottom-left corner of map */
+    .auscope-watermark {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 600;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .auscope-watermark img {
+      height: 64px;
+      width: auto;
+      display: block;
+      image-rendering: auto;
+      image-rendering: high-quality;
+      image-rendering: smooth;
+    }
+
+    /* When the page container is in fullscreen, fill the screen and let
+       the map expand to take all available height. */
+    .page:fullscreen {
+      background: var(--bg);
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 32px 16px;
+      box-sizing: border-box;
+    }
+    .page:fullscreen .map-wrap { flex: 1; }
+    .page:fullscreen #map { height: 100%; }
+
+    /* Bigger stats in fullscreen */
+    .page:fullscreen .stats { margin-bottom: 14px; }
+    .page:fullscreen .stat   { padding: 16px 24px; }
+    .page:fullscreen .stat-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .page:fullscreen .stat-value { font-size: 32px; }
+    .page:fullscreen .stat-unit  { font-size: 15px; margin-left: 5px; }
+
+    /* Centred, larger legend in fullscreen */
+    .page:fullscreen .legend {
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    .page:fullscreen .legend-title { font-size: 11px; letter-spacing: 0.14em; }
+    .page:fullscreen .legend-dot { width: 12px; height: 12px; }
+
+    /* Bigger controls in fullscreen */
+    .page:fullscreen .controls { padding: 14px 20px; gap: 18px; }
+    .page:fullscreen .play-btn { width: 42px; height: 42px; }
+    .page:fullscreen .play-btn svg { width: 14px; height: 14px; }
+    .page:fullscreen .time-label { font-size: 22px; min-width: 140px; }
+    .page:fullscreen .speed-toggle button {
+      height: 32px; padding: 0 14px; font-size: 11px;
+    }
+
+    /* Bigger footer in fullscreen */
+    .page:fullscreen .footer { padding: 14px 20px; font-size: 13px; }
+
+    /* WebKit prefixed copy — Safari + older Chromium needs this since
+       :fullscreen and :-webkit-full-screen can't be combined in one selector */
+    .page:-webkit-full-screen {
+      background: var(--bg);
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 32px 16px;
+      box-sizing: border-box;
+    }
+    .page:-webkit-full-screen .map-wrap { flex: 1; }
+    .page:-webkit-full-screen #map { height: 100%; }
+    .page:-webkit-full-screen .stats { margin-bottom: 14px; }
+    .page:-webkit-full-screen .stat   { padding: 16px 24px; }
+    .page:-webkit-full-screen .stat-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .page:-webkit-full-screen .stat-value { font-size: 32px; }
+    .page:-webkit-full-screen .stat-unit  { font-size: 15px; margin-left: 5px; }
+    .page:-webkit-full-screen .legend {
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    .page:-webkit-full-screen .legend-title { font-size: 11px; letter-spacing: 0.14em; }
+    .page:-webkit-full-screen .legend-dot { width: 12px; height: 12px; }
+    .page:-webkit-full-screen .controls { padding: 14px 20px; gap: 18px; }
+    .page:-webkit-full-screen .play-btn { width: 42px; height: 42px; }
+    .page:-webkit-full-screen .play-btn svg { width: 14px; height: 14px; }
+    .page:-webkit-full-screen .time-label { font-size: 22px; min-width: 140px; }
+    .page:-webkit-full-screen .speed-toggle button {
+      height: 32px; padding: 0 14px; font-size: 11px;
+    }
+    .page:-webkit-full-screen .footer { padding: 14px 20px; font-size: 13px; }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    /* ─── Stats strip ────────────────────── */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--navy);
+      border-bottom: 1px solid var(--border);
+      margin: 0 0 8px;
+    }
+
+    .stat {
+      padding: 8px 10px;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-label {
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-size: 8px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-family: 'Karmina', Georgia, serif;
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: 0;
+      white-space: nowrap;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    .stat-unit {
+      font-family: 'Calibre', Arial, sans-serif;
+      font-size: 11px;
+      color: var(--fg-muted);
+      font-weight: 400;
+      margin-left: 3px;
+    }
+
+    /* ─── Map ─────────────────────────────── */
+
+    .map-wrap {
+      position: relative;
+      margin-bottom: 0;
+      overflow: hidden;
+    }
+    #map {
+      height: 480px;
+      width: 100%;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-bottom: none;
+    }
+
+    .callouts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 400;
+    }
+    .callout-line {
+      stroke: #a63d40;
+      stroke-width: 1.5;
+      opacity: 0;
+      transition: opacity 600ms ease;
+      stroke-dasharray: 4 3;
+    }
+    .callout-line.visible { opacity: 0.8; }
+    .callout-dot {
+      fill: #a63d40;
+      opacity: 0;
+      transition: opacity 600ms ease;
+    }
+    .callout-dot.visible { opacity: 1; }
+
+    .facility-logos {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 500;
+    }
+    .facility-logo {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      padding: 3px 5px;
+      border-radius: 2px;
+      box-shadow: 0 2px 10px rgba(35,31,32,0.10);
+      opacity: 0;
+      transition: opacity 700ms ease;
+      display: flex;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .facility-logo.visible { opacity: 1; }
+    .facility-logo.visible.zoomed-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .callout-line.visible.zoomed-hidden { opacity: 0; }
+    .callout-dot.visible.zoomed-hidden { opacity: 0; }
+    .facility-logo img {
+      height: 35px;
+      width: auto;
+      display: block;
+      image-rendering: auto;
+      image-rendering: high-quality;
+      image-rendering: smooth;
+    }
+    /* Per-facility size overrides */
+    .facility-logo[data-state="NSW"] img   { height: 51px; }
+    .facility-logo[data-state="TAS"] img   { height: 51px; }
+    .facility-logo[data-state="CSIRO"] img { height: 51px; }
+    .facility-logo[data-state="WA"] img    { height: 51px; }
+    .facility-logo[data-state="SA"] img    { height: 32px; }
+    .facility-logo[data-state="NT"] img    { height: 32px; }
+    /* QLD logo is trimmed — wide aspect, constrain by width instead of height */
+    .facility-logo[data-state="QLD"] img   { height: auto; width: 100px; }
+
+    /* ─── Legend ─────────────────────────── */
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--fg-muted);
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .legend-title {
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      font-weight: 500;
+    }
+    .legend-swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      border: 1px solid rgba(35,31,32,0.18);
+    }
+
+    /* ─── Timeline controls ───────────────── */
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .play-btn {
+      width: 32px; height: 32px;
+      border: 1px solid var(--navy);
+      background: var(--navy);
+      color: var(--white);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+      transition: background 180ms ease;
+      border-radius: 0;
+    }
+    .play-btn:hover { background: var(--navy-deep); }
+    .play-btn:active { transform: scale(0.96); }
+    .play-btn svg { width: 12px; height: 12px; fill: currentColor; }
+
+    #time-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 3px;
+      background: linear-gradient(
+        to right,
+        var(--teal) 0%, var(--teal) var(--progress, 0%),
+        var(--grey) var(--progress, 0%), var(--grey) 100%
+      );
+      outline: none;
+      border-radius: 2px;
+    }
+    #time-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px; height: 14px;
+      background: var(--navy);
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 1px var(--navy);
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    #time-slider::-moz-range-thumb {
+      width: 14px; height: 14px;
+      background: var(--navy);
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 1px var(--navy);
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .time-label {
+      font-family: 'Karmina', Georgia, serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--navy);
+      min-width: 100px;
+      text-align: right;
+      line-height: 1;
+      letter-spacing: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    .speed-toggle {
+      display: flex;
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+    }
+    .speed-toggle button {
+      border: 0;
+      background: var(--bg);
+      padding: 0 9px;
+      height: 24px;
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--fg-muted);
+      border-right: 1px solid var(--border);
+      transition: background 160ms ease;
+    }
+    .speed-toggle button:last-child { border-right: 0; }
+    .speed-toggle button:hover { background: var(--grey-pale); }
+    .speed-toggle button.active {
+      background: var(--teal);
+      color: var(--white);
+    }
+
+    /* ─── Footer ─────────────────────────── */
+
+    .footer {
+      padding: 8px 12px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--fg-muted);
+      line-height: 1.5;
+    }
+    .footer a {
+      color: var(--navy);
+      text-decoration: none;
+      border-bottom: 1px solid var(--teal);
+      padding-bottom: 1px;
+      transition: color 160ms ease;
+    }
+    .footer a:hover { color: var(--teal-deep); }
+    .footer code {
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-size: 10px;
+      background: var(--grey-pale);
+      padding: 1px 4px;
+      border-radius: 2px;
+      color: var(--navy);
+    }
+
+    /* ─── Leaflet popup override ─────────── */
+    .leaflet-popup-content-wrapper {
+      border-radius: 2px;
+      font-family: 'Calibre', Arial, sans-serif;
+      box-shadow: 0 2px 12px rgba(35,31,32,0.18);
+      border: 1px solid var(--border-strong);
+    }
+    .leaflet-popup-content { margin: 12px 16px; font-size: 13px; }
+    .leaflet-popup-tip { background: var(--white); }
+    .popup-title {
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .popup-row {
+      color: var(--fg-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .popup-row strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+    .leaflet-control-attribution {
+      background: rgba(255,255,255,0.85);
+      font-size: 10px;
+      font-family: 'Calibre', Arial, sans-serif;
+      opacity: 0.7;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .stats, .map-wrap, .legend, .controls, .footer {
+      animation: fadeIn 480ms ease-out backwards;
+    }
+    .map-wrap { animation-delay: 80ms; }
+    .legend { animation-delay: 140ms; }
+    .controls { animation-delay: 200ms; }
+    .footer { animation-delay: 260ms; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <section class="stats" id="stats">
+    <div class="stat">
+      <div class="stat-label">As of</div>
+      <div class="stat-value" id="stat-date">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Drill cores scanned</div>
+      <div class="stat-value" id="stat-cores">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total length</div>
+      <div class="stat-value" id="stat-km">—<span class="stat-unit">km</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Active facilities</div>
+      <div class="stat-value" id="stat-nodes">—</div>
+    </div>
+  </section>
+
+  <section class="map-wrap">
+    <div id="map" role="application" aria-label="Map of Australian drill cores scanned by the NVCL"></div>
+    <svg class="callouts" id="callouts" aria-hidden="true"></svg>
+    <div class="facility-logos" id="facility-logos"></div>
+    <div class="auscope-watermark" aria-hidden="true">
+      <img src="assets/2025_AuScope_Logo_Icon-Colour.png" alt="">
+    </div>
+    <button id="fullscreen-btn" class="fullscreen-btn" aria-label="Toggle fullscreen" title="Fullscreen">
+      <svg id="fullscreen-icon" viewBox="0 0 20 20" aria-hidden="true">
+        <polyline points="3,8 3,3 8,3" />
+        <polyline points="12,3 17,3 17,8" />
+        <polyline points="17,12 17,17 12,17" />
+        <polyline points="8,17 3,17 3,12" />
+      </svg>
+    </button>
+  </section>
+
+  <div class="legend">
+    <span class="legend-title">HyLogger version:</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v1);"></span>HyLogger 1</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v2);"></span>HyLogger 2</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v3);"></span>HyLogger 3</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v4);"></span>HyLogger 4</span>
+  </div>
+
+  <div class="controls">
+    <button id="play-btn" class="play-btn" aria-label="Play timeline">
+      <svg viewBox="0 0 14 14" id="play-icon"><polygon points="2,1 13,7 2,13"/></svg>
+    </button>
+    <input type="range" id="time-slider" min="0" max="100" step="1" value="100"
+           aria-label="Timeline scrubber">
+    <span class="time-label" id="time-label">—</span>
+    <div class="speed-toggle" role="group" aria-label="Animation speed">
+      <button data-speed="200">Slow</button>
+      <button data-speed="80" class="active">Normal</button>
+      <button data-speed="30">Fast</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Locations from State and Territory NVCL WFS endpoints. Scan dates from TSG metadata
+    at <a href="https://thredds.nci.org.au">NCI THREDDS</a>,
+    <a href="https://www.dmirs.wa.gov.au">GSWA</a>'s <em>Hylogger Drillholes</em> shapefile (WA),
+    <a href="https://geoscience.nt.gov.au">NTGS</a>'s GEMIS register (NT), and NVCL <code>createdDate</code>
+    otherwise.
+    <span id="generated"></span>
+  </footer>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script>
+(function() {
+
+  const VCOLOR = {
+    1: getCss('--v1'), 2: getCss('--v2'), 3: getCss('--v3'),
+    4: getCss('--v4'), 6: getCss('--v6'),
+    null: getCss('--vUnknown'), undefined: getCss('--vUnknown'),
+  };
+  function getCss(varname) {
+    return getComputedStyle(document.documentElement).getPropertyValue(varname).trim();
+  }
+
+  const NUM = new Intl.NumberFormat('en-AU');
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtMonth(m) {
+    if (!m) return '—';
+    const [y, mo] = m.split('-');
+    return MONTHS[parseInt(mo,10)-1] + ' ' + y;
+  }
+
+  // Facility metadata
+  //
+  // Gating: by default a facility's logo appears when its first borehole
+  // record reaches the timeline cursor. WA is the exception — its early
+  // records (2003 Lake Magenta etc.) were scanned on CSIRO's prototype
+  // before GSWA had its own machine. WA uses onlineMonth instead, gated
+  // to July 2009 when GSWA's HyLogger was installed at Carlisle.
+  //
+  // CSIRO has alwaysOn = true because it's the originating facility.
+  //
+  // offsetX/Y are pixel offsets from the capital city marker to the
+  // centre of the logo badge.
+  const FACILITIES = [
+    { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 95, alwaysOn: true },
+    { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -65, offsetY: 0, onlineMonth: '2009-07' },
+    { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX:  -80, offsetY: 40 },
+    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -155, offsetY: 0 },
+    { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.png',   offsetX:   55, offsetY: 0 },
+    { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -130 },
+    { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30 },
+  ];
+
+  let boreholes = [], timeline = [], summary = {};
+  let firstSeenByState = {};
+
+  Promise.all([
+    fetch('data/map_boreholes.json').then(r => r.json()),
+    fetch('data/map_timeline.json').then(r => r.json()),
+    fetch('data/map_summary.json').then(r => r.json()),
+  ]).then(([b, t, s]) => {
+    boreholes = b; timeline = t; summary = s;
+    computeFacilityFirstSeen();
+    init();
+  }).catch(err => {
+    document.getElementById('map').innerHTML =
+      '<div style="padding:24px; color: var(--fg-muted);">Could not load data files. ' +
+      'Run <code>prep_my_data.py</code> first.</div>';
+    console.error(err);
+  });
+
+  function computeFacilityFirstSeen() {
+    for (const b of boreholes) {
+      if (!b.month || !b.state) continue;
+      const k = b.state;
+      if (!(k in firstSeenByState) || b.month < firstSeenByState[k]) {
+        firstSeenByState[k] = b.month;
+      }
+    }
+  }
+
+  let map, markerLayer;
+  let currentIdx = 0;
+  let playing = false;
+  let playTimer = null;
+  let speed = 80;
+  const facilityEls = new Map();
+
+  function init() {
+    initMap();
+    initFacilityOverlay();
+    initTimeline();
+    initFullscreen();
+    render();
+    const gen = summary.generated || '';
+    if (gen) {
+      document.getElementById('generated').textContent = ' Last updated ' + gen.slice(0, 10) + '.';
+    }
+  }
+
+  function initFullscreen() {
+    const btn = document.getElementById('fullscreen-btn');
+    const icon = document.getElementById('fullscreen-icon');
+    const page = document.querySelector('.page');
+
+    // Expand-corners icon (default state — not in fullscreen)
+    const expandIcon = `
+      <polyline points="3,8 3,3 8,3" />
+      <polyline points="12,3 17,3 17,8" />
+      <polyline points="17,12 17,17 12,17" />
+      <polyline points="8,17 3,17 3,12" />`;
+    // Compress-corners icon (when IN fullscreen)
+    const compressIcon = `
+      <polyline points="8,3 8,8 3,8" />
+      <polyline points="12,8 17,8 17,3" />
+      <polyline points="17,12 12,12 12,17" />
+      <polyline points="3,12 8,12 8,17" />`;
+
+    function isFs() {
+      return document.fullscreenElement || document.webkitFullscreenElement;
+    }
+
+    btn.addEventListener('click', () => {
+      if (!isFs()) {
+        const req = page.requestFullscreen || page.webkitRequestFullscreen;
+        if (req) req.call(page).catch(err => console.warn('Fullscreen request failed:', err));
+      } else {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) exit.call(document);
+      }
+    });
+
+    function onFsChange() {
+      icon.innerHTML = isFs() ? compressIcon : expandIcon;
+      // Leaflet needs to recompute its size after the container resizes;
+      // then re-fit to Australia bounds for the new viewport. The offset
+      // scaling in repositionFacilities will adapt to the new zoom level.
+      setTimeout(() => {
+        if (!map) return;
+        map.invalidateSize();
+        const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
+        map.fitBounds(ausBounds, { padding: [4, 4], animate: false });
+        repositionFacilities();
+      }, 100);
+    }
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+  }
+
+  function initMap() {
+    map = L.map('map', {
+      zoomControl: true,
+      attributionControl: true,
+      preferCanvas: true,
+      worldCopyJump: false,
+      maxZoom: 11,
+      minZoom: 3,
+    });
+
+    // Tight Australia bounding box — covers mainland + Tas, no surrounding ocean
+    const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
+    map.fitBounds(ausBounds, { padding: [4, 4] });
+    map.setMaxBounds(ausBounds.pad(0.5));
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap, &copy; CARTO',
+      maxZoom: 12,
+    }).addTo(map);
+
+    markerLayer = L.layerGroup().addTo(map);
+  }
+
+  function initFacilityOverlay() {
+    const logosContainer = document.getElementById('facility-logos');
+    const svg = document.getElementById('callouts');
+    const mapEl = document.getElementById('map');
+    svg.setAttribute('width', mapEl.clientWidth);
+    svg.setAttribute('height', mapEl.clientHeight);
+
+    for (const f of FACILITIES) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'callout-line');
+      svg.appendChild(line);
+
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('class', 'callout-dot');
+      dot.setAttribute('r', '3.5');
+      svg.appendChild(dot);
+
+      const div = document.createElement('div');
+      div.className = 'facility-logo';
+      div.setAttribute('data-state', f.state);
+      div.innerHTML = `<img src="${f.logo}" alt="" onerror="this.style.display='none'">`;
+      logosContainer.appendChild(div);
+
+      facilityEls.set(f.state, { div, line, dot, conf: f });
+    }
+
+    repositionFacilities();
+
+    const resize = () => {
+      svg.setAttribute('width', mapEl.clientWidth);
+      svg.setAttribute('height', mapEl.clientHeight);
+      repositionFacilities();
+    };
+    map.on('move zoom resize zoomend moveend', resize);
+    window.addEventListener('resize', resize);
+  }
+
+  let initialHomeZoom = null;  // captured once at startup
+
+  function repositionFacilities() {
+    // Capture the initial fit-to-Australia zoom on first call. This is the
+    // baseline for our offset scaling — at this zoom we use the FACILITIES
+    // offsets as authored. At higher zooms (e.g. going to fullscreen, or
+    // user zoom-in) we scale the offsets up so logos stay anchored in
+    // geographic space rather than pixel space.
+    if (initialHomeZoom === null) {
+      initialHomeZoom = map.getZoom();
+    }
+    const currentZoom = map.getZoom();
+
+    // Each Leaflet zoom level doubles the pixel resolution, so the offset
+    // multiplier doubles with each level above the initial home zoom.
+    const offsetScale = Math.pow(2, currentZoom - initialHomeZoom);
+
+    // Hide once zoomed more than 2 levels past the initial home zoom —
+    // drill-hole detail wins.
+    const zoomedIn = currentZoom > initialHomeZoom + 2;
+
+    // DIAGNOSTIC — remove once tuning is finished
+    console.log(`zoom=${currentZoom}, initial=${initialHomeZoom}, scale=${offsetScale.toFixed(2)}, hidden=${zoomedIn}`);
+
+    for (const [state, els] of facilityEls.entries()) {
+      const f = els.conf;
+      const pt = map.latLngToContainerPoint([f.lat, f.lng]);
+      const logoX = pt.x + f.offsetX * offsetScale;
+      const logoY = pt.y + f.offsetY * offsetScale;
+      els.div.style.left = logoX + 'px';
+      els.div.style.top = logoY + 'px';
+      els.line.setAttribute('x1', pt.x);
+      els.line.setAttribute('y1', pt.y);
+      els.line.setAttribute('x2', logoX);
+      els.line.setAttribute('y2', logoY);
+      els.dot.setAttribute('cx', pt.x);
+      els.dot.setAttribute('cy', pt.y);
+
+      els.div.classList.toggle('zoomed-hidden', zoomedIn);
+      els.line.classList.toggle('zoomed-hidden', zoomedIn);
+      els.dot.classList.toggle('zoomed-hidden', zoomedIn);
+    }
+  }
+
+  function updateFacilityVisibility(currentMonth) {
+    for (const [state, els] of facilityEls.entries()) {
+      const f = els.conf;
+      // alwaysOn (CSIRO) > explicit onlineMonth (WA) > data-derived first-seen (everyone else)
+      const gate = f.onlineMonth || firstSeenByState[state];
+      const visible = f.alwaysOn || (gate && currentMonth >= gate);
+      els.div.classList.toggle('visible', visible);
+      els.line.classList.toggle('visible', visible);
+      els.dot.classList.toggle('visible', visible);
+    }
+  }
+
+  function dotRadius() {
+    const z = map.getZoom();
+    if (z <= 3) return 2;
+    if (z === 4) return 3;
+    if (z === 5) return 4;
+    if (z === 6) return 5;
+    return 6;
+  }
+
+  function popupHtml(b) {
+    let v;
+    if (b.v) {
+      v = 'HyLogger ' + b.v;
+    } else if (b.instrument_label) {
+      v = b.instrument_label;
+    } else {
+      v = 'Instrument unknown';
+    }
+    const depth = b.depth_m != null ? NUM.format(Math.round(b.depth_m)) + ' m scanned' : 'depth unknown';
+    const scans = b.n_datasets > 1 ? ` &middot; ${b.n_datasets} scans` : '';
+    return `
+      <div class="popup-title">${b.name || b.id}</div>
+      <div class="popup-row"><strong>${b.state}</strong> &middot; ${fmtMonth(b.month)}</div>
+      <div class="popup-row">${v} &middot; ${depth}${scans}</div>
+    `;
+  }
+
+  function render() {
+    if (!boreholes.length || !timeline.length) return;
+    const t = timeline[currentIdx];
+    const upToMonth = t.month;
+    // Defensive: HyLogger didn't exist before 2002, so reject anything earlier
+    // even if upstream date-processing has a bug. Belt-and-braces with
+    // prepare_map_data.py's own filter.
+    const visible = boreholes.filter(b => b.month && b.month >= '2002' && b.month <= upToMonth);
+
+    markerLayer.clearLayers();
+    const r = dotRadius();
+    for (const b of visible) {
+      const m = L.circleMarker([b.lat, b.lng], {
+        radius: r,
+        fillColor: VCOLOR[b.v] || VCOLOR.null,
+        color: '#ffffff',
+        weight: 0.6,
+        fillOpacity: 0.82,
+      });
+      m.bindPopup(popupHtml(b));
+      m.addTo(markerLayer);
+    }
+
+    document.getElementById('stat-date').textContent = fmtMonth(t.month);
+    document.getElementById('stat-cores').textContent = NUM.format(t.cum_boreholes);
+    document.getElementById('stat-km').innerHTML = NUM.format(Math.round(t.cum_km)) + '<span class="stat-unit">km</span>';
+    document.getElementById('stat-nodes').textContent = activeFacilityCount(upToMonth);
+    document.getElementById('time-label').textContent = fmtMonth(t.month);
+
+    const slider = document.getElementById('time-slider');
+    const pct = (currentIdx / Math.max(1, timeline.length - 1)) * 100;
+    slider.style.setProperty('--progress', pct + '%');
+
+    updateFacilityVisibility(upToMonth);
+  }
+
+  function activeFacilityCount(upToMonth) {
+    let n = 0;
+    for (const f of FACILITIES) {
+      if (f.alwaysOn) { n++; continue; }
+      const gate = f.onlineMonth || firstSeenByState[f.state];
+      if (gate && gate <= upToMonth) n++;
+    }
+    return n;
+  }
+
+  function initTimeline() {
+    const slider = document.getElementById('time-slider');
+    slider.min = 0;
+    slider.max = timeline.length - 1;
+    slider.value = timeline.length - 1;
+    currentIdx = timeline.length - 1;
+
+    slider.addEventListener('input', e => {
+      currentIdx = +e.target.value;
+      if (playing) togglePlay();
+      render();
+    });
+
+    document.getElementById('play-btn').addEventListener('click', togglePlay);
+
+    document.querySelectorAll('.speed-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.speed-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        speed = +btn.dataset.speed;
+        if (playing) { stopTimer(); startTimer(); }
+      });
+    });
+
+    map.on('zoomend', () => {
+      const r = dotRadius();
+      markerLayer.eachLayer(m => m.setRadius(r));
+    });
+  }
+
+  function togglePlay() {
+    playing = !playing;
+    const btn = document.getElementById('play-btn');
+    const icon = document.getElementById('play-icon');
+    if (playing) {
+      btn.setAttribute('aria-label', 'Pause timeline');
+      icon.innerHTML = '<rect x="2" y="1.5" width="3.5" height="11"/><rect x="8.5" y="1.5" width="3.5" height="11"/>';
+      if (currentIdx >= timeline.length - 1) currentIdx = 0;
+      startTimer();
+    } else {
+      btn.setAttribute('aria-label', 'Play timeline');
+      icon.innerHTML = '<polygon points="2,1 13,7 2,13"/>';
+      stopTimer();
+    }
+  }
+
+  function startTimer() {
+    playTimer = setInterval(() => {
+      currentIdx++;
+      if (currentIdx >= timeline.length - 1) {
+        currentIdx = timeline.length - 1;
+        togglePlay();
+      }
+      document.getElementById('time-slider').value = currentIdx;
+      render();
+    }, speed);
+  }
+
+  function stopTimer() {
+    if (playTimer) { clearInterval(playTimer); playTimer = null; }
+  }
+
+  // Expose a small public API for external automation (e.g. Playwright
+  // GIF capture). Read-only access to map state + a programmatic stepper.
+  window.NVCL = {
+    get map() { return map; },
+    get timeline() { return timeline; },
+    get boreholes() { return boreholes; },
+    get currentIndex() { return currentIdx; },
+    setTimelineIndex(i) {
+      if (playing) togglePlay();
+      currentIdx = Math.max(0, Math.min(timeline.length - 1, i | 0));
+      document.getElementById('time-slider').value = currentIdx;
+      render();
+    },
+  };
+
+})();
+</script>
+
+</body>
+</html>
