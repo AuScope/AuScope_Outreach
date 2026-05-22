@@ -1,0 +1,233 @@
+{
+  "generated": "2026-05-22T01:21:37.079539+00:00",
+  "total_datasets": 6442,
+  "total_boreholes": 6281,
+  "total_km_scanned": 1742.6,
+  "participating_nodes": [
+    "CSIRO",
+    "NSW",
+    "NT",
+    "QLD",
+    "SA",
+    "TAS",
+    "VIC",
+    "WA"
+  ],
+  "participating_node_count": 8,
+  "non_participating": [],
+  "non_participating_borehole_count": 0,
+  "date_range": {
+    "earliest": "2003-09",
+    "latest": "2026-05"
+  },
+  "rescan_stats": {
+    "boreholes_rescanned": 141,
+    "max_scans_one_borehole": 4
+  },
+  "tir_stats": {
+    "tir_datasets": 5658,
+    "tir_pct": 88.4
+  },
+  "by_version": {
+    "HyLogger 1": 278,
+    "HyLogger 2": 463,
+    "HyLogger 3": 5133,
+    "HyLogger 4": 26
+  },
+  "by_state": [
+    {
+      "state": "WA",
+      "boreholes": 1878,
+      "datasets": 1987,
+      "km_scanned": 601.3
+    },
+    {
+      "state": "SA",
+      "boreholes": 1820,
+      "datasets": 1829,
+      "km_scanned": 427.2
+    },
+    {
+      "state": "NSW",
+      "boreholes": 1224,
+      "datasets": 1230,
+      "km_scanned": 285.1
+    },
+    {
+      "state": "NT",
+      "boreholes": 423,
+      "datasets": 433,
+      "km_scanned": 177.0
+    },
+    {
+      "state": "TAS",
+      "boreholes": 482,
+      "datasets": 490,
+      "km_scanned": 139.8
+    },
+    {
+      "state": "QLD",
+      "boreholes": 423,
+      "datasets": 429,
+      "km_scanned": 111.9
+    },
+    {
+      "state": "CSIRO",
+      "boreholes": 5,
+      "datasets": 5,
+      "km_scanned": 0.2
+    },
+    {
+      "state": "VIC",
+      "boreholes": 29,
+      "datasets": 39,
+      "km_scanned": 0.0
+    }
+  ],
+  "tir_by_year": [
+    {
+      "year": 2003,
+      "total": 47,
+      "tir": 0,
+      "tir_pct": 0.0
+    },
+    {
+      "year": 2004,
+      "total": 62,
+      "tir": 2,
+      "tir_pct": 3.2
+    },
+    {
+      "year": 2005,
+      "total": 72,
+      "tir": 0,
+      "tir_pct": 0.0
+    },
+    {
+      "year": 2006,
+      "total": 3,
+      "tir": 0,
+      "tir_pct": 0.0
+    },
+    {
+      "year": 2007,
+      "total": 21,
+      "tir": 1,
+      "tir_pct": 4.8
+    },
+    {
+      "year": 2008,
+      "total": 14,
+      "tir": 0,
+      "tir_pct": 0.0
+    },
+    {
+      "year": 2009,
+      "total": 29,
+      "tir": 0,
+      "tir_pct": 0.0
+    },
+    {
+      "year": 2010,
+      "total": 122,
+      "tir": 18,
+      "tir_pct": 14.8
+    },
+    {
+      "year": 2011,
+      "total": 176,
+      "tir": 121,
+      "tir_pct": 68.8
+    },
+    {
+      "year": 2012,
+      "total": 181,
+      "tir": 176,
+      "tir_pct": 97.2
+    },
+    {
+      "year": 2013,
+      "total": 270,
+      "tir": 241,
+      "tir_pct": 89.3
+    },
+    {
+      "year": 2014,
+      "total": 319,
+      "tir": 287,
+      "tir_pct": 90.0
+    },
+    {
+      "year": 2015,
+      "total": 400,
+      "tir": 332,
+      "tir_pct": 83.0
+    },
+    {
+      "year": 2016,
+      "total": 303,
+      "tir": 298,
+      "tir_pct": 98.3
+    },
+    {
+      "year": 2017,
+      "total": 377,
+      "tir": 357,
+      "tir_pct": 94.7
+    },
+    {
+      "year": 2018,
+      "total": 473,
+      "tir": 459,
+      "tir_pct": 97.0
+    },
+    {
+      "year": 2019,
+      "total": 649,
+      "tir": 526,
+      "tir_pct": 81.0
+    },
+    {
+      "year": 2020,
+      "total": 587,
+      "tir": 546,
+      "tir_pct": 93.0
+    },
+    {
+      "year": 2021,
+      "total": 407,
+      "tir": 407,
+      "tir_pct": 100.0
+    },
+    {
+      "year": 2022,
+      "total": 589,
+      "tir": 572,
+      "tir_pct": 97.1
+    },
+    {
+      "year": 2023,
+      "total": 418,
+      "tir": 418,
+      "tir_pct": 100.0
+    },
+    {
+      "year": 2024,
+      "total": 379,
+      "tir": 374,
+      "tir_pct": 98.7
+    },
+    {
+      "year": 2025,
+      "total": 483,
+      "tir": 462,
+      "tir_pct": 95.7
+    },
+    {
+      "year": 2026,
+      "total": 54,
+      "tir": 54,
+      "tir_pct": 100.0
+    }
+  ]
+}
