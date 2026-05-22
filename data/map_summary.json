@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-22T01:21:37.079539+00:00",
+  "generated": "2026-05-22T04:24:39.599879+00:00",
   "total_datasets": 6442,
   "total_boreholes": 6281,
   "total_km_scanned": 1742.6,
@@ -123,110 +123,110 @@
     },
     {
       "year": 2009,
-      "total": 29,
+      "total": 57,
       "tir": 0,
       "tir_pct": 0.0
     },
     {
       "year": 2010,
-      "total": 122,
+      "total": 172,
       "tir": 18,
-      "tir_pct": 14.8
+      "tir_pct": 10.5
     },
     {
       "year": 2011,
-      "total": 176,
-      "tir": 121,
-      "tir_pct": 68.8
+      "total": 195,
+      "tir": 128,
+      "tir_pct": 65.6
     },
     {
       "year": 2012,
-      "total": 181,
-      "tir": 176,
-      "tir_pct": 97.2
+      "total": 195,
+      "tir": 189,
+      "tir_pct": 96.9
     },
     {
       "year": 2013,
-      "total": 270,
-      "tir": 241,
-      "tir_pct": 89.3
+      "total": 256,
+      "tir": 251,
+      "tir_pct": 98.0
     },
     {
       "year": 2014,
-      "total": 319,
-      "tir": 287,
-      "tir_pct": 90.0
+      "total": 333,
+      "tir": 301,
+      "tir_pct": 90.4
     },
     {
       "year": 2015,
-      "total": 400,
-      "tir": 332,
-      "tir_pct": 83.0
+      "total": 393,
+      "tir": 356,
+      "tir_pct": 90.6
     },
     {
       "year": 2016,
-      "total": 303,
-      "tir": 298,
-      "tir_pct": 98.3
+      "total": 334,
+      "tir": 329,
+      "tir_pct": 98.5
     },
     {
       "year": 2017,
-      "total": 377,
-      "tir": 357,
-      "tir_pct": 94.7
+      "total": 395,
+      "tir": 375,
+      "tir_pct": 94.9
     },
     {
       "year": 2018,
-      "total": 473,
-      "tir": 459,
-      "tir_pct": 97.0
+      "total": 507,
+      "tir": 493,
+      "tir_pct": 97.2
     },
     {
       "year": 2019,
-      "total": 649,
-      "tir": 526,
-      "tir_pct": 81.0
+      "total": 654,
+      "tir": 531,
+      "tir_pct": 81.2
     },
     {
       "year": 2020,
-      "total": 587,
-      "tir": 546,
-      "tir_pct": 93.0
+      "total": 434,
+      "tir": 431,
+      "tir_pct": 99.3
     },
     {
       "year": 2021,
-      "total": 407,
-      "tir": 407,
+      "total": 463,
+      "tir": 463,
       "tir_pct": 100.0
     },
     {
       "year": 2022,
-      "total": 589,
-      "tir": 572,
-      "tir_pct": 97.1
+      "total": 537,
+      "tir": 520,
+      "tir_pct": 96.8
     },
     {
       "year": 2023,
-      "total": 418,
-      "tir": 418,
+      "total": 446,
+      "tir": 446,
       "tir_pct": 100.0
     },
     {
       "year": 2024,
-      "total": 379,
-      "tir": 374,
-      "tir_pct": 98.7
+      "total": 420,
+      "tir": 413,
+      "tir_pct": 98.3
     },
     {
       "year": 2025,
-      "total": 483,
-      "tir": 462,
-      "tir_pct": 95.7
+      "total": 373,
+      "tir": 352,
+      "tir_pct": 94.4
     },
     {
       "year": 2026,
-      "total": 54,
-      "tir": 54,
+      "total": 52,
+      "tir": 52,
       "tir_pct": 100.0
     }
   ]
