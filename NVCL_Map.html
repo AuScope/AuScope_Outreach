@@ -116,32 +116,25 @@
       border-bottom: 1px solid var(--border);
       margin: 0 0 8px;
     }
-    @media (max-width: 720px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-    }
 
     .stat {
-      padding: 8px 12px;
+      padding: 8px 10px;
       border-right: 1px solid var(--border);
       background: var(--bg);
     }
     .stat:last-child { border-right: none; }
-    @media (max-width: 720px) {
-      .stat:nth-child(2) { border-right: none; }
-      .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--border); }
-    }
 
     .stat-label {
       font-family: 'SF Mono', Consolas, 'Courier New', monospace;
-      font-size: 9px;
-      letter-spacing: 0.12em;
+      font-size: 8px;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
       color: var(--fg-faint);
       margin-bottom: 4px;
     }
     .stat-value {
       font-family: 'Karmina', Georgia, serif;
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 500;
       line-height: 1;
       color: var(--navy);
@@ -150,7 +143,7 @@
     }
     .stat-unit {
       font-family: 'Calibre', Arial, sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--fg-muted);
       font-weight: 400;
       margin-left: 3px;
@@ -163,7 +156,7 @@
       margin-bottom: 0;
     }
     #map {
-      height: 580px;
+      height: 480px;
       width: 100%;
       background: var(--bg-soft);
       border: 1px solid var(--border);
@@ -641,7 +634,12 @@
       worldCopyJump: false,
       maxZoom: 11,
       minZoom: 3,
-    }).setView([-28, 134], 4);
+    });
+
+    // Tight Australia bounding box — covers mainland + Tas, no surrounding ocean
+    const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
+    map.fitBounds(ausBounds, { padding: [4, 4] });
+    map.setMaxBounds(ausBounds.pad(0.5));
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap, &copy; CARTO',
