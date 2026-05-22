@@ -180,6 +180,7 @@
     .map-wrap {
       position: relative;
       margin-bottom: 0;
+      overflow: hidden;
     }
     #map {
       height: 480px;
@@ -552,15 +553,15 @@
   // pointing down; others sit horizontally beside the capital.
   const FACILITIES = [
     // Perth — CSIRO drops south, WA sits west closer to coast
-    { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 70, alwaysOn: true },
-    { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -90, offsetY: 0, onlineMonth: '2009-07' },
+    { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 95, alwaysOn: true },
+    { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -65, offsetY: 0, onlineMonth: '2009-07' },
     // Adelaide — west, line drops at ~15° below horizontal
     { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX: -110, offsetY: 30 },
     // Darwin — west of the city, horizontal line
     { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.jpg',    offsetX: -110, offsetY: 0 },
     // East coast
-    { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.jpg',   offsetX:   80, offsetY: 0 },
-    { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -55 },
+    { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.jpg',   offsetX:   55, offsetY: 0 },
+    { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -80 },
     { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.jpg',   offsetX:   80, offsetY: -30 },
   ];
 
