@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>National Virtual Core Library — AuScope</title>
 
+  <!--
+    Font stack: prefer Calibre (sans) and Karmina (serif) if loaded by the
+    parent page; fall back to Arial / Georgia (system fonts, universal).
+    No external font loading — keeps the iframe lightweight and avoids
+    licensing issues with commercial typefaces.
+  -->
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""/>
@@ -625,8 +632,8 @@
   const FACILITIES = [
     { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 95, alwaysOn: true },
     { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -65, offsetY: 0, onlineMonth: '2009-07' },
-    { state: 'SA',    lat: -34.928, lng: 138.515, logo: 'assets/SA_Gvmt.png',    offsetX:  -85, offsetY: 50 },
-    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -160, offsetY: 0 },
+    { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX:  -80, offsetY: 40 },
+    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -155, offsetY: 0 },
     { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.png',   offsetX:   55, offsetY: 0 },
     { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -130 },
     { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30 },
@@ -854,7 +861,14 @@
   }
 
   function popupHtml(b) {
-    const v = b.v ? 'HyLogger ' + b.v : 'Instrument unknown';
+    let v;
+    if (b.v) {
+      v = 'HyLogger ' + b.v;
+    } else if (b.instrument_label) {
+      v = b.instrument_label;
+    } else {
+      v = 'Instrument unknown';
+    }
     const depth = b.depth_m != null ? NUM.format(Math.round(b.depth_m)) + ' m scanned' : 'depth unknown';
     const scans = b.n_datasets > 1 ? ` &middot; ${b.n_datasets} scans` : '';
     return `
