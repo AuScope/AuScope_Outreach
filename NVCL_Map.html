@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>National Virtual Core Library - AuScope</title>
+  <title>National Virtual Core Library — AuScope</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -307,6 +307,8 @@
     .facility-logo[data-state="TAS"] img   { height: 51px; }
     .facility-logo[data-state="CSIRO"] img { height: 51px; }
     .facility-logo[data-state="WA"] img    { height: 51px; }
+    .facility-logo[data-state="SA"] img    { height: 32px; }
+    .facility-logo[data-state="NT"] img    { height: 32px; }
     /* QLD logo is trimmed — wide aspect, constrain by width instead of height */
     .facility-logo[data-state="QLD"] img   { height: auto; width: 100px; }
 
@@ -496,6 +498,7 @@
       background: rgba(255,255,255,0.85);
       font-size: 10px;
       font-family: 'Calibre', Arial, sans-serif;
+      opacity: 0.7;
     }
 
     @keyframes fadeIn {
@@ -539,7 +542,7 @@
     <svg class="callouts" id="callouts" aria-hidden="true"></svg>
     <div class="facility-logos" id="facility-logos"></div>
     <div class="auscope-watermark" aria-hidden="true">
-      <img src="assets/auscope-logo.png" alt="">
+      <img src="assets/2025_AuScope_Logo_Icon-Colour.png" alt="">
     </div>
     <button id="fullscreen-btn" class="fullscreen-btn" aria-label="Toggle fullscreen" title="Fullscreen">
       <svg id="fullscreen-icon" viewBox="0 0 20 20" aria-hidden="true">
@@ -552,11 +555,11 @@
   </section>
 
   <div class="legend">
-    <span class="legend-title">HyLogger generation</span>
-    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v1);"></span>v1</span>
-    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v2);"></span>v2</span>
-    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v3);"></span>v3</span>
-    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v4);"></span>v4</span>
+    <span class="legend-title">HyLogger version:</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v1);"></span>HyLogger 1</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v2);"></span>HyLogger 2</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v3);"></span>HyLogger 3</span>
+    <span class="legend-swatch"><span class="legend-dot" style="background: var(--v4);"></span>HyLogger 4</span>
   </div>
 
   <div class="controls">
@@ -618,18 +621,12 @@
   // CSIRO has alwaysOn = true because it's the originating facility.
   //
   // offsetX/Y are pixel offsets from the capital city marker to the
-  // centre of the logo badge. Perth has CSIRO + WA stacked horizontally
-  // (both pointing back to Perth); Darwin has its logo above the city
-  // pointing down; others sit horizontally beside the capital.
+  // centre of the logo badge.
   const FACILITIES = [
-    // Perth — CSIRO drops south, WA sits west closer to coast
     { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 95, alwaysOn: true },
     { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -65, offsetY: 0, onlineMonth: '2009-07' },
-    // Adelaide — west, line drops at ~15° below horizontal
-    { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX: -110, offsetY: 30 },
-    // Darwin — west of the city, horizontal line
-    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -140, offsetY: 0 },
-    // East coast
+    { state: 'SA',    lat: -34.928, lng: 138.515, logo: 'assets/SA_Gvmt.png',    offsetX:  -85, offsetY: 50 },
+    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -160, offsetY: 0 },
     { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.png',   offsetX:   55, offsetY: 0 },
     { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -130 },
     { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30 },
@@ -974,6 +971,21 @@
   function stopTimer() {
     if (playTimer) { clearInterval(playTimer); playTimer = null; }
   }
+
+  // Expose a small public API for external automation (e.g. Playwright
+  // GIF capture). Read-only access to map state + a programmatic stepper.
+  window.NVCL = {
+    get map() { return map; },
+    get timeline() { return timeline; },
+    get boreholes() { return boreholes; },
+    get currentIndex() { return currentIdx; },
+    setTimelineIndex(i) {
+      if (playing) togglePlay();
+      currentIdx = Math.max(0, Math.min(timeline.length - 1, i | 0));
+      document.getElementById('time-slider').value = currentIdx;
+      render();
+    },
+  };
 
 })();
 </script>
