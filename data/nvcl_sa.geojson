@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "sa",
     "stateLabel": "South Australia",
-    "fetched": "2026-05-11T11:31:28Z"
+    "fetched": "2026-05-25T11:57:15Z"
   },
   "features": [
     {
@@ -3716,9 +3716,9 @@
         "purpose": "stratigraphic borehole",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2024-01-18",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.45,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -13600,9 +13600,9 @@
         "purpose": "mineral borehole",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2015-01-14",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 91.35,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -21888,9 +21888,9 @@
         "purpose": "mineral borehole",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2019-07-05",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 86.73,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"

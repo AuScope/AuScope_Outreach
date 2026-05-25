@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "qld",
     "stateLabel": "Queensland",
-    "fetched": "2026-05-11T11:31:28Z"
+    "fetched": "2026-05-25T11:57:15Z"
   },
   "features": [
     {
@@ -3492,9 +3492,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2014-07-03",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 176.57,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -3772,9 +3772,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2014-05-09",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 400.39,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -4358,13 +4358,13 @@
         "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
         "drillEndDate": "1985-04-16 00:00:00",
         "purpose": "unknown",
-        "instrument": null,
-        "drillDate": null,
-        "datasetCreated": null,
+        "instrument": "HyLogger 3-5",
+        "drillDate": "1985-03-20",
+        "datasetCreated": "2018-05-09",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "scannedMetres": 503.92,
+        "project": "AuScope NVCL HyLogging",
+        "owner": "Department of Minerals and Energy",
         "state": "QLD"
       },
       "geometry": {
@@ -7356,9 +7356,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-11-25",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 288.78,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -8252,9 +8252,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2015-10-14",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 494.9,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -9090,13 +9090,13 @@
         "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
         "drillEndDate": "1973-12-05 00:00:00",
         "purpose": "unknown",
-        "instrument": null,
+        "instrument": "HyLogger 3-5",
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2017-10-25",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "scannedMetres": 868.07,
+        "project": "AuScope NVCL HyLogging",
+        "owner": "MOUNT MORGAN LIMITED",
         "state": "QLD"
       },
       "geometry": {
@@ -9848,9 +9848,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2015-10-14",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 540.3,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -10352,9 +10352,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2017-02-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 425.5,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -15774,6 +15774,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Mount Oxide MOXD217",
+        "boreholeId": "bh083054",
+        "boreholeLength": 427.9,
+        "elevation": 222,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "",
+        "purpose": "unknown",
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.39075813,
+          -19.47841087
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "MARONAN MRN14004",
         "boreholeId": "bh083055",
         "boreholeLength": 1320,
@@ -15852,6 +15880,34 @@
         "coordinates": [
           140.91509456,
           -21.06848348
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Oxide MOXD223",
+        "boreholeId": "bh083060",
+        "boreholeLength": 468.4,
+        "elevation": 223,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "",
+        "purpose": "unknown",
+        "instrument": "HyLogger 3-5",
+        "drillDate": null,
+        "datasetCreated": "2026-05-12",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 468.39,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.39079614,
+          -19.47842024
         ]
       }
     },
@@ -16194,7 +16250,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Mount Hope MHDD034",
+        "name": "Mount Hope North MHDD034",
         "boreholeId": "bh083911",
         "boreholeLength": 489.7,
         "elevation": 455,

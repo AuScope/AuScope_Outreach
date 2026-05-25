@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-05-11T11:31:28Z"
+    "fetched": "2026-05-25T11:57:15Z"
   },
   "features": [
     {
@@ -4378,6 +4378,258 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Accost Grid - Mudgee: DDH1",
+        "boreholeId": "MIN_004797",
+        "boreholeLength": 151.2,
+        "elevation": 640,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 147.17,
+        "project": "Accost Grid - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7621,
+          -32.6528
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Accost Grid - Mudgee: DDH2",
+        "boreholeId": "MIN_004798",
+        "boreholeLength": 61.3,
+        "elevation": 675,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 57.28,
+        "project": "Accost Grid - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7627,
+          -32.6522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH1",
+        "boreholeId": "MIN_004806",
+        "boreholeLength": 139.35,
+        "elevation": 562,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 119.73,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7711,
+          -32.6345
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH2",
+        "boreholeId": "MIN_004807",
+        "boreholeLength": 61,
+        "elevation": 564,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 57.99,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7717,
+          -32.6342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH3",
+        "boreholeId": "MIN_004808",
+        "boreholeLength": 166.5,
+        "elevation": 575,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 163.48,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7727,
+          -32.6364
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH5",
+        "boreholeId": "MIN_004810",
+        "boreholeLength": 64.5,
+        "elevation": 564,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 61.49,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7727,
+          -32.6342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH6",
+        "boreholeId": "MIN_004811",
+        "boreholeLength": 130.5,
+        "elevation": 585,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 127.49,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7764,
+          -32.6381
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH7",
+        "boreholeId": "MIN_004812",
+        "boreholeLength": 181.7,
+        "elevation": 580,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1977",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-13",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 178.73,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7735,
+          -32.6375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Achaye Anomaly A - Mudgee: DDH8",
+        "boreholeId": "MIN_004813",
+        "boreholeLength": 190.3,
+        "elevation": 582,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1978",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-13",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 180.28,
+        "project": "Achaye Anomaly A - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7736,
+          -32.6378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Achaye Anomaly A - Mudgee: DDH9",
         "boreholeId": "MIN_004814",
         "boreholeLength": 232.8,
@@ -4764,6 +5016,34 @@
         "coordinates": [
           146.8577,
           -34.3256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Williams Lode: WL5",
+        "boreholeId": "MIN_005266",
+        "boreholeLength": 325,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "1978",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-05-20",
+        "firstSeen": "2026-05-25",
+        "scannedMetres": 315.99,
+        "project": "Williams Lode",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.2866,
+          -33.3067
         ]
       }
     },

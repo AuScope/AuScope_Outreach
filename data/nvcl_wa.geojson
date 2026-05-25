@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-05-11T11:31:28Z"
+    "fetched": "2026-05-25T11:57:15Z"
   },
   "features": [
     {
@@ -5442,6 +5442,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "24FNDD010",
+        "boreholeId": "24FNDD010",
+        "boreholeLength": 768.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "2024-12-02",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "Lake Carey",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.5401,
+          -29.2615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "24MD001",
         "boreholeId": "24MD001",
         "boreholeLength": 173.7,
@@ -6248,6 +6276,34 @@
         "coordinates": [
           120.63811278,
           -25.80043197
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ADD10",
+        "boreholeId": "ADD10",
+        "boreholeLength": 88.5,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "2025-11-01",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": null,
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.6401,
+          -17.1538
         ]
       }
     },
@@ -11120,6 +11176,34 @@
         "coordinates": [
           115.82703084,
           -31.17649003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR0006",
+        "boreholeId": "BR0006",
+        "boreholeLength": 266,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "2011-08-31",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "Birrindudu",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4675,
+          -19.0061
         ]
       }
     },
@@ -46994,6 +47078,174 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "TSD0001",
+        "boreholeId": "TSD0001",
+        "boreholeLength": 444,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-05-17",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Bandicoot prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4198,
+          -19.863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TSD0002",
+        "boreholeId": "TSD0002",
+        "boreholeLength": 265.2,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-05-12",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Quenda prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4328,
+          -20.0038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TSD0003",
+        "boreholeId": "TSD0003",
+        "boreholeLength": 253.89999999999998,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-05-22",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Mojave prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4657,
+          -19.6772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TSD0004",
+        "boreholeId": "TSD0004",
+        "boreholeLength": 308,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-05-23",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Mojave prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4657,
+          -19.6804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TSD0005",
+        "boreholeId": "TSD0005",
+        "boreholeLength": 365.9,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-06-10",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Camel prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.445,
+          -19.9745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TSD0006",
+        "boreholeId": "TSD0006",
+        "boreholeLength": 250,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-06-08",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": "West Tanami, Camel prospect ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.445,
+          -19.9754
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "TSD0007",
         "boreholeId": "TSD0007",
         "boreholeLength": 451.8,
@@ -48304,6 +48556,34 @@
         "coordinates": [
           115.27096579,
           -33.70275352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "VHD10",
+        "boreholeId": "VHD10",
+        "boreholeLength": 188.10000000000002,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "1993-05-22",
+        "datasetCreated": null,
+        "firstSeen": "2026-05-25",
+        "scannedMetres": null,
+        "project": null,
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.9841,
+          -18.6053
         ]
       }
     },
@@ -49936,7 +50216,7 @@
       "properties": {
         "name": "Wilson Cliffs 1",
         "boreholeId": "Wilson Cliffs 1",
-        "boreholeLength": 1084.4,
+        "boreholeLength": 2798,
         "elevation": 440.13,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
