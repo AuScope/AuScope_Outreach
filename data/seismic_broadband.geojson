@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-05-25T11:13:25Z"
+    "fetched": "2026-06-01T12:41:46Z"
   },
   "features": [
     {
@@ -20375,7 +20375,7 @@
         "sensor": "Streckeisen STS-6A VBB Seismometer",
         "sampleRate": 100.0,
         "elevation": 366.0,
-        "startTime": "2019-05-17T20:09:20.548393",
+        "startTime": "2019-05-17T00:00:00",
         "endTime": null
       },
       "geometry": {
@@ -20392,10 +20392,10 @@
         "name": "MBWA",
         "network": "IU",
         "channel": "HHZ",
-        "sensor": "T120 post hole, quiet",
+        "sensor": "Velocity Sensor",
         "sampleRate": 100.0,
         "elevation": 182.0,
-        "startTime": "2016-01-24T10:50:44.608393",
+        "startTime": "2016-01-24T10:20:00",
         "endTime": "2018-09-23T00:00:00"
       },
       "geometry": {
@@ -20412,11 +20412,11 @@
         "name": "NWAO",
         "network": "IU",
         "channel": "HHZ",
-        "sensor": "Streckeisen STS-6A VBB Seismometer",
+        "sensor": "Velocity Sensor",
         "sampleRate": 100.0,
-        "elevation": 278.1,
-        "startTime": "2018-09-15T08:03:57.268393",
-        "endTime": null
+        "elevation": 278.0,
+        "startTime": "2018-09-15T00:00:00",
+        "endTime": "2022-06-19T06:16:00"
       },
       "geometry": {
         "type": "Point",
@@ -20849,6 +20849,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "GRACE",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sampleRate": 100.0,
+        "elevation": 99.0,
+        "startTime": "2026-06-09T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.0,
+          -33.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "HAR01",
         "network": "M8",
         "channel": "CHZ",
@@ -20863,6 +20883,26 @@
         "coordinates": [
           115.844,
           -33.009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KOJON",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sampleRate": 100.0,
+        "elevation": 99.0,
+        "startTime": "2026-06-09T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.0,
+          -33.0
         ]
       }
     },
@@ -21014,8 +21054,8 @@
         "channel": "HHZ",
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
-        "elevation": 327.0,
-        "startTime": "2026-05-13T08:00:00",
+        "elevation": 372.0,
+        "startTime": "2026-05-13T08:01:00",
         "endTime": null
       },
       "geometry": {
