@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-05-25T11:57:15Z"
+    "fetched": "2026-06-01T13:46:59Z"
   },
   "features": [
     {
@@ -23056,7 +23056,7 @@
       "properties": {
         "name": "Cowal - Endeavour 42: E42D1061",
         "boreholeId": "MIN_070649",
-        "boreholeLength": 594.54,
+        "boreholeLength": 594.55,
         "elevation": 204.92,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -27732,7 +27732,7 @@
       "properties": {
         "name": "CSA Mine: UDD14012",
         "boreholeId": "MIN_160370",
-        "boreholeLength": 359.20001220703125,
+        "boreholeLength": 359.2,
         "elevation": -1255.2,
         "custodian": "",
         "drillingMethod": "",
@@ -27956,7 +27956,7 @@
       "properties": {
         "name": "Fairholme: FHD006",
         "boreholeId": "MIN_165309",
-        "boreholeLength": 793.2999877929688,
+        "boreholeLength": 793.3,
         "elevation": 210,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -28180,7 +28180,7 @@
       "properties": {
         "name": "Cundumbul-Bakers Swamp: CND001B",
         "boreholeId": "MIN_169877",
-        "boreholeLength": 424.79998779296875,
+        "boreholeLength": 424.8,
         "elevation": 481,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -28320,7 +28320,7 @@
       "properties": {
         "name": "CSA Mine: UDD14009A",
         "boreholeId": "MIN_171792",
-        "boreholeLength": 377.1000061035156,
+        "boreholeLength": 377.1,
         "elevation": -1276.6,
         "custodian": "",
         "drillingMethod": "",
@@ -28600,7 +28600,7 @@
       "properties": {
         "name": "Great Cobar: DD16CA0640",
         "boreholeId": "MIN_173345",
-        "boreholeLength": 355.3999938964844,
+        "boreholeLength": 355.4,
         "elevation": 239.6,
         "custodian": "",
         "drillingMethod": "",
@@ -29160,7 +29160,7 @@
       "properties": {
         "name": "McPhillamys: LMPDD116",
         "boreholeId": "MIN_232624",
-        "boreholeLength": 380.20001220703125,
+        "boreholeLength": 380.2,
         "elevation": 964.57,
         "custodian": "",
         "drillingMethod": "",
@@ -29216,7 +29216,7 @@
       "properties": {
         "name": "McPhillamys: LMPDD139",
         "boreholeId": "MIN_232647",
-        "boreholeLength": 446.8999938964844,
+        "boreholeLength": 446.9,
         "elevation": 973.52,
         "custodian": "",
         "drillingMethod": "",
@@ -29244,7 +29244,7 @@
       "properties": {
         "name": "McPhillamys: LMPDD151",
         "boreholeId": "MIN_232659",
-        "boreholeLength": 486.70001220703125,
+        "boreholeLength": 486.7,
         "elevation": 957.84,
         "custodian": "",
         "drillingMethod": "",
@@ -29272,7 +29272,7 @@
       "properties": {
         "name": "McPhillamys: LMPDD154",
         "boreholeId": "MIN_232662",
-        "boreholeLength": 447.3999938964844,
+        "boreholeLength": 447.4,
         "elevation": 943.28,
         "custodian": "",
         "drillingMethod": "",
@@ -29748,7 +29748,7 @@
       "properties": {
         "name": "Moorilda - EL5760: LMPDD214",
         "boreholeId": "MIN_242733",
-        "boreholeLength": 734.5999755859375,
+        "boreholeLength": 734.6,
         "elevation": 950.2,
         "custodian": "",
         "drillingMethod": "",
@@ -29776,7 +29776,7 @@
       "properties": {
         "name": "Moorilda - EL5760: LMPDD218",
         "boreholeId": "MIN_242737",
-        "boreholeLength": 368.6000061035156,
+        "boreholeLength": 368.6,
         "elevation": 937.84,
         "custodian": "",
         "drillingMethod": "",
@@ -29888,7 +29888,7 @@
       "properties": {
         "name": "Faith - Brandy: ORD0006",
         "boreholeId": "MIN_253633",
-        "boreholeLength": 691.0999755859375,
+        "boreholeLength": 691.1,
         "elevation": 876.726,
         "custodian": "",
         "drillingMethod": "",
@@ -29916,7 +29916,7 @@
       "properties": {
         "name": "Faith - Brandy: ORD0006W1",
         "boreholeId": "MIN_253634",
-        "boreholeLength": 768.2999877929688,
+        "boreholeLength": 768.3,
         "elevation": 876.726,
         "custodian": "",
         "drillingMethod": "",
@@ -30028,7 +30028,7 @@
       "properties": {
         "name": "Blayney: DRDD011",
         "boreholeId": "MIN_255727",
-        "boreholeLength": 380.70001220703125,
+        "boreholeLength": 380.7,
         "elevation": 738.23,
         "custodian": "",
         "drillingMethod": "",
@@ -30392,7 +30392,7 @@
       "properties": {
         "name": "Thackaringa Project: 18THD012",
         "boreholeId": "MIN_311042",
-        "boreholeLength": 315.70001220703125,
+        "boreholeLength": 315.7,
         "elevation": 276.68,
         "custodian": "",
         "drillingMethod": "",
@@ -30896,7 +30896,7 @@
       "properties": {
         "name": "Cowal: GRUD0147",
         "boreholeId": "MIN_337672",
-        "boreholeLength": 644.1599731445312,
+        "boreholeLength": 644.16,
         "elevation": -7,
         "custodian": "",
         "drillingMethod": "",
@@ -31064,7 +31064,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD20004",
         "boreholeId": "MIN_340207",
-        "boreholeLength": 534.7999877929688,
+        "boreholeLength": 534.8,
         "elevation": 624.123,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -31092,7 +31092,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD20005",
         "boreholeId": "MIN_340208",
-        "boreholeLength": 412.3999938964844,
+        "boreholeLength": 412.4,
         "elevation": 596.058,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -31120,7 +31120,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD20012",
         "boreholeId": "MIN_340214",
-        "boreholeLength": 351.70001220703125,
+        "boreholeLength": 351.7,
         "elevation": 617.696,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -31428,7 +31428,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD21007",
         "boreholeId": "MIN_367745",
-        "boreholeLength": 510.79998779296875,
+        "boreholeLength": 510.8,
         "elevation": 602.989,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -31876,7 +31876,7 @@
       "properties": {
         "name": "Cargelligo: A3DD001",
         "boreholeId": "MIN_368554",
-        "boreholeLength": 545.7999877929688,
+        "boreholeLength": 545.8,
         "elevation": 162,
         "custodian": "",
         "drillingMethod": "",
@@ -33304,7 +33304,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD22025",
         "boreholeId": "MIN_391417",
-        "boreholeLength": 484.8999938964844,
+        "boreholeLength": 484.9,
         "elevation": 675.136,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -33696,7 +33696,7 @@
       "properties": {
         "name": "The Meadows: 23MEA001",
         "boreholeId": "MIN_414506",
-        "boreholeLength": 498.6000061035156,
+        "boreholeLength": 498.6,
         "elevation": 146,
         "custodian": "",
         "drillingMethod": "",
@@ -33724,7 +33724,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD23003",
         "boreholeId": "MIN_415082",
-        "boreholeLength": 375.54998779296875,
+        "boreholeLength": 375.55,
         "elevation": 584.19,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
@@ -33780,7 +33780,7 @@
       "properties": {
         "name": "Bowdens Silver Deposit: BD23014",
         "boreholeId": "MIN_415093",
-        "boreholeLength": 408.79998779296875,
+        "boreholeLength": 408.8,
         "elevation": 591.92,
         "custodian": "Geological Survey of NSW",
         "drillingMethod": "",
