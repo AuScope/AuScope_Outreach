@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-06-01T13:46:59Z"
+    "fetched": "2026-06-08T12:39:14Z"
   },
   "features": [
     {
@@ -35682,9 +35682,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Ngalti 1_cuttings",
+        "name": "Ngalti 1",
         "boreholeId": "Ngalti 1",
-        "boreholeLength": 150,
+        "boreholeLength": 1690.1,
         "elevation": 280,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
@@ -35702,8 +35702,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          127.31410904,
-          -19.86748621
+          127.3141,
+          -19.8675
         ]
       }
     },
