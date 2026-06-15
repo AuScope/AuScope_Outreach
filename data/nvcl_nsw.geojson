@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-06-08T12:39:14Z"
+    "fetched": "2026-06-15T14:30:19Z"
   },
   "features": [
     {
@@ -24090,6 +24090,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Potosi Mine - Broken Hill Broken Hill: PD11879",
+        "boreholeId": "MIN_097689",
+        "boreholeLength": 56.7,
+        "elevation": 10021.7,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "2012",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-09",
+        "firstSeen": "2026-06-15",
+        "scannedMetres": 56.69,
+        "project": "Potosi Mine - Broken Hill Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.5071,
+          -31.9301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Tomingley: PE178",
         "boreholeId": "MIN_098012",
         "boreholeLength": 222.2,
@@ -28256,6 +28284,34 @@
         "coordinates": [
           145.652,
           -31.1557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Western Min/Centenary Mineralisation - Broken Hill: S2711",
+        "boreholeId": "MIN_170163",
+        "boreholeLength": 622.5,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1982",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-10",
+        "firstSeen": "2026-06-15",
+        "scannedMetres": 622.47,
+        "project": "Western Min/Centenary Mineralisation - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4533,
+          -31.9681
         ]
       }
     },
