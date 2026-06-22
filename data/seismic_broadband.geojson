@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-06-15T13:20:02Z"
+    "fetched": "2026-06-22T12:52:46Z"
   },
   "features": [
     {
@@ -20475,7 +20475,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 353.0,
-        "startTime": "2025-05-04T09:21:00",
+        "startTime": "2025-11-17T02:28:00",
         "endTime": null
       },
       "geometry": {
@@ -20495,7 +20495,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 534.0,
-        "startTime": "2025-05-09T05:17:00",
+        "startTime": "2025-11-15T00:15:00",
         "endTime": null
       },
       "geometry": {
@@ -20655,7 +20655,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 485.0,
-        "startTime": "2025-03-13T06:00:00",
+        "startTime": "2025-11-12T05:50:00",
         "endTime": null
       },
       "geometry": {
@@ -20855,7 +20855,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 295.0,
-        "startTime": "2026-06-05T08:00:00",
+        "startTime": "2026-06-05T10:19:00",
         "endTime": null
       },
       "geometry": {
@@ -20895,7 +20895,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 290.0,
-        "startTime": "2026-06-06T03:30:00",
+        "startTime": "2026-06-06T03:33:00",
         "endTime": null
       },
       "geometry": {
@@ -20995,7 +20995,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 443.0,
-        "startTime": "2026-05-12T05:12:00",
+        "startTime": "2026-05-12T04:58:00",
         "endTime": null
       },
       "geometry": {
@@ -21055,7 +21055,7 @@
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
         "elevation": 372.0,
-        "startTime": "2026-05-13T08:01:00",
+        "startTime": "2026-05-13T07:56:00",
         "endTime": null
       },
       "geometry": {
