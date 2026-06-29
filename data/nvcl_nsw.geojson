@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-06-15T14:30:19Z"
+    "fetched": "2026-06-29T12:42:33Z"
   },
   "features": [
     {
@@ -24118,6 +24118,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Potosi Mine Underground - Broken Hill: PD11899",
+        "boreholeId": "MIN_097709",
+        "boreholeLength": 70.2,
+        "elevation": 10061.2,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "2012",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-15",
+        "firstSeen": "2026-06-29",
+        "scannedMetres": 70.18,
+        "project": "Potosi Mine Underground - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.5061,
+          -31.9308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Tomingley: PE178",
         "boreholeId": "MIN_098012",
         "boreholeLength": 222.2,
@@ -24672,6 +24700,62 @@
         "coordinates": [
           146.7319,
           -31.3966
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Western Min Rasp Mine - Broken Hill: WMDD4042",
+        "boreholeId": "MIN_113873",
+        "boreholeLength": 432.7,
+        "elevation": 315.5,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "2003",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-17",
+        "firstSeen": "2026-06-29",
+        "scannedMetres": 419.19,
+        "project": "Western Min Rasp Mine - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4585,
+          -31.9645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Western Min Rasp Mine - Broken Hill: WMDD4047",
+        "boreholeId": "MIN_113878",
+        "boreholeLength": 497.8,
+        "elevation": 315,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "2003",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-17",
+        "firstSeen": "2026-06-29",
+        "scannedMetres": 492.77,
+        "project": "Western Min Rasp Mine - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4592,
+          -31.964
         ]
       }
     },
@@ -28290,6 +28374,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Southern Extensions - Broken Hill Mine Leases: DDH N5300",
+        "boreholeId": "MIN_170090",
+        "boreholeLength": 0.1,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-18",
+        "firstSeen": "2026-06-29",
+        "scannedMetres": 489.27,
+        "project": "Southern Extensions - Broken Hill Mine Leases",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4232,
+          -32.0234
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Western Min/Centenary Mineralisation - Broken Hill: S2711",
         "boreholeId": "MIN_170163",
         "boreholeLength": 622.5,
@@ -29180,6 +29292,34 @@
         "coordinates": [
           147.0607,
           -32.0407
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Main Lode Rasp Mine - Broken Hill: MLDD3687",
+        "boreholeId": "MIN_230864",
+        "boreholeLength": 118.1,
+        "elevation": 198,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "2016",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-17",
+        "firstSeen": "2026-06-29",
+        "scannedMetres": 118.08,
+        "project": "Main Lode Rasp Mine - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4559,
+          -31.9753
         ]
       }
     },

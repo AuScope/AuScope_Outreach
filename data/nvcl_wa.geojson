@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-06-15T14:30:19Z"
+    "fetched": "2026-06-29T12:42:33Z"
   },
   "features": [
     {
@@ -52174,6 +52174,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "YD1",
+        "boreholeId": "YD1",
+        "boreholeLength": 116.80000000000001,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "1973-02-28",
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola ",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8594,
+          -21.5899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "YD10-01",
         "boreholeId": "YD10-01",
         "boreholeLength": 169.89999999999998,
@@ -52196,6 +52224,90 @@
         "coordinates": [
           118.9199535,
           -28.57911951
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YD2",
+        "boreholeId": "YD2",
+        "boreholeLength": 111.60000000000001,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "1973-02-28",
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola ",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8599,
+          -21.5895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YD4",
+        "boreholeId": "YD4",
+        "boreholeLength": 289.2,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "1975-04-01",
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola ",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8578,
+          -21.5887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YD8",
+        "boreholeId": "YD8",
+        "boreholeLength": 132.61,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola ",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.86,
+          -21.5909
         ]
       }
     },
@@ -52308,6 +52420,90 @@
         "coordinates": [
           118.63671029,
           -33.19498586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YDH11",
+        "boreholeId": "YDH11",
+        "boreholeLength": 121.1,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8768,
+          -21.5605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YDH12",
+        "boreholeId": "YDH12",
+        "boreholeLength": 115.69999999999999,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "1981-01-01",
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8769,
+          -21.5605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YDH13",
+        "boreholeId": "YDH13",
+        "boreholeLength": 30,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 4-2301",
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-06-29",
+        "scannedMetres": null,
+        "project": "Yarraloola",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.8771,
+          -21.5613
         ]
       }
     },
