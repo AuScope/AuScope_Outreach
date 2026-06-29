@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-06-22T12:52:46Z"
+    "fetched": "2026-06-29T12:02:21Z"
   },
   "features": [
     {
@@ -20612,7 +20612,7 @@
         "name": "AUANU",
         "network": "M8",
         "channel": "HHZ",
-        "sensor": "Trillium Compact 120s PostHole (BB)",
+        "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 555.0,
         "startTime": "2024-12-16T05:26:00",
@@ -20703,6 +20703,46 @@
         "coordinates": [
           124.8249,
           -24.1915
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BC37",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 422.0,
+        "startTime": "2026-07-24T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.3947,
+          -26.0405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BG31",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 368.0,
+        "startTime": "2026-07-24T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0171,
+          -22.7541
         ]
       }
     },
@@ -23149,6 +23189,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AUOKV",
+        "network": "S1",
+        "channel": "HHZ",
+        "sensor": "Nanometrics Meridian PH 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 227.0,
+        "startTime": "2026-06-24T05:50:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.73989,
+          -29.40158
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "AUPHS",
         "network": "S1",
         "channel": "HHZ",
@@ -23409,6 +23469,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AUYLT",
+        "network": "S1",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 73.0,
+        "startTime": "2026-06-22T04:30:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.8435,
+          -31.48007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "BN13A",
         "network": "WG",
         "channel": "HHZ",
@@ -23496,13 +23576,13 @@
         "sampleRate": 100.0,
         "elevation": 397.8,
         "startTime": "2025-05-18T02:30:13",
-        "endTime": "2025-10-14T01:51:22.22"
+        "endTime": "2026-05-13T03:25:10.95"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.1916357,
-          -23.58394009
+          118.19164,
+          -23.58394
         ]
       }
     },
@@ -23516,13 +23596,13 @@
         "sampleRate": 100.0,
         "elevation": 520.5,
         "startTime": "2025-05-26T04:47:19.83",
-        "endTime": "2025-10-13T07:35:14.79"
+        "endTime": "2026-05-12T00:00:58.88"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6031153,
-          -23.61112307
+          118.60312,
+          -23.61112
         ]
       }
     },
@@ -23534,15 +23614,15 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": 579.12,
-        "startTime": "2025-05-26T02:58:59.74",
-        "endTime": "2025-06-06T06:30:13.7"
+        "elevation": 570.3,
+        "startTime": "2025-05-08T02:30:34.26",
+        "endTime": "2025-10-13T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.982968,
-          -23.60794702
+          118.98297,
+          -23.60795
         ]
       }
     },
@@ -23556,13 +23636,13 @@
         "sampleRate": 100.0,
         "elevation": 612.9,
         "startTime": "2025-05-25T07:22:34.11",
-        "endTime": "2025-06-04T04:20:55.15"
+        "endTime": "2026-05-12T04:55:51.41"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.4082201,
-          -23.60648312
+          119.40822,
+          -23.60648
         ]
       }
     },
@@ -23576,13 +23656,13 @@
         "sampleRate": 100.0,
         "elevation": 432.2,
         "startTime": "2025-05-19T04:34:34",
-        "endTime": "2025-10-13T05:39:55.63"
+        "endTime": "2026-05-14T02:38:48.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9944016,
-          -24.03914183
+          116.9944,
+          -24.03914
         ]
       }
     },
@@ -23596,13 +23676,13 @@
         "sampleRate": 100.0,
         "elevation": 451.5,
         "startTime": "2025-05-21T04:49:38.76",
-        "endTime": "2025-10-13T23:17:56.24"
+        "endTime": "2026-05-14T01:47:47.85"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.3995612,
-          -23.99715016
+          117.39956,
+          -23.99715
         ]
       }
     },
@@ -23616,13 +23696,13 @@
         "sampleRate": 100.0,
         "elevation": 340.1,
         "startTime": "2025-05-19T00:55:51",
-        "endTime": "2025-05-28T18:59:59.99"
+        "endTime": "2025-11-24T00:00:16.38"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8161707,
-          -24.02882412
+          117.81617,
+          -24.02882
         ]
       }
     },
@@ -23636,13 +23716,13 @@
         "sampleRate": 100.0,
         "elevation": 401.5,
         "startTime": "2025-05-18T03:42:55.18",
-        "endTime": "2025-10-14T04:03:17.08"
+        "endTime": "2026-03-02T05:07:51.34"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.2026857,
-          -23.99596948
+          118.20269,
+          -23.99597
         ]
       }
     },
@@ -23656,13 +23736,13 @@
         "sampleRate": 100.0,
         "elevation": 437.9,
         "startTime": "2025-05-18T05:10:16.08",
-        "endTime": "2025-10-12T23:06:16.57"
+        "endTime": "2026-05-13T01:41:34.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.5857134,
-          -24.0040892
+          118.58571,
+          -24.00409
         ]
       }
     },
@@ -23676,13 +23756,13 @@
         "sampleRate": 100.0,
         "elevation": 542.7,
         "startTime": "2025-05-25T04:44:07.74",
-        "endTime": "2025-10-12T01:33:19.7"
+        "endTime": "2025-10-12T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3995335,
-          -23.97493983
+          119.39953,
+          -23.97494
         ]
       }
     },
@@ -23696,13 +23776,13 @@
         "sampleRate": 100.0,
         "elevation": 0.7,
         "startTime": "2025-05-22T05:23:48",
-        "endTime": "2025-10-20T01:22:12.75"
+        "endTime": "2026-01-08T23:00:12.92"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.4615379,
-          -24.40735662
+          113.46154,
+          -24.40736
         ]
       }
     },
@@ -23716,13 +23796,13 @@
         "sampleRate": 100.0,
         "elevation": 9.1,
         "startTime": "2025-05-22T06:39:27",
-        "endTime": "2025-10-19T03:44:22.9"
+        "endTime": "2026-05-15T02:15:08.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.7990213,
-          -24.39812164
+          113.79902,
+          -24.39812
         ]
       }
     },
@@ -23736,13 +23816,13 @@
         "sampleRate": 100.0,
         "elevation": 11.67,
         "startTime": "2025-05-26T05:47:18.74",
-        "endTime": "2025-05-27T05:25:46.62"
+        "endTime": "2026-05-15T00:05:37.37"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.0780216,
-          -24.4458097
+          114.07802,
+          -24.44581
         ]
       }
     },
@@ -23756,13 +23836,13 @@
         "sampleRate": 100.0,
         "elevation": 101.0,
         "startTime": "2025-05-24T00:47:46",
-        "endTime": "2025-10-19T02:42:50.29"
+        "endTime": "2026-05-10T07:13:16.3"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.5244279,
-          -24.40504392
+          114.52443,
+          -24.40504
         ]
       }
     },
@@ -23776,13 +23856,13 @@
         "sampleRate": 100.0,
         "elevation": 158.399994,
         "startTime": "2025-05-24T02:03:15.8",
-        "endTime": "2025-10-18T06:18:45.98"
+        "endTime": "2026-04-28T02:00:10.9"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.7797154,
-          -24.39683984
+          114.77972,
+          -24.39684
         ]
       }
     },
@@ -23796,13 +23876,13 @@
         "sampleRate": 100.0,
         "elevation": 218.899994,
         "startTime": "2025-05-24T03:38:02",
-        "endTime": "2025-10-17T04:46:39.89"
+        "endTime": "2026-03-14T18:05:45.02"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.388342,
-          -24.45916303
+          115.38834,
+          -24.45916
         ]
       }
     },
@@ -23816,13 +23896,13 @@
         "sampleRate": 100.0,
         "elevation": 296.399994,
         "startTime": "2025-03-23T01:57:48.8",
-        "endTime": "2025-10-18T04:45:41.8"
+        "endTime": "2026-04-28T13:04:22.34"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.7901144,
-          -24.3937387
+          115.79011,
+          -24.39374
         ]
       }
     },
@@ -23836,13 +23916,13 @@
         "sampleRate": 100.0,
         "elevation": 332.4,
         "startTime": "2025-05-23T01:52:23",
-        "endTime": "2025-10-18T03:55:35.48"
+        "endTime": "2026-04-29T03:25:22.65"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.1813093,
-          -24.4218968
+          116.18131,
+          -24.4219
         ]
       }
     },
@@ -23856,13 +23936,13 @@
         "sampleRate": 100.0,
         "elevation": 395.700012,
         "startTime": "2025-05-21T23:58:01",
-        "endTime": "2025-10-18T01:51:54.87"
+        "endTime": "2026-05-14T03:31:41.64"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6029132,
-          -24.43480962
+          116.60291,
+          -24.43481
         ]
       }
     },
@@ -23876,13 +23956,13 @@
         "sampleRate": 100.0,
         "elevation": 406.100006,
         "startTime": "2025-05-20T08:29:46",
-        "endTime": "2025-06-26T12:20:02.99"
+        "endTime": "2026-03-24T08:57:01.21"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9967115,
-          -24.39835163
+          116.99671,
+          -24.39835
         ]
       }
     },
@@ -23896,13 +23976,13 @@
         "sampleRate": 100.0,
         "elevation": 440.5,
         "startTime": "2025-05-21T05:55:18.42",
-        "endTime": "2025-10-13T04:08:06.12"
+        "endTime": "2026-05-01T02:20:38.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4009835,
-          -24.39474317
+          117.40098,
+          -24.39474
         ]
       }
     },
@@ -23916,13 +23996,13 @@
         "sampleRate": 100.0,
         "elevation": 521.799988,
         "startTime": "2025-05-19T02:24:40",
-        "endTime": "2025-10-09T00:24:45.08"
+        "endTime": "2026-05-15T00:10:34.97"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8066695,
-          -24.41358779
+          117.80667,
+          -24.41359
         ]
       }
     },
@@ -23936,13 +24016,13 @@
         "sampleRate": 100.0,
         "elevation": 465.6,
         "startTime": "2025-05-19T03:31:29.63",
-        "endTime": "2025-10-13T00:57:34.67"
+        "endTime": "2026-05-15T00:50:57.14"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.1719149,
-          -24.39305779
+          118.17191,
+          -24.39306
         ]
       }
     },
@@ -23956,13 +24036,13 @@
         "sampleRate": 100.0,
         "elevation": 485.9,
         "startTime": "2025-05-29T00:30:34",
-        "endTime": "2025-10-09T19:10:00.48"
+        "endTime": "2026-05-13T00:54:54.95"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.5976547,
-          -24.40462583
+          118.59765,
+          -24.40463
         ]
       }
     },
@@ -23976,13 +24056,13 @@
         "sampleRate": 100.0,
         "elevation": 558.4,
         "startTime": "2025-05-29T01:40:45.42",
-        "endTime": "2025-10-12T01:35:16.15"
+        "endTime": "2026-05-13T00:13:31.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9906015,
-          -24.40847106
+          118.9906,
+          -24.40847
         ]
       }
     },
@@ -23996,13 +24076,13 @@
         "sampleRate": 100.0,
         "elevation": 680.2,
         "startTime": "2025-05-18T07:52:17",
-        "endTime": "2025-10-11T23:59:11.19"
+        "endTime": "2026-05-12T23:36:12.56"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3894781,
-          -24.41012977
+          119.38948,
+          -24.41013
         ]
       }
     },
@@ -24016,13 +24096,13 @@
         "sampleRate": 100.0,
         "elevation": 15.4,
         "startTime": "2025-05-22T00:41:32",
-        "endTime": "2025-06-04T08:17:29.14"
+        "endTime": "2025-11-18T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.7622379,
-          -24.7695283
+          113.76224,
+          -24.76953
         ]
       }
     },
@@ -24036,13 +24116,13 @@
         "sampleRate": 100.0,
         "elevation": 57.1,
         "startTime": "2025-05-23T01:48:52",
-        "endTime": "2025-10-18T00:56:46.6"
+        "endTime": "2026-04-06T05:37:30.11"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.212548,
-          -24.79524333
+          114.21255,
+          -24.79524
         ]
       }
     },
@@ -24056,13 +24136,13 @@
         "sampleRate": 100.0,
         "elevation": 94.4,
         "startTime": "2025-05-24T06:12:00",
-        "endTime": "2025-10-17T02:26:35.75"
+        "endTime": "2025-11-01T22:14:07.3"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.585047,
-          -24.80099839
+          114.58505,
+          -24.801
         ]
       }
     },
@@ -24081,8 +24161,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.9107792,
-          -24.80936316
+          114.91078,
+          -24.80936
         ]
       }
     },
@@ -24096,13 +24176,13 @@
         "sampleRate": 100.0,
         "elevation": 212.5,
         "startTime": "2025-05-23T07:09:40.8",
-        "endTime": "2025-10-16T06:15:11.66"
+        "endTime": "2026-04-29T00:08:04.74"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4169615,
-          -24.78160211
+          115.41696,
+          -24.7816
         ]
       }
     },
@@ -24121,8 +24201,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.774922,
-          -24.80908819
+          115.77492,
+          -24.80909
         ]
       }
     },
@@ -24136,13 +24216,13 @@
         "sampleRate": 100.0,
         "elevation": 306.7,
         "startTime": "2025-05-24T09:14:18",
-        "endTime": "2025-10-15T03:30:51.54"
+        "endTime": "2026-05-14T04:42:28.88"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.2174795,
-          -24.80182883
+          116.21748,
+          -24.80183
         ]
       }
     },
@@ -24156,13 +24236,13 @@
         "sampleRate": 100.0,
         "elevation": 363.7,
         "startTime": "2025-05-19T02:08:11",
-        "endTime": "2025-10-15T02:44:40.25"
+        "endTime": "2026-05-14T05:42:23.16"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6137966,
-          -24.80811947
+          116.6138,
+          -24.80812
         ]
       }
     },
@@ -24176,13 +24256,13 @@
         "sampleRate": 100.0,
         "elevation": 437.5,
         "startTime": "2025-05-22T03:21:35.51",
-        "endTime": "2025-10-13T08:38:41.02"
+        "endTime": "2026-04-30T06:24:20.25"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9650799,
-          -24.77552056
+          116.96508,
+          -24.77552
         ]
       }
     },
@@ -24196,13 +24276,13 @@
         "sampleRate": 100.0,
         "elevation": 504.2,
         "startTime": "2025-05-29T04:27:38",
-        "endTime": "2025-10-14T23:56:05.8"
+        "endTime": "2026-05-15T03:17:08.33"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.3959927,
-          -24.79938462
+          117.39599,
+          -24.79938
         ]
       }
     },
@@ -24216,13 +24296,13 @@
         "sampleRate": 100.0,
         "elevation": 461.56,
         "startTime": "2025-05-29T05:28:35.74",
-        "endTime": "2025-10-14T23:07:53.49"
+        "endTime": "2026-05-15T02:18:27.6"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.7444818,
-          -24.86434076
+          117.74448,
+          -24.86434
         ]
       }
     },
@@ -24236,13 +24316,13 @@
         "sampleRate": 100.0,
         "elevation": 485.6,
         "startTime": "2025-05-29T06:37:34",
-        "endTime": "2025-10-12T06:12:19.59"
+        "endTime": "2026-05-15T01:38:01.39"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.197357,
-          -24.79768386
+          118.19736,
+          -24.79768
         ]
       }
     },
@@ -24256,13 +24336,13 @@
         "sampleRate": 100.0,
         "elevation": 605.6,
         "startTime": "2025-05-29T07:51:32.07",
-        "endTime": "2025-07-15T23:59:59.99"
+        "endTime": "2025-10-11T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.5997718,
-          -24.80051334
+          118.59977,
+          -24.80051
         ]
       }
     },
@@ -24276,13 +24356,13 @@
         "sampleRate": 100.0,
         "elevation": 609.1,
         "startTime": "2025-05-29T08:42:39",
-        "endTime": "2025-10-11T07:24:51.12"
+        "endTime": "2026-02-19T06:07:24.2"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9870918,
-          -24.79998071
+          118.98709,
+          -24.79998
         ]
       }
     },
@@ -24296,13 +24376,13 @@
         "sampleRate": 100.0,
         "elevation": 618.18,
         "startTime": "2025-05-27T01:24:28.74",
-        "endTime": "2025-10-11T08:37:05.45"
+        "endTime": "2026-05-11T06:18:32.97"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3954847,
-          -24.78610468
+          119.39548,
+          -24.7861
         ]
       }
     },
@@ -24316,13 +24396,13 @@
         "sampleRate": 100.0,
         "elevation": 23.1,
         "startTime": "2025-05-23T07:22:00",
-        "endTime": "2025-10-20T04:59:41.19"
+        "endTime": "2026-05-14T04:45:44.53"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.8421512,
-          -25.17600997
+          113.84215,
+          -25.17601
         ]
       }
     },
@@ -24336,13 +24416,13 @@
         "sampleRate": 100.0,
         "elevation": 37.3,
         "startTime": "2025-05-25T00:10:17",
-        "endTime": "2025-10-20T00:10:23.48"
+        "endTime": "2026-04-20T04:26:51.8"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.1936607,
-          -25.20072933
+          114.19366,
+          -25.20073
         ]
       }
     },
@@ -24356,13 +24436,13 @@
         "sampleRate": 100.0,
         "elevation": 86.9,
         "startTime": "2025-05-25T01:41:00",
-        "endTime": "2025-10-20T02:07:43.83"
+        "endTime": "2026-04-26T02:58:00.03"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.6047256,
-          -25.19985077
+          114.60473,
+          -25.19985
         ]
       }
     },
@@ -24376,13 +24456,33 @@
         "sampleRate": 100.0,
         "elevation": 158.5,
         "startTime": "2025-05-25T02:41:51",
-        "endTime": "2025-10-16T22:46:53.47"
+        "endTime": "2026-02-13T09:00:42.64"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.984181,
-          -25.19731893
+          114.98418,
+          -25.19732
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBC07",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 196.2,
+        "startTime": "2025-06-04T05:58:00",
+        "endTime": "2026-03-29T15:26:35.03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.39062,
+          -25.19732
         ]
       }
     },
@@ -24401,8 +24501,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.8117893,
-          -25.20419196
+          115.81179,
+          -25.20419
         ]
       }
     },
@@ -24416,13 +24516,13 @@
         "sampleRate": 100.0,
         "elevation": 291.1,
         "startTime": "2025-05-24T03:21:19",
-        "endTime": "2025-10-16T02:54:26.88"
+        "endTime": "2026-05-15T05:54:14.67"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.219848,
-          -25.23943562
+          116.21985,
+          -25.23944
         ]
       }
     },
@@ -24436,13 +24536,13 @@
         "sampleRate": 100.0,
         "elevation": 345.6,
         "startTime": "2025-05-21T08:19:10.21",
-        "endTime": "2025-10-17T23:45:44.29"
+        "endTime": "2026-05-15T05:16:30.77"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.5899805,
-          -25.19463786
+          116.58998,
+          -25.19464
         ]
       }
     },
@@ -24456,13 +24556,13 @@
         "sampleRate": 100.0,
         "elevation": 366.8,
         "startTime": "2025-05-22T05:05:21.28",
-        "endTime": "2025-10-15T04:20:28.53"
+        "endTime": "2026-02-09T06:04:43.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9670592,
-          -25.18197517
+          116.96706,
+          -25.18198
         ]
       }
     },
@@ -24476,13 +24576,13 @@
         "sampleRate": 100.0,
         "elevation": 418.0,
         "startTime": "2025-05-18T07:20:55",
-        "endTime": "2025-10-15T04:51:28.65"
+        "endTime": "2026-01-30T15:14:46.87"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.3904949,
-          -25.15157351
+          117.39049,
+          -25.15157
         ]
       }
     },
@@ -24496,13 +24596,13 @@
         "sampleRate": 100.0,
         "elevation": 431.0,
         "startTime": "2025-05-19T01:01:40",
-        "endTime": "2025-10-14T06:21:47.98"
+        "endTime": "2026-05-01T07:26:33.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.7645767,
-          -25.18471019
+          117.76458,
+          -25.18471
         ]
       }
     },
@@ -24516,13 +24616,13 @@
         "sampleRate": 100.0,
         "elevation": 449.5,
         "startTime": "2025-05-18T03:42:06",
-        "endTime": "2025-10-14T04:29:58.35"
+        "endTime": "2025-10-25T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.0806167,
-          -25.25099354
+          118.08062,
+          -25.25099
         ]
       }
     },
@@ -24536,13 +24636,13 @@
         "sampleRate": 100.0,
         "elevation": 479.8,
         "startTime": "2025-05-19T08:31:36",
-        "endTime": "2025-10-12T07:52:43.65"
+        "endTime": "2026-01-08T13:02:34.63"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6360951,
-          -25.17296266
+          118.6361,
+          -25.17296
         ]
       }
     },
@@ -24556,13 +24656,13 @@
         "sampleRate": 100.0,
         "elevation": 505.8,
         "startTime": "2025-05-17T05:49:36",
-        "endTime": "2025-10-14T01:08:25.71"
+        "endTime": "2026-05-11T01:02:08.92"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.0057201,
-          -25.20165192
+          119.00572,
+          -25.20165
         ]
       }
     },
@@ -24576,13 +24676,13 @@
         "sampleRate": 100.0,
         "elevation": 18.8,
         "startTime": "2025-06-04T04:53:55",
-        "endTime": "2025-10-26T04:43:43.35"
+        "endTime": "2026-05-18T02:59:59.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          112.9955588,
-          -25.59897782
+          112.99556,
+          -25.59898
         ]
       }
     },
@@ -24596,13 +24696,33 @@
         "sampleRate": 100.0,
         "elevation": 5.1,
         "startTime": "2025-06-02T04:48:05",
-        "endTime": "2025-10-25T04:58:10.75"
+        "endTime": "2026-05-17T07:51:30.95"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.5073802,
-          -25.60017188
+          113.50738,
+          -25.60017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBD04",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 21.2,
+        "startTime": "2025-10-21T01:55:59",
+        "endTime": "2026-04-25T05:06:45.64"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.22384,
+          -25.60238
         ]
       }
     },
@@ -24616,13 +24736,13 @@
         "sampleRate": 100.0,
         "elevation": 21.200001,
         "startTime": "2025-05-25T04:57:45.8",
-        "endTime": "2025-10-20T04:12:00.05"
+        "endTime": "2026-04-25T04:31:35.73"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.5799768,
-          -25.60043017
+          114.57998,
+          -25.60043
         ]
       }
     },
@@ -24636,13 +24756,13 @@
         "sampleRate": 100.0,
         "elevation": 163.2,
         "startTime": "2025-05-25T04:06:00",
-        "endTime": "2025-10-21T05:17:18.67"
+        "endTime": "2026-04-25T03:58:27.48"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.9920481,
-          -25.5936674
+          114.99205,
+          -25.59367
         ]
       }
     },
@@ -24661,8 +24781,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4495703,
-          -25.58626594
+          115.44957,
+          -25.58627
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBD08",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 270.3,
+        "startTime": "2025-05-27T02:38:00",
+        "endTime": "2025-10-21T01:27:33.76"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.80362,
+          -25.59527
         ]
       }
     },
@@ -24676,13 +24816,33 @@
         "sampleRate": 100.0,
         "elevation": 357.7,
         "startTime": "2025-05-24T00:19:55",
-        "endTime": "2025-10-17T06:06:21.8"
+        "endTime": "2026-05-14T02:35:56.72"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.2443568,
-          -25.58726044
+          116.24436,
+          -25.58726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBD10",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 391.2,
+        "startTime": "2025-11-03T00:00:00",
+        "endTime": "2026-03-29T03:00:17.59"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.63609,
+          -25.57353
         ]
       }
     },
@@ -24695,14 +24855,14 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 427.5,
-        "startTime": "2025-05-27T00:00:00",
-        "endTime": "2025-07-17T01:07:50.43"
+        "startTime": "2025-10-16T05:32:23",
+        "endTime": "2026-05-15T04:34:23.04"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.0709899,
-          -25.68531349
+          117.07099,
+          -25.68531
         ]
       }
     },
@@ -24716,13 +24876,13 @@
         "sampleRate": 100.0,
         "elevation": 434.200012,
         "startTime": "2025-05-16T02:06:28",
-        "endTime": "2025-10-15T08:26:41.32"
+        "endTime": "2026-05-03T01:22:00.8"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4080689,
-          -25.60065217
+          117.40807,
+          -25.60065
         ]
       }
     },
@@ -24736,13 +24896,13 @@
         "sampleRate": 100.0,
         "elevation": 456.2,
         "startTime": "2025-05-16T05:03:23",
-        "endTime": "2025-10-15T22:29:42.35"
+        "endTime": "2026-05-02T03:35:50.55"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8014276,
-          -25.59553797
+          117.80143,
+          -25.59554
         ]
       }
     },
@@ -24756,13 +24916,13 @@
         "sampleRate": 100.0,
         "elevation": 485.8,
         "startTime": "2025-05-19T04:03:43",
-        "endTime": "2025-10-15T08:35:40.95"
+        "endTime": "2026-02-05T09:09:37.87"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.2008517,
-          -25.60169854
+          118.20085,
+          -25.6017
         ]
       }
     },
@@ -24776,13 +24936,13 @@
         "sampleRate": 100.0,
         "elevation": 542.8,
         "startTime": "2025-05-17T03:00:45.11",
-        "endTime": "2025-10-10T06:08:33.72"
+        "endTime": "2026-03-01T03:18:15.36"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.5861579,
-          -25.58960298
+          118.58616,
+          -25.5896
         ]
       }
     },
@@ -24796,13 +24956,13 @@
         "sampleRate": 100.0,
         "elevation": 582.8,
         "startTime": "2025-05-20T02:45:13",
-        "endTime": "2025-10-10T04:38:34.35"
+        "endTime": "2026-05-12T02:20:19.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.0009625,
-          -25.59234331
+          119.00096,
+          -25.59234
         ]
       }
     },
@@ -24816,13 +24976,13 @@
         "sampleRate": 100.0,
         "elevation": 256.0,
         "startTime": "2025-06-04T07:10:44.96",
-        "endTime": "2025-10-26T05:27:35.92"
+        "endTime": "2026-05-18T02:59:26.3"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.1593189,
-          -25.9803587
+          113.15932,
+          -25.98036
         ]
       }
     },
@@ -24836,13 +24996,13 @@
         "sampleRate": 100.0,
         "elevation": 14.6,
         "startTime": "2025-06-02T03:52:55",
-        "endTime": "2025-10-25T00:34:40.55"
+        "endTime": "2026-05-17T07:08:22.55"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.5905966,
-          -25.9798838
+          113.5906,
+          -25.97988
         ]
       }
     },
@@ -24856,13 +25016,13 @@
         "sampleRate": 100.0,
         "elevation": -8.9,
         "startTime": "2025-06-02T00:23:44",
-        "endTime": "2025-10-25T02:51:43.95"
+        "endTime": "2026-05-17T06:17:08.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.878089,
-          -25.99653869
+          113.87809,
+          -25.99654
         ]
       }
     },
@@ -24876,13 +25036,13 @@
         "sampleRate": 100.0,
         "elevation": 2.4,
         "startTime": "2025-06-04T02:17:25",
-        "endTime": "2025-10-22T05:29:58.95"
+        "endTime": "2026-05-17T01:08:36.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.213141,
-          -26.01140123
+          114.21314,
+          -26.0114
         ]
       }
     },
@@ -24896,13 +25056,13 @@
         "sampleRate": 100.0,
         "elevation": 72.8,
         "startTime": "2025-06-04T01:21:56",
-        "endTime": "2025-10-22T03:41:50.55"
+        "endTime": "2026-05-17T01:59:05.36"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.6165013,
-          -25.99953033
+          114.6165,
+          -25.99953
         ]
       }
     },
@@ -24916,13 +25076,13 @@
         "sampleRate": 100.0,
         "elevation": 139.3,
         "startTime": "2025-06-03T04:19:15",
-        "endTime": "2025-10-22T02:01:06.95"
+        "endTime": "2026-05-17T02:45:38.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.001529,
-          -25.99677579
+          115.00153,
+          -25.99678
         ]
       }
     },
@@ -24936,13 +25096,13 @@
         "sampleRate": 100.0,
         "elevation": 233.4,
         "startTime": "2025-05-25T06:18:50",
-        "endTime": "2025-10-20T02:23:12.04"
+        "endTime": "2026-05-14T06:54:04.42"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4022978,
-          -26.02101359
+          115.4023,
+          -26.02101
         ]
       }
     },
@@ -24956,13 +25116,13 @@
         "sampleRate": 100.0,
         "elevation": 279.5,
         "startTime": "2025-05-25T04:37:01",
-        "endTime": "2025-10-20T03:26:26.92"
+        "endTime": "2026-05-14T08:00:17"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.799069,
-          -26.0659229
+          115.79907,
+          -26.06592
         ]
       }
     },
@@ -24971,18 +25131,18 @@
       "properties": {
         "name": "WBE09",
         "network": "WG",
-        "channel": "HHE",
+        "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 329.700012,
-        "startTime": "2025-05-23T06:39:10",
-        "endTime": "2025-10-17T02:59:47.53"
+        "startTime": "2025-10-17T04:06:14",
+        "endTime": "2026-05-15T01:39:47.77"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.1579339,
-          -26.02222717
+          116.15793,
+          -26.02223
         ]
       }
     },
@@ -24996,13 +25156,13 @@
         "sampleRate": 100.0,
         "elevation": 326.6,
         "startTime": "2025-05-18T03:40:25",
-        "endTime": "2025-10-16T07:44:53.64"
+        "endTime": "2026-05-16T04:34:00.17"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6176081,
-          -25.9998968
+          116.61761,
+          -25.9999
         ]
       }
     },
@@ -25016,13 +25176,13 @@
         "sampleRate": 100.0,
         "elevation": 378.0,
         "startTime": "2025-05-30T06:19:30.29",
-        "endTime": "2025-10-16T02:06:04.32"
+        "endTime": "2026-05-03T03:48:36.96"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4741461,
-          -25.9548881
+          117.47415,
+          -25.95489
         ]
       }
     },
@@ -25036,13 +25196,13 @@
         "sampleRate": 100.0,
         "elevation": 394.0,
         "startTime": "2025-05-16T05:53:25",
-        "endTime": "2025-10-16T06:39:58.47"
+        "endTime": "2026-05-03T05:19:27.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8008549,
-          -26.01104519
+          117.80085,
+          -26.01105
         ]
       }
     },
@@ -25056,13 +25216,13 @@
         "sampleRate": 100.0,
         "elevation": 471.7,
         "startTime": "2025-05-16T02:19:39",
-        "endTime": "2025-10-11T01:24:50.81"
+        "endTime": "2026-05-14T00:59:59.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.1962479,
-          -25.9988993
+          118.19625,
+          -25.9989
         ]
       }
     },
@@ -25076,13 +25236,13 @@
         "sampleRate": 100.0,
         "elevation": 507.6,
         "startTime": "2025-05-16T06:10:39",
-        "endTime": "2025-10-11T03:43:01.77"
+        "endTime": "2026-05-10T01:37:25.89"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6351784,
-          -25.97420356
+          118.63518,
+          -25.9742
         ]
       }
     },
@@ -25096,13 +25256,13 @@
         "sampleRate": 100.0,
         "elevation": 528.34,
         "startTime": "2025-05-24T05:11:56.74",
-        "endTime": "2025-10-10T07:38:42.84"
+        "endTime": "2026-05-10T03:34:26.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9943101,
-          -25.99188358
+          118.99431,
+          -25.99188
         ]
       }
     },
@@ -25121,8 +25281,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3390266,
-          -25.93308844
+          119.33903,
+          -25.93309
         ]
       }
     },
@@ -25136,13 +25296,13 @@
         "sampleRate": 100.0,
         "elevation": 609.98,
         "startTime": "2025-05-23T04:43:01.74",
-        "endTime": "2025-10-10T01:10:11.69"
+        "endTime": "2026-05-10T02:47:02.25"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.7575182,
-          -26.03594438
+          119.75752,
+          -26.03594
         ]
       }
     },
@@ -25156,13 +25316,13 @@
         "sampleRate": 100.0,
         "elevation": 15.0,
         "startTime": "2025-06-05T00:32:44",
-        "endTime": "2025-10-26T06:42:01.75"
+        "endTime": "2026-05-18T02:19:20.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.3785288,
-          -26.42103075
+          113.37853,
+          -26.42103
         ]
       }
     },
@@ -25174,15 +25334,15 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": -4.89,
+        "elevation": 32.5,
         "startTime": "2025-06-02T02:26:42.74",
-        "endTime": "2025-10-24T04:19:53.62"
+        "endTime": "2025-10-26T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.8899128,
-          -26.39241013
+          113.88991,
+          -26.39241
         ]
       }
     },
@@ -25196,13 +25356,13 @@
         "sampleRate": 100.0,
         "elevation": 35.9,
         "startTime": "2025-06-02T01:33:48",
-        "endTime": "2025-10-22T00:21:17.73"
+        "endTime": "2026-05-14T01:08:02.55"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.2160292,
-          -26.41686396
+          114.21603,
+          -26.41686
         ]
       }
     },
@@ -25216,13 +25376,13 @@
         "sampleRate": 100.0,
         "elevation": 53.2,
         "startTime": "2025-06-03T00:40:30",
-        "endTime": "2025-10-21T23:57:22.95"
+        "endTime": "2026-04-25T02:56:39.55"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.5877197,
-          -26.39399969
+          114.58772,
+          -26.394
         ]
       }
     },
@@ -25236,13 +25396,13 @@
         "sampleRate": 100.0,
         "elevation": 171.1,
         "startTime": "2025-06-03T01:33:15",
-        "endTime": "2025-10-23T04:50:17.55"
+        "endTime": "2026-05-17T04:19:58.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.9924907,
-          -26.40059584
+          114.99249,
+          -26.4006
         ]
       }
     },
@@ -25256,13 +25416,13 @@
         "sampleRate": 100.0,
         "elevation": 247.39,
         "startTime": "2025-06-03T03:18:39",
-        "endTime": "2025-10-23T02:56:29.95"
+        "endTime": "2026-01-04T14:46:03.81"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4062717,
-          -26.40152887
+          115.40627,
+          -26.40153
         ]
       }
     },
@@ -25276,13 +25436,33 @@
         "sampleRate": 100.0,
         "elevation": 282.3,
         "startTime": "2025-05-18T05:27:03",
-        "endTime": "2025-10-23T01:57:22.95"
+        "endTime": "2026-05-13T05:17:58.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.7943128,
-          -26.42189187
+          115.79431,
+          -26.42189
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBF09",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 348.4,
+        "startTime": "2025-10-18T00:00:00",
+        "endTime": "2026-05-15T03:40:48.26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.19122,
+          -26.41363
         ]
       }
     },
@@ -25296,13 +25476,13 @@
         "sampleRate": 100.0,
         "elevation": 317.1,
         "startTime": "2025-05-17T07:31:55",
-        "endTime": "2025-10-22T09:09:23.75"
+        "endTime": "2026-05-08T04:59:59.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.5994148,
-          -26.39976013
+          116.59941,
+          -26.39976
         ]
       }
     },
@@ -25316,13 +25496,13 @@
         "sampleRate": 100.0,
         "elevation": 393.799988,
         "startTime": "2025-05-17T02:30:27",
-        "endTime": "2025-10-21T05:15:16.82"
+        "endTime": "2026-04-23T14:15:30.94"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.0624672,
-          -26.38286187
+          117.06247,
+          -26.38286
         ]
       }
     },
@@ -25336,13 +25516,13 @@
         "sampleRate": 100.0,
         "elevation": 400.2,
         "startTime": "2025-05-17T04:25:34",
-        "endTime": "2025-10-24T22:25:07.88"
+        "endTime": "2026-05-09T01:37:30.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.3339148,
-          -26.38063794
+          117.33391,
+          -26.38064
         ]
       }
     },
@@ -25356,13 +25536,13 @@
         "sampleRate": 100.0,
         "elevation": 477.2,
         "startTime": "2025-05-16T02:18:05",
-        "endTime": "2025-10-16T05:05:51.6"
+        "endTime": "2026-05-02T07:04:25.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8213449,
-          -26.38401852
+          117.82134,
+          -26.38402
         ]
       }
     },
@@ -25376,13 +25556,13 @@
         "sampleRate": 100.0,
         "elevation": 425.9,
         "startTime": "2025-05-30T08:22:44",
-        "endTime": "2025-10-16T03:51:00.41"
+        "endTime": "2026-05-03T06:39:33.36"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.093132,
-          -26.38650522
+          118.09313,
+          -26.38651
         ]
       }
     },
@@ -25396,13 +25576,13 @@
         "sampleRate": 100.0,
         "elevation": 515.6,
         "startTime": "2025-05-20T06:59:26",
-        "endTime": "2025-10-11T00:03:39.74"
+        "endTime": "2026-05-10T00:13:34.02"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6031099,
-          -26.38952582
+          118.60311,
+          -26.38953
         ]
       }
     },
@@ -25416,13 +25596,13 @@
         "sampleRate": 100.0,
         "elevation": 553.7,
         "startTime": "2025-05-23T07:04:35",
-        "endTime": "2025-10-10T06:53:33.82"
+        "endTime": "2026-05-10T00:28:48.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.0290931,
-          -26.43457388
+          119.02909,
+          -26.43457
         ]
       }
     },
@@ -25436,13 +25616,13 @@
         "sampleRate": 100.0,
         "elevation": 579.2,
         "startTime": "2025-05-19T08:21:03",
-        "endTime": "2025-10-10T04:30:51.09"
+        "endTime": "2026-05-09T07:27:01.06"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3610044,
-          -26.46180331
+          119.361,
+          -26.4618
         ]
       }
     },
@@ -25456,13 +25636,13 @@
         "sampleRate": 100.0,
         "elevation": 601.0,
         "startTime": "2025-05-23T02:28:27.73",
-        "endTime": "2025-10-10T02:32:18.8"
+        "endTime": "2026-05-10T02:59:59.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.8089064,
-          -26.35788398
+          119.80891,
+          -26.35788
         ]
       }
     },
@@ -25476,13 +25656,13 @@
         "sampleRate": 100.0,
         "elevation": 37.9,
         "startTime": "2025-05-29T03:50:15.96",
-        "endTime": "2025-10-24T02:09:24.75"
+        "endTime": "2026-05-18T01:08:22.16"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          113.8524172,
-          -26.83253146
+          113.85242,
+          -26.83253
         ]
       }
     },
@@ -25496,13 +25676,13 @@
         "sampleRate": 100.0,
         "elevation": 79.1,
         "startTime": "2025-05-29T01:48:01",
-        "endTime": "2025-10-24T00:05:59.55"
+        "endTime": "2026-04-24T05:28:29.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.1960502,
-          -26.80480938
+          114.19605,
+          -26.80481
         ]
       }
     },
@@ -25516,13 +25696,13 @@
         "sampleRate": 100.0,
         "elevation": 216.6,
         "startTime": "2025-05-28T01:08:00",
-        "endTime": "2025-08-12T08:00:17.13"
+        "endTime": "2026-04-24T23:59:08.6"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.9966604,
-          -26.6404116
+          114.99666,
+          -26.64041
         ]
       }
     },
@@ -25536,13 +25716,13 @@
         "sampleRate": 100.0,
         "elevation": 247.39,
         "startTime": "2025-06-03T02:24:17.74",
-        "endTime": "2025-10-22T03:20:31.77"
+        "endTime": "2025-11-12T00:08:49.14"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4119139,
-          -26.82069235
+          115.41191,
+          -26.82069
         ]
       }
     },
@@ -25556,13 +25736,13 @@
         "sampleRate": 100.0,
         "elevation": 307.2,
         "startTime": "2025-05-18T00:55:26",
-        "endTime": "2025-10-20T05:26:18"
+        "endTime": "2026-05-13T06:44:04.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.821415,
-          -26.78746078
+          115.82142,
+          -26.78746
         ]
       }
     },
@@ -25576,13 +25756,13 @@
         "sampleRate": 100.0,
         "elevation": 310.3,
         "startTime": "2025-05-17T07:23:37",
-        "endTime": "2025-10-21T01:44:00.42"
+        "endTime": "2026-05-13T07:09:59.11"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.2041487,
-          -26.80189044
+          116.20415,
+          -26.80189
         ]
       }
     },
@@ -25596,13 +25776,13 @@
         "sampleRate": 100.0,
         "elevation": 361.0,
         "startTime": "2025-05-15T05:05:34",
-        "endTime": "2025-10-23T02:14:52.51"
+        "endTime": "2026-05-05T08:15:14.36"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6005198,
-          -26.79963346
+          116.60052,
+          -26.79963
         ]
       }
     },
@@ -25616,13 +25796,13 @@
         "sampleRate": 100.0,
         "elevation": 393.5,
         "startTime": "2025-05-15T04:00:32",
-        "endTime": "2025-10-21T07:48:32.85"
+        "endTime": "2026-04-15T05:34:50.36"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9537915,
-          -26.79267681
+          116.95379,
+          -26.79268
         ]
       }
     },
@@ -25636,13 +25816,13 @@
         "sampleRate": 100.0,
         "elevation": 492.299988,
         "startTime": "2025-05-18T07:20:29",
-        "endTime": "2025-10-24T06:58:32.19"
+        "endTime": "2026-04-24T23:05:30.58"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4731859,
-          -26.77074478
+          117.47319,
+          -26.77074
         ]
       }
     },
@@ -25656,13 +25836,13 @@
         "sampleRate": 100.0,
         "elevation": 505.6,
         "startTime": "2025-05-14T01:51:01",
-        "endTime": "2025-10-09T02:55:42.85"
+        "endTime": "2026-05-07T06:36:18.96"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.8200166,
-          -26.82349352
+          117.82002,
+          -26.82349
         ]
       }
     },
@@ -25676,13 +25856,13 @@
         "sampleRate": 100.0,
         "elevation": 436.3,
         "startTime": "2025-05-25T03:46:25",
-        "endTime": "2025-10-09T07:00:34.07"
+        "endTime": "2026-05-08T06:51:08.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.1667418,
-          -26.87563611
+          118.16674,
+          -26.87564
         ]
       }
     },
@@ -25696,13 +25876,13 @@
         "sampleRate": 100.0,
         "elevation": 481.8,
         "startTime": "2025-05-25T06:22:38",
-        "endTime": "2025-10-09T08:22:34.69"
+        "endTime": "2026-01-23T15:59:40.83"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.5905387,
-          -26.79200286
+          118.59054,
+          -26.792
         ]
       }
     },
@@ -25716,13 +25896,13 @@
         "sampleRate": 100.0,
         "elevation": 503.799988,
         "startTime": "2025-05-28T00:09:50",
-        "endTime": "2025-10-09T06:37:05.77"
+        "endTime": "2026-05-09T03:06:31.2"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.0025518,
-          -26.79516904
+          119.00255,
+          -26.79517
         ]
       }
     },
@@ -25736,13 +25916,13 @@
         "sampleRate": 100.0,
         "elevation": 594.1,
         "startTime": "2025-05-27T07:26:11",
-        "endTime": "2025-10-09T00:01:19.71"
+        "endTime": "2026-05-09T05:29:50.48"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3971627,
-          -26.80207331
+          119.39716,
+          -26.80207
         ]
       }
     },
@@ -25756,13 +25936,13 @@
         "sampleRate": 100.0,
         "elevation": 163.1,
         "startTime": "2025-05-29T05:19:17",
-        "endTime": "2025-10-27T04:07:55.22"
+        "endTime": "2026-04-24T00:06:16.95"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.1889356,
-          -27.26107111
+          114.18894,
+          -27.26107
         ]
       }
     },
@@ -25776,13 +25956,13 @@
         "sampleRate": 100.0,
         "elevation": 135.69,
         "startTime": "2025-05-30T01:48:16.08",
-        "endTime": "2025-10-19T02:31:54.42"
+        "endTime": "2026-04-24T02:37:00.29"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.6134413,
-          -27.18992375
+          114.61344,
+          -27.18992
         ]
       }
     },
@@ -25796,13 +25976,13 @@
         "sampleRate": 100.0,
         "elevation": 243.899994,
         "startTime": "2025-05-28T04:30:05.8",
-        "endTime": "2025-10-27T01:55:35.64"
+        "endTime": "2026-04-23T07:28:14.63"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.0035369,
-          -27.29396615
+          115.00354,
+          -27.29397
         ]
       }
     },
@@ -25816,13 +25996,33 @@
         "sampleRate": 100.0,
         "elevation": 233.1,
         "startTime": "2025-05-16T05:48:56",
-        "endTime": "2025-05-27T05:38:29.42"
+        "endTime": "2025-12-04T02:40:23.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.3895465,
-          -27.20044486
+          115.38955,
+          -27.20044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBH08",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 307.1,
+        "startTime": "2025-10-22T05:11:02.1",
+        "endTime": "2026-05-13T02:23:42.96"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.81144,
+          -27.15936
         ]
       }
     },
@@ -25836,13 +26036,13 @@
         "sampleRate": 100.0,
         "elevation": 311.6,
         "startTime": "2025-05-16T01:47:12",
-        "endTime": "2025-10-20T07:12:10.67"
+        "endTime": "2026-05-16T00:23:52.89"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.1973475,
-          -27.1977787
+          116.19735,
+          -27.19778
         ]
       }
     },
@@ -25856,13 +26056,13 @@
         "sampleRate": 100.0,
         "elevation": 332.7,
         "startTime": "2025-05-14T06:33:05",
-        "endTime": "2025-10-23T06:21:30.49"
+        "endTime": "2026-05-16T02:43:48.02"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.5581897,
-          -27.24004345
+          116.55819,
+          -27.24004
         ]
       }
     },
@@ -25875,14 +26075,14 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 441.7,
-        "startTime": "2025-05-15T03:57:25",
-        "endTime": "2025-05-28T07:59:34.43"
+        "startTime": "2025-05-08T02:36:13.13",
+        "endTime": "2026-05-17T04:01:09.05"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9588749,
-          -27.20080603
+          116.95887,
+          -27.20081
         ]
       }
     },
@@ -25896,13 +26096,13 @@
         "sampleRate": 100.0,
         "elevation": 454.3,
         "startTime": "2025-05-14T05:38:48",
-        "endTime": "2025-10-08T07:38:27.24"
+        "endTime": "2026-05-07T08:47:37.95"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4004429,
-          -27.14389397
+          117.40044,
+          -27.14389
         ]
       }
     },
@@ -25916,13 +26116,13 @@
         "sampleRate": 100.0,
         "elevation": 424.7,
         "startTime": "2025-05-14T08:56:13",
-        "endTime": "2025-10-08T07:03:37.17"
+        "endTime": "2026-05-07T01:56:48.75"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.7937807,
-          -27.20157841
+          117.79378,
+          -27.20158
         ]
       }
     },
@@ -25936,13 +26136,13 @@
         "sampleRate": 100.0,
         "elevation": 457.899994,
         "startTime": "2025-05-22T00:41:51",
-        "endTime": "2025-10-07T08:07:33.84"
+        "endTime": "2025-10-30T23:44:20.87"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.2102066,
-          -27.2510257
+          118.21021,
+          -27.25103
         ]
       }
     },
@@ -25956,13 +26156,13 @@
         "sampleRate": 100.0,
         "elevation": 463.5,
         "startTime": "2025-05-26T03:34:15",
-        "endTime": "2025-10-08T05:50:31.14"
+        "endTime": "2026-05-07T07:31:05.66"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6081268,
-          -27.19229343
+          118.60813,
+          -27.19229
         ]
       }
     },
@@ -25976,13 +26176,13 @@
         "sampleRate": 100.0,
         "elevation": 464.4,
         "startTime": "2025-05-26T01:20:16",
-        "endTime": "2025-10-09T03:26:42.63"
+        "endTime": "2026-03-27T17:00:57.67"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9967851,
-          -27.20123878
+          118.99679,
+          -27.20124
         ]
       }
     },
@@ -25996,13 +26196,13 @@
         "sampleRate": 100.0,
         "elevation": 165.5,
         "startTime": "2025-05-29T06:27:30",
-        "endTime": "2025-10-27T06:01:31.05"
+        "endTime": "2026-04-23T09:45:29.16"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.1762644,
-          -27.58244644
+          114.17626,
+          -27.58245
         ]
       }
     },
@@ -26016,13 +26216,13 @@
         "sampleRate": 100.0,
         "elevation": 189.75,
         "startTime": "2025-05-30T02:58:10.74",
-        "endTime": "2025-10-19T02:05:49.64"
+        "endTime": "2026-05-19T04:17:16.7"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.6929646,
-          -27.62636056
+          114.69296,
+          -27.62636
         ]
       }
     },
@@ -26036,13 +26236,13 @@
         "sampleRate": 100.0,
         "elevation": 233.3,
         "startTime": "2025-05-28T05:51:00",
-        "endTime": "2025-10-28T04:24:41.22"
+        "endTime": "2026-04-23T05:44:10.32"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
           114.99946,
-          -27.59939362
+          -27.59939
         ]
       }
     },
@@ -26056,13 +26256,13 @@
         "sampleRate": 100.0,
         "elevation": 237.4,
         "startTime": "2025-05-15T03:12:44",
-        "endTime": "2025-08-29T20:58:18.56"
+        "endTime": "2026-05-13T03:37:28.99"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4063676,
-          -27.57374052
+          115.40637,
+          -27.57374
         ]
       }
     },
@@ -26076,13 +26276,13 @@
         "sampleRate": 100.0,
         "elevation": 267.8,
         "startTime": "2025-05-15T06:06:34",
-        "endTime": "2025-10-24T04:38:40.71"
+        "endTime": "2026-05-13T00:34:54.56"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.7607008,
-          -27.60259889
+          115.7607,
+          -27.6026
         ]
       }
     },
@@ -26101,8 +26301,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.2135826,
-          -27.59568535
+          116.21358,
+          -27.59569
         ]
       }
     },
@@ -26116,13 +26316,13 @@
         "sampleRate": 100.0,
         "elevation": 376.0,
         "startTime": "2025-08-06T00:00:00",
-        "endTime": "2025-10-23T10:07:16.13"
+        "endTime": "2026-05-17T00:22:21"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6026541,
-          -27.59677026
+          116.60265,
+          -27.59677
         ]
       }
     },
@@ -26136,13 +26336,13 @@
         "sampleRate": 100.0,
         "elevation": 381.0,
         "startTime": "2025-05-14T04:07:34",
-        "endTime": "2025-10-22T01:23:41.34"
+        "endTime": "2026-05-04T03:42:17.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9773681,
-          -27.56624514
+          116.97737,
+          -27.56625
         ]
       }
     },
@@ -26155,14 +26355,14 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 483.600006,
-        "startTime": "2025-05-15T03:59:02",
-        "endTime": "2025-10-08T01:52:50.2"
+        "startTime": "2025-05-08T02:30:12.63",
+        "endTime": "2025-10-08T00:00:00"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.4323464,
-          -27.66043501
+          117.43235,
+          -27.66044
         ]
       }
     },
@@ -26176,13 +26376,13 @@
         "sampleRate": 100.0,
         "elevation": 415.799988,
         "startTime": "2025-05-23T00:15:39",
-        "endTime": "2025-10-06T08:29:23.3"
+        "endTime": "2026-05-06T06:13:58.1"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.9058885,
-          -27.59304912
+          117.90589,
+          -27.59305
         ]
       }
     },
@@ -26196,13 +26396,13 @@
         "sampleRate": 100.0,
         "elevation": 425.9,
         "startTime": "2025-05-22T03:38:36",
-        "endTime": "2025-10-07T01:42:04.14"
+        "endTime": "2026-05-08T02:21:32.5"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.2231059,
-          -27.59870017
+          118.22311,
+          -27.5987
         ]
       }
     },
@@ -26216,13 +26416,13 @@
         "sampleRate": 100.0,
         "elevation": 476.2,
         "startTime": "2025-05-23T03:15:00",
-        "endTime": "2025-10-07T04:13:47.55"
+        "endTime": "2026-05-08T00:53:24.09"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
           118.5476,
-          -27.61906817
+          -27.61907
         ]
       }
     },
@@ -26235,14 +26435,14 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 528.3,
-        "startTime": "2025-05-24T02:51:45",
-        "endTime": "2025-06-02T07:07:54.01"
+        "startTime": "2025-05-08T02:32:00.78",
+        "endTime": "2026-05-07T04:22:20.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.0949543,
-          -27.56226826
+          119.09495,
+          -27.56227
         ]
       }
     },
@@ -26256,13 +26456,13 @@
         "sampleRate": 100.0,
         "elevation": 522.9,
         "startTime": "2025-05-08T03:26:51.36",
-        "endTime": "2025-10-08T03:45:55.6"
+        "endTime": "2026-05-07T02:04:11.71"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.4270392,
-          -27.59758214
+          119.42704,
+          -27.59758
         ]
       }
     },
@@ -26349,40 +26549,40 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "WBJ07",
-        "network": "WG",
-        "channel": "HHZ",
-        "sensor": "",
-        "sampleRate": 100.0,
-        "elevation": 284.0,
-        "startTime": "2025-05-13T03:59:06",
-        "endTime": "2025-10-24T23:13:05.15"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          115.4044545,
-          -28.01982797
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "WBJ08",
         "network": "WG",
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 292.2,
-        "startTime": "2025-05-13T07:44:01",
-        "endTime": "2025-10-22T05:00:09.89"
+        "startTime": "2025-05-08T02:20:06.99",
+        "endTime": "2026-01-03T07:00:12.67"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.808071,
-          -27.99892741
+          115.80807,
+          -27.99893
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBJ09",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 305.2,
+        "startTime": "2025-05-14T04:27:57",
+        "endTime": "2025-12-31T03:52:21.36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.22712,
+          -28.01047
         ]
       }
     },
@@ -26396,13 +26596,13 @@
         "sampleRate": 100.0,
         "elevation": 376.8,
         "startTime": "2025-05-13T06:44:04",
-        "endTime": "2025-10-22T05:19:51.79"
+        "endTime": "2026-04-14T00:00:43.35"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.5988797,
-          -28.04148345
+          116.59888,
+          -28.04148
         ]
       }
     },
@@ -26501,8 +26701,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3959943,
-          -28.0171826
+          119.39599,
+          -28.01718
         ]
       }
     },
@@ -26561,8 +26761,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.1225437,
-          -28.10100425
+          115.12254,
+          -28.101
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBJ57",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 284.0,
+        "startTime": "2025-10-24T00:00:00",
+        "endTime": "2026-05-12T05:17:58.37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.40445,
+          -28.01983
         ]
       }
     },
@@ -26821,8 +27041,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.38333333333334,
-          -28.39638888888889
+          119.38333,
+          -28.39639
         ]
       }
     },
@@ -26861,8 +27081,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.2380834,
-          -28.3975923
+          120.23808,
+          -28.39759
         ]
       }
     },
@@ -26881,8 +27101,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.58333333333333,
-          -28.365555555555556
+          120.58333,
+          -28.36556
         ]
       }
     },
@@ -27009,20 +27229,20 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "WBK51",
+        "name": "WBK61",
         "network": "WG",
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 319.93,
         "startTime": "2025-07-04T04:33:39.74",
-        "endTime": "2025-10-22T07:29:25"
+        "endTime": "2026-05-10T00:21:01.48"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.9878016,
-          -28.40544432
+          116.9878,
+          -28.40544
         ]
       }
     },
@@ -27036,13 +27256,73 @@
         "sampleRate": 100.0,
         "elevation": 414.0,
         "startTime": "2025-05-17T04:59:06.74",
-        "endTime": "2025-10-08T02:15:10.38"
+        "endTime": "2026-05-06T03:22:02.25"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.064642,
-          -28.41372361
+          119.06464,
+          -28.41372
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBK69",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 470.0,
+        "startTime": "2025-05-16T03:53:00",
+        "endTime": "2025-12-10T18:22:17.61"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.23389,
+          -28.39772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBK72",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 503.2,
+        "startTime": "2025-05-16T05:31:00",
+        "endTime": "2026-03-17T00:07:34.37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.39907,
+          -28.39902
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBK74",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 420.1,
+        "startTime": "2025-05-14T07:16:00",
+        "endTime": "2026-05-11T04:53:47.38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.20528,
+          -28.40241
         ]
       }
     },
@@ -27061,8 +27341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.605423,
-          -28.781835
+          114.60542,
+          -28.78184
         ]
       }
     },
@@ -27181,8 +27461,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.003436919345,
-          -28.7950843735812
+          117.00344,
+          -28.79508
         ]
       }
     },
@@ -27201,8 +27481,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.43923946029,
-          -28.7069253976166
+          117.43924,
+          -28.70693
         ]
       }
     },
@@ -27221,8 +27501,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.850083568942,
-          -28.7860703926535
+          117.85008,
+          -28.78607
         ]
       }
     },
@@ -27241,8 +27521,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.245994542883,
-          -28.8008921159574
+          118.24599,
+          -28.80089
         ]
       }
     },
@@ -27281,8 +27561,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9829416,
-          -28.8106867
+          118.98294,
+          -28.81069
         ]
       }
     },
@@ -27301,8 +27581,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.3823813,
-          -28.7843102
+          119.38238,
+          -28.78431
         ]
       }
     },
@@ -27321,8 +27601,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.8199606,
-          -28.8086039119819
+          119.81996,
+          -28.8086
         ]
       }
     },
@@ -27341,8 +27621,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.2078002,
-          -28.7985681
+          120.2078,
+          -28.79857
         ]
       }
     },
@@ -27361,8 +27641,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.5754379,
-          -28.8047022
+          120.57544,
+          -28.8047
         ]
       }
     },
@@ -27489,26 +27769,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "WBL55",
-        "network": "WG",
-        "channel": "HHZ",
-        "sensor": "",
-        "sampleRate": 100.0,
-        "elevation": 460.0,
-        "startTime": "2025-05-17T07:12:52.74",
-        "endTime": "2025-10-08T00:59:40.68"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          118.5230154,
-          -28.77387473
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "WBL58",
         "network": "WG",
         "channel": "HHZ",
@@ -27516,13 +27776,13 @@
         "sampleRate": 100.0,
         "elevation": 291.78,
         "startTime": "2025-07-03T08:29:33.74",
-        "endTime": "2025-10-23T00:50:19.51"
+        "endTime": "2026-04-13T14:02:19.22"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.8224156,
-          -28.76175612
+          115.82242,
+          -28.76176
         ]
       }
     },
@@ -27536,13 +27796,13 @@
         "sampleRate": 100.0,
         "elevation": 271.15,
         "startTime": "2025-07-04T01:53:14.74",
-        "endTime": "2025-10-22T23:01:01.87"
+        "endTime": "2025-11-05T22:23:17.83"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.2384715,
-          -28.79631935
+          116.23847,
+          -28.79632
         ]
       }
     },
@@ -27556,13 +27816,73 @@
         "sampleRate": 100.0,
         "elevation": 369.43,
         "startTime": "2025-07-04T07:47:16.52",
-        "endTime": "2025-10-23T07:34:07.41"
+        "endTime": "2026-05-09T08:59:52.46"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.6152745,
-          -28.7924339
+          116.61527,
+          -28.79243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBL65",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 460.0,
+        "startTime": "2025-05-17T07:12:52.74",
+        "endTime": "2026-05-06T02:09:56.27"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.52302,
+          -28.77387
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBL69",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 410.3,
+        "startTime": "2025-05-16T02:11:00",
+        "endTime": "2026-05-11T07:07:25.69"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.2078,
+          -28.7985
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBL74",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 443.3,
+        "startTime": "2025-05-15T05:00:00",
+        "endTime": "2026-03-18T06:36:50.21"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.18554,
+          -28.79643
         ]
       }
     },
@@ -27682,7 +28002,7 @@
         "type": "Point",
         "coordinates": [
           117.0063,
-          -29.225166666666667
+          -29.22517
         ]
       }
     },
@@ -27701,8 +28021,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.278147923925,
-          -29.215251442107
+          117.27815,
+          -29.21525
         ]
       }
     },
@@ -27721,8 +28041,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.841931024209,
-          -29.2157437505583
+          117.84193,
+          -29.21574
         ]
       }
     },
@@ -27741,8 +28061,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.200630688216,
-          -29.1861782246821
+          118.20063,
+          -29.18618
         ]
       }
     },
@@ -27761,8 +28081,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6012846,
-          -29.2017803
+          118.60128,
+          -29.20178
         ]
       }
     },
@@ -27781,8 +28101,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.9861461,
-          -29.1973255
+          118.98615,
+          -29.19733
         ]
       }
     },
@@ -27801,8 +28121,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.4087624,
-          -29.2207399
+          119.40876,
+          -29.22074
         ]
       }
     },
@@ -27821,8 +28141,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.7882709,
-          -29.193467
+          119.78827,
+          -29.19347
         ]
       }
     },
@@ -27989,6 +28309,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "WBM56",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 47.0,
+        "startTime": "2025-01-01T00:00:00",
+        "endTime": "2025-07-22T19:20:35.56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.98732,
+          -29.17894
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "WBM57",
         "network": "WG",
         "channel": "HHZ",
@@ -28001,8 +28341,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.4458323,
-          -29.19095497
+          115.44583,
+          -29.19095
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WBM75",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 481.3,
+        "startTime": "2025-05-15T01:39:00",
+        "endTime": "2026-05-11T04:07:38.7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.59519,
+          -29.12695
         ]
       }
     },
@@ -28122,7 +28482,7 @@
         "type": "Point",
         "coordinates": [
           117.0342,
-          -29.593416666666666
+          -29.59342
         ]
       }
     },
@@ -28141,8 +28501,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.40791666666667,
-          -29.608783333333335
+          117.40792,
+          -29.60878
         ]
       }
     },
@@ -28161,8 +28521,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.79908333333333,
-          -29.611283333333333
+          117.79908,
+          -29.61128
         ]
       }
     },
@@ -28181,8 +28541,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.05993333333333,
-          -29.60791666666667
+          118.05993,
+          -29.60792
         ]
       }
     },
@@ -28281,8 +28641,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.182193,
-          -29.60033741
+          120.18219,
+          -29.60034
         ]
       }
     },
@@ -28396,13 +28756,13 @@
         "sampleRate": 100.0,
         "elevation": -29.6,
         "startTime": "2025-07-02T03:59:51.06",
-        "endTime": "2025-10-18T04:34:04.86"
+        "endTime": "2026-05-08T04:39:23.52"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.7103959,
-          -29.62740165
+          115.7104,
+          -29.6274
         ]
       }
     },
@@ -28416,7 +28776,7 @@
         "sampleRate": 100.0,
         "elevation": 212.0,
         "startTime": "2022-12-10T19:33:47.87",
-        "endTime": "2023-07-23T14:59:59.28"
+        "endTime": "2023-07-23T14:59:59.27"
       },
       "geometry": {
         "type": "Point",
@@ -28481,8 +28841,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.548455649534,
-          -29.9894172286339
+          116.54846,
+          -29.98942
         ]
       }
     },
@@ -28541,8 +28901,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.24549666666667,
-          -30.030958333333334
+          118.2455,
+          -30.03096
         ]
       }
     },
@@ -28641,7 +29001,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.999463888889,
+          120.99946,
           -30.0174
         ]
       }
@@ -28661,8 +29021,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.392530555556,
-          -30.00196388888889
+          121.39253,
+          -30.00196
         ]
       }
     },
@@ -28681,8 +29041,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.828547222222,
-          -30.00274722222222
+          121.82855,
+          -30.00275
         ]
       }
     },
@@ -28776,7 +29136,7 @@
         "sampleRate": 100.0,
         "elevation": 264.0,
         "startTime": "2023-02-23T05:29:39.02",
-        "endTime": "2023-11-28T04:43:10.68"
+        "endTime": "2023-11-28T04:43:09.87"
       },
       "geometry": {
         "type": "Point",
@@ -28841,8 +29201,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.51940333333333,
-          -30.394718333333334
+          118.5194,
+          -30.39472
         ]
       }
     },
@@ -28876,7 +29236,7 @@
         "sampleRate": 100.0,
         "elevation": 390.0,
         "startTime": "2023-02-28T02:28:45",
-        "endTime": "2023-12-31T23:59:59.99"
+        "endTime": "2025-04-30T07:51:09.39"
       },
       "geometry": {
         "type": "Point",
@@ -28921,8 +29281,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.23873055555556,
-          -30.4041166666667
+          120.23873,
+          -30.40412
         ]
       }
     },
@@ -28941,8 +29301,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.63921666666667,
-          -30.4339972222222
+          120.63922,
+          -30.434
         ]
       }
     },
@@ -28962,7 +29322,7 @@
         "type": "Point",
         "coordinates": [
           121.01975,
-          -30.4077472222222
+          -30.40775
         ]
       }
     },
@@ -28981,8 +29341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.38198055555554,
-          -30.4180333333333
+          121.38198,
+          -30.41803
         ]
       }
     },
@@ -29061,7 +29421,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.40776666666666,
+          115.40777,
           -30.8862
         ]
       }
@@ -29082,7 +29442,7 @@
         "type": "Point",
         "coordinates": [
           115.8143,
-          -30.798130555555556
+          -30.79813
         ]
       }
     },
@@ -29101,8 +29461,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.14433055555556,
-          -30.80216666666667
+          116.14433,
+          -30.80217
         ]
       }
     },
@@ -29141,8 +29501,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.782545,
-          -30.798845
+          117.78254,
+          -30.79885
         ]
       }
     },
@@ -29241,8 +29601,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.20083333333334,
-          -30.7998333333333
+          120.20083,
+          -30.79983
         ]
       }
     },
@@ -29261,8 +29621,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.56094166666666,
-          -30.7953972222222
+          120.56094,
+          -30.7954
         ]
       }
     },
@@ -29281,8 +29641,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.98509722222222,
-          -30.7837305555556
+          120.9851,
+          -30.78373
         ]
       }
     },
@@ -29301,8 +29661,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.1921631,
-          -30.8076939
+          122.19216,
+          -30.80769
         ]
       }
     },
@@ -29321,8 +29681,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.5972978,
-          -30.7911043
+          122.5973,
+          -30.7911
         ]
       }
     },
@@ -29341,8 +29701,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.9978187,
-          -30.7930968
+          122.99782,
+          -30.7931
         ]
       }
     },
@@ -29361,8 +29721,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.41127777777778,
-          -31.200480555555554
+          115.41128,
+          -31.20048
         ]
       }
     },
@@ -29381,8 +29741,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.18036666666667,
-          -31.1824305555556
+          116.18037,
+          -31.18243
         ]
       }
     },
@@ -29421,8 +29781,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.376944,
-          -31.202778
+          117.37694,
+          -31.20278
         ]
       }
     },
@@ -29441,8 +29801,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.795234,
-          -31.114903
+          117.79523,
+          -31.1149
         ]
       }
     },
@@ -29561,8 +29921,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.30049722222222,
-          -31.1506472222222
+          120.3005,
+          -31.15065
         ]
       }
     },
@@ -29581,8 +29941,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.71338055555556,
-          -31.1179805555556
+          120.71338,
+          -31.11798
         ]
       }
     },
@@ -29601,7 +29961,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.94183333333334,
+          120.94183,
           -31.1971
         ]
       }
@@ -29701,8 +30061,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.0028148,
-          -31.1985255
+          123.00281,
+          -31.19853
         ]
       }
     },
@@ -29721,7 +30081,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.743663888889,
+          115.74366,
           -31.6612
         ]
       }
@@ -29741,8 +30101,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.064666666667,
-          -31.502480555555554
+          116.06467,
+          -31.50248
         ]
       }
     },
@@ -29761,8 +30121,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.62031666666667,
-          -31.56509722222222
+          116.62032,
+          -31.5651
         ]
       }
     },
@@ -29781,7 +30141,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.01209722222222,
+          117.0121,
           -31.5918
         ]
       }
@@ -29801,7 +30161,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.39808333333333,
+          117.39808,
           -31.61825
         ]
       }
@@ -29821,7 +30181,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.30004722222222,
+          118.30005,
           -31.6016
         ]
       }
@@ -29841,8 +30201,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.59290277777778,
-          -31.568597222222223
+          118.5929,
+          -31.5686
         ]
       }
     },
@@ -29901,8 +30261,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.2027716,
-          -31.6238541
+          120.20277,
+          -31.62385
         ]
       }
     },
@@ -29921,8 +30281,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.6040769,
-          -31.5945321
+          120.60408,
+          -31.59453
         ]
       }
     },
@@ -29941,8 +30301,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.9982238,
-          -31.6025419
+          120.99822,
+          -31.60254
         ]
       }
     },
@@ -29961,8 +30321,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.3961138888889,
-          -31.6035472222222
+          121.39611,
+          -31.60355
         ]
       }
     },
@@ -30121,8 +30481,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.87558596928,
-          -31.9315235264381
+          117.87559,
+          -31.93152
         ]
       }
     },
@@ -30141,8 +30501,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.251563821326,
-          -31.9192171651819
+          118.25156,
+          -31.91922
         ]
       }
     },
@@ -30161,8 +30521,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.528858237327,
-          -32.0333920162204
+          118.52886,
+          -32.03339
         ]
       }
     },
@@ -30221,8 +30581,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.20921388888888,
-          -32.019333333333336
+          120.20921,
+          -32.01933
         ]
       }
     },
@@ -30241,8 +30601,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.6087881,
-          -32.0028425
+          120.60879,
+          -32.00284
         ]
       }
     },
@@ -30281,8 +30641,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.8264823,
-          -32.0038621
+          121.82648,
+          -32.00386
         ]
       }
     },
@@ -30301,8 +30661,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.2035705,
-          -31.9988908
+          122.20357,
+          -31.99889
         ]
       }
     },
@@ -30361,8 +30721,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.1996639,
-          -32.40318333
+          116.19966,
+          -32.40318
         ]
       }
     },
@@ -30421,8 +30781,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.428213341036,
-          -32.3625976080534
+          117.42821,
+          -32.3626
         ]
       }
     },
@@ -30461,7 +30821,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.13674722222223,
+          118.13675,
           -32.3557
         ]
       }
@@ -30481,7 +30841,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.56761388888889,
+          118.56761,
           -32.3591
         ]
       }
@@ -30541,7 +30901,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.17128333333334,
+          120.17128,
           -32.39
         ]
       }
@@ -30561,8 +30921,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.6059324,
-          -32.4019503
+          120.60593,
+          -32.40195
         ]
       }
     },
@@ -30581,8 +30941,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.9671463,
-          -32.4005593
+          120.96715,
+          -32.40056
         ]
       }
     },
@@ -30601,8 +30961,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.4026979,
-          -32.3934387
+          121.4027,
+          -32.39344
         ]
       }
     },
@@ -30621,8 +30981,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.77444722222222,
-          -32.407833333333336
+          121.77445,
+          -32.40783
         ]
       }
     },
@@ -30641,8 +31001,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.20363055555556,
-          -32.3934805555556
+          122.20363,
+          -32.39348
         ]
       }
     },
@@ -30681,8 +31041,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.0002251,
-          -32.4015897
+          123.00023,
+          -32.40159
         ]
       }
     },
@@ -30801,8 +31161,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.422711063758,
-          -32.7597959462344
+          117.42271,
+          -32.7598
         ]
       }
     },
@@ -30821,8 +31181,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.767490710178,
-          -32.7560450924331
+          117.76749,
+          -32.75605
         ]
       }
     },
@@ -30841,8 +31201,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.62594722222222,
-          -32.80261388888889
+          118.62595,
+          -32.80261
         ]
       }
     },
@@ -30861,7 +31221,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.03938333333333,
+          119.03938,
           -32.7955
         ]
       }
@@ -30881,8 +31241,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.37833055555555,
-          -32.829483333333336
+          119.37833,
+          -32.82948
         ]
       }
     },
@@ -30921,8 +31281,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.1942638888889,
-          -32.7968305555556
+          120.19426,
+          -32.79683
         ]
       }
     },
@@ -30941,8 +31301,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.57311388888888,
-          -32.772216666666665
+          120.57311,
+          -32.77222
         ]
       }
     },
@@ -30961,8 +31321,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.99789722222222,
-          -32.71738055555556
+          120.9979,
+          -32.71738
         ]
       }
     },
@@ -30981,8 +31341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.41863333333333,
-          -32.799413888888886
+          121.41863,
+          -32.79941
         ]
       }
     },
@@ -31001,8 +31361,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.1994854,
-          -32.7983406
+          122.19949,
+          -32.79834
         ]
       }
     },
@@ -31021,7 +31381,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.597173,
+          122.59717,
           -32.79597
         ]
       }
@@ -31041,8 +31401,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.0023716,
-          -32.7878725
+          123.00237,
+          -32.78787
         ]
       }
     },
@@ -31076,13 +31436,13 @@
         "sampleRate": 100.0,
         "elevation": 322.3,
         "startTime": "2025-05-08T02:21:55.14",
-        "endTime": "2026-02-19T01:25:06.43"
+        "endTime": "2026-05-23T05:21:15.71"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.573128,
-          -32.772211
+          120.57313,
+          -32.77221
         ]
       }
     },
@@ -31161,7 +31521,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.0303286,
+          117.03033,
           -33.2844
         ]
       }
@@ -31201,8 +31561,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.073920334395,
-          -33.1711169788495
+          118.07392,
+          -33.17112
         ]
       }
     },
@@ -31221,8 +31581,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.717650005368,
-          -33.1167481488895
+          118.71765,
+          -33.11675
         ]
       }
     },
@@ -31241,8 +31601,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.963792596942,
-          -33.2415856516095
+          118.96379,
+          -33.24159
         ]
       }
     },
@@ -31261,8 +31621,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.388762939931,
-          -33.182857325396
+          119.38876,
+          -33.18286
         ]
       }
     },
@@ -31281,8 +31641,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.232563888889,
-          -33.1547333333333
+          120.23256,
+          -33.15473
         ]
       }
     },
@@ -31301,7 +31661,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.61573333333332,
+          120.61573,
           -33.2264
         ]
       }
@@ -31321,8 +31681,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.012306,
-          -33.155028
+          121.01231,
+          -33.15503
         ]
       }
     },
@@ -31341,7 +31701,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.4,
+          121.40807,
           -33.16485
         ]
       }
@@ -31361,8 +31721,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.77356388888889,
-          -33.213008333333335
+          121.77356,
+          -33.21301
         ]
       }
     },
@@ -31382,7 +31742,7 @@
         "type": "Point",
         "coordinates": [
           122.16155,
-          -33.2207472222222
+          -33.22075
         ]
       }
     },
@@ -31401,8 +31761,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.6072255,
-          -33.1981709
+          122.60723,
+          -33.19817
         ]
       }
     },
@@ -31421,8 +31781,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.0064634,
-          -33.1758084
+          123.00646,
+          -33.17581
         ]
       }
     },
@@ -31441,8 +31801,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.05818055555555,
-          -33.64541388888889
+          115.05818,
+          -33.64541
         ]
       }
     },
@@ -31461,8 +31821,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.8636994,
-          -33.57787466
+          115.8637,
+          -33.57787
         ]
       }
     },
@@ -31501,8 +31861,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.582013977505,
-          -33.6227244620216
+          116.58201,
+          -33.62272
         ]
       }
     },
@@ -31541,7 +31901,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.40271388888888,
+          117.40271,
           -33.60335
         ]
       }
@@ -31561,8 +31921,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.765673875949,
-          -33.6280663075814
+          117.76567,
+          -33.62807
         ]
       }
     },
@@ -31581,8 +31941,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.256974328017,
-          -33.7077302045958
+          118.25697,
+          -33.70773
         ]
       }
     },
@@ -31601,8 +31961,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.995718174651,
-          -33.6335375824977
+          118.99572,
+          -33.63354
         ]
       }
     },
@@ -31621,8 +31981,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.354514444296,
-          -33.6054295755161
+          119.35451,
+          -33.60543
         ]
       }
     },
@@ -31641,8 +32001,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.764594036158,
-          -33.4851620207924
+          119.76459,
+          -33.48516
         ]
       }
     },
@@ -31661,8 +32021,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.25758055555555,
-          -33.59408055555556
+          120.25758,
+          -33.59408
         ]
       }
     },
@@ -31681,8 +32041,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.62104722222222,
-          -33.62251666666667
+          120.62105,
+          -33.62252
         ]
       }
     },
@@ -31701,8 +32061,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.453472,
-          -33.573028
+          121.45347,
+          -33.57303
         ]
       }
     },
@@ -31721,8 +32081,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.78769722222222,
-          -33.6091638888889
+          121.7877,
+          -33.60916
         ]
       }
     },
@@ -31741,7 +32101,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.114647,
+          122.11465,
           -33.59835
         ]
       }
@@ -31761,8 +32121,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.595767,
-          -33.615983
+          122.59577,
+          -33.61598
         ]
       }
     },
@@ -31781,8 +32141,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.31488333333333,
-          -33.5702472222222
+          123.31488,
+          -33.57025
         ]
       }
     },
@@ -31829,6 +32189,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "WBX73",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 158.0,
+        "startTime": "2025-07-04T05:34:03",
+        "endTime": "2026-05-23T03:57:40.05"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.788,
+          -33.60822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "WBY07",
         "network": "WG",
         "channel": "HHZ",
@@ -31861,8 +32241,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.76578333333333,
-          -33.97779722222222
+          115.76578,
+          -33.9778
         ]
       }
     },
@@ -31881,8 +32261,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.139038888889,
-          -33.961930555555554
+          116.13904,
+          -33.96193
         ]
       }
     },
@@ -31941,8 +32321,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.885999906057,
-          -34.0172805992308
+          117.886,
+          -34.01728
         ]
       }
     },
@@ -31961,8 +32341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.146233958042,
-          -34.0247407368004
+          118.14623,
+          -34.02474
         ]
       }
     },
@@ -31981,8 +32361,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.591139182887,
-          -34.1423752366673
+          118.59114,
+          -34.14238
         ]
       }
     },
@@ -32021,8 +32401,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.54043333333333,
-          -33.8679166666667
+          120.54043,
+          -33.86792
         ]
       }
     },
@@ -32041,8 +32421,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.94884722222223,
-          -33.8107638888889
+          120.94885,
+          -33.81076
         ]
       }
     },
@@ -32061,7 +32441,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.554581,
+          121.55458,
           -33.77495
         ]
       }
@@ -32101,8 +32481,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.20826666666666,
-          -33.91491388888889
+          122.20827,
+          -33.91491
         ]
       }
     },
@@ -32141,8 +32521,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.01063055555555,
-          -33.80396666666667
+          123.01063,
+          -33.80397
         ]
       }
     },
@@ -32156,13 +32536,13 @@
         "sampleRate": 100.0,
         "elevation": -5.4,
         "startTime": "2025-07-05T03:38:41",
-        "endTime": "2025-10-31T10:24:54.35"
+        "endTime": "2026-05-08T13:06:02.19"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.113648,
-          -33.893983
+          120.11365,
+          -33.89398
         ]
       }
     },
@@ -32176,13 +32556,13 @@
         "sampleRate": 100.0,
         "elevation": 68.5,
         "startTime": "2025-05-08T00:48:14",
-        "endTime": "2026-02-17T06:46:26.43"
+        "endTime": "2026-05-23T08:38:28.16"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
           122.20903,
-          -33.912991
+          -33.91299
         ]
       }
     },
@@ -32196,13 +32576,13 @@
         "sampleRate": 100.0,
         "elevation": 47.6,
         "startTime": "2025-07-05T04:02:29",
-        "endTime": "2026-02-17T04:28:10.58"
+        "endTime": "2026-05-23T06:50:47.15"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          123.015358,
-          -33.806515
+          123.01536,
+          -33.80651
         ]
       }
     },
@@ -32221,8 +32601,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.11846666666666,
-          -34.29963333333333
+          115.11847,
+          -34.29963
         ]
       }
     },
@@ -32321,8 +32701,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.061041322686,
-          -34.3178076471452
+          118.06104,
+          -34.31781
         ]
       }
     },
@@ -32341,8 +32721,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.929244579903,
-          -34.4028567464217
+          118.92924,
+          -34.40286
         ]
       }
     },
@@ -32361,8 +32741,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.384849651379,
-          -34.4437048792893
+          119.38485,
+          -34.4437
         ]
       }
     },
@@ -32381,8 +32761,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.1184667,
-          -34.29963333
+          115.11847,
+          -34.29963
         ]
       }
     },
@@ -32421,7 +32801,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.58601666666667,
+          116.58602,
           -34.7957
         ]
       }
@@ -32461,8 +32841,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.84283055555555,
-          -35.02693055555556
+          117.84283,
+          -35.02693
         ]
       }
     },
@@ -32481,8 +32861,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.19593333333333,
-          -34.80141666666667
+          118.19593,
+          -34.80142
         ]
       }
     },
