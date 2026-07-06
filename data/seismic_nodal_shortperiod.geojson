@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "nodal_shortperiod",
-    "fetched": "2026-06-29T12:02:21Z"
+    "fetched": "2026-07-06T11:39:30Z"
   },
   "features": [
     {
@@ -4023,6 +4023,126 @@
         "coordinates": [
           141.20512,
           -30.926803
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP1",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 106.0,
+        "startTime": "2026-05-20T00:09:34",
+        "endTime": "2026-05-26T21:57:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.406403,
+          -43.293619
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP2",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 100.0,
+        "startTime": "2026-05-20T03:42:18",
+        "endTime": "2026-05-26T21:04:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.41219,
+          -43.28385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP3",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 94.0,
+        "startTime": "2026-05-20T04:29:34",
+        "endTime": "2026-05-26T22:10:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.408357,
+          -43.290872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP4",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 95.0,
+        "startTime": "2026-05-20T04:41:58",
+        "endTime": "2026-05-26T22:07:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.409383,
+          -43.291315
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP5",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 94.0,
+        "startTime": "2026-05-20T05:56:26",
+        "endTime": "2026-05-26T21:17:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.393912,
+          -43.283718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DFDP6",
+        "network": "2B",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
+        "sampleRate": 250.0,
+        "elevation": 85.0,
+        "startTime": "2026-05-21T04:36:14",
+        "endTime": "2026-05-26T22:15:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.406068,
+          -43.290017
         ]
       }
     },

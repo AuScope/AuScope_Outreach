@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-06-29T12:02:21Z"
+    "fetched": "2026-07-06T11:39:30Z"
   },
   "features": [
     {
@@ -23895,7 +23895,7 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 296.399994,
-        "startTime": "2025-03-23T01:57:48.8",
+        "startTime": "2025-05-23T03:10:39.8",
         "endTime": "2026-04-28T13:04:22.34"
       },
       "geometry": {
@@ -23935,7 +23935,7 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 395.700012,
-        "startTime": "2025-05-21T23:58:01",
+        "startTime": "2025-10-15T01:37:46",
         "endTime": "2026-05-14T03:31:41.64"
       },
       "geometry": {
@@ -26355,7 +26355,7 @@
         "sensor": "",
         "sampleRate": 100.0,
         "elevation": 483.600006,
-        "startTime": "2025-05-08T02:30:12.63",
+        "startTime": "2025-05-15T03:59:02",
         "endTime": "2025-10-08T00:00:00"
       },
       "geometry": {
@@ -26549,6 +26549,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "WBJ07",
+        "network": "WG",
+        "channel": "HHZ",
+        "sensor": "",
+        "sampleRate": 100.0,
+        "elevation": 284.0,
+        "startTime": "2025-05-13T03:59:06",
+        "endTime": "2026-05-12T05:17:58.37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.40445,
+          -28.01983
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "WBJ08",
         "network": "WG",
         "channel": "HHZ",
@@ -26681,7 +26701,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.6,
+          118.60001,
           -28.0001
         ]
       }
@@ -26741,7 +26761,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.8,
+          121.80001,
           -28.0125
         ]
       }
@@ -26763,26 +26783,6 @@
         "coordinates": [
           115.12254,
           -28.101
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "WBJ57",
-        "network": "WG",
-        "channel": "HHZ",
-        "sensor": "",
-        "sampleRate": 100.0,
-        "elevation": 284.0,
-        "startTime": "2025-10-24T00:00:00",
-        "endTime": "2026-05-12T05:17:58.37"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          115.40445,
-          -28.01983
         ]
       }
     },
