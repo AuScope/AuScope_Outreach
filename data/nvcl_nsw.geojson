@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-06-29T12:42:33Z"
+    "fetched": "2026-07-06T12:10:11Z"
   },
   "features": [
     {
@@ -23166,6 +23166,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Eastern Sequence Rasp Mine - Broken Hill: ESDD1010",
+        "boreholeId": "MIN_072101",
+        "boreholeLength": 501.4,
+        "elevation": 319.6,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "",
+        "drillEndDate": "2007",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-07-02",
+        "firstSeen": "2026-07-06",
+        "scannedMetres": 477.37,
+        "project": "Eastern Sequence Rasp Mine - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4691,
+          -31.9652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Yantabangee: F03D02",
         "boreholeId": "MIN_072288",
         "boreholeLength": 264.6,
@@ -28379,7 +28407,7 @@
         "boreholeLength": 0.1,
         "elevation": null,
         "custodian": "Geological Survey of NSW",
-        "drillingMethod": "",
+        "drillingMethod": "diamond drill",
         "drillEndDate": "",
         "purpose": "Metallic minerals",
         "instrument": "HyLogger 4-2303",
