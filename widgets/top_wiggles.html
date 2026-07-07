@@ -92,6 +92,29 @@ Promise.all([
   document.getElementById('list').innerHTML =
     '<div class="empty">Leaderboard data not available yet — it appears after the next hourly update.</div>';
 });
+
+// Same-page map bridge: when the AuSIS map is iframed on the same page
+// (same origin), clicking here drives it directly over a BroadcastChannel.
+// No map answers within 250 ms -> fall back to opening a new tab.
+var mapChannel = null, mapAcked = false;
+try {
+  mapChannel = new BroadcastChannel('ausis-map');
+  mapChannel.onmessage = function(ev) { if (ev.data && ev.data.type === 'ack') mapAcked = true; };
+} catch (e) {}
+document.addEventListener('click', function(ev) {
+  if (!mapChannel) return;
+  var a = ev.target.closest ? ev.target.closest('a[href*="#quake="], a[href*="#station="]') : null;
+  if (!a) return;
+  var m = /#(quake|station)=([A-Za-z0-9_-]+)/.exec(a.getAttribute('href'));
+  if (!m) return;
+  ev.preventDefault();
+  mapAcked = false;
+  mapChannel.postMessage(m[1] === 'quake'
+    ? { type: 'reveal-quake', id: m[2] }
+    : { type: 'reveal-station', code: m[2] });
+  var href = a.href;
+  setTimeout(function() { if (!mapAcked) window.open(href, '_blank', 'noopener'); }, 250);
+});
 </script>
 </body>
 </html>

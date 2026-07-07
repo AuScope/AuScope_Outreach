@@ -540,6 +540,30 @@ function updateSpotlight() {
   });
 })();
 
+// ── Widget bridge ────────────────────────────────────────────
+// The embeddable cards (widgets/) share this page's origin, so when both
+// are iframed on the same AuScope page they can drive this map over a
+// BroadcastChannel instead of opening a new tab. The map acks so widgets
+// know someone answered; without an ack they fall back to a new tab.
+try {
+  var widgetChannel = new BroadcastChannel('ausis-map');
+  widgetChannel.onmessage = function(ev) {
+    var d = ev.data || {};
+    if (d.type === 'reveal-quake' && d.id) {
+      widgetChannel.postMessage({ type: 'ack', of: d.type });
+      revealQuake(String(d.id));
+    } else if (d.type === 'reveal-station' && d.code) {
+      var code = String(d.code).toUpperCase();
+      var s = stations.filter(function(x) { return x.code === code; })[0];
+      if (s && s.marker) {
+        widgetChannel.postMessage({ type: 'ack', of: d.type });
+        map.setView([s.lat, s.lng], 8);
+        setTimeout(function() { s.marker.openPopup(); }, 300);
+      }
+    }
+  };
+} catch (e) { /* no BroadcastChannel — widgets just open new tabs */ }
+
 // ── Deep links: #station=CODE / #quake=ID open the matching popup ──
 var deepLinkDone = { station: false, quake: false };
 
