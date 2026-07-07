@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+  widgets/latest_quake.html
+  Embeddable "Latest earthquake recorded by AuSIS" card. Reads the same
+  published data as the map (event-waveforms manifest + section PNG from the
+  AuScope org repo branches) — no backend, no third-party API calls beyond
+  raw.githubusercontent.com (CORS-enabled).
+
+  Embed on auscope.org.au:
+    <iframe src="https://auscope.github.io/AuScope_Outreach/widgets/latest_quake.html"
+            width="100%" height="430" frameborder="0" style="border:none;"></iframe>
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latest earthquake recorded by AuSIS</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: transparent; }
+.card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+  overflow: hidden; max-width: 720px; margin: 0 auto;
+}
+.card-head { padding: 10px 14px 2px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; }
+.q-line { padding: 2px 14px 8px; font-size: 14px; color: #374151; }
+.q-line .mag { font-weight: 700; color: #b91c1c; font-size: 16px; }
+.q-line .ago { color: #6b7280; font-size: 12px; }
+.section-img { display: block; width: 100%; height: auto; border-top: 1px solid #e2e8f0; }
+.card-foot { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; font-size: 12px; }
+.card-foot a { color: #2563eb; text-decoration: none; font-weight: 700; }
+.card-foot a:hover { text-decoration: underline; }
+.card-foot .src { color: #94a3b8; font-size: 11px; }
+.empty { padding: 24px 14px; font-size: 13px; color: #6b7280; text-align: center; }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="card-head"><div class="card-title">Latest earthquake recorded by AuSIS school seismometers</div></div>
+  <div class="empty" id="empty">Loading&hellip;</div>
+</div>
+<script>
+const REPO = 'AuScope/AuScope_Outreach';
+const EV_BASE = 'https://raw.githubusercontent.com/' + REPO + '/event-waveforms/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function timeAgo(ms) {
+  var h = (Date.now() - ms) / 3600000;
+  if (h < 1) return Math.max(1, Math.round(h * 60)) + ' minutes ago';
+  if (h < 48) return Math.round(h) + ' hours ago';
+  return Math.round(h / 24) + ' days ago';
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+
+fetch(EV_BASE + 'manifest.json?v=' + hourStamp())
+  .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(function(m) {
+    var best = null;
+    (m.events || []).forEach(function(e) {
+      var t = e.origin ? Date.parse(e.origin) : NaN;
+      if (isNaN(t)) return;
+      if (!best || t > Date.parse(best.origin)) best = e;
+    });
+    if (!best) throw new Error('no events');
+    var t = Date.parse(best.origin);
+    var n = (best.stations || []).length;
+    document.getElementById('empty').outerHTML =
+      '<div class="q-line"><span class="mag">M' + (best.mag != null ? Number(best.mag).toFixed(1) : '?') + '</span> '
+      + esc(best.place || 'Unknown location')
+      + ' &nbsp;<span class="ago">' + timeAgo(t) + '</span></div>'
+      + '<img class="section-img" alt="Seismic record section for this earthquake across ' + n + ' school seismometers" '
+      + 'src="' + EV_BASE + encodeURIComponent(best.event_id) + '.png?v=' + hourStamp() + '">'
+      + '<div class="card-foot">'
+      + '<span class="src">Recorded by ' + n + ' school seismometers &middot; blue/red dashes = predicted P &amp; S waves</span>'
+      + '<a href="' + MAP_URL + '#quake=' + encodeURIComponent(best.event_id) + '" target="_blank" rel="noopener">Explore on the map &rarr;</a>'
+      + '</div>';
+  })
+  .catch(function() {
+    document.getElementById('empty').textContent =
+      'No recent earthquake sections available right now — check back soon.';
+  });
+</script>
+</body>
+</html>
