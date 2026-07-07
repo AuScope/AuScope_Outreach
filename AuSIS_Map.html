@@ -78,6 +78,8 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-row strong { color: #374151; }
 .q-near { margin-top: 6px; font-size: 11px; color: #4b5563; }
 .q-near b { color: #282572; }
+.q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
+.q-link:hover { text-decoration: underline; }
 .q-section { margin-top: 8px; }
 .q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
 .q-section-img { display: block; width: 360px; max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
@@ -768,13 +770,20 @@ function buildQuakePopup(f) {
             return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
           }).join('<br>') + '</div>'
         : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>');
+  // GA-sourced events link to the authoritative Geoscience Australia event
+  // page (felt reports, revisions). USGS-seeded ids have no GA page.
+  var gaLink = (p.id && /^ga/.test(p.id))
+    ? '<div><a class="q-link" href="https://earthquakes.ga.gov.au/event/' + encodeURIComponent(p.id)
+      + '" target="_blank" rel="noopener">More at Geoscience Australia &rarr;</a></div>'
+    : '';
   return '<div class="q-title">M ' + magStr + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
     + sectionHtml
-    + nearHtml;
+    + nearHtml
+    + gaLink;
 }
 
 function renderQuakes() {

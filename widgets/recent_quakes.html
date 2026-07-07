@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+  widgets/recent_quakes.html
+  Embeddable "Recent earthquakes" list — the scannable table view of the
+  same 24-month GA-sourced store the map uses. Magnitude chips follow the
+  map's recency convention (red <24 h, orange <7 d, yellow older); rows with
+  a wave glyph have an AuSIS record section and deep-link to it on the map.
+
+  Embed on auscope.org.au:
+    <iframe src="https://auscope.github.io/AuScope_Outreach/widgets/recent_quakes.html"
+            width="100%" height="420" frameborder="0" style="border:none;"></iframe>
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recent earthquakes — AuSIS</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: transparent; }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 620px; margin: 0 auto; overflow: hidden; }
+.card-head { padding: 10px 14px 6px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; }
+.card-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+ul { list-style: none; }
+li a {
+  display: flex; align-items: baseline; gap: 8px; padding: 7px 14px;
+  border-top: 1px solid #f1f5f9; font-size: 13px; color: #374151; text-decoration: none;
+}
+li a:hover { background: #f8fafc; }
+.mag {
+  font-weight: 700; font-size: 12px; color: #fff; border-radius: 10px;
+  padding: 1px 7px; min-width: 44px; text-align: center; white-space: nowrap;
+}
+.place { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ago { font-size: 11px; color: #94a3b8; white-space: nowrap; }
+.wave { font-size: 11px; color: #2563eb; white-space: nowrap; }
+.empty { padding: 20px 14px; font-size: 13px; color: #6b7280; text-align: center; }
+.card-foot { padding: 8px 14px; font-size: 11px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+.card-foot a { color: #2563eb; text-decoration: none; }
+.card-foot a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-head">
+    <div class="card-title">Recent earthquakes</div>
+    <div class="card-sub">Australian region + significant global events &middot; Geoscience Australia data</div>
+  </div>
+  <ul id="list"><div class="empty">Loading&hellip;</div></ul>
+  <div class="card-foot">&#x223F;&#xFE0E; = recorded by AuSIS school seismometers &middot; click an earthquake to see it on the
+    <a href="https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html" target="_blank" rel="noopener">map</a></div>
+</div>
+<script>
+const REPO = 'AuScope/AuScope_Outreach';
+const EV_BASE = 'https://raw.githubusercontent.com/' + REPO + '/event-waveforms/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+const N_ROWS = 10;
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function timeAgo(ms) {
+  var h = (Date.now() - ms) / 3600000;
+  if (h < 1) return Math.max(1, Math.round(h * 60)) + ' min ago';
+  if (h < 48) return Math.round(h) + ' h ago';
+  return Math.round(h / 24) + ' days ago';
+}
+// Same recency convention as the map: red <24 h, orange <7 d, yellow older
+function recencyColor(ms) {
+  var d = (Date.now() - ms) / 86400000;
+  if (d < 1) return '#dc2626';
+  if (d < 7) return '#f97316';
+  return '#d9a604';   // darker yellow so white text stays readable
+}
+
+var sections = {};
+fetch(EV_BASE + 'manifest.json?v=' + hourStamp())
+  .then(function(r) { return r.ok ? r.json() : { events: [] }; })
+  .then(function(m) { (m.events || []).forEach(function(e) { sections[e.event_id] = true; }); })
+  .catch(function() {})
+  .then(function() { return fetch('../data/earthquakes_24mo.geojson?v=' + hourStamp()); })
+  .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+  .then(function(gj) {
+    var rows = (gj.features || []).map(function(f) {
+      var p = f.properties || {};
+      var t = p.time ? Date.parse(p.time) : NaN;
+      return { id: p.id, mag: p.mag, place: p.place, t: t };
+    }).filter(function(r) { return r.id && !isNaN(r.t) && r.mag != null; })
+      .sort(function(a, b) { return b.t - a.t; })
+      .slice(0, N_ROWS);
+    if (!rows.length) throw 0;
+    document.getElementById('list').innerHTML = rows.map(function(r) {
+      return '<li><a href="' + MAP_URL + '#quake=' + encodeURIComponent(r.id) + '" target="_blank" rel="noopener">'
+        + '<span class="mag" style="background:' + recencyColor(r.t) + '">M ' + Number(r.mag).toFixed(1) + '</span>'
+        + '<span class="place">' + esc(r.place || 'Unknown location') + '</span>'
+        + (sections[r.id] ? '<span class="wave" title="Recorded by AuSIS school seismometers">&#x223F;&#xFE0E;</span>' : '')
+        + '<span class="ago">' + timeAgo(r.t) + '</span>'
+        + '</a></li>';
+    }).join('');
+  })
+  .catch(function() {
+    document.getElementById('list').innerHTML =
+      '<div class="empty">Earthquake data not available right now — try again shortly.</div>';
+  });
+</script>
+</body>
+</html>
