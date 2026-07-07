@@ -35,6 +35,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 
 from obspy import UTCDateTime, Stream
 from obspy.clients.fdsn import Client
@@ -60,7 +61,8 @@ DATA_CENTRES   = ["EARTHSCOPE"]
 # Filters applied AFTER response removal, so units stay µm/s.
 LOCAL_HP_HZ    = 1.0                             # high-pass corner (local quakes)
 DISTANT_BP_HZ  = (0.02, 0.1)                     # band-pass (distant teleseisms)
-VARIANTS       = ["raw", "local", "distant"]
+VARIANTS       = ["raw", "local", "distant", "spectrogram"]
+SPEC_FMAX_HZ   = 20.0                            # spectrogram display ceiling
 
 PLOT_W, PLOT_H = 5.0, 2.1                        # inches
 PLOT_DPI       = 192                             # 2x (~960px wide) so the
@@ -71,7 +73,13 @@ BRAND          = "#282572"                       # AuScope purple
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
-             "connection aborted", "502", "504", "bad gateway")
+             "connection aborted", "502", "504", "bad gateway",
+             "429", "too many requests")
+
+# Stations that miss one flaky upstream hour keep their previous plot (the
+# workflow restores the old branch contents into out/ first) — but only this
+# long, so a genuinely silent station ages out rather than showing forever.
+CARRY_HOURS = 6
 
 
 def short(exc):
@@ -176,7 +184,42 @@ VARIANT_SUB = {
     "raw":     "ground velocity (no filter)",
     "local":   f"{LOCAL_HP_HZ:g} Hz high-pass — local earthquakes",
     "distant": f"{DISTANT_BP_HZ[0]:g}–{DISTANT_BP_HZ[1]:g} Hz band-pass — distant earthquakes",
+    "spectrogram": "spectrogram — which frequencies are shaking",
 }
+
+
+def render_spectrogram(code, tr, cha, t2, out_path):
+    """Spectrogram of the response-removed velocity trace. Brighter =
+    stronger shaking at that frequency; x-axis matches the waveform plots."""
+    sr = tr.stats.sampling_rate
+    nfft = 256 if sr <= 20 else 512
+    fig, ax = plt.subplots(figsize=(PLOT_W, PLOT_H))
+    ax.specgram(tr.data, NFFT=nfft, Fs=sr, noverlap=nfft // 2,
+                cmap="viridis", scale="dB")
+    ax.set_ylim(0, min(SPEC_FMAX_HZ, 0.45 * sr))
+    ax.set_title(
+        f"S1.{code}..{cha}   {VARIANT_SUB['spectrogram']}\n"
+        f"last {WINDOW_MINUTES} min to {t2.strftime('%Y-%m-%d %H:%M')} UTC"
+        f"   ·   brighter = stronger shaking",
+        fontsize=7.5, color="#333", pad=4,
+    )
+    ax.set_ylabel("Hz", fontsize=7.5, color="#333")
+    start = tr.stats.starttime
+    ax.xaxis.set_major_formatter(mticker.FuncFormatter(
+        lambda s, pos: (start + s).strftime("%H:%M")))
+    ax.tick_params(labelsize=7, length=2)
+    ax.margins(x=0)
+    fig.tight_layout(pad=0.4)
+    fig.savefig(out_path, dpi=PLOT_DPI, facecolor="white")
+    plt.close(fig)
+    # Spectrogram PNGs compress poorly (noisy colormap) — palette-quantise to
+    # keep them comparable to the line plots for school connections.
+    try:
+        from PIL import Image
+        im = Image.open(out_path).convert("RGB").quantize(colors=128)
+        im.save(out_path, optimize=True)
+    except Exception as exc:
+        print(f"  {code}: spectrogram quantise skipped ({short(exc)})")
 
 
 def render(code, tr, cha, variant, t2, out_path):
@@ -208,6 +251,15 @@ def render(code, tr, cha, variant, t2, out_path):
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
 
+    # Previous run's manifest (restored into out/ by the workflow) — used to
+    # carry recent plots forward for stations that miss this hour.
+    prev_stations = {}
+    try:
+        with open(os.path.join(OUT_DIR, "manifest.json")) as fh:
+            prev_stations = json.load(fh).get("stations", {})
+    except (OSError, ValueError):
+        pass
+
     t2 = UTCDateTime()
     t1 = t2 - WINDOW_MINUTES * 60
     print(f"Window {t1} -> {t2}")
@@ -227,6 +279,7 @@ def main():
             "raw": "none",
             "local": f"{LOCAL_HP_HZ:g} Hz high-pass",
             "distant": f"{DISTANT_BP_HZ[0]:g}-{DISTANT_BP_HZ[1]:g} Hz band-pass",
+            "spectrogram": f"spectrogram to {SPEC_FMAX_HZ:g} Hz",
         },
         "stations": {},
     }
@@ -259,8 +312,12 @@ def main():
             made = []
             for variant in VARIANTS:
                 fname = f"{code}_{variant}.png"
-                render(code, apply_variant(vel, variant), cha, variant, t2,
-                       os.path.join(OUT_DIR, fname))
+                if variant == "spectrogram":
+                    render_spectrogram(code, vel, cha, t2,
+                                       os.path.join(OUT_DIR, fname))
+                else:
+                    render(code, apply_variant(vel, variant), cha, variant, t2,
+                           os.path.join(OUT_DIR, fname))
                 made.append(variant)
 
             manifest["stations"][code] = {
@@ -273,6 +330,32 @@ def main():
             print(f"  {code}: OK ({cha}) — {', '.join(made)}")
         except Exception as exc:
             print(f"  {code}: skipped ({short(exc)})")
+
+    # Carry forward previous plots for stations that returned nothing this
+    # hour (their PNGs are already in out/ from the workflow's restore step),
+    # capped at CARRY_HOURS. Anything older is pruned from out/ so a silent
+    # station drops off rather than showing a stale plot indefinitely.
+    carried = 0
+    for code, entry in prev_stations.items():
+        if code in manifest["stations"]:
+            continue
+        try:
+            age_h = (t2 - UTCDateTime(entry.get("end"))) / 3600.0
+        except Exception:
+            age_h = None
+        pngs_exist = all(os.path.exists(os.path.join(OUT_DIR, f"{code}_{v}.png"))
+                         for v in entry.get("variants", []) or VARIANTS)
+        if age_h is not None and 0 <= age_h <= CARRY_HOURS and pngs_exist:
+            manifest["stations"][code] = dict(entry, carried=True)
+            carried += 1
+        else:
+            for v in VARIANTS:
+                path = os.path.join(OUT_DIR, f"{code}_{v}.png")
+                if os.path.exists(path):
+                    os.remove(path)
+    if carried:
+        print(f"Carried forward {carried} station(s) from the previous run "
+              f"(within {CARRY_HOURS} h).")
 
     with open(os.path.join(OUT_DIR, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)

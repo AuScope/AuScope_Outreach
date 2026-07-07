@@ -16,6 +16,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   update:
@@ -40,7 +41,27 @@ jobs:
           git add -f data/earthquakes_24mo.geojson
           if ! git diff --cached --quiet; then
             git commit -q -m "earthquake store $(date -u +%FT%TZ)"
+            # Another hourly job may have pushed to main since checkout —
+            # rebase (disjoint files) so the push can't fail non-fast-forward.
+            git pull --rebase -q origin main
             git push
           else
             echo "No change to the earthquake store this run."
+          fi
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Scheduled run failed at $(date -u +%FT%TZ): $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
           fi

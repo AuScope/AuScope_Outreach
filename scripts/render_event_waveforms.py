@@ -36,6 +36,7 @@ Published by .github/workflows/event_waveforms.yml to a flat, force-pushed
 import json
 import math
 import os
+import re
 import sys
 import time
 import traceback
@@ -45,10 +46,13 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.transforms as mtransforms
 
 from obspy import UTCDateTime, Stream
 from obspy.clients.fdsn import Client
 from obspy.clients.fdsn.header import FDSNNoDataException
+from obspy.geodetics import kilometer2degrees
+from obspy.taup import TauPyModel
 
 # ── Age window ───────────────────────────────────────────────
 MIN_AGE_HOURS = 6
@@ -110,10 +114,22 @@ ROW_H        = 0.95      # inches per station lane
 PLOT_DPI     = 192       # 2x so sections stay sharp when the map is enlarged
 BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
+P_CLR        = "#2563eb"  # predicted P arrival — blue
+S_CLR        = "#dc2626"  # predicted S arrival — red
+
+# Bump to force re-render of already-published sections when the plot
+# changes (manifest entries carry "v"; mismatches are treated as new).
+RENDER_VERSION = 2
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
-             "connection aborted", "502", "504", "bad gateway")
+             "connection aborted", "502", "504", "bad gateway",
+             "429", "too many requests")
+
+# Event ids become filenames (out/<id>.png) — belt-and-braces guard on top of
+# the same check in update_quakes.py, since the store is a committed file
+# anyone could edit.
+SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 
 
 def short(exc):
@@ -190,6 +206,8 @@ def qualifying_events(now):
         c = g.get("coordinates") or []
         if len(c) < 2 or p.get("mag") is None or p.get("id") is None:
             continue
+        if not SAFE_ID.match(str(p["id"])):
+            continue
         try:
             mag = float(p["mag"])
         except (TypeError, ValueError):
@@ -206,9 +224,36 @@ def qualifying_events(now):
             if mag < TELE_MIN_MAG:
                 continue
             mode = "tele"
+        try:
+            depth = float(p.get("depth"))
+        except (TypeError, ValueError):
+            depth = None
         out.append((p["id"], t, lat, lon, mag,
-                    p.get("place") or "Unknown location", mode))
+                    p.get("place") or "Unknown location", mode, depth))
     return out
+
+
+# ── Predicted P & S arrivals (iasp91) ────────────────────────
+_TAUP = None
+
+def ps_arrivals(dist_km, depth_km):
+    """First predicted P and S arrival, in seconds after origin, or None.
+    Uses TauP's wildcard phase groups so local (Pg/Pn) and teleseismic
+    (P/PKP...) geometries both resolve without hand-picking phases."""
+    global _TAUP
+    try:
+        if _TAUP is None:
+            _TAUP = TauPyModel("iasp91")
+        depth = min(700.0, max(0.0, depth_km if depth_km is not None else 10.0))
+        arrs = _TAUP.get_travel_times(source_depth_in_km=depth,
+                                      distance_in_degree=kilometer2degrees(dist_km),
+                                      phase_list=["ttp", "tts"])
+        p = min((a.time for a in arrs if a.name[0] in "Pp"), default=None)
+        s = min((a.time for a in arrs if a.name[0] in "Ss"), default=None)
+        return p, s
+    except Exception as exc:
+        print(f"  taup failed for {dist_km:.0f} km / {depth_km} km: {short(exc)}")
+        return None, None
 
 
 def clean_site_name(raw, code):
@@ -254,7 +299,7 @@ def pick_channel(channels):
 
 
 def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
-                  mag, place, mode):
+                  mag, place, mode, depth):
     """Fetch nearest candidates, keep best N_KEEP with data, render section.
     `mode` is 'local' or 'tele' and selects distance cap / window / filter."""
     if mode == "tele":
@@ -329,7 +374,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         return None
 
     lanes.sort(key=lambda x: x[1])  # nearest -> furthest
-    render_section(eid, origin, mag, place, lanes, mode,
+    render_section(eid, origin, mag, place, lanes, mode, depth,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     return {
         "event_id": eid,
@@ -337,13 +382,14 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         "mag": mag,
         "place": place,
         "mode": mode,
+        "v": RENDER_VERSION,
         "stations": [{"code": c, "dist_km": round(d), "channel": ch,
                        "site": nm}
                      for c, d, ch, _, nm in lanes],
     }
 
 
-def render_section(eid, origin, mag, place, lanes, mode, out_path):
+def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
     n = len(lanes)
     fig, axes = plt.subplots(n, 1, figsize=(PLOT_W, ROW_H * n + 0.8),
                              sharex=True, squeeze=False)
@@ -378,17 +424,34 @@ def render_section(eid, origin, mag, place, lanes, mode, out_path):
         ax.text(0.006, 0.06, f"{round(dist)} km",
                 transform=ax.transAxes, va="bottom", ha="left",
                 fontsize=9.5, color="#555")
+        # Predicted P & S arrivals (iasp91) — the classroom moment: P beats
+        # S to every station, and both get later with distance.
+        p_sec, s_sec = ps_arrivals(dist, depth)
+        times_mpl = tr.times("matplotlib")
+        x0, x1 = times_mpl[0], times_mpl[-1]
+        lane_trans = mtransforms.blended_transform_factory(ax.transData, ax.transAxes)
+        for t_sec, lbl, clr in ((p_sec, "P", P_CLR), (s_sec, "S", S_CLR)):
+            if t_sec is None:
+                continue
+            t_mpl = o_mpl + t_sec / 86400.0
+            if not (x0 <= t_mpl <= x1):
+                continue
+            ax.axvline(t_mpl, color=clr, linewidth=0.9, alpha=0.85,
+                       linestyle=(0, (4, 3)))
+            ax.text(t_mpl, 0.94, " " + lbl, transform=lane_trans,
+                    va="top", ha="left", fontsize=8.5,
+                    fontweight="bold", color=clr)
 
     axes[-1].xaxis_date()
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[-1].tick_params(labelsize=8, length=2)
     if mode == "tele":
-        sub = (f"\n{n} AuSIS stations  ·  red line = origin time"
-               f"  ·  long-period {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz "
-               f"band-pass (µm/s)  ·  distant earthquake")
+        sub = (f"\n{n} AuSIS stations · red = origin · dashed = predicted P/S"
+               f" · {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz (µm/s)"
+               f" · distant earthquake")
     else:
-        sub = (f"\nnearest {n} AuSIS stations  ·  red line = origin time"
-               f"  ·  {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
+        sub = (f"\nnearest {n} AuSIS stations · red = origin"
+               f" · dashed = predicted P/S · {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
     axes[0].set_title(
         f"M{mag:.1f}  {place}  ·  {origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
         + sub,
@@ -428,7 +491,9 @@ def main():
     qualifying_ids = {e[0] for e in events}
     kept = {}
     for eid, meta in prev.items():
-        if eid in qualifying_ids and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png")):
+        if (eid in qualifying_ids
+                and meta.get("v") == RENDER_VERSION
+                and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png"))):
             kept[eid] = meta
     todo = [e for e in events if e[0] not in kept]
     print(f"{len(kept)} already rendered & still valid, {len(todo)} new to render")
@@ -450,10 +515,10 @@ def main():
             print("ERROR: could not load S1 response metadata; aborting.")
             sys.exit(1)
 
-        for eid, origin, lat, lon, mag, place, mode in todo:
+        for eid, origin, lat, lon, mag, place, mode, depth in todo:
             try:
                 rec = process_event(client, resp_inv, sites, eid,
-                                     origin, lat, lon, mag, place, mode)
+                                     origin, lat, lon, mag, place, mode, depth)
                 if rec:
                     rendered[eid] = rec
                     print(f"  {eid}: rendered [{mode}] "

@@ -2,15 +2,26 @@
 <!--
   AuSIS_Map.html
   Interactive map of AuSIS (Australian Seismometers In Schools) stations.
-  Fetches station and availability data from IRIS FDSN services (network S1).
   FDSN Network DOI: 10.7914/SN/S1
+
+  Data model: the browser makes NO third-party API calls. Station metadata,
+  availability-derived status, waveform plots and the earthquake catalogue are
+  all produced by scheduled GitHub Actions (see .github/workflows/ and
+  scripts/) and read either same-origin from data/ or from this repo's
+  force-pushed `waveforms` / `event-waveforms` branches on
+  raw.githubusercontent.com. Upstream services (EarthScope FDSN, Geoscience
+  Australia) are only ever contacted server-side, where redirects and missing
+  CORS headers cannot break the page — the June 2026 EarthScope migration
+  (service.iris.edu -> service.earthscope.org, 307 without CORS headers)
+  broke exactly the browser-side fetches this design removes.
 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuSIS Map</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; height: 100vh; }
@@ -46,8 +57,6 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf { margin-top: 8px; width: 332px; max-width: 100%; }
 .wf-head { display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
 .wf-label { font-size: 11px; font-weight: 700; color: #282572; text-transform: uppercase; letter-spacing: 0.4px; }
-.wf-actions a { font-size: 11px; color: #2563eb; text-decoration: none; margin-left: 8px; }
-.wf-actions a:hover { text-decoration: underline; }
 .wf-seg { display: flex; width: auto; margin: 0 -14px 4px; border: 1px solid #cbd5e1; border-left: none; border-right: none; border-radius: 0; overflow: hidden; }
 .wf-seg-btn { flex: 1; font-family: inherit; font-size: 11px; padding: 4px 0; border: none; border-left: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; }
 .wf-seg-btn:first-child { border-left: none; }
@@ -58,11 +67,9 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-frame.loaded img.wf-img { opacity: 1; }
 .wf-frame.loaded .wf-status { display: none; }
 .wf-frame.failed img.wf-img { display: none; }
-.wf-frame.failed .wf-status::after { content: "No waveform yet — the hourly job only builds one while a station is streaming."; }
-.wf-frame.failed .wf-status { font-style: normal; }
 .wf-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; text-align: center; padding: 8px; }
-.wf-frame.failed .wf-status { font-size: 0; }
-.wf-frame.failed .wf-status::after { font-size: 11px; }
+.wf-frame.failed .wf-status { font-size: 0; font-style: normal; }
+.wf-frame.failed .wf-status::after { content: "Waveform image unavailable right now — plots refresh hourly, so try again shortly."; font-size: 11px; }
 .wf-foot { font-size: 10px; color: #94a3b8; margin-top: 3px; }
 /* Earthquake popups */
 .q-title { font-weight: 700; font-size: 15px; color: #b91c1c; margin-bottom: 2px; }
@@ -74,8 +81,6 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-section { margin-top: 8px; }
 .q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
 .q-section-img { display: block; width: 360px; max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
-.q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
-.q-link:hover { text-decoration: underline; }
 
 /* Three size tiers, driven by the `medium` / `enlarged` classes the size
    detector puts on #map. The Leaflet popup maxWidth option is raised (700)
@@ -134,6 +139,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .legend-quakes { cursor: pointer; transition: opacity 0.15s; }
 .legend-quakes.off { opacity: 0.45; }
 .quake-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #fff; }
+#stale-badge { color: #fbbf24; font-size: 11px; }
 @media (max-width: 600px) {
   .header-title { font-size: 14px; }
   .footer { flex-wrap: wrap; gap: 12px; font-size: 11px; }
@@ -155,13 +161,16 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
   <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
-  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes"><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes — red: last 24 h, orange: last 7 days, yellow: older. Circle size = magnitude."><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+  <span id="stale-badge" style="display:none"></span>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 // ── Constants ─────────────────────────────────────────────────
-const LIVE_THRESHOLD_DAYS = 7;
-const IRIS_BASE = 'https://service.iris.edu';
+const LIVE_THRESHOLD_DAYS = 7;    // latestData within this = "Live streaming"
+const STATUS_STALE_HOURS  = 48;   // committed status older than this = show badge, ignore overrides
+const WAVEFORM_FRESH_HOURS = 3;   // manifest older than this no longer proves a station is live
 
 // Waveform (last-hour) settings
 // The plots are pre-rendered hourly by a GitHub Action
@@ -193,7 +202,9 @@ const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 // ── State ─────────────────────────────────────────────────────
 let stations = [],
     map = null,
-    verifiedStatus = {},   // from ausis_status.json (hourly GitHub Action)
+    verifiedStatus = {},   // from data/ausis_status.json (hourly ausis-status.yml)
+    statusChecked = null,  // its "checked" timestamp — drives the staleness badge
+    stationsFetched = null,// data/ausis_stations.geojson "fetched" timestamp (daily ausis-backup.yml)
     waveformManifest = {}, // from waveforms branch: { generated, stations:{CODE:{...}} }
     eventSections = {},    // from event-waveforms branch: { event_id: {...} }
     quakeLayer = null,
@@ -202,15 +213,12 @@ let stations = [],
     quakesVisible = SHOW_QUAKES_DEFAULT;
 
 // ── Helpers ──────────────────────────────────────────────────
+// Escapes quotes as well as &<> because esc() output lands inside
+// double-quoted attributes and single-quoted inline-JS strings.
 function esc(str) {
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
-
-// UTC timestamp in the form YYYY-MM-DDThh:mm:ss (FDSN event service format)
-function isoUTC(d) {
-  return d.toISOString().replace(/\.\d+Z$/, '');
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 // Great-circle distance in km
@@ -233,16 +241,36 @@ function triangleIcon(size, strokeColor) {
   const stroke = strokeColor || '#fff';
   return L.divIcon({ html: triangleSVG(size, stroke), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
 }
-function stationStrokeColor(s) {
-  if (s.endTime) return '#ef4444';
-  // Hourly status check overrides stale IRIS availability data
-  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '#22c55e';
+// Single source of truth for station status — every marker colour, z-order,
+// popup row, count and waveform gate derives from this one ladder.
+// Returns 'live' | 'intermittent' | 'ended' | 'unknown'.
+function stationStatus(s) {
+  if (s.endTime) return 'ended';
+  // A station in a fresh waveform manifest streamed within the last render
+  // window — the strongest live signal we have.
+  if (wfHasPlot(s.code)) return 'live';
+  // Hourly server-side status check (dataselect probe) overrides a lagging
+  // availability index — but only while the check itself is fresh.
+  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return 'live';
   if (s.latestData) {
-    var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-    if (daysAgo <= LIVE_THRESHOLD_DAYS) return '#22c55e';
-    return '#facc15';
+    var daysAgo = (Date.now() - s.latestData.getTime()) / 86400000;
+    return daysAgo <= LIVE_THRESHOLD_DAYS ? 'live' : 'intermittent';
   }
-  return '#22c55e';
+  return 'unknown';
+}
+
+// True when the hourly waveform manifest is fresh and lists this station.
+function wfHasPlot(code) {
+  if (!waveformManifest || !waveformManifest.stations || !waveformManifest.stations[code]) return false;
+  var gen = waveformManifest.generated ? Date.parse(waveformManifest.generated) : NaN;
+  return !isNaN(gen) && (Date.now() - gen) <= WAVEFORM_FRESH_HOURS * 3600000;
+}
+
+function stationStrokeColor(s) {
+  var st = stationStatus(s);
+  if (st === 'ended') return '#ef4444';
+  if (st === 'intermittent') return '#facc15';
+  return '#22c55e';   // live, or unknown (active, no data report yet)
 }
 
 // ── Legend icons ─────────────────────────────────────────────
@@ -374,7 +402,7 @@ function formatDate(d) {
   if (!d) return 'Unknown';
   const p = d.substring(0, 10).split('-');
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
+  return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : esc(d);
 }
 function formatDateTime(d) {
   // d is a Date — show UTC and local browser time, compactly
@@ -383,35 +411,13 @@ function formatDateTime(d) {
   return utc + ' &middot; ' + loc + ' local';
 }
 
-// ── Data fetching (live IRIS with local GeoJSON fallback) ────
-// Parse IRIS FDSN station text (level=station, pipe-delimited) into records.
-// Used by the live-refresh step; the same format is documented at
-// service.iris.edu/fdsnws/station/1/
-function parseStationText(text) {
-  var lines = text.trim().split('\n');
-  var out = [];
-  for (var i = 1; i < lines.length; i++) {
-    var p = lines[i].split('|');
-    if (p.length < 7) continue;
-    var code = p[1].trim();
-    if (code === 'TEST') continue;
-    var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-    if (isNaN(lat) || isNaN(lng)) continue;
-    var endRaw = p[7] ? p[7].trim() : '';
-    out.push({
-      code: code, lat: lat, lng: lng,
-      elevation: parseFloat(p[4]), name: p[5].trim(),
-      startTime: p[6].trim(), endTime: endRaw || null
-    });
-  }
-  return out;
-}
-
+// ── Data fetching (same-origin files committed by GitHub Actions) ────
 async function fetchStationsFromBackup() {
   try {
-    var resp = await fetch('data/ausis_stations.geojson');
+    var resp = await fetch('data/ausis_stations.geojson?v=' + hourStamp());
     if (!resp.ok) return [];
     var geojson = await resp.json();
+    if (geojson.metadata && geojson.metadata.fetched) stationsFetched = geojson.metadata.fetched;
     return (geojson.features || []).map(function(f) {
       var coords = f.geometry.coordinates;
       var p = f.properties;
@@ -423,35 +429,15 @@ async function fetchStationsFromBackup() {
   }
 }
 
-async function fetchAvailability() {
-  try {
-    var resp = await fetch(IRIS_BASE + '/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text');
-    if (!resp.ok) return;
-    var lines = (await resp.text()).trim().split('\n');
-    var latest = {};
-    for (var i = 1; i < lines.length; i++) {
-      var cols = lines[i].trim().split(/\s+/);
-      if (cols.length < 8) continue;
-      var code = cols[1];
-      var dt = new Date(cols[7]);
-      if (!latest[code] || dt > latest[code]) latest[code] = dt;
-    }
-    stations.forEach(function(s) {
-      if (latest[s.code]) s.latestData = latest[s.code];
-    });
-  } catch (e) {
-    console.warn('Failed to fetch availability data:', e);
-  }
-}
-
 // Fetch the waveform manifest from the `waveforms` branch. Tells us which
-// stations have a fresh plot and when it was generated. Optional: if it
-// fails we still try the image and just omit the "as of" label.
+// stations have a fresh plot and when it was generated — a fresh entry is
+// also the strongest "live" signal, so markers refresh after each load.
 async function fetchWaveformManifest() {
   try {
     var resp = await fetch(WAVEFORM_BASE + 'manifest.json?v=' + hourStamp());
     if (!resp.ok) return;
     waveformManifest = await resp.json();
+    if (stations.length) { refreshMarkers(); updateHeader(); }
   } catch (e) {
     // Branch may not exist yet (first Action run pending) — that's fine.
   }
@@ -498,30 +484,29 @@ function drawQuakeLinks(lat, lng) {
 
 // ── Marker rendering ─────────────────────────────────────────
 function stationZIndex(s) {
-  if (s.endTime) return 0;
-  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return 2000;
-  if (s.latestData) {
-    var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
-    if (daysAgo <= LIVE_THRESHOLD_DAYS) return 2000;
-    return 1000;
-  }
+  var st = stationStatus(s);
+  if (st === 'ended') return 0;
+  if (st === 'intermittent') return 1000;
   return 2000;
 }
 
 function buildPopupHtml(s) {
-  var daysAgo = s.latestData ? Math.floor((Date.now() - s.latestData.getTime()) / 86400000) : null;
-  var streaming = isStationStreaming(s);
+  var status = stationStatus(s);
+  // Show the waveform block whenever a fresh plot exists — never hide healthy
+  // pipeline output behind a possibly-stale status heuristic. Fall back to
+  // the status when the manifest itself failed to load.
+  var showWf = wfHasPlot(s.code) || status === 'live';
   return '<div class="popup-title">' + esc(s.name) + '</div>'
     + '<div class="popup-row"><span class="popup-code">S1.' + esc(s.code) + '</span> <strong>Recording since:</strong> ' + formatDate(s.startTime) + '</div>'
     + (function() {
-        if (s.endTime) return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
-        if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
-        if (!s.latestData) return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
-        if (daysAgo <= LIVE_THRESHOLD_DAYS) return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+        if (status === 'ended') return '<div class="popup-row"><strong>End:</strong> ' + formatDate(s.endTime) + '</div>';
+        if (status === 'live') return '<div class="popup-row" style="color:#16a34a"><strong>Data:</strong> Streaming</div>';
+        if (status === 'unknown') return '<div class="popup-row" style="color:#16a34a"><strong>Status:</strong> Active</div>';
+        var daysAgo = Math.floor((Date.now() - s.latestData.getTime()) / 86400000);
         return '<div class="popup-row" style="color:#d97706"><strong>Last data:</strong> ' + formatDate(s.latestData.toISOString()) + ' (' + daysAgo + ' days ago)</div>';
       })()
     + '<div class="popup-row"><strong>Coordinates:</strong> ' + s.lat.toFixed(3) + ', ' + s.lng.toFixed(3) + '</div>'
-    + (streaming
+    + (showWf
         ? (function() {
             var src  = (waveformManifest.source) ? esc(waveformManifest.source) : 'EarthScope';
             var upd  = waveformManifest.generated
@@ -536,7 +521,7 @@ function buildPopupHtml(s) {
             return '<div class="wf">'
               + '<div class="wf-head"><span class="wf-label">Waveform last hour</span></div>'
               + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
-              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
+              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant') + seg('spectrogram', 'Spectro')
               + '</div>'
               + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
               + '<div class="wf-status">Loading last hour…</div>'
@@ -572,7 +557,9 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(buildPopupHtml(s), { maxWidth: 700, minWidth: 240 }).addTo(map);
+    // Bind a FUNCTION so the popup re-renders on every open — status, image
+    // URL and hourStamp cache-buster stay current on long-lived embeds.
+    var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(function() { return buildPopupHtml(s); }, { maxWidth: 700, minWidth: 240 }).addTo(map);
     m._station = s;
     s.marker = m;
   });
@@ -585,16 +572,13 @@ function refreshMarkers() {
     if (s.marker) {
       s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
       s.marker.setZIndexOffset(stationZIndex(s));
-      s.marker.setPopupContent(buildPopupHtml(s));
+      // Popup content is a bound function — it re-renders on next open.
     }
   });
 }
 
 function isStationStreaming(s) {
-  if (s.endTime) return false;
-  if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return true;
-  if (s.latestData && Math.floor((Date.now() - s.latestData.getTime()) / 86400000) <= LIVE_THRESHOLD_DAYS) return true;
-  return false;
+  return stationStatus(s) === 'live';
 }
 
 function updateHeader() {
@@ -604,12 +588,13 @@ function updateHeader() {
   document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
 }
 
-// ── Earthquakes (USGS FDSN event service) ────────────────────
-function quakeColor(m) {
-  if (m >= 5) return '#7f1d1d';
-  if (m >= 4) return '#dc2626';
-  if (m >= 3) return '#f97316';
-  return '#facc15';
+// ── Earthquakes (Geoscience Australia rolling store, same-origin) ──
+// Seismic-map convention (GA / USGS): colour = recency (red = newest),
+// size = magnitude. Magnitude is not double-encoded in colour.
+function quakeColor(ageDays) {
+  if (ageDays < 1) return '#dc2626';   // last 24 hours — red
+  if (ageDays < 7) return '#f97316';   // last 7 days — orange
+  return '#facc15';                    // older — yellow
 }
 function quakeRadius(m) {
   return 0.8 * Math.max(4, Math.min(22, 3 + m * 2.6));
@@ -695,8 +680,8 @@ function renderQuakes() {
       radius: quakeRadius(m),
       color: '#fff',
       weight: 1,
-      fillColor: quakeColor(m),
-      fillOpacity: ageDays < 1 ? 0.9 : 0.55
+      fillColor: quakeColor(ageDays),
+      fillOpacity: 0.85
     }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 700, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
@@ -716,15 +701,46 @@ function updateQuakeLegend() {
   txt.textContent = 'Earthquakes';
 }
 
-// Load hourly verified status from GitHub-hosted JSON
+// Load the hourly server-side status check (data/ausis_status.json, written
+// by .github/workflows/ausis-status.yml). Streaming overrides are only
+// trusted while the check itself is fresh — a frozen file must never pin a
+// station green (or hide that the pipeline died).
 async function loadVerifiedStatus() {
   try {
-    var resp = await fetch('data/ausis_status.json');
+    var resp = await fetch('data/ausis_status.json?v=' + hourStamp());
     if (!resp.ok) return;
     var data = await resp.json();
-    verifiedStatus = data.stations || {};
+    statusChecked = data.checked || null;
+    var age = statusChecked ? Date.now() - Date.parse(statusChecked) : NaN;
+    if (!isNaN(age) && age <= STATUS_STALE_HOURS * 3600000) {
+      verifiedStatus = data.stations || {};
+    } else {
+      // Clear overrides loaded earlier: on a long-lived embed the file can
+      // transition fresh -> stale between interval refreshes, and old
+      // streaming:true entries must not keep pinning stations green.
+      verifiedStatus = {};
+    }
   } catch (e) {
     // No status file yet - that's fine
+  }
+}
+
+// Amber footer badge when the committed status data has stopped updating —
+// a silently-frozen pipeline must be visible on the page, not just in logs.
+function updateStalenessBadge() {
+  var el = document.getElementById('stale-badge');
+  if (!el) return;
+  var newest = null;
+  [statusChecked, stationsFetched].forEach(function(t) {
+    var ms = t ? Date.parse(t) : NaN;
+    if (!isNaN(ms) && (newest === null || ms > newest)) newest = ms;
+  });
+  if (newest === null || Date.now() - newest > STATUS_STALE_HOURS * 3600000) {
+    el.textContent = '⚠ Station status last updated ' +
+      (newest ? formatDate(new Date(newest).toISOString()) : 'unknown');
+    el.style.display = '';
+  } else {
+    el.style.display = 'none';
   }
 }
 
@@ -748,7 +764,7 @@ document.getElementById('legend-quakes').onclick = function() {
   if (!sel) return;
   sel.value = String(quakeWindowDays);
   sel.addEventListener('change', function() {
-    quakeWindowDays = parseInt(sel.value, 10) || 30;
+    quakeWindowDays = parseInt(sel.value, 10) || 7;
     applyQuakeWindow();
   });
 })();
@@ -756,13 +772,21 @@ document.getElementById('legend-quakes').onclick = function() {
 // Fetch waveform manifest + earthquakes in the background (independent of stations)
 fetchWaveformManifest();
 fetchEventSections();
-setInterval(fetchWaveformManifest, 15 * 60 * 1000); // refresh "as of" every 15 min
+setInterval(fetchWaveformManifest, 15 * 60 * 1000); // refresh manifest/status every 15 min
 setInterval(fetchEventSections, 15 * 60 * 1000);
+setInterval(function() {                            // long-lived embeds stay honest
+  loadVerifiedStatus().then(function() {
+    if (stations.length) { refreshMarkers(); updateHeader(); }
+    updateStalenessBadge();
+  });
+}, 15 * 60 * 1000);
 fetchQuakes();
 setInterval(fetchQuakes, QUAKE_REFRESH_MS);
 
-// Step 0: Load verified status file (hourly GitHub Action)
-// Step 1: Load local backup instantly for immediate display
+// Station data comes entirely from same-origin files committed by the
+// scheduled Actions (ausis-status.yml hourly, ausis-backup.yml daily). The
+// browser never calls a third-party API — upstream migrations, redirects and
+// CORS changes are absorbed server-side where they can't break the page.
 loadVerifiedStatus().then(function() {
   return fetchStationsFromBackup();
 }).then(function(data) {
@@ -770,33 +794,14 @@ loadVerifiedStatus().then(function() {
     stations = data;
     addMarkers();
     map.setView([-28, 134], 4);
-    updateHeader();
+  } else {
+    console.warn('Station data failed to load (data/ausis_stations.geojson).');
   }
-  // Step 2: Fetch live IRIS data in background, merge into existing stations
-  return fetch(IRIS_BASE + '/fdsnws/station/1/query?network=S1&level=station&format=text')
-    .then(function(resp) {
-      if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
-      return resp.text();
-    })
-    .then(function(text) {
-      // Merge live IRIS data into existing stations (preserving markers)
-      var liveByCode = {};
-      parseStationText(text).forEach(function(r) { liveByCode[r.code] = r; });
-      stations.forEach(function(s) {
-        if (liveByCode[s.code]) {
-          s.startTime = liveByCode[s.code].startTime;
-          s.endTime = liveByCode[s.code].endTime;
-        }
-      });
-      return fetchAvailability();
-    })
-    .then(function() {
-      refreshMarkers();
-      updateHeader();
-    });
+  updateHeader();
+  updateStalenessBadge();
 }).catch(function(err) {
-  console.warn('Live refresh failed, using backup data:', err);
-  // Backup data already displayed - nothing else to do
+  console.warn('Station load failed:', err);
+  updateStalenessBadge();
 });
 
 // Fullscreen button: use the Fullscreen API where the parent iframe permits

@@ -1,0 +1,141 @@
+name: Hourly AuSIS Status Check
+
+# Server-side "is it really streaming?" check. The availability index at
+# EarthScope lags real time by ~6 h, so stations that look stale there are
+# re-checked against dataselect for the last 24 h. Result is committed to
+# data/ausis_status.json, which the map reads same-origin — the browser never
+# calls EarthScope (their June 2026 migration broke browser CORS, not curl).
+#
+# FAILS LOUD: an upstream fetch error exits non-zero and auto-files an issue,
+# instead of silently leaving a frozen file the map would trust forever.
+
+on:
+  schedule:
+    - cron: '15 * * * *'  # Every hour at :15 (off the congested :00 slot)
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check intermittent stations via dataselect
+        run: |
+          python3 << 'EOF'
+          import json, urllib.request, datetime, sys
+
+          LIVE_THRESHOLD_DAYS = 7
+          FDSN = 'https://service.earthscope.org'
+          now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+          checked = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+          # Step 1: Get latest availability for all stations
+          url = FDSN + '/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text'
+          try:
+              resp = urllib.request.urlopen(url, timeout=30)
+              lines = resp.read().decode('utf-8').strip().split('\n')
+          except Exception as e:
+              print(f'ERROR: availability fetch failed: {e}')
+              sys.exit(1)   # fail visibly — a silent skip freezes the map's status
+
+          latest = {}
+          for line in lines[1:]:
+              cols = line.strip().split()
+              if len(cols) < 8:
+                  continue
+              code = cols[1]
+              dt = datetime.datetime.fromisoformat(cols[7].replace('Z', ''))
+              if code not in latest or dt > latest[code]:
+                  latest[code] = dt
+
+          if not latest:
+              print('ERROR: availability response contained no stations')
+              sys.exit(1)
+
+          # Step 2: Find stations that appear stale (>7 days)
+          stale = []
+          for code, dt in latest.items():
+              if code == 'TEST':
+                  continue
+              days_ago = (now - dt).days
+              if days_ago > LIVE_THRESHOLD_DAYS:
+                  stale.append(code)
+
+          if not stale:
+              print('No stale stations to check')
+              # Still write the file to confirm we checked
+              status = {'checked': checked, 'stations': {}}
+              with open('data/ausis_status.json', 'w') as f:
+                  json.dump(status, f, indent=2)
+              sys.exit(0)
+
+          print(f'Checking {len(stale)} stale stations: {", ".join(stale)}')
+
+          # Step 3: For each stale station, check dataselect for last 24hrs
+          yesterday = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT00:00:00')
+          today = now.strftime('%Y-%m-%dT%H:%M:%S')
+
+          stations = {}
+          for code in stale:
+              url = (f'{FDSN}/fdsnws/dataselect/1/query'
+                     f'?network=S1&station={code}&channel=HHZ&nodata=404'
+                     f'&starttime={yesterday}&endtime={today}')
+              try:
+                  req = urllib.request.Request(url, method='HEAD')
+                  resp = urllib.request.urlopen(req, timeout=15)
+                  streaming = (resp.status == 200)
+              except urllib.error.HTTPError:
+                  streaming = False
+              except Exception:
+                  streaming = False
+
+              stations[code] = {
+                  'streaming': streaming,
+                  'checkedAt': checked
+              }
+              status_text = 'STREAMING' if streaming else 'DOWN'
+              print(f'  {code}: {status_text}')
+
+          # Step 4: Write status file
+          status = {'checked': checked, 'stations': stations}
+          with open('data/ausis_status.json', 'w') as f:
+              json.dump(status, f, indent=2)
+
+          print(f'\nSaved status for {len(stations)} stations')
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ausis_status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Hourly AuSIS status check $(date -u +%Y-%m-%dT%H:%M)"
+            # Another hourly job may have pushed to main since checkout —
+            # rebase (disjoint files) so the push can't fail non-fast-forward.
+            git pull --rebase -q origin main
+            git push
+          fi
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Scheduled run failed at $(date -u +%FT%TZ): $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
+          fi
