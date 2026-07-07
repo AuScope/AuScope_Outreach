@@ -89,6 +89,17 @@ LOCAL_POST_MIN  = 15
 LOCAL_MAX_DIST  = 1500   # km cap for local events
 LOCAL_HP_HZ     = 1.0    # high-pass corner — emphasises regional arrivals
 
+# Local sections are TRIMMED after filtering to an adaptive view window:
+# a little pre-origin context through predicted-S-at-the-farthest-lane plus
+# a coda margin. Nearby quakes then fill the plot (visible moveout) instead
+# of being squeezed into a sliver of the fixed 20-minute fetch window. The
+# fetch stays wide so response removal / filter edge effects land outside
+# the displayed part.
+LOCAL_VIEW_PRE_S    = 60      # seconds of quiet shown before origin
+LOCAL_VIEW_MIN_S    = 180     # never show less than this after origin
+LOCAL_CODA_FACTOR   = 1.6     # view ends at S_farthest * this ...
+LOCAL_CODA_PAD_S    = 60      # ... plus this pad
+
 TELE_PRE_MIN    = 0
 TELE_POST_MIN   = 60
 TELE_MAX_DIST   = None   # no cap — the whole point is "even from far away"
@@ -119,7 +130,7 @@ S_CLR        = "#dc2626"  # predicted S arrival — red
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 2
+RENDER_VERSION = 3
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -374,6 +385,28 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         return None
 
     lanes.sort(key=lambda x: x[1])  # nearest -> furthest
+
+    # Adaptive local view: trim to origin-context .. S-at-farthest + coda.
+    # Done AFTER response removal/filtering so edge tapers stay off-screen.
+    if mode == "local":
+        far_km = lanes[-1][1]
+        _, s_far = ps_arrivals(far_km, depth)
+        if s_far is None:
+            s_far = far_km / 3.0                     # ~crustal S speed fallback
+        view_len = max(LOCAL_VIEW_MIN_S,
+                       s_far * LOCAL_CODA_FACTOR + LOCAL_CODA_PAD_S)
+        view_len = min(view_len, post_min * 60.0)    # never beyond the fetch
+        w0 = UTCDateTime(origin) - LOCAL_VIEW_PRE_S
+        w1 = UTCDateTime(origin) + view_len
+        for _, _, _, tr, _ in lanes:
+            tr.trim(w0, w1)
+        lanes = [l for l in lanes if len(l[3].data)]
+        if len(lanes) < MIN_TRACES:
+            print(f"  {eid}: <{MIN_TRACES} usable trace(s) after view trim, skipped")
+            return None
+        print(f"  {eid}: view window {view_len:.0f}s "
+              f"(farthest lane {far_km:.0f} km, S ~{s_far:.0f}s)")
+
     render_section(eid, origin, mag, place, lanes, mode, depth,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     return {

@@ -584,7 +584,7 @@ function isStationStreaming(s) {
 function updateHeader() {
   var active = stations.filter(function(s) { return !s.endTime; }).length;
   var streaming = stations.filter(isStationStreaming).length;
-  document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' active stations';
+  document.getElementById('header-title').textContent = 'AuSIS Map - ' + active + ' school seismometers';
   document.getElementById('legend-streaming-text').textContent = 'Live streaming (' + streaming + ')';
 }
 
