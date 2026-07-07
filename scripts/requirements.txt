@@ -1,4 +1,6 @@
-# Pinned to major versions so an upstream breaking change can't silently
-# break the hourly waveform job. Bump deliberately when needed.
-obspy>=1.4,<2
-matplotlib>=3.8,<4
+# Pinned exactly: this job runs `pip install` against PyPI up to 24x/day, so
+# loose ranges mean any new upstream release ships straight into production
+# within the hour. Bump deliberately, then verify a manual workflow run.
+# NOTE: the "EARTHSCOPE" FDSN client name requires obspy >= 1.5.0.
+obspy==1.5.0
+matplotlib==3.10.0

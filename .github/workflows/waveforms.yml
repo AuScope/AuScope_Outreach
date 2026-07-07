@@ -1,15 +1,21 @@
 name: Hourly AuSIS waveforms
 
-# Renders the last hour of ground motion for every streaming S1 station
-# (data from AusPass) and publishes the PNGs to the `waveforms` branch.
+# Renders the last hour of ground velocity (µm/s, response removed) for every
+# streaming S1 station in three variants (raw / local / distant), with data
+# from EarthScope, and publishes the PNGs to the `waveforms` branch.
 #
 # The `waveforms` branch is FORCE-PUSHED with a single fresh commit every run,
 # so it never accumulates history — the repository footprint stays flat
-# (~1 MB total, forever) no matter how long this runs.
+# (~3 MB total, forever) no matter how long this runs.
+#
+# The previous branch contents are restored into out/ before rendering, so a
+# partially-failed upstream hour carries recent plots forward (age-capped in
+# the script) instead of wiping every station that missed one bulk request.
 
 on:
   schedule:
-    - cron: "0 * * * *"      # top of every hour (UTC)
+    - cron: "7 * * * *"      # hourly at :07 — GitHub's :00 slot is the most
+                             # congested and has the worst delay/drop odds
   workflow_dispatch:          # allow manual runs for testing
 
 concurrency:
@@ -18,6 +24,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   render:
@@ -26,6 +33,11 @@ jobs:
     steps:
       - name: Checkout (main, for the script)
         uses: actions/checkout@v4
+        with:
+          # pip installs third-party code in this job — don't leave the write
+          # token in .git/config while it runs. The publish step supplies the
+          # token explicitly; the restore fetch is anonymous (public repo).
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,6 +47,17 @@ jobs:
 
       - name: Install dependencies
         run: pip install --quiet -r scripts/requirements.txt
+
+      - name: Restore previous waveforms (carry-forward on partial hours)
+        run: |
+          mkdir -p out
+          if git ls-remote --exit-code --heads origin waveforms >/dev/null 2>&1; then
+            git fetch -q origin waveforms
+            git --work-tree=out checkout origin/waveforms -- . 2>/dev/null || true
+            echo "Restored $(ls out/*.png 2>/dev/null | wc -l) existing PNG(s)."
+          else
+            echo "No waveforms branch yet — first run."
+          fi
 
       - name: Render waveforms
         run: python scripts/render_waveforms.py
@@ -51,3 +74,20 @@ jobs:
           git push -f \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
             waveforms
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Scheduled run failed at $(date -u +%FT%TZ): $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
+          fi

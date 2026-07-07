@@ -4,8 +4,8 @@
     Interactive map of AuScope outreach program locations.
     Programs: AuSIS (Seismometers in Schools), Magnetometers in Schools,
     EarthBank in the Classroom, GPlates in Schools.
-    Static GeoJSON data loaded from data/ folder; AuSIS fetched live from IRIS
-    with local GeoJSON fallback.
+    All data loads same-origin from the data/ folder; the AuSIS file is
+    refreshed daily by a GitHub Action (no third-party calls from the browser).
 -->
 <html lang="en">
 <head>
@@ -246,25 +246,11 @@
             });
         }
 
-        // ── Data: AuSIS from IRIS (live) ─────────────────────────────
-        async function fetchAuSISLive() {
-            var resp = await fetch('https://service.iris.edu/fdsnws/station/1/query?network=S1&level=station&format=text');
-            if (!resp.ok) throw new Error('IRIS HTTP ' + resp.status);
-            var lines = (await resp.text()).trim().split('\n');
-            var out = [];
-            for (var i = 1; i < lines.length; i++) {
-                var p = lines[i].split('|');
-                if (p.length < 7) continue;
-                var code = p[1].trim();
-                if (code === 'TEST') continue;
-                var lat = parseFloat(p[2]), lng = parseFloat(p[3]);
-                if (isNaN(lat) || isNaN(lng)) continue;
-                out.push({ name: p[5].trim(), lat: lat, lng: lng, program: 'ausis', marker: null });
-            }
-            return out;
-        }
-
         // ── Data: GeoJSON from data/ folder ──────────────────────────
+        // (AuSIS comes from data/ausis_stations.geojson, refreshed daily by
+        // the ausis-backup.yml Action — the browser never calls a third-party
+        // API. The old in-page IRIS fetch broke in June 2026 when EarthScope's
+        // redirect stripped CORS from service.iris.edu.)
         async function fetchGeoJSON(url, program) {
             try {
                 var resp = await fetch(url);
@@ -315,29 +301,20 @@
         setLegendIcons();
         initMap();
 
-        // Step 1: Load all from local GeoJSON (instant display)
-        var staticPrograms;
+        // Load all programs from local GeoJSON (AuSIS file is refreshed
+        // daily by a GitHub Action, so no live third-party fetch is needed)
         Promise.all([
             fetchGeoJSON('data/ausis_stations.geojson', 'ausis'),
             fetchGeoJSON('data/magnetometers.geojson', 'mag'),
             fetchGeoJSON('data/earthbank.geojson', 'earthbank'),
             fetchGeoJSON('data/gplates.geojson', 'gplates')
         ]).then(function(results) {
-            staticPrograms = results;
             allStations = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
             addMarkers();
             map.setView([-28, 134], 4);
             updateLegend(results[0].length, results[1].length, results[2].length, results[3].length);
-
-            // Step 2: Silently update AuSIS count from live IRIS data
-            // Markers look identical (green triangles) so no visual rebuild needed
-            return fetchAuSISLive();
-        }).then(function(liveAusis) {
-            if (liveAusis.length > 0 && liveAusis.length !== staticPrograms[0].length) {
-                updateLegend(liveAusis.length, staticPrograms[1].length, staticPrograms[2].length, staticPrograms[3].length);
-            }
         }).catch(function(err) {
-            console.warn('Live AuSIS refresh failed, using backup:', err);
+            console.warn('Data load failed:', err);
         });
     </script>
 </body>

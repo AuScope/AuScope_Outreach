@@ -20,6 +20,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   render:
@@ -28,6 +29,11 @@ jobs:
     steps:
       - name: Checkout (main, for the script + quake store)
         uses: actions/checkout@v4
+        with:
+          # pip installs third-party code in this job — don't leave the write
+          # token in .git/config while it runs. The publish step supplies the
+          # token explicitly; the restore fetch is anonymous (public repo).
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -64,3 +70,20 @@ jobs:
           git push -f \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
             event-waveforms
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Scheduled run failed at $(date -u +%FT%TZ): $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
+          fi

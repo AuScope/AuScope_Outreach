@@ -71,7 +71,13 @@ BRAND          = "#282572"                       # AuScope purple
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
-             "connection aborted", "502", "504", "bad gateway")
+             "connection aborted", "502", "504", "bad gateway",
+             "429", "too many requests")
+
+# Stations that miss one flaky upstream hour keep their previous plot (the
+# workflow restores the old branch contents into out/ first) — but only this
+# long, so a genuinely silent station ages out rather than showing forever.
+CARRY_HOURS = 6
 
 
 def short(exc):
@@ -208,6 +214,15 @@ def render(code, tr, cha, variant, t2, out_path):
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
 
+    # Previous run's manifest (restored into out/ by the workflow) — used to
+    # carry recent plots forward for stations that miss this hour.
+    prev_stations = {}
+    try:
+        with open(os.path.join(OUT_DIR, "manifest.json")) as fh:
+            prev_stations = json.load(fh).get("stations", {})
+    except (OSError, ValueError):
+        pass
+
     t2 = UTCDateTime()
     t1 = t2 - WINDOW_MINUTES * 60
     print(f"Window {t1} -> {t2}")
@@ -274,8 +289,55 @@ def main():
         except Exception as exc:
             print(f"  {code}: skipped ({short(exc)})")
 
+    # Carry forward previous plots for stations that returned nothing this
+    # hour (their PNGs are already in out/ from the workflow's restore step),
+    # capped at CARRY_HOURS. Anything older is pruned from out/ so a silent
+    # station drops off rather than showing a stale plot indefinitely.
+    carried = 0
+    for code, entry in prev_stations.items():
+        if code in manifest["stations"]:
+            continue
+        try:
+            age_h = (t2 - UTCDateTime(entry.get("end"))) / 3600.0
+        except Exception:
+            age_h = None
+        pngs_exist = all(os.path.exists(os.path.join(OUT_DIR, f"{code}_{v}.png"))
+                         for v in entry.get("variants", []) or VARIANTS)
+        if age_h is not None and 0 <= age_h <= CARRY_HOURS and pngs_exist:
+            manifest["stations"][code] = dict(entry, carried=True)
+            carried += 1
+        else:
+            for v in VARIANTS:
+                path = os.path.join(OUT_DIR, f"{code}_{v}.png")
+                if os.path.exists(path):
+                    os.remove(path)
+    if carried:
+        print(f"Carried forward {carried} station(s) from the previous run "
+              f"(within {CARRY_HOURS} h).")
+
     with open(os.path.join(OUT_DIR, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)
+
+    # Diagnostics: which S1 stations EarthScope knows about (from the response
+    # inventory we already fetched — no extra request) but that returned no
+    # usable data this run. Turns "got N" into "got N of M, missing: ...".
+    expected = set()
+    try:
+        for net in inv:
+            for sta in net:
+                expected.add(sta.code)
+    except Exception:
+        pass
+    rendered_codes = set(manifest["stations"].keys())
+    if expected:
+        missing = sorted(expected - rendered_codes)
+        print(f"Coverage: {len(rendered_codes)} rendered of "
+              f"{len(expected)} S1 stations known to {centre}.")
+        if missing:
+            print(f"  no data this run ({len(missing)}): {', '.join(missing)}")
+    else:
+        print(f"Coverage: {len(rendered_codes)} rendered "
+              f"(station inventory unavailable for a missing-list diff).")
 
     print(f"Done: {ok} stations rendered from {centre}.")
     if ok == 0:

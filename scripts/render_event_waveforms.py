@@ -36,6 +36,7 @@ Published by .github/workflows/event_waveforms.yml to a flat, force-pushed
 import json
 import math
 import os
+import re
 import sys
 import time
 import traceback
@@ -51,14 +52,10 @@ from obspy.clients.fdsn import Client
 from obspy.clients.fdsn.header import FDSNNoDataException
 
 # ── Age window ───────────────────────────────────────────────
-# TESTING values (use recent events so you don't wait a day):
-MIN_AGE_HOURS = 1
-MAX_AGE_DAYS  = 3
-# PRODUCTION values — switch to these before going live:
-#   MIN_AGE_HOURS = 24
-#   MAX_AGE_DAYS  = 14
+MIN_AGE_HOURS = 6
+MAX_AGE_DAYS  = 14
 # (At a 1 h floor, expect many events to be skipped for missing data — that
-#  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 during testing if
+#  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 if
 #  too few events have complete data to validate the renderer.)
 
 # ── Selection ────────────────────────────────────────────────
@@ -117,7 +114,13 @@ ORIGIN_CLR   = "#b91c1c"
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
-             "connection aborted", "502", "504", "bad gateway")
+             "connection aborted", "502", "504", "bad gateway",
+             "429", "too many requests")
+
+# Event ids become filenames (out/<id>.png) — belt-and-braces guard on top of
+# the same check in update_quakes.py, since the store is a committed file
+# anyone could edit.
+SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 
 
 def short(exc):
@@ -193,6 +196,8 @@ def qualifying_events(now):
         g = f.get("geometry", {}) or {}
         c = g.get("coordinates") or []
         if len(c) < 2 or p.get("mag") is None or p.get("id") is None:
+            continue
+        if not SAFE_ID.match(str(p["id"])):
             continue
         try:
             mag = float(p["mag"])
