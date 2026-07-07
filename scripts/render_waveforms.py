@@ -35,6 +35,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 
 from obspy import UTCDateTime, Stream
 from obspy.clients.fdsn import Client
@@ -60,7 +61,8 @@ DATA_CENTRES   = ["EARTHSCOPE"]
 # Filters applied AFTER response removal, so units stay µm/s.
 LOCAL_HP_HZ    = 1.0                             # high-pass corner (local quakes)
 DISTANT_BP_HZ  = (0.02, 0.1)                     # band-pass (distant teleseisms)
-VARIANTS       = ["raw", "local", "distant"]
+VARIANTS       = ["raw", "local", "distant", "spectrogram"]
+SPEC_FMAX_HZ   = 20.0                            # spectrogram display ceiling
 
 PLOT_W, PLOT_H = 5.0, 2.1                        # inches
 PLOT_DPI       = 192                             # 2x (~960px wide) so the
@@ -182,7 +184,42 @@ VARIANT_SUB = {
     "raw":     "ground velocity (no filter)",
     "local":   f"{LOCAL_HP_HZ:g} Hz high-pass — local earthquakes",
     "distant": f"{DISTANT_BP_HZ[0]:g}–{DISTANT_BP_HZ[1]:g} Hz band-pass — distant earthquakes",
+    "spectrogram": "spectrogram — which frequencies are shaking",
 }
+
+
+def render_spectrogram(code, tr, cha, t2, out_path):
+    """Spectrogram of the response-removed velocity trace. Brighter =
+    stronger shaking at that frequency; x-axis matches the waveform plots."""
+    sr = tr.stats.sampling_rate
+    nfft = 256 if sr <= 20 else 512
+    fig, ax = plt.subplots(figsize=(PLOT_W, PLOT_H))
+    ax.specgram(tr.data, NFFT=nfft, Fs=sr, noverlap=nfft // 2,
+                cmap="viridis", scale="dB")
+    ax.set_ylim(0, min(SPEC_FMAX_HZ, 0.45 * sr))
+    ax.set_title(
+        f"S1.{code}..{cha}   {VARIANT_SUB['spectrogram']}\n"
+        f"last {WINDOW_MINUTES} min to {t2.strftime('%Y-%m-%d %H:%M')} UTC"
+        f"   ·   brighter = stronger shaking",
+        fontsize=7.5, color="#333", pad=4,
+    )
+    ax.set_ylabel("Hz", fontsize=7.5, color="#333")
+    start = tr.stats.starttime
+    ax.xaxis.set_major_formatter(mticker.FuncFormatter(
+        lambda s, pos: (start + s).strftime("%H:%M")))
+    ax.tick_params(labelsize=7, length=2)
+    ax.margins(x=0)
+    fig.tight_layout(pad=0.4)
+    fig.savefig(out_path, dpi=PLOT_DPI, facecolor="white")
+    plt.close(fig)
+    # Spectrogram PNGs compress poorly (noisy colormap) — palette-quantise to
+    # keep them comparable to the line plots for school connections.
+    try:
+        from PIL import Image
+        im = Image.open(out_path).convert("RGB").quantize(colors=128)
+        im.save(out_path, optimize=True)
+    except Exception as exc:
+        print(f"  {code}: spectrogram quantise skipped ({short(exc)})")
 
 
 def render(code, tr, cha, variant, t2, out_path):
@@ -242,6 +279,7 @@ def main():
             "raw": "none",
             "local": f"{LOCAL_HP_HZ:g} Hz high-pass",
             "distant": f"{DISTANT_BP_HZ[0]:g}-{DISTANT_BP_HZ[1]:g} Hz band-pass",
+            "spectrogram": f"spectrogram to {SPEC_FMAX_HZ:g} Hz",
         },
         "stations": {},
     }
@@ -274,8 +312,12 @@ def main():
             made = []
             for variant in VARIANTS:
                 fname = f"{code}_{variant}.png"
-                render(code, apply_variant(vel, variant), cha, variant, t2,
-                       os.path.join(OUT_DIR, fname))
+                if variant == "spectrogram":
+                    render_spectrogram(code, vel, cha, t2,
+                                       os.path.join(OUT_DIR, fname))
+                else:
+                    render(code, apply_variant(vel, variant), cha, variant, t2,
+                           os.path.join(OUT_DIR, fname))
                 made.append(variant)
 
             manifest["stations"][code] = {

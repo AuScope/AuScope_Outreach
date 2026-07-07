@@ -521,7 +521,7 @@ function buildPopupHtml(s) {
             return '<div class="wf">'
               + '<div class="wf-head"><span class="wf-label">Waveform last hour</span></div>'
               + '<div class="wf-seg" data-code="' + esc(s.code) + '" data-base="' + base + '" data-stamp="' + stamp + '">'
-              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant')
+              + seg('raw', 'Raw') + seg('local', 'Local') + seg('distant', 'Distant') + seg('spectrogram', 'Spectro')
               + '</div>'
               + '<div class="wf-frame" data-code="' + esc(s.code) + '">'
               + '<div class="wf-status">Loading last hour…</div>'
