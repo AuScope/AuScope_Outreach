@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--
+  widgets/top_wiggles.html
+  Embeddable "Biggest wiggles in the last hour" leaderboard. Ranks stations
+  by peak ground velocity from the hourly waveform manifest (peak_um_s),
+  joined with school names from the same-origin station file. Movement is
+  movement — earthquakes, ocean swell, or the lunchtime rush — that's part
+  of the conversation.
+
+  Embed on auscope.org.au:
+    <iframe src="https://auscope.github.io/AuScope_Outreach/widgets/top_wiggles.html"
+            width="100%" height="320" frameborder="0" style="border:none;"></iframe>
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biggest wiggles — AuSIS school seismometers</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: transparent; }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 520px; margin: 0 auto; overflow: hidden; }
+.card-head { padding: 10px 14px 6px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; }
+.card-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+ol { list-style: none; }
+li { display: flex; align-items: baseline; gap: 8px; padding: 7px 14px; border-top: 1px solid #f1f5f9; font-size: 13px; }
+li .rank { font-weight: 700; color: #282572; width: 16px; text-align: right; }
+li a { color: #374151; text-decoration: none; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+li a:hover { color: #2563eb; text-decoration: underline; }
+li .val { font-family: monospace; font-size: 12px; color: #b91c1c; white-space: nowrap; }
+li .hair { font-size: 10.5px; color: #94a3b8; white-space: nowrap; }
+.empty { padding: 20px 14px; font-size: 13px; color: #6b7280; text-align: center; }
+.card-foot { padding: 8px 14px; font-size: 11px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-head">
+    <div class="card-title">Biggest wiggles in the last hour</div>
+    <div class="card-sub" id="sub">Peak ground velocity at AuSIS school seismometers</div>
+  </div>
+  <ol id="list"><div class="empty">Loading&hellip;</div></ol>
+  <div class="card-foot">Movement can be earthquakes, ocean swell &mdash; or the school gym. Click a school to see its waveform.</div>
+</div>
+<script>
+const REPO = 'AuScope/AuScope_Outreach';
+const WF_BASE = 'https://raw.githubusercontent.com/' + REPO + '/waveforms/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+const HAIR_UM = 70.0;
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function hairPhrase(p) {
+  if (!p || p <= 0) return '';
+  if (p >= HAIR_UM) return '&asymp; ' + Math.round(p / HAIR_UM) + ' hair-widths/s';
+  var s = HAIR_UM / p;
+  if (s > 3600) return '';
+  if (s >= 90) return '&asymp; a hair-width every ' + Math.round(s / 60) + ' min';
+  return '&asymp; a hair-width every ' + Math.round(s) + ' s';
+}
+
+Promise.all([
+  fetch(WF_BASE + 'manifest.json?v=' + hourStamp()).then(function(r) { if (!r.ok) throw 0; return r.json(); }),
+  fetch('../data/ausis_stations.geojson?v=' + hourStamp()).then(function(r) { if (!r.ok) throw 0; return r.json(); })
+]).then(function(res) {
+  var names = {};
+  (res[1].features || []).forEach(function(f) { names[f.properties.code] = f.properties.name; });
+  var rows = Object.keys(res[0].stations || {}).map(function(code) {
+    var e = res[0].stations[code];
+    return { code: code, peak: e.peak_um_s, name: names[code] || code };
+  }).filter(function(r) { return typeof r.peak === 'number' && r.peak > 0; })
+    .sort(function(a, b) { return b.peak - a.peak; })
+    .slice(0, 5);
+  if (!rows.length) throw 0;
+  if (res[0].generated) {
+    document.getElementById('sub').textContent =
+      'Peak ground velocity · updated ' + res[0].generated.slice(11, 16) + ' UTC';
+  }
+  document.getElementById('list').innerHTML = rows.map(function(r, i) {
+    return '<li><span class="rank">' + (i + 1) + '</span>'
+      + '<a href="' + MAP_URL + '#station=' + encodeURIComponent(r.code) + '" target="_blank" rel="noopener">'
+      + esc(r.name) + '</a>'
+      + '<span class="val">' + r.peak.toPrecision(3) + ' µm/s</span>'
+      + '<span class="hair">' + hairPhrase(r.peak) + '</span></li>';
+  }).join('');
+}).catch(function() {
+  document.getElementById('list').innerHTML =
+    '<div class="empty">Leaderboard data not available yet — it appears after the next hourly update.</div>';
+});
+
+// Same-page map bridge: when the AuSIS map is iframed on the same page
+// (same origin), clicking here drives it directly over a BroadcastChannel.
+// No map answers within 250 ms -> fall back to opening a new tab.
+var mapChannel = null, mapAcked = false;
+try {
+  mapChannel = new BroadcastChannel('ausis-map');
+  mapChannel.onmessage = function(ev) { if (ev.data && ev.data.type === 'ack') mapAcked = true; };
+} catch (e) {}
+document.addEventListener('click', function(ev) {
+  if (!mapChannel) return;
+  var a = ev.target.closest ? ev.target.closest('a[href*="#quake="], a[href*="#station="]') : null;
+  if (!a) return;
+  var m = /#(quake|station)=([A-Za-z0-9_-]+)/.exec(a.getAttribute('href'));
+  if (!m) return;
+  ev.preventDefault();
+  mapAcked = false;
+  mapChannel.postMessage(m[1] === 'quake'
+    ? { type: 'reveal-quake', id: m[2] }
+    : { type: 'reveal-station', code: m[2] });
+  var href = a.href;
+  setTimeout(function() { if (!mapAcked) window.open(href, '_blank', 'noopener'); }, 250);
+});
+</script>
+</body>
+</html>

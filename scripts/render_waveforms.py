@@ -222,6 +222,22 @@ def render_spectrogram(code, tr, cha, t2, out_path):
         print(f"  {code}: spectrogram quantise skipped ({short(exc)})")
 
 
+HAIR_UM = 70.0   # human hair diameter, µm — the relatable yardstick
+
+def hair_phrase(peak_um_s):
+    """Translate a µm/s peak into hair-widths of movement per unit time."""
+    if peak_um_s <= 0:
+        return ""
+    if peak_um_s >= HAIR_UM:
+        return f" ≈ {peak_um_s / HAIR_UM:.0f} hair-widths of movement per second"
+    secs = HAIR_UM / peak_um_s
+    if secs > 3600:
+        return ""                        # essentially still — skip the phrase
+    if secs >= 90:
+        return f" ≈ a hair's width of movement every {secs / 60:.0f} min"
+    return f" ≈ a hair's width of movement every {secs:.0f} s"
+
+
 def render(code, tr, cha, variant, t2, out_path):
     """Plot one µm/s trace as a clean, compact PNG with a labelled y-axis."""
     peak = float(max(abs(tr.data.min()), abs(tr.data.max()))) if len(tr.data) else 0.0
@@ -232,8 +248,8 @@ def render(code, tr, cha, variant, t2, out_path):
 
     ax.set_title(
         f"S1.{code}..{cha}   {VARIANT_SUB[variant]}\n"
-        f"last {WINDOW_MINUTES} min to {t2.strftime('%Y-%m-%d %H:%M')} UTC"
-        f"   ·   peak {peak:.3g} µm/s",
+        f"last {WINDOW_MINUTES} min to {t2.strftime('%Y-%m-%d %H:%M')} UTC\n"
+        f"peak {peak:.3g} µm/s{hair_phrase(peak)}",
         fontsize=7.5, color="#333", pad=4,
     )
     ax.set_ylabel("µm/s", fontsize=7.5, color="#333")
@@ -320,11 +336,13 @@ def main():
                            os.path.join(OUT_DIR, fname))
                 made.append(variant)
 
+            peak = float(max(abs(vel.data.min()), abs(vel.data.max()))) if len(vel.data) else 0.0
             manifest["stations"][code] = {
                 "channel": f"S1.{code}.{tr.stats.location or ''}.{cha}",
                 "variants": made,
                 "start": t1.strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "end":   t2.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "peak_um_s": round(peak, 3),   # feeds the top-wiggles widget
             }
             ok += 1
             print(f"  {code}: OK ({cha}) — {', '.join(made)}")

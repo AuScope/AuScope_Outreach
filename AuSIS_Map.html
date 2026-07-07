@@ -78,6 +78,8 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .q-row strong { color: #374151; }
 .q-near { margin-top: 6px; font-size: 11px; color: #4b5563; }
 .q-near b { color: #282572; }
+.q-link { display: inline-block; margin-top: 6px; font-size: 12px; color: #2563eb; text-decoration: none; }
+.q-link:hover { text-decoration: underline; }
 .q-section { margin-top: 8px; }
 .q-section-label { font-size: 11px; font-weight: 700; color: #282572; margin-bottom: 4px; text-align: center; }
 .q-section-img { display: block; width: 360px; max-width: none; margin: 0 -14px; height: auto; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
@@ -101,6 +103,27 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   #map.enlarged .leaflet-popup-content { max-width: 332px; }
   #map.medium .wf, #map.enlarged .wf { width: 332px; }
   #map.medium .q-section-img, #map.enlarged .q-section-img { width: 360px; }
+}
+/* Latest-earthquake spotlight chip */
+#spotlight {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  z-index: 1000; display: none; align-items: center; gap: 8px;
+  max-width: min(86%, 560px); padding: 6px 10px 6px 12px;
+  background: rgba(255,255,255,0.95); border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 6px; cursor: pointer; font-size: 12px; color: #282572;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3); white-space: nowrap; overflow: hidden;
+}
+#spotlight.on { display: flex; }
+#spotlight:hover { background: #fff; }
+#spotlight .sp-mag { font-weight: 700; color: #b91c1c; }
+#spotlight .sp-text { overflow: hidden; text-overflow: ellipsis; }
+#spotlight .sp-close { border: none; background: none; font-size: 14px; color: #94a3b8; cursor: pointer; padding: 0 2px; }
+#spotlight .sp-close:hover { color: #333; }
+/* Distance/travel-time labels on quake connector lines */
+.q-conn-label {
+  background: rgba(255,255,255,0.9); border-radius: 3px; padding: 1px 5px;
+  font-size: 10px; color: #7f1d1d; white-space: nowrap; width: max-content !important;
+  border: 1px solid rgba(185,28,28,0.35); font-family: Arial, Helvetica, sans-serif;
 }
 /* Controls — hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
@@ -152,6 +175,10 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="header-logo"><img src="assets/auscope-logo.png" alt="AuScope"></span>
 </div>
 <div id="map">
+  <div id="spotlight" role="button" tabindex="0" title="Show this earthquake on the map">
+    <span class="sp-mag"></span><span class="sp-text"></span>
+    <button class="sp-close" type="button" aria-label="Dismiss" title="Dismiss">&times;</button>
+  </div>
   <button id="fs-btn" type="button" title="Fullscreen" aria-label="Toggle fullscreen">
     <svg class="fs-open" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5V2.5h4M16 6.5V2.5h-4M2 11.5v4h4M16 11.5v4h-4"/></svg>
     <svg class="fs-close" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5v4H2M12 2.5v4h4M6 15.5v-4H2M12 15.5v-4h4"/></svg>
@@ -453,6 +480,7 @@ async function fetchEventSections() {
     var byId = {};
     (m.events || []).forEach(function(e) { byId[e.event_id] = e; });
     eventSections = byId;
+    updateSpotlight();
   } catch (e) {
     // event-waveforms branch may not exist yet — fine, popups just omit it.
   }
@@ -463,13 +491,106 @@ function hourStamp() {
   return new Date().toISOString().slice(0, 13).replace(/[-T]/g, '');
 }
 
+// ── Latest-earthquake spotlight ──────────────────────────────
+// Chip pointing at the newest event (≤7 days) that has a record section —
+// the sections are the best thing the pipeline makes; don't bury them.
+var spotlightDismissed = false;
+
+function timeAgo(ms) {
+  var h = (Date.now() - ms) / 3600000;
+  if (h < 1) return Math.max(1, Math.round(h * 60)) + ' min ago';
+  if (h < 48) return Math.round(h) + ' h ago';
+  return Math.round(h / 24) + ' days ago';
+}
+
+function updateSpotlight() {
+  var el = document.getElementById('spotlight');
+  if (!el || spotlightDismissed) return;
+  var best = null;
+  Object.keys(eventSections).forEach(function(id) {
+    var e = eventSections[id];
+    var t = e.origin ? Date.parse(e.origin) : NaN;
+    if (isNaN(t) || Date.now() - t > 7 * 86400000) return;
+    if (!best || t > best.t) best = { id: id, t: t, e: e };
+  });
+  if (!best) { el.classList.remove('on'); return; }
+  var e = best.e;
+  el.querySelector('.sp-mag').textContent = 'M' + (e.mag != null ? Number(e.mag).toFixed(1) : '?');
+  el.querySelector('.sp-text').textContent =
+    ' ' + (e.place || 'earthquake') + ' · ' + timeAgo(best.t) + ' — see the waves →';
+  el._qid = best.id;
+  el.classList.add('on');
+}
+
+(function() {
+  var el = document.getElementById('spotlight');
+  if (!el) return;
+  function activate() { if (el._qid) revealQuake(el._qid); }
+  el.addEventListener('click', function(ev) {
+    if (ev.target.classList.contains('sp-close')) {
+      spotlightDismissed = true;
+      el.classList.remove('on');
+      ev.stopPropagation();
+      return;
+    }
+    activate();
+  });
+  el.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); activate(); }
+  });
+})();
+
+// ── Widget bridge ────────────────────────────────────────────
+// The embeddable cards (widgets/) share this page's origin, so when both
+// are iframed on the same AuScope page they can drive this map over a
+// BroadcastChannel instead of opening a new tab. The map acks so widgets
+// know someone answered; without an ack they fall back to a new tab.
+try {
+  var widgetChannel = new BroadcastChannel('ausis-map');
+  widgetChannel.onmessage = function(ev) {
+    var d = ev.data || {};
+    if (d.type === 'reveal-quake' && d.id) {
+      widgetChannel.postMessage({ type: 'ack', of: d.type });
+      revealQuake(String(d.id));
+    } else if (d.type === 'reveal-station' && d.code) {
+      var code = String(d.code).toUpperCase();
+      var s = stations.filter(function(x) { return x.code === code; })[0];
+      if (s && s.marker) {
+        widgetChannel.postMessage({ type: 'ack', of: d.type });
+        map.setView([s.lat, s.lng], 8);
+        setTimeout(function() { s.marker.openPopup(); }, 300);
+      }
+    }
+  };
+} catch (e) { /* no BroadcastChannel — widgets just open new tabs */ }
+
+// ── Deep links: #station=CODE / #quake=ID open the matching popup ──
+var deepLinkDone = { station: false, quake: false };
+
+function applyDeepLink() {
+  var m = /^#(station|quake)=([A-Za-z0-9_-]+)$/.exec(window.location.hash || '');
+  if (!m) return;
+  if (m[1] === 'station' && !deepLinkDone.station && stations.length) {
+    var code = m[2].toUpperCase();
+    var s = stations.filter(function(x) { return x.code === code; })[0];
+    if (s && s.marker) {
+      deepLinkDone.station = true;
+      map.setView([s.lat, s.lng], 8);
+      setTimeout(function() { s.marker.openPopup(); }, 300);
+    }
+  } else if (m[1] === 'quake' && !deepLinkDone.quake && quakeStoreFeatures.length) {
+    deepLinkDone.quake = revealQuake(m[2]);
+  }
+}
+
 // ── Quake → station connector lines ──────────────────────────
 function clearQuakeLinks() {
   if (quakeLinkLayer) quakeLinkLayer.clearLayers();
 }
 
-// Draw faint dashed lines from a quake to its nearest AuSIS stations,
-// each labelled with the station name, code and distance.
+// Draw faint dashed lines from a quake to its nearest AuSIS stations, each
+// with a midpoint label: distance and rough seismic travel time (~3.5 km/s
+// S/surface-wave speed) — distance ÷ time = wave speed, done by the reader.
 function drawQuakeLinks(lat, lng) {
   if (!quakeLinkLayer) return;
   quakeLinkLayer.clearLayers();
@@ -479,6 +600,18 @@ function drawQuakeLinks(lat, lng) {
       color: '#b91c1c', weight: 1.5, opacity: 0.8, dashArray: '4 6', interactive: false
     });
     quakeLinkLayer.addLayer(line);
+    var secs = Math.round(x.dist / 3.5 / 5) * 5;   // ~S-wave speed, rounded to 5 s
+    if (secs > 0) {
+      var label = L.marker([(lat + s.lat) / 2, (lng + s.lng) / 2], {
+        interactive: false,
+        icon: L.divIcon({
+          className: 'q-conn-label',
+          html: '~' + x.dist + ' km &middot; waves &asymp; ' + (secs >= 120 ? Math.round(secs / 60) + ' min' : secs + ' s'),
+          iconSize: null
+        })
+      });
+      quakeLinkLayer.addLayer(label);
+    }
   });
 }
 
@@ -621,6 +754,7 @@ async function fetchQuakes() {
     var gj = await resp.json();
     quakeStoreFeatures = gj.features || [];
     applyQuakeWindow();
+    applyDeepLink();
   } catch (e) {
     console.warn('Earthquake store load failed:', e);
     updateQuakeLegend();
@@ -660,13 +794,20 @@ function buildQuakePopup(f) {
             return esc(x.name) + ' (S1.' + esc(x.code) + ') ~' + x.dist + ' km';
           }).join('<br>') + '</div>'
         : '<div class="q-near" style="color:#94a3b8">Locating nearest AuSIS stations…</div>');
+  // GA-sourced events link to the authoritative Geoscience Australia event
+  // page (felt reports, revisions). USGS-seeded ids have no GA page.
+  var gaLink = (p.id && /^ga/.test(p.id))
+    ? '<div><a class="q-link" href="https://earthquakes.ga.gov.au/event/' + encodeURIComponent(p.id)
+      + '" target="_blank" rel="noopener">More at Geoscience Australia &rarr;</a></div>'
+    : '';
   return '<div class="q-title">M ' + magStr + '</div>'
     + '<div class="q-place">' + esc(p.place || 'Unknown location') + '</div>'
     + '<div class="q-row"><strong>Time:</strong> ' + formatDateTime(when) + '</div>'
     + '<div class="q-row"><strong>Depth:</strong> ' + (p.depth != null ? Math.round(p.depth) + ' km' : 'n/a') + '</div>'
     + '<div class="q-row"><strong>Coordinates:</strong> ' + c[1].toFixed(3) + ', ' + c[0].toFixed(3) + '</div>'
     + sectionHtml
-    + nearHtml;
+    + nearHtml
+    + gaLink;
 }
 
 function renderQuakes() {
@@ -684,8 +825,31 @@ function renderQuakes() {
       fillOpacity: 0.85
     }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 700, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
+    marker._qid = f.properties.id;
     quakeLayer.addLayer(marker);
   });
+}
+
+// Find a quake marker by event id, widening the time window if needed.
+function revealQuake(id) {
+  var found = null;
+  function search() {
+    found = null;
+    quakeLayer.eachLayer(function(l) { if (l._qid === id) found = l; });
+  }
+  search();
+  if (!found) {                      // maybe outside the current time window
+    quakeWindowDays = 730;
+    var sel = document.getElementById('quake-window');
+    if (sel) sel.value = '730';
+    applyQuakeWindow();
+    search();
+  }
+  if (!found) return false;
+  setQuakesVisible(true);
+  map.setView(found.getLatLng(), Math.max(map.getZoom(), 5));
+  setTimeout(function() { found.openPopup(); }, 250);
+  return true;
 }
 
 function setQuakesVisible(v) {
@@ -794,6 +958,7 @@ loadVerifiedStatus().then(function() {
     stations = data;
     addMarkers();
     map.setView([-28, 134], 4);
+    applyDeepLink();
   } else {
     console.warn('Station data failed to load (data/ausis_stations.geojson).');
   }

@@ -56,7 +56,8 @@ from obspy.taup import TauPyModel
 
 # ── Age window ───────────────────────────────────────────────
 MIN_AGE_HOURS = 6
-MAX_AGE_DAYS  = 14
+MAX_AGE_DAYS  = 30   # sections stay published for a month (render-once, so
+                     # longer retention costs storage only, not compute)
 # (At a 1 h floor, expect many events to be skipped for missing data — that
 #  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 if
 #  too few events have complete data to validate the renderer.)
