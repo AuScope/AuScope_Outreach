@@ -161,7 +161,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
   <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
-  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes"><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes — red: last 24 h, orange: last 7 days, yellow: older. Circle size = magnitude."><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
   <span id="stale-badge" style="display:none"></span>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -589,11 +589,12 @@ function updateHeader() {
 }
 
 // ── Earthquakes (Geoscience Australia rolling store, same-origin) ──
-function quakeColor(m) {
-  if (m >= 5) return '#7f1d1d';
-  if (m >= 4) return '#dc2626';
-  if (m >= 3) return '#f97316';
-  return '#facc15';
+// Seismic-map convention (GA / USGS): colour = recency (red = newest),
+// size = magnitude. Magnitude is not double-encoded in colour.
+function quakeColor(ageDays) {
+  if (ageDays < 1) return '#dc2626';   // last 24 hours — red
+  if (ageDays < 7) return '#f97316';   // last 7 days — orange
+  return '#facc15';                    // older — yellow
 }
 function quakeRadius(m) {
   return 0.8 * Math.max(4, Math.min(22, 3 + m * 2.6));
@@ -679,8 +680,8 @@ function renderQuakes() {
       radius: quakeRadius(m),
       color: '#fff',
       weight: 1,
-      fillColor: quakeColor(m),
-      fillOpacity: ageDays < 1 ? 0.9 : 0.55
+      fillColor: quakeColor(ageDays),
+      fillOpacity: 0.85
     }).bindPopup(function() { return buildQuakePopup(f); }, { maxWidth: 700, minWidth: 240 });
     marker._quake = { lat: c[1], lng: c[0] };
     quakeLayer.addLayer(marker);
