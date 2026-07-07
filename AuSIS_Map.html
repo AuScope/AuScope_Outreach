@@ -395,7 +395,7 @@ function initMap() {
         stations.filter(function(s) { return s.code.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 10).forEach(function(s) {
           const row = document.createElement('div');
           row.innerHTML = '<b style="color:#2563eb;font-family:monospace">' + esc(s.code) + '</b> ' + esc(s.name);
-          row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); map.setView([s.lat, s.lng], 12, { animate: true }); setTimeout(function() { s.marker.openPopup(); }, 300); };
+          row.onclick = function() { input.value = ''; res.innerHTML = ''; panel.classList.remove('open'); setViewForPopup(L.latLng(s.lat, s.lng), 12); setTimeout(function() { s.marker.openPopup(); }, 300); };
           res.appendChild(row);
         });
       };
@@ -557,7 +557,7 @@ try {
       var s = stations.filter(function(x) { return x.code === code; })[0];
       if (s && s.marker) {
         widgetChannel.postMessage({ type: 'ack', of: d.type });
-        map.setView([s.lat, s.lng], 8);
+        setViewForPopup(L.latLng(s.lat, s.lng), 8);
         setTimeout(function() { s.marker.openPopup(); }, 300);
       }
     }
@@ -575,7 +575,7 @@ function applyDeepLink() {
     var s = stations.filter(function(x) { return x.code === code; })[0];
     if (s && s.marker) {
       deepLinkDone.station = true;
-      map.setView([s.lat, s.lng], 8);
+      setViewForPopup(L.latLng(s.lat, s.lng), 8);
       setTimeout(function() { s.marker.openPopup(); }, 300);
     }
   } else if (m[1] === 'quake' && !deepLinkDone.quake && quakeStoreFeatures.length) {
@@ -830,6 +830,15 @@ function renderQuakes() {
   });
 }
 
+// Centre a point 25% below the viewport middle before opening its popup —
+// waveform/section popups are tall and open upward, so a dead-centre marker
+// gets its popup clipped by the top of the (550px) iframe.
+function setViewForPopup(latlng, zoom) {
+  var pt = map.project(latlng, zoom);
+  pt.y -= map.getSize().y * 0.25;   // centre north of the marker → marker renders low
+  map.setView(map.unproject(pt, zoom), zoom);
+}
+
 // Find a quake marker by event id, widening the time window if needed.
 function revealQuake(id) {
   var found = null;
@@ -847,7 +856,7 @@ function revealQuake(id) {
   }
   if (!found) return false;
   setQuakesVisible(true);
-  map.setView(found.getLatLng(), Math.max(map.getZoom(), 5));
+  setViewForPopup(found.getLatLng(), Math.max(map.getZoom(), 5));
   setTimeout(function() { found.openPopup(); }, 250);
   return true;
 }
