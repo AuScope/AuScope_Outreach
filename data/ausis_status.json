@@ -1,21 +1,25 @@
 {
-  "checked": "2026-07-11T03:43:09Z",
+  "checked": "2026-07-11T06:25:35Z",
   "stations": {
     "AUMTC": {
       "streaming": false,
-      "checkedAt": "2026-07-11T03:43:09Z"
+      "checkedAt": "2026-07-11T06:25:35Z"
     },
     "AUMUL": {
       "streaming": false,
-      "checkedAt": "2026-07-11T03:43:09Z"
+      "checkedAt": "2026-07-11T06:25:35Z"
+    },
+    "AURMK": {
+      "streaming": false,
+      "checkedAt": "2026-07-11T06:25:35Z"
     },
     "AUSIS": {
       "streaming": false,
-      "checkedAt": "2026-07-11T03:43:09Z"
+      "checkedAt": "2026-07-11T06:25:35Z"
     },
     "AUTOO": {
       "streaming": false,
-      "checkedAt": "2026-07-11T03:43:09Z"
+      "checkedAt": "2026-07-11T06:25:35Z"
     }
   }
 }
