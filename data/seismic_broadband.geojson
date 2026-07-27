@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-07-20T10:15:35Z"
+    "fetched": "2026-07-27T10:46:17Z"
   },
   "features": [
     {
@@ -20675,7 +20675,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 451.0,
-        "startTime": "2025-05-10T07:00:00",
+        "startTime": "2026-07-20T13:48:00",
         "endTime": null
       },
       "geometry": {
@@ -20775,7 +20775,7 @@
         "sensor": "Trillium Compact 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 368.0,
-        "startTime": "2026-07-24T00:00:00",
+        "startTime": "2026-07-01T00:00:00",
         "endTime": null
       },
       "geometry": {
@@ -25054,7 +25054,7 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": -8.9,
+        "elevation": 4.0,
         "startTime": "2025-06-02T00:23:44",
         "endTime": "2026-05-17T06:17:08.75"
       },
@@ -28534,7 +28534,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 359.5,
         "startTime": "2022-12-12T09:00:00",
         "endTime": "2023-11-28T07:20:30.95"
       },
@@ -28554,7 +28554,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 350.9,
         "startTime": "2022-12-13T02:00:00",
         "endTime": "2023-03-01T02:59:59.99"
       },
@@ -28574,7 +28574,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 368.1,
         "startTime": "2022-12-13T09:00:00",
         "endTime": "2023-11-30T00:05:21.11"
       },
@@ -28794,7 +28794,7 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": -29.6,
+        "elevation": 268.0,
         "startTime": "2025-07-02T03:59:51.06",
         "endTime": "2026-05-08T04:39:23.52"
       },
@@ -29834,7 +29834,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 294.2,
         "startTime": "2022-11-16T05:28:34.62",
         "endTime": "2023-11-27T05:59:59.99"
       },
@@ -29854,7 +29854,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 337.1,
         "startTime": "2022-11-15T02:22:09.62",
         "endTime": "2023-11-30T23:59:59.99"
       },
@@ -31654,7 +31654,7 @@
         "channel": "HHZ",
         "sensor": "Silicone Audio 213-120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 382.2,
         "startTime": "2022-12-02T04:27:47.04",
         "endTime": "2023-08-07T19:59:59.35"
       },
@@ -31914,7 +31914,7 @@
         "channel": "HHZ",
         "sensor": "Trillium Dome 120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 248.9,
         "startTime": "2022-12-21T08:17:39.62",
         "endTime": "2023-06-16T07:59:34"
       },
@@ -32254,7 +32254,7 @@
         "channel": "HHZ",
         "sensor": "COLT120",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 112.6,
         "startTime": "2022-11-15T02:08:20",
         "endTime": "2023-12-04T06:59:59.99"
       },
@@ -32334,7 +32334,7 @@
         "channel": "HHZ",
         "sensor": "COLT120",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 332.4,
         "startTime": "2022-11-18T01:57:14",
         "endTime": "2023-09-23T23:59:59.99"
       },
@@ -32434,7 +32434,7 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 20.1,
         "startTime": "2024-03-06T05:38:08",
         "endTime": "2025-03-04T23:30:45.16"
       },
@@ -32574,7 +32574,7 @@
         "channel": "HHZ",
         "sensor": "",
         "sampleRate": 100.0,
-        "elevation": -5.4,
+        "elevation": 24.0,
         "startTime": "2025-07-05T03:38:41",
         "endTime": "2026-05-08T13:06:02.19"
       },
@@ -32694,7 +32694,7 @@
         "channel": "HHZ",
         "sensor": "COLT120",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 182.5,
         "startTime": "2022-11-17T06:59:40",
         "endTime": "2023-11-29T23:59:59.99"
       },
@@ -32754,7 +32754,7 @@
         "channel": "HHZ",
         "sensor": "Silicone Audio 213-120PA",
         "sampleRate": 100.0,
-        "elevation": 0.0,
+        "elevation": 84.1,
         "startTime": "2022-11-29T04:37:16.73",
         "endTime": "2023-07-19T12:59:59.68"
       },
