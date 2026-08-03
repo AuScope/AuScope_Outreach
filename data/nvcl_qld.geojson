@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "qld",
     "stateLabel": "Queensland",
-    "fetched": "2026-07-06T12:10:11Z"
+    "fetched": "2026-08-03T11:34:12Z"
   },
   "features": [
     {
@@ -496,9 +496,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-06-20",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 767.69,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -2484,9 +2484,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-07-19",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 1242.8,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -3044,9 +3044,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-07-19",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 627.18,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -4500,9 +4500,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2014-11-26",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 229.83,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7328,9 +7328,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-11-25",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 258.0,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7356,9 +7356,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-11-25",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 288.78,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7384,9 +7384,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-11-25",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 343.38,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -8252,9 +8252,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2015-10-14",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 494.9,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -10212,9 +10212,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2017-02-10",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 279.8,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -16250,6 +16250,90 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Mount Hope MHDD133W7",
+        "boreholeId": "bh083825",
+        "boreholeLength": 1029.1,
+        "elevation": null,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "2023-07-23 00:00:00",
+        "purpose": "unknown",
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-08-03",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.81187022,
+          -21.17270027
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Duchess DCDD002",
+        "boreholeId": "bh083828",
+        "boreholeLength": 663,
+        "elevation": 368,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "2022-08-10 00:00:00",
+        "purpose": "unknown",
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-08-03",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.85880196,
+          -21.36028542
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Hope MHDD195",
+        "boreholeId": "bh083830",
+        "boreholeLength": 247.1,
+        "elevation": 460,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "2024-05-16 00:00:00",
+        "purpose": "unknown",
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-08-03",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.8131381,
+          -21.17301633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Mount Hope North MHDD034",
         "boreholeId": "bh083911",
         "boreholeLength": 489.7,
@@ -16328,6 +16412,34 @@
         "coordinates": [
           140.79952255,
           -20.9799843
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ernest Henry EH688",
+        "boreholeId": "bh085509",
+        "boreholeLength": 1050.9,
+        "elevation": 157,
+        "custodian": "Geological Survey of Queensland",
+        "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
+        "drillEndDate": "2008-05-20 00:00:00",
+        "purpose": "unknown",
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-08-03",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "QLD"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.70645746,
+          -20.45353417
         ]
       }
     }
