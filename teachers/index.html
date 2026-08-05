@@ -51,7 +51,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 .res .d { font-size: 11.5px; color: #6b7280; margin-top: 3px; line-height: 1.45; }
 .foot { text-align: center; font-size: 11px; color: #94a3b8; padding: 14px 0 8px; }
 .legend { display: flex; gap: 14px; padding: 0 14px 10px; font-size: 11px; color: #6b7280; }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+.tri { display: inline-block; margin-right: 4px; vertical-align: -3px; }
 </style>
 </head>
 <body>
@@ -70,9 +70,9 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
     <div class="card">
       <h2>Find your school</h2>
       <div class="legend">
-        <span><span class="dot" style="background:#22c55e"></span>live</span>
-        <span><span class="dot" style="background:#f59e0b"></span>no recent data</span>
-        <span><span class="dot" style="background:#ef4444"></span>decommissioned</span>
+        <span><span class="tri" id="tri-live"></span>live</span>
+        <span><span class="tri" id="tri-quiet"></span>no recent data</span>
+        <span><span class="tri" id="tri-ended"></span>decommissioned</span>
         <span style="margin-left:auto">click a school &rarr; live drum, catches &amp; more</span>
       </div>
       <div id="map"></div>
@@ -108,6 +108,22 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 const LIVE_THRESHOLD_DAYS = 7;
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
 
+// Same station symbol as the public map: black triangle, status-coloured
+// stroke — stations are triangles, earthquakes are circles.
+function triangleSVG(size, strokeColor) {
+  const h = size / 2;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2)
+    + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+}
+function triangleIcon(size, strokeColor) {
+  return L.divIcon({ html: triangleSVG(size, strokeColor), className: '',
+    iconSize: [size, size], iconAnchor: [size / 2, size - 2] });
+}
+document.getElementById('tri-live').innerHTML = triangleSVG(15, '#22c55e');
+document.getElementById('tri-quiet').innerHTML = triangleSVG(15, '#f59e0b');
+document.getElementById('tri-ended').innerHTML = triangleSVG(15, '#ef4444');
+
 const map = L.map('map', { center: [-27, 134], zoom: 4, minZoom: 3, maxZoom: 12 });
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { attribution: 'Tiles &copy; Esri', opacity: 0.8 }).addTo(map);
@@ -133,10 +149,7 @@ Promise.all([
       colour = live ? '#22c55e' : '#f59e0b';
     }
     const big = window.innerWidth >= 1500;   // projector / TV distances
-    L.circleMarker([c[1], c[0]], {
-      radius: big ? 10 : 7, color: '#fff', weight: big ? 2 : 1.5,
-      fillColor: colour, fillOpacity: 0.95
-    }).addTo(map)
+    L.marker([c[1], c[0]], { icon: triangleIcon(big ? 26 : 19, colour) }).addTo(map)
       .bindTooltip(p.name + ' — click to open dashboard', { direction: 'top' })
       .on('click', () => { window.location.href = '../widgets/station.html?code=' + p.code; });
   });
