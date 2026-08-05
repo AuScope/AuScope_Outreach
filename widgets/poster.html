@@ -15,6 +15,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: #e5e7eb; }
 .toolbar { padding: 12px; text-align: center; }
+.hubback { font-size: 13px; color: #2563eb; text-decoration: none; margin-right: 12px; }
+.hubback:hover { text-decoration: underline; }
 .toolbar button { font-family: inherit; font-size: 14px; padding: 8px 22px; cursor: pointer; background: #282572; color: #fff; border: none; border-radius: 6px; }
 .page {
   width: 210mm; min-height: 296mm; margin: 0 auto 20px; background: #fff;
@@ -40,7 +42,7 @@ h1 { font-size: 26pt; color: #282572; line-height: 1.25; }
 </style>
 </head>
 <body>
-<div class="toolbar"><button onclick="window.print()">Print this poster</button></div>
+<div class="toolbar"><a class="hubback" href="../teachers/">&larr; Teacher Hub</a> <button onclick="window.print()">Print this poster</button></div>
 <div class="page">
   <img class="logo" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
   <h1>This school hosts a real,<br>working seismometer</h1>
@@ -97,5 +99,6 @@ function esc(s) {
   }
 })();
 </script>
+<script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>
 </body>
 </html>

@@ -16,6 +16,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: #e5e7eb; color: #374151; }
 .toolbar { padding: 12px; text-align: center; }
+.hubback { font-size: 13px; color: #2563eb; text-decoration: none; margin-right: 12px; }
+.hubback:hover { text-decoration: underline; }
 .toolbar button { font-family: inherit; font-size: 14px; padding: 8px 22px; cursor: pointer; background: #282572; color: #fff; border: none; border-radius: 6px; }
 .toolbar select { font-family: inherit; font-size: 13px; padding: 7px; margin-right: 8px; border-radius: 6px; border: 1px solid #cbd5e1; max-width: 60%; }
 .page { width: 210mm; min-height: 296mm; margin: 0 auto 20px; background: #fff; padding: 14mm 15mm; }
@@ -40,7 +42,7 @@ ol.tasks li { margin-bottom: 2.5mm; }
 </style>
 </head>
 <body>
-<div class="toolbar">
+<div class="toolbar"><a class="hubback" href="../teachers/">&larr; Teacher Hub</a> 
   <select id="picker" title="Choose a recorded earthquake"></select>
   <select id="level" title="Choose the year level">
     <option value="junior">Years 1&ndash;4</option>
@@ -58,6 +60,13 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+// Kid-readable UTC: "28 Jul 2026, 07:27 UTC" — no T, no Z
+function fmtWhen(d) {
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getUTCDate() + ' ' + mo[d.getUTCMonth()] + ' ' + d.getUTCFullYear()
+    + ', ' + String(d.getUTCHours()).padStart(2, '0') + ':'
+    + String(d.getUTCMinutes()).padStart(2, '0') + ' UTC';
+}
 
 (async function() {
   const params = new URLSearchParams(window.location.search);
@@ -217,14 +226,14 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
         <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} — ${esc(e.place)}</h1>
         <div class="sub">${e.n_recorded
           ? 'Seen at ' + e.n_recorded + ' of ' + e.n_with_data + ' AuSIS school seismometers · ' + n + ' clearest shown'
-          : 'Recorded by ' + n + ' AuSIS school seismometers'} · ${esc(when.toUTCString())}</div>
+          : 'Recorded by ' + n + ' AuSIS school seismometers'} · ${fmtWhen(when)}</div>
       </div>
       <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
     </div>
     <div class="nameline">Name: <span></span> Class: <span></span> Date: <span></span></div>
     <div class="facts">
       <div class="fact"><b>Magnitude</b> ${Number(e.mag).toFixed(1)}</div>
-      <div class="fact"><b>When (UTC)</b> ${esc(e.origin)}</div>
+      <div class="fact"><b>When</b> ${fmtWhen(when)}</div>
       <div class="fact"><b>Type</b> ${isLocal ? 'Australian region' : 'Distant (teleseismic)'}</div>
       <div class="fact"><b>Nearest school shown</b> ${nearest ? esc(nearest.site || nearest.code) + ' — ' + nearest.dist_km + ' km' : '—'}</div>
     </div>
@@ -235,5 +244,6 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
   document.getElementById('page').innerHTML = '<div class="err">Could not load: ' + esc(err && err.message ? err.message : err) + '</div>';
 });
 </script>
+<script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>
 </body>
 </html>

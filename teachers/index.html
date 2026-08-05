@@ -92,9 +92,9 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
       <div class="d">Big distant quakes — Japan, Mexico, the Pacific — seen from Australian classrooms.</div></a>
     <a class="res" href="../AuSIS_Map.html"><div class="t">Public AuSIS map</div>
       <div class="d">The full interactive map with earthquakes, waveform popups and record sections.</div></a>
-    <a class="res" href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener"><div class="t">AuSIS program site</div>
+    <a class="res ausis-site" href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener"><div class="t">AuSIS program site</div>
       <div class="d">Stories, education resources, competitions and contacts from the AuSIS team at ANU.</div></a>
-    <a class="res" href="https://sites.google.com/view/ausis2/feedback" target="_blank" rel="noopener"><div class="t">Need help?</div>
+    <a class="res ausis-site" href="https://sites.google.com/view/ausis2/feedback" target="_blank" rel="noopener"><div class="t">Need help?</div>
       <div class="d">Seismometer offline or questions about your station — contact the AuSIS team.</div></a>
   </div>
 
@@ -157,6 +157,11 @@ Promise.all([
   document.getElementById('map').outerHTML =
     '<div style="padding:30px;text-align:center;color:#6b7280">Station data unavailable right now — try again shortly.</div>';
 });
+</script>
+<script>
+// Embedded in the AuSIS site itself -> linking back to it is circular noise
+if (window.self !== window.top)
+  document.querySelectorAll('.ausis-site').forEach(el => el.style.display = 'none');
 </script>
 </body>
 </html>

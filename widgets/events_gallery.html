@@ -24,6 +24,8 @@ body { font-family: Arial, Helvetica, sans-serif; background: transparent; color
 .feedhead img { height: 36px; }
 .feedhead .t { font-size: 15px; font-weight: 700; color: #282572; }
 .feedhead .s { font-size: 11px; color: #94a3b8; }
+.hubback { font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 700; white-space: nowrap; }
+.hubback:hover { text-decoration: underline; }
 .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
 .q-line { display: flex; align-items: baseline; gap: 8px; padding: 10px 14px 6px; }
 .q-line .mag { font-weight: 700; color: #b91c1c; font-size: 17px; white-space: nowrap; }
@@ -46,6 +48,8 @@ body { font-family: Arial, Helvetica, sans-serif; background: transparent; color
       <div class="t" id="title">Earthquakes recorded by AuSIS</div>
       <div class="s" id="sub">Updated automatically within hours of each event</div>
     </div>
+    <div style="flex:1"></div>
+    <a class="hubback" href="../teachers/">Teacher Hub &rarr;</a>
   </div>
   <div id="feed"><div class="empty">Loading&hellip;</div></div>
   <div class="foot">Sections show predicted P, S and main-shaking arrivals · data via EarthScope &amp; Geoscience Australia</div>
@@ -118,5 +122,6 @@ fetch(RAW + 'manifest.json?v=' + hourStamp())
       '<div class="empty">Event data not available right now — try again shortly.</div>';
   });
 </script>
+<script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>
 </body>
 </html>

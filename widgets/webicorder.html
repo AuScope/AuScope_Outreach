@@ -46,6 +46,9 @@ body.compact #heli { height: 520px; }
 body.compact .head img { height: 30px; }
 body.compact .head .t1 { font-size: 14px; }
 .foot { padding: 6px 14px 10px; font-size: 10.5px; color: #94a3b8; }
+.hubback { color: #2563eb; text-decoration: none; }
+.hubback:hover { text-decoration: underline; }
+body.compact .hubback { display: none; }
 .foot a { color: #2563eb; text-decoration: none; }
 sp-helicorder { --sp-helicorder-color-even: #282572; --sp-helicorder-color-odd: #b45309; }
 </style>
@@ -66,7 +69,7 @@ sp-helicorder { --sp-helicorder-color-even: #282572; --sp-helicorder-color-odd: 
 </div>
 <div id="status">loading&hellip;</div>
 <div id="heli"></div>
-<div class="foot">Drum updates every 10 minutes (data reaches the archive with a delay of a minute or two).
+<div class="foot"><a class="hubback" href="../teachers/">&larr; Teacher Hub</a> &middot; Drum updates every 10 minutes (data reaches the archive with a delay of a minute or two).
   Times shown in your local timezone. Data: EarthScope &middot; AuSIS network S1 &middot;
   <a id="maplink" href="https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html" target="_blank" rel="noopener">AuSIS map</a></div>
 
@@ -243,5 +246,6 @@ initialLoad().catch(e => {
     ' — the hourly plots on the AuSIS map still work.', true);
 });
 </script>
+<script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>
 </body>
 </html>

@@ -20,6 +20,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
 .wrap { max-width: 860px; margin: 0 auto; padding: 14px; }
+.hubback { display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; margin-bottom: 8px; }
+.hubback:hover { text-decoration: underline; }
 .head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; }
 .head img { height: 56px; }
 .head img.partner { height: 42px; }
@@ -52,6 +54,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 </head>
 <body>
 <div class="wrap">
+  <a class="hubback" href="../teachers/">&larr; AuSIS Teacher Hub</a>
   <div class="head">
     <img src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
     <div>
@@ -215,11 +218,12 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
     + '<a href="' + MAP_URL + '#station=' + CODE + '" target="_blank" rel="noopener">See your school on the map</a>'
     + '<a href="poster.html?code=' + CODE + '" target="_blank" rel="noopener">Print the classroom QR poster</a>'
     + '<a href="event.html" target="_blank" rel="noopener">Earthquake worksheets</a>'
-    + '<a href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener">AuSIS resources</a>';
+    + (window.self === window.top ? '<a href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener">AuSIS resources</a>' : '');
 })().catch(e => {
   document.getElementById('school').textContent = 'Could not load station data';
   document.getElementById('meta').textContent = String(e && e.message ? e.message : e);
 });
 </script>
+<script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>
 </body>
 </html>
