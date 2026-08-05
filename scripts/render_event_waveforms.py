@@ -128,10 +128,18 @@ BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
 P_CLR        = "#2563eb"  # predicted P arrival — blue
 S_CLR        = "#dc2626"  # predicted S arrival — red
+LG_CLR       = "#6b7280"  # Lg / surface-wave arrival — grey
+
+# The biggest shaking on Australian regional records is Lg (crust-guided
+# shear energy, ~3.5 km/s), which always FOLLOWS direct S — without a mark
+# it reads as "S is early". Teleseismic sections likewise peak at the
+# surface waves (~4 km/s), minutes after S.
+LG_KM_S      = 3.5
+SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 3
+RENDER_VERSION = 5
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -417,6 +425,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         "place": place,
         "mode": mode,
         "v": RENDER_VERSION,
+        "depth": round(depth, 1) if depth is not None else None,
         "stations": [{"code": c, "dist_km": round(d), "channel": ch,
                        "site": nm}
                      for c, d, ch, _, nm in lanes],
@@ -461,10 +470,15 @@ def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
         # Predicted P & S arrivals (iasp91) — the classroom moment: P beats
         # S to every station, and both get later with distance.
         p_sec, s_sec = ps_arrivals(dist, depth)
+        if mode == "tele":
+            big_sec, big_lbl = dist / SURF_KM_S, "Surf"
+        else:
+            big_sec, big_lbl = dist / LG_KM_S, "Lg"
         times_mpl = tr.times("matplotlib")
         x0, x1 = times_mpl[0], times_mpl[-1]
         lane_trans = mtransforms.blended_transform_factory(ax.transData, ax.transAxes)
-        for t_sec, lbl, clr in ((p_sec, "P", P_CLR), (s_sec, "S", S_CLR)):
+        for t_sec, lbl, clr in ((p_sec, "P", P_CLR), (s_sec, "S", S_CLR),
+                                 (big_sec, big_lbl, LG_CLR)):
             if t_sec is None:
                 continue
             t_mpl = o_mpl + t_sec / 86400.0
@@ -472,20 +486,21 @@ def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
                 continue
             ax.axvline(t_mpl, color=clr, linewidth=0.9, alpha=0.85,
                        linestyle=(0, (4, 3)))
-            ax.text(t_mpl, 0.94, " " + lbl, transform=lane_trans,
-                    va="top", ha="left", fontsize=8.5,
+            # Label at the BOTTOM of the dash — the top is where the bold
+            # school-name text lives and was masking P/S on some lanes.
+            ax.text(t_mpl, 0.04, " " + lbl, transform=lane_trans,
+                    va="bottom", ha="left", fontsize=8.5,
                     fontweight="bold", color=clr)
 
     axes[-1].xaxis_date()
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[-1].tick_params(labelsize=8, length=2)
     if mode == "tele":
-        sub = (f"\n{n} AuSIS stations · red = origin · dashed = predicted P/S"
-               f" · {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz (µm/s)"
-               f" · distant earthquake")
+        sub = (f"\n{n} AuSIS stations · red = origin · dashed: P, S, surface waves"
+               f" (main shaking) · {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz (µm/s)")
     else:
-        sub = (f"\nnearest {n} AuSIS stations · red = origin"
-               f" · dashed = predicted P/S · {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
+        sub = (f"\nnearest {n} AuSIS stations · red = origin · dashed: P, S, Lg"
+               f" (main shaking) · {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
     axes[0].set_title(
         f"M{mag:.1f}  {place}  ·  {origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
         + sub,
@@ -523,10 +538,17 @@ def main():
     # which still fall inside the age window; only fetch genuinely new ones.
     prev = load_manifest()
     qualifying_ids = {e[0] for e in events}
+    # GA revises origins/depths after first publication; the P/S/Lg marks are
+    # computed from them, so a kept section must still match the CURRENT
+    # catalogue values or it gets re-rendered.
+    current = {e[0]: (e[1].strftime("%Y-%m-%dT%H:%M:%SZ"),
+                      round(e[7], 1) if e[7] is not None else None)
+               for e in events}
     kept = {}
     for eid, meta in prev.items():
         if (eid in qualifying_ids
                 and meta.get("v") == RENDER_VERSION
+                and (meta.get("origin"), meta.get("depth")) == current.get(eid)
                 and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png"))):
             kept[eid] = meta
     todo = [e for e in events if e[0] not in kept]

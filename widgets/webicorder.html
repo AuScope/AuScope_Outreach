@@ -25,6 +25,8 @@
 body { font-family: Arial, Helvetica, sans-serif; background: #fff; }
 .head { display: flex; align-items: center; gap: 10px; padding: 10px 14px 6px; }
 .head img { height: 40px; }
+.head img.partner { height: 30px; }
+body.compact .head img.partner { display: none; }
 .head .t1 { font-size: 16px; font-weight: 700; color: #282572; }
 .head .t2 { font-size: 12px; color: #6b7280; }
 .head .grow { flex: 1; }
@@ -33,6 +35,10 @@ body { font-family: Arial, Helvetica, sans-serif; background: #fff; }
   background: #fff; color: #282572; border: 1px solid #cbd5e1; border-radius: 5px;
 }
 .head button:hover { background: #f8fafc; }
+.fseg { display: flex; border: 1px solid #cbd5e1; border-radius: 5px; overflow: hidden; }
+.fseg button { border: none; border-radius: 0; border-left: 1px solid #cbd5e1; padding: 5px 10px; }
+.fseg button:first-child { border-left: none; }
+.fseg button.active { background: #282572; color: #fff; }
 #status { padding: 0 14px 6px; font-size: 11px; color: #94a3b8; }
 #status.err { color: #b45309; font-size: 13px; padding: 14px; }
 #heli { height: 640px; padding: 0 6px; }
@@ -52,6 +58,10 @@ sp-helicorder { --sp-helicorder-color-even: #282572; --sp-helicorder-color-odd: 
     <div class="t2" id="subtitle">loading station&hellip;</div>
   </div>
   <div class="grow"></div>
+  <div class="fseg" role="group" aria-label="Filter">
+    <button type="button" data-f="raw" class="active">Raw</button><button type="button" data-f="local" title="1 Hz high-pass — sharpens nearby earthquakes">Local</button><button type="button" data-f="distant" title="0.02–0.1 Hz band-pass — reveals distant earthquakes">Distant</button>
+  </div>
+  <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
   <button id="refresh" type="button" title="Fetch the newest data now">Refresh</button>
 </div>
 <div id="status">loading&hellip;</div>
@@ -75,11 +85,41 @@ const heliDiv = document.getElementById('heli');
 document.getElementById('maplink').href =
   'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html#station=' + CODE;
 
-let segments = [];        // all SeismogramSegments collected so far
+let segments = [];        // all RAW SeismogramSegments collected so far
 let lastEnd = null;       // luxon DateTime of newest data we hold
 let channel = null;       // e.g. HHZ
 let heliEl = null;
 let refreshing = false;
+let filterMode = 'raw';   // raw | local (1 Hz HP) | distant (0.02-0.1 Hz BP)
+
+// Same filter vocabulary as the map's hourly plots. Filtering happens
+// client-side per contiguous segment (keeps IIR edge effects at real gaps).
+function filteredSegments() {
+  if (filterMode === 'raw') return segments;
+  const out = [];
+  for (const seg of segments) {
+    try {
+      let s = new sp.seismogram.Seismogram([seg]);
+      s = sp.filter.removeTrend(s);
+      const delta = 1 / seg.sampleRate;
+      const butter = (filterMode === 'local')
+        ? sp.filter.createButterworth(2, sp.filter.HIGH_PASS, 1.0, 0, delta)
+        : sp.filter.createButterworth(2, sp.filter.BAND_PASS, 0.02, 0.1, delta);
+      s = sp.filter.applyFilter(butter, s);
+      out.push(...s.segments);
+    } catch (e) { out.push(seg); }
+  }
+  return out;
+}
+
+document.querySelectorAll('.fseg button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterMode = btn.dataset.f;
+    document.querySelectorAll('.fseg button').forEach(b =>
+      b.classList.toggle('active', b === btn));
+    try { rebuild(windowNow()); } catch (e) { /* no data yet */ }
+  });
+});
 
 function setStatus(msg, isErr) {
   statusEl.textContent = msg;
@@ -117,7 +157,7 @@ function rebuild(timeWindow, name) {
   // Drop segments that fell off the left edge of the drum
   segments = segments.filter(s => s.endTime >= timeWindow.start);
   if (!segments.length) throw new Error('no data in window');
-  const seis = new sp.seismogram.Seismogram(segments);
+  const seis = new sp.seismogram.Seismogram(filteredSegments());
   const seisData = sp.seismogram.SeismogramDisplayData.fromSeismogram(seis);
   seisData.addMarkers([{ markertype: 'predicted', name: 'now', time: sp.luxon.DateTime.utc() }]);
 

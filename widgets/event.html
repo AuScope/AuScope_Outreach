@@ -21,6 +21,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #e5e7eb; color: #3
 .page { width: 210mm; min-height: 296mm; margin: 0 auto 20px; background: #fff; padding: 14mm 15mm; }
 .head { display: flex; align-items: center; gap: 6mm; border-bottom: 3px solid #f0b34e; padding-bottom: 4mm; }
 .head img { height: 18mm; }
+.head img.partner { height: 13mm; margin-left: auto; }
 .head h1 { font-size: 16pt; color: #282572; line-height: 1.3; }
 .head .sub { font-size: 10pt; color: #6b7280; margin-top: 1mm; }
 .nameline { margin-top: 4mm; font-size: 10.5pt; color: #6b7280; }
@@ -41,6 +42,11 @@ ol.tasks li { margin-bottom: 2.5mm; }
 <body>
 <div class="toolbar">
   <select id="picker" title="Choose a recorded earthquake"></select>
+  <select id="level" title="Choose the year level">
+    <option value="junior">Years 1&ndash;4</option>
+    <option value="middle" selected>Years 5&ndash;8</option>
+    <option value="senior">Years 9&ndash;12</option>
+  </select>
   <button onclick="window.print()">Print worksheet</button>
 </div>
 <div class="page" id="page"><div class="err">Loading&hellip;</div></div>
@@ -56,6 +62,14 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
 (async function() {
   const params = new URLSearchParams(window.location.search);
   let id = (params.get('id') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  const LEVEL = ['junior', 'middle', 'senior'].includes(params.get('level'))
+    ? params.get('level') : 'middle';
+  document.getElementById('level').value = LEVEL;
+  document.getElementById('level').addEventListener('change', function() {
+    const u = new URLSearchParams(window.location.search);
+    u.set('level', this.value);
+    window.location.search = u.toString();
+  });
   const m = await (await fetch(RAW + 'manifest.json?v=' + hourStamp())).json();
   const events = (m.events || []).slice()
     .sort((a, b) => Date.parse(b.origin) - Date.parse(a.origin));
@@ -80,44 +94,121 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
   const nearest = (e.stations || []).slice().sort((a, b) => a.dist_km - b.dist_km)[0];
   document.title = 'AuSIS worksheet — M' + Number(e.mag).toFixed(1) + ' ' + e.place;
 
-  const tasksLocal = `
-    <h2>Your turn: how far away was it?</h2>
-    <ol class="tasks">
-      <li>Pick a school lane. The <b style="color:#2563eb">blue dashed line</b> is the predicted arrival of the
-          <b>P wave</b> (fast, arrives first). The <b style="color:#dc2626">red dashed line</b> is the
-          <b>S wave</b> (slower, bigger shake). Read the time between them off the axis:
-          S − P = <span class="blank"></span> seconds.</li>
-      <li>Multiply by 8. Seismologists' rule of thumb: every second of S−P gap ≈ 8 km of distance.
-          Your distance estimate: <span class="blank"></span> km.</li>
-      <li>Compare with the real distance printed at the bottom-left of that lane:
-          <span class="blank"></span> km. How close were you?</li>
-      <li>Now look across all ${n} schools, nearest at the top. What happens to the S−P gap as the
-          distance grows? Why? <span class="blank" style="min-width:70mm"></span></li>
-      <li>Harder: the earthquake happened at ${esc(when.toISOString().slice(11, 19))} UTC (the solid red line).
-          Using the nearest school (${nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km + ' km' : '—'}),
-          estimate how fast the P wave travelled in km/s: <span class="blank"></span></li>
-    </ol>
-    <div class="hint">Teacher notes: P waves travel ~6–8 km/s in the crust, S waves ~3.5–4.5 km/s. The ×8 rule of thumb
-      comes from (Vp·Vs)/(Vp−Vs) ≈ 8. Predicted arrivals use the iasp91 Earth model — real arrivals can differ by a
-      second or two, which is itself worth discussing. More activities: sites.google.com/view/ausis2</div>`;
+  const hintFoot = 'Predicted arrivals use the iasp91 Earth model — real arrivals can differ by a second or two, ' +
+    'which is itself worth discussing. The grey dashed line marks the arrival that usually carries the BIGGEST ' +
+    'shaking (Lg crust-guided waves locally; surface waves for distant quakes) — it always follows S. ' +
+    'More activities: sites.google.com/view/ausis2';
 
-  const tasksTele = `
-    <h2>Your turn: waves across the planet</h2>
-    <ol class="tasks">
-      <li>This earthquake happened roughly <b>${nearest ? Math.round(nearest.dist_km / 100) * 100 : '—'} km</b> from the
-          nearest school shown — in another country. The <b style="color:#2563eb">blue dashed line</b> marks the predicted
-          <b>P wave</b> arrival. About how many <b>minutes</b> after the earthquake (solid red line) did it arrive?
-          <span class="blank"></span></li>
-      <li>Estimate the P wave's average speed: distance ÷ time = <span class="blank"></span> km/s.
-          (Jet airliner: ~0.25 km/s. How many times faster is the wave?)</li>
-      <li>The largest slow rolling waves that follow are <b>surface waves</b>. Roughly how long did the ground
-          keep moving after the P arrival? <span class="blank"></span> minutes.</li>
-      <li>The wiggles here are measured in µm/s — millionths of a metre per second. Nobody at these schools felt
-          anything. What does that tell you about how sensitive the seismometer is?
-          <span class="blank" style="min-width:60mm"></span></li>
-    </ol>
-    <div class="hint">Teacher notes: teleseismic P waves dive through the mantle at 8–13 km/s. Depth and epicentre
-      from Geoscience Australia; predicted arrivals use the iasp91 Earth model. More activities: sites.google.com/view/ausis2</div>`;
+  const TASKS = {
+    local: {
+      junior: `
+        <h2>Wiggle detectives (Years 1–4)</h2>
+        <ol class="tasks">
+          <li><b>Circle</b> the school that felt the earthquake first. Hint: it's the one whose wiggles start
+              closest to the solid red line.</li>
+          <li>The red line shows the moment the earthquake happened underground. Did any school feel it at that
+              exact moment? Why do you think the shaking took time to arrive?
+              <span class="blank" style="min-width:60mm"></span></li>
+          <li>With a ruler, join the start of the wiggles on each line, top to bottom. Is your line straight up
+              and down, or does it lean? Which way?</li>
+          <li>Which school had the <b>biggest</b> wiggle? Was it the closest one? <span class="blank"></span></li>
+        </ol>
+        <div class="hint">Teacher notes: the leaning line IS wave travel — shaking spreads out like ripples in a pond,
+          about 3–8 km every second. ${hintFoot}</div>`,
+      middle: `
+        <h2>Your turn: how far away was it? (Years 5–8)</h2>
+        <ol class="tasks">
+          <li>Pick a school lane. The <b style="color:#2563eb">blue dashed line</b> is the predicted arrival of the
+              <b>P wave</b> (fast, arrives first). The <b style="color:#dc2626">red dashed line</b> is the
+              <b>S wave</b> (slower). Read the time between them off the axis:
+              S − P = <span class="blank"></span> seconds.</li>
+          <li>Multiply by 8. Seismologists' rule of thumb: every second of S−P gap ≈ 8 km of distance.
+              Your distance estimate: <span class="blank"></span> km.</li>
+          <li>Compare with the real distance printed at the bottom-left of that lane:
+              <span class="blank"></span> km. How close were you?</li>
+          <li>The <b style="color:#6b7280">grey dashed line (Lg)</b> marks where the biggest shaking usually
+              arrives — waves bouncing along inside the crust. Does the biggest wiggle in your lane land near it?</li>
+          <li>Look across all ${n} schools, nearest at the top. What happens to the S−P gap as distance grows?
+              Why? <span class="blank" style="min-width:60mm"></span></li>
+        </ol>
+        <div class="hint">Teacher notes: P ~6–8 km/s, S ~3.5–4.5 km/s in the crust; the ×8 rule comes from
+          (Vp·Vs)/(Vp−Vs) ≈ 8. ${hintFoot}</div>`,
+      senior: `
+        <h2>Locating an earthquake from first principles (Years 9–12)</h2>
+        <ol class="tasks">
+          <li>Measure S − P (seconds) for <b>three</b> lanes and tabulate against the printed distances.
+              Compute d ÷ (S−P) for each: <span class="blank"></span>, <span class="blank"></span>,
+              <span class="blank"></span> km/s. How consistent is it?</li>
+          <li>Derive that constant: if waves leave together, show the separation after distance d is
+              d(1/V<sub>s</sub> − 1/V<sub>p</sub>), so d = (S−P) · V<sub>p</sub>V<sub>s</sub>/(V<sub>p</sub>−V<sub>s</sub>).
+              Evaluate with V<sub>p</sub> = 6.4, V<sub>s</sub> = 3.7 km/s.</li>
+          <li>The origin time is ${esc(when.toISOString().slice(11, 19))} UTC (solid red line). Using the nearest
+              lane (${nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km + ' km' : '—'}), estimate
+              V<sub>p</sub> directly: <span class="blank"></span> km/s.</li>
+          <li>The biggest amplitudes arrive at the <b style="color:#6b7280">grey Lg mark</b> (≈3.5 km/s), after
+              direct S. Lg is shear energy trapped in the crustal waveguide. Why would guided waves lose energy
+              more slowly with distance than body waves? (Hint: spreading in 2D vs 3D.)</li>
+          <li>One S−P time gives a distance, not a location. How many stations do you need to find the epicentre,
+              and how would you construct it? Sketch on the back.</li>
+        </ol>
+        <div class="hint">Teacher notes: expect d/(S−P) ≈ 8–9 km/s on cratonic paths (Australian crust is fast —
+          predictions from a global average model run a touch late here, a good uncertainty discussion).
+          ${hintFoot}</div>`,
+    },
+    tele: {
+      junior: `
+        <h2>Waves from far away (Years 1–4)</h2>
+        <ol class="tasks">
+          <li>This earthquake happened near <b>${esc(e.place)}</b> — find it on a globe or map.
+              It is about <b>${nearest ? Math.round(nearest.dist_km / 100) * 100 : '—'} km</b> from the nearest
+              school on this page!</li>
+          <li>The waves travelled all that way through the Earth. About how long do you think they took —
+              seconds, minutes, or hours? Circle your guess, then check with your teacher using the marks.</li>
+          <li>Nobody at these schools felt anything — the ground moved less than the width of a hair. What
+              instrument "felt" it for us? <span class="blank"></span></li>
+          <li>Which school's wiggle looks biggest to you? Put a star on it.</li>
+        </ol>
+        <div class="hint">Teacher notes: the P wave took roughly ${nearest ? Math.round(nearest.dist_km / 10 / 60) : '—'}
+          minutes (mantle P averages ~10 km/s over these paths). ${hintFoot}</div>`,
+      middle: `
+        <h2>Your turn: waves across the planet (Years 5–8)</h2>
+        <ol class="tasks">
+          <li>The <b style="color:#2563eb">blue dashed line</b> marks the predicted <b>P wave</b> arrival. About
+              how many <b>minutes</b> after the earthquake (solid red line) did it arrive?
+              <span class="blank"></span></li>
+          <li>Estimate the P wave's average speed: distance ÷ time = <span class="blank"></span> km/s.
+              (A jet airliner does ~0.25 km/s. How many times faster is the wave?)</li>
+          <li>The biggest slow rolling wiggles arrive near the <b style="color:#6b7280">grey dashed line</b> —
+              these are <b>surface waves</b>. Roughly how long after P did they arrive? <span class="blank"></span> minutes.</li>
+          <li>The wiggles are measured in µm/s — millionths of a metre per second. Nobody felt anything. What
+              does that tell you about the seismometer? <span class="blank" style="min-width:55mm"></span></li>
+        </ol>
+        <div class="hint">Teacher notes: teleseismic P dives through the mantle at 8–13 km/s; surface waves skim
+          the outside at ~4 km/s, which is why they arrive so much later. ${hintFoot}</div>`,
+      senior: `
+        <h2>Probing the deep Earth (Years 9–12)</h2>
+        <ol class="tasks">
+          <li>Measure the P travel time from origin (red) to the blue mark: <span class="blank"></span> s.
+              Average speed over ${nearest ? nearest.dist_km : '—'} km: <span class="blank"></span> km/s.
+              Crustal P is ~6 km/s — what does the higher average tell you about the mantle, and why does
+              wave speed rise with depth?</li>
+          <li>Surface waves (grey mark) average ≈4 km/s along the surface. Verify from the plot, and explain
+              why the P–surface gap grows with distance while carrying most of the energy.</li>
+          <li>This was M${Number(e.mag).toFixed(1)}. Radiated energy scales as 10<sup>1.5M</sup> — compute how
+              many times more energy this released than a local M3.0: <span class="blank"></span>.</li>
+          <li>The display is band-passed 0.02–0.1 Hz (periods 10–50 s). Why do long periods survive
+              ${nearest ? Math.round(nearest.dist_km / 1000) : '—'},000 km better than the 1 Hz energy a nearby
+              quake shows? (Consider attenuation and scattering.)</li>
+          <li>Estimate arrival-time uncertainty: the marks assume the iasp91 global model and the catalogue depth
+              (${esc(String(e.depth != null ? e.depth : 'unknown'))} km). Name two reasons the real onset could differ
+              by a few seconds.</li>
+        </ol>
+        <div class="hint">Teacher notes: ΔM of ${(Number(e.mag) - 3).toFixed(1)} → energy ratio
+          10^${(1.5 * (Number(e.mag) - 3)).toFixed(1)}. ${hintFoot}</div>`,
+    },
+  };
+  const tasksLocal = TASKS.local[LEVEL];
+  const tasksTele = TASKS.tele[LEVEL];
 
   document.getElementById('page').innerHTML = `
     <div class="head">
@@ -126,6 +217,7 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
         <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} — ${esc(e.place)}</h1>
         <div class="sub">Recorded by ${n} AuSIS school seismometers · ${esc(when.toUTCString())}</div>
       </div>
+      <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
     </div>
     <div class="nameline">Name: <span></span> Class: <span></span> Date: <span></span></div>
     <div class="facts">

@@ -22,6 +22,8 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 .wrap { max-width: 860px; margin: 0 auto; padding: 14px; }
 .head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; }
 .head img { height: 56px; }
+.head img.partner { height: 42px; }
+@media (max-width: 480px) { .head img.partner { display: none; } }
 .head .school { font-size: 22px; font-weight: 700; color: #282572; line-height: 1.2; }
 .head .meta { font-size: 12px; color: #6b7280; margin-top: 3px; }
 .code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 7px; border-radius: 3px; }
@@ -56,6 +58,8 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
       <div class="school" id="school">Loading&hellip;</div>
       <div class="meta" id="meta"></div>
     </div>
+    <div style="flex:1"></div>
+    <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
   </div>
 
   <div class="banner" id="banner"></div>
