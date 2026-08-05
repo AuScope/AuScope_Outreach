@@ -4,6 +4,41 @@ Interactive maps for AuScope programs, part of the [AuScope](https://www.auscope
 
 Hosted on GitHub Pages and embedded via iframe on the AuScope website.
 
+## Repository organisation
+
+```
+/                    Maps (AuSIS_Map.html, NVCL_Map.html, ...) - static, no build step
+assets/              Images + vendor/ (pinned, self-hosted JS: seisplotjs, qrcode-generator;
+                     nothing is loaded from a CDN at runtime)
+data/                Committed data products - written by GitHub Actions, never hand-edited
+scripts/             Pipeline Python - run by the scheduled workflows only
+widgets/             Static, embeddable, URL-parameterised pages (see below)
+.github/workflows/   Scheduled jobs; every one auto-files an issue on failure
+```
+
+Branches `waveforms` and `event-waveforms` are force-pushed flat by the hourly/3-hourly
+render jobs (PNGs + manifest.json) and never accumulate history.
+
+**Design rule: the browser never calls a third-party API** (exception: the live
+webicorder, an optional page that degrades gracefully). All upstream fetching happens
+server-side in Actions, where redirects and CORS changes can't break the pages.
+
+### Widgets (`widgets/`)
+
+| Page | Purpose |
+|---|---|
+| `latest_quake.html` | Card: newest earthquake with its AuSIS record section |
+| `recent_quakes.html` | Card: 10 newest quakes, recency-coloured, deep-linking to the map |
+| `top_wiggles.html` | Card: peak-ground-velocity leaderboard across schools |
+| `station.html?code=X` | "My School" dashboard: live drum, catches, rank, health |
+| `webicorder.html?code=X` | Live 24 h drum (IRIS-webicorder style), seconds-fresh via EarthScope dataselect |
+| `poster.html?code=X` | Printable A4 classroom QR poster (QR generated in-browser) |
+| `event.html?id=X` | Printable class worksheet for a recorded earthquake (S-P exercise) |
+
+All widgets read the same published data (same-origin `data/` + the render branches on
+the AuScope org repo), take their subject from the query string, and are embeddable as
+iframes (AuScope website, Google Sites) or used standalone.
+
 ### Live Maps
 
 - [AuScope Interactive Map](https://bvkay.github.io/AuScope_Outreach/) - All programs combined with layer toggles

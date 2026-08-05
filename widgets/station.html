@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  widgets/station.html?code=AUYLT
+  "My School" dashboard — one bookmarkable page per AuSIS school. Not a
+  rearranged map popup: the hero is the LIVE drum (webicorder embed), and
+  everything else is personal to this station — the earthquakes it caught,
+  its liveliness rank right now, years on air, nearest AuSIS neighbours,
+  and a health banner with what-to-do when it stops sending data.
+
+  All data comes from the same published files the map uses. Static, no
+  backend. Embeddable, but designed to be THE link a teacher bookmarks:
+    https://auscope.github.io/AuScope_Outreach/widgets/station.html?code=AUYLT
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My School — AuSIS station dashboard</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 14px; }
+.head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; }
+.head img { height: 56px; }
+.head .school { font-size: 22px; font-weight: 700; color: #282572; line-height: 1.2; }
+.head .meta { font-size: 12px; color: #6b7280; margin-top: 3px; }
+.code { font-family: monospace; font-size: 12px; color: #2563eb; background: #eff6ff; padding: 1px 7px; border-radius: 3px; }
+.pill { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; border-radius: 10px; padding: 2px 9px; vertical-align: middle; }
+.banner { display: none; margin-top: 12px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #92400e; }
+.banner a { color: #b45309; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 12px; }
+.tile { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; }
+.tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #b45309; }
+.tile .v { font-size: 19px; font-weight: 700; color: #282572; margin-top: 4px; }
+.tile .s { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.section { margin-top: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+.section h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; padding: 12px 14px 8px; }
+.section iframe { display: block; width: 100%; border: none; }
+.catch { display: flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-top: 1px solid #f1f5f9; font-size: 13px; text-decoration: none; color: #374151; }
+.catch:hover { background: #f8fafc; }
+.catch .mag { font-weight: 700; color: #b91c1c; min-width: 46px; }
+.catch .place { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.catch .d { font-size: 11px; color: #94a3b8; white-space: nowrap; }
+.none { padding: 14px; font-size: 13px; color: #6b7280; }
+.links { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; }
+.links a { color: #2563eb; text-decoration: none; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 14px; }
+.links a:hover { background: #eff6ff; }
+.foot { margin-top: 14px; font-size: 11px; color: #94a3b8; text-align: center; padding-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <img src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <div>
+      <div class="school" id="school">Loading&hellip;</div>
+      <div class="meta" id="meta"></div>
+    </div>
+  </div>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="section">
+    <h2>Your seismometer, live</h2>
+    <iframe id="drum" height="560" title="Live webicorder drum for this station"></iframe>
+  </div>
+
+  <div class="section">
+    <h2>Earthquakes your seismometer caught recently</h2>
+    <div id="catches"><div class="none">Checking the last 30 days&hellip;</div></div>
+  </div>
+
+  <div class="links" id="links"></div>
+  <div class="foot">AuSIS · Australian Seismometers in Schools · data via EarthScope &amp; Geoscience Australia, updated automatically</div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const CODE = (params.get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const REPO = 'AuScope/AuScope_Outreach';
+const RAW = 'https://raw.githubusercontent.com/' + REPO + '/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+const LIVE_THRESHOLD_DAYS = 7;
+const HAIR_UM = 70.0;
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371, toRad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * toRad, dLon = (lon2 - lon1) * toRad;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) ** 2;
+  return Math.round(2 * R * Math.asin(Math.sqrt(a)));
+}
+function hairPhrase(p) {
+  if (!p || p <= 0) return '';
+  if (p >= HAIR_UM) return '≈ ' + Math.round(p / HAIR_UM) + ' hair-widths per second';
+  const s = HAIR_UM / p;
+  if (s > 3600) return '';
+  if (s >= 90) return '≈ a hair-width every ' + Math.round(s / 60) + ' min';
+  return '≈ a hair-width every ' + Math.round(s) + ' s';
+}
+function tile(k, v, s) {
+  return '<div class="tile"><div class="k">' + k + '</div><div class="v">' + v + '</div>'
+    + (s ? '<div class="s">' + s + '</div>' : '') + '</div>';
+}
+
+async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + url); return r.json(); }
+
+(async function() {
+  if (!CODE) {
+    document.getElementById('school').textContent = 'No station selected';
+    document.getElementById('meta').innerHTML =
+      'Add <span class="code">?code=YOURCODE</span> to the address — e.g. <a href="?code=AUYLT">?code=AUYLT</a>';
+    return;
+  }
+  document.getElementById('drum').src = 'webicorder.html?code=' + CODE + '&hours=12&compact=1';
+
+  const [geo, statusFile, wfManifest, evManifest] = await Promise.all([
+    jget('../data/ausis_stations.geojson?v=' + hourStamp()),
+    jget('../data/ausis_status.json?v=' + hourStamp()).catch(() => ({})),
+    jget(RAW + 'waveforms/manifest.json?v=' + hourStamp()).catch(() => ({})),
+    jget(RAW + 'event-waveforms/manifest.json?v=' + hourStamp()).catch(() => ({ events: [] })),
+  ]);
+
+  const me = (geo.features || []).find(f => f.properties.code === CODE);
+  if (!me) {
+    document.getElementById('school').textContent = 'Unknown station: ' + CODE;
+    document.getElementById('meta').textContent = 'Check the code on the AuSIS map.';
+    return;
+  }
+  const p = me.properties, c = me.geometry.coordinates;
+  document.title = p.name + ' — AuSIS station dashboard';
+  document.getElementById('school').textContent = p.name;
+
+  // Status ladder (same as the map): verified streaming > latestData 7d
+  const vs = (statusFile.stations || {})[CODE];
+  const lastMs = p.latestData ? Date.parse(p.latestData) : NaN;
+  const daysAgo = isNaN(lastMs) ? null : (Date.now() - lastMs) / 86400000;
+  const inManifest = !!(wfManifest.stations && wfManifest.stations[CODE]);
+  let live = inManifest || (vs && vs.streaming) || (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS);
+  const pillColor = p.endTime ? '#ef4444' : (live ? '#22c55e' : '#f59e0b');
+  const pillText = p.endTime ? 'DECOMMISSIONED' : (live ? 'LIVE' : 'NO RECENT DATA');
+  document.getElementById('meta').innerHTML =
+    '<span class="code">S1.' + esc(CODE) + '</span> '
+    + '<span class="pill" style="background:' + pillColor + '">' + pillText + '</span> '
+    + ' recording since ' + esc(String(p.startTime || '').slice(0, 10));
+
+  if (!p.endTime && !live) {
+    const b = document.getElementById('banner');
+    b.style.display = 'block';
+    b.innerHTML = '⚠ Your seismometer hasn\'t sent data since '
+      + (isNaN(lastMs) ? 'an unknown time' : new Date(lastMs).toLocaleDateString())
+      + '. Usual fixes: check the power plug and the network cable. Still quiet? '
+      + '<a href="https://sites.google.com/view/ausis2/feedback" target="_blank" rel="noopener">Contact the AuSIS team</a>.';
+  }
+
+  // Tiles: years on air, liveliness rank, elevation, nearest neighbours
+  const startMs = Date.parse(p.startTime);
+  const years = isNaN(startMs) ? null : (Date.now() - startMs) / (365.25 * 86400000);
+  const entry = wfManifest.stations && wfManifest.stations[CODE];
+  const peaks = Object.entries(wfManifest.stations || {})
+    .map(([k, v]) => [v.peak_um_s, k]).filter(x => typeof x[0] === 'number' && x[0] > 0)
+    .sort((a, b) => b[0] - a[0]);
+  const rank = peaks.findIndex(x => x[1] === CODE) + 1;
+  const neighbours = (geo.features || [])
+    .filter(f => f.properties.code !== CODE && !f.properties.endTime)
+    .map(f => ({ n: f.properties.name, km: haversineKm(c[1], c[0], f.geometry.coordinates[1], f.geometry.coordinates[0]) }))
+    .sort((a, b) => a.km - b.km).slice(0, 2);
+
+  let tiles = '';
+  if (years !== null) tiles += tile('Listening for', years >= 1 ? years.toFixed(1) + ' years' : Math.round(years * 365) + ' days', 'since ' + esc(String(p.startTime).slice(0, 10)));
+  if (entry && typeof entry.peak_um_s === 'number') {
+    tiles += tile('Ground movement (last hour)', entry.peak_um_s.toPrecision(3) + ' µm/s', esc(hairPhrase(entry.peak_um_s)));
+    if (rank > 0) tiles += tile('Liveliest right now', '#' + rank + ' of ' + peaks.length, rank <= 5 ? 'on the leaderboard!' : 'across all AuSIS schools');
+  }
+  tiles += tile('Your sensor sits at', Math.round(p.elevation || 0) + ' m', c[1].toFixed(3) + ', ' + c[0].toFixed(3));
+  if (neighbours.length) tiles += tile('Nearest AuSIS schools', esc(neighbours[0].n), neighbours[0].km + ' km away'
+    + (neighbours[1] ? ' · then ' + esc(neighbours[1].n) + ' (' + neighbours[1].km + ' km)' : ''));
+  document.getElementById('tiles').innerHTML = tiles;
+
+  // Earthquakes this station appears in (event sections, last 30 days)
+  const mine = (evManifest.events || [])
+    .map(e => ({ e, hit: (e.stations || []).find(s => s.code === CODE) }))
+    .filter(x => x.hit)
+    .sort((a, b) => Date.parse(b.e.origin) - Date.parse(a.e.origin));
+  document.getElementById('catches').innerHTML = mine.length
+    ? mine.slice(0, 8).map(x =>
+        '<a class="catch" href="' + MAP_URL + '#quake=' + encodeURIComponent(x.e.event_id) + '" target="_blank" rel="noopener">'
+        + '<span class="mag">M ' + Number(x.e.mag).toFixed(1) + '</span>'
+        + '<span class="place">' + esc(x.e.place || 'Unknown location') + '</span>'
+        + '<span class="d">' + x.hit.dist_km + ' km away · ' + esc(String(x.e.origin).slice(0, 10)) + '</span></a>').join('')
+    : '<div class="none">Nothing in the last 30 days — earthquakes big and close enough to make a clean record are rarer than you\'d think. The drum above still shows everything your sensor hears.</div>';
+
+  // Links
+  document.getElementById('links').innerHTML =
+    '<a href="webicorder.html?code=' + CODE + '" target="_blank" rel="noopener">Open the full 24-hour drum</a>'
+    + '<a href="' + MAP_URL + '#station=' + CODE + '" target="_blank" rel="noopener">See your school on the map</a>'
+    + '<a href="poster.html?code=' + CODE + '" target="_blank" rel="noopener">Print the classroom QR poster</a>'
+    + '<a href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener">AuSIS resources</a>';
+})().catch(e => {
+  document.getElementById('school').textContent = 'Could not load station data';
+  document.getElementById('meta').textContent = String(e && e.message ? e.message : e);
+});
+</script>
+</body>
+</html>

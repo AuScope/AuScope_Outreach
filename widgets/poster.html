@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+  widgets/poster.html?code=AUYLT
+  Printable A4 classroom poster: hangs next to the seismometer, QR code
+  opens that school's live dashboard on a phone. QR is generated in the
+  browser (vendored qrcode-generator, no network) so one page serves all
+  schools — nothing is pre-generated or stored.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuSIS classroom poster</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #e5e7eb; }
+.toolbar { padding: 12px; text-align: center; }
+.toolbar button { font-family: inherit; font-size: 14px; padding: 8px 22px; cursor: pointer; background: #282572; color: #fff; border: none; border-radius: 6px; }
+.page {
+  width: 210mm; min-height: 296mm; margin: 0 auto 20px; background: #fff;
+  padding: 18mm 16mm; display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.logo { height: 34mm; margin-bottom: 8mm; }
+h1 { font-size: 26pt; color: #282572; line-height: 1.25; }
+.school { font-size: 20pt; color: #b45309; font-weight: 700; margin-top: 4mm; }
+.code { font-family: monospace; font-size: 12pt; color: #6b7280; margin-top: 1mm; }
+.tagline { font-size: 13pt; color: #374151; margin-top: 8mm; max-width: 150mm; line-height: 1.5; }
+#qr { margin-top: 10mm; }
+#qr svg { width: 70mm; height: 70mm; }
+.scan { font-size: 14pt; font-weight: 700; color: #282572; margin-top: 5mm; }
+.url { font-family: monospace; font-size: 8.5pt; color: #94a3b8; margin-top: 2mm; word-break: break-all; max-width: 160mm; }
+.facts { margin-top: 9mm; font-size: 11pt; color: #4b5563; line-height: 1.7; max-width: 150mm; }
+.spacer { flex: 1; }
+.foot { font-size: 9pt; color: #94a3b8; }
+@media print {
+  body { background: #fff; }
+  .toolbar { display: none; }
+  .page { margin: 0; width: auto; min-height: auto; }
+}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">Print this poster</button></div>
+<div class="page">
+  <img class="logo" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+  <h1>This school hosts a real,<br>working seismometer</h1>
+  <div class="school" id="school">&nbsp;</div>
+  <div class="code" id="code"></div>
+  <div class="tagline">It listens to the ground 24 hours a day — earthquakes on the other
+    side of the planet, waves crashing on the coast, even the rumble of lunchtime.
+    The same data is used by real seismologists.</div>
+  <div id="qr"></div>
+  <div class="scan">Scan to see what it's recording right now</div>
+  <div class="url" id="url"></div>
+  <div class="facts" id="facts"></div>
+  <div class="spacer"></div>
+  <div class="foot">AuSIS — Australian Seismometers in Schools · ANU · supported by AuScope &amp; NCRIS</div>
+</div>
+<script src="../assets/vendor/qrcode-generator_1.4.4.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const CODE = (params.get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+(async function() {
+  if (!CODE) {
+    document.getElementById('school').textContent = 'Add ?code=YOURCODE to the address';
+    return;
+  }
+  const target = 'https://auscope.github.io/AuScope_Outreach/widgets/station.html?code=' + CODE;
+  document.getElementById('code').textContent = 'Station S1.' + CODE;
+  document.getElementById('url').textContent = target;
+  const qr = qrcode(0, 'M');
+  qr.addData(target);
+  qr.make();
+  document.getElementById('qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2 });
+  try {
+    const g = await (await fetch('../data/ausis_stations.geojson')).json();
+    const f = (g.features || []).find(x => x.properties.code === CODE);
+    if (f) {
+      document.getElementById('school').textContent = f.properties.name;
+      const since = String(f.properties.startTime || '').slice(0, 4);
+      if (since) document.getElementById('facts').innerHTML =
+        'Recording here since <b>' + esc(since) + '</b> · one of <b>50+</b> school seismometers across Australia';
+      document.title = 'AuSIS poster — ' + f.properties.name;
+    } else {
+      document.getElementById('school').textContent = CODE;
+    }
+  } catch (e) {
+    document.getElementById('school').textContent = CODE;
+  }
+})();
+</script>
+</body>
+</html>
