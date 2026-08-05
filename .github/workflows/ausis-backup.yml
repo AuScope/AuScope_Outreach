@@ -1,12 +1,18 @@
 name: Daily AuSIS Station Backup
 
 # Rebuilds data/ausis_stations.geojson (station metadata + latest-data
-# timestamps) from EarthScope's FDSN services, server-side. This committed
-# file is the map's ONLY station source — the browser never calls EarthScope
-# (their June 2026 migration broke browser CORS, not curl/urllib).
+# timestamps) server-side. The map and every widget read this committed file
+# — the browser never calls a third-party API.
 #
-# FAILS LOUD: if either fetch fails the file is left untouched, the run goes
-# red and an issue is auto-filed — never silently written with missing data.
+# EarthScope RETIRED fdsnws-availability on 2026-07-27 (HTTP 410, Seattle
+# datacenter decommissioning; replacement "not ready before the legacy
+# system is turned off"). latestData is now derived without it:
+#   1. the hourly waveform manifest (proof of streaming, precise end times)
+#   2. dataselect day-slice probes for stations not in the manifest
+#   3. the previous file's value for long-quiet stations (history preserved)
+#
+# FAILS LOUD: no stations, or zero stations with recent data, leaves the
+# file untouched, goes red and auto-files an issue.
 
 on:
   schedule:
@@ -16,7 +22,7 @@ on:
 jobs:
   backup:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: write
       issues: write
@@ -24,21 +30,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch AuSIS stations and availability from EarthScope FDSN
+      - name: Rebuild station file (station service + manifest + probes)
         run: |
           python3 << 'EOF'
           import json, urllib.request, datetime, sys
 
           FDSN = 'https://service.earthscope.org'
+          MANIFEST = ('https://raw.githubusercontent.com/AuScope/'
+                      'AuScope_Outreach/waveforms/manifest.json')
+          now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
 
-          # Step 1: Fetch station metadata
+          # Step 1: station metadata (required)
           url = FDSN + '/fdsnws/station/1/query?network=S1&level=station&format=text'
           try:
               resp = urllib.request.urlopen(url, timeout=30)
               lines = resp.read().decode('utf-8').strip().split('\n')
           except Exception as e:
               print(f'ERROR: station fetch failed: {e}')
-              sys.exit(1)   # keep yesterday's file; a red run beats silent staleness
+              sys.exit(1)
 
           stations = {}
           for line in lines[1:]:
@@ -48,8 +57,6 @@ jobs:
               code = parts[1].strip()
               if code == 'TEST':
                   continue
-              lat = float(parts[2].strip())
-              lng = float(parts[3].strip())
               stations[code] = {
                   "code": code,
                   "name": parts[5].strip(),
@@ -57,69 +64,100 @@ jobs:
                   "startTime": parts[6].strip(),
                   "endTime": parts[7].strip() if len(parts) > 7 and parts[7].strip() else None,
                   "latestData": None,
-                  "lat": lat,
-                  "lng": lng
+                  "lat": float(parts[2].strip()),
+                  "lng": float(parts[3].strip()),
               }
-
-          if len(stations) == 0:
+          if not stations:
               print('ERROR: no stations returned — keeping existing backup')
               sys.exit(1)
 
-          # Step 2: Fetch availability (latest data timestamps). Required —
-          # without it every station would render as "unknown" on the map.
-          avail_url = FDSN + '/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text'
+          # Step 2: previous values (preserved for long-quiet stations)
+          prev = {}
           try:
-              resp = urllib.request.urlopen(avail_url, timeout=30)
-              avail_lines = resp.read().decode('utf-8').strip().split('\n')
+              with open('data/ausis_stations.geojson') as fh:
+                  for ft in json.load(fh).get('features', []):
+                      prev[ft['properties']['code']] = ft['properties'].get('latestData')
+          except Exception:
+              pass
+
+          # Step 3: hourly waveform manifest — precise end times for streamers
+          man = {}
+          try:
+              with urllib.request.urlopen(MANIFEST, timeout=30) as r:
+                  m = json.load(r)
+              man = {k: v.get('end') for k, v in (m.get('stations') or {}).items()
+                     if v.get('end')}
+              print(f'manifest: {len(man)} station end-times '
+                    f'(generated {m.get("generated")})')
           except Exception as e:
-              print(f'ERROR: availability fetch failed: {e}')
+              print(f'WARNING: manifest read failed ({e}) — probes only')
+
+          # Step 4: dataselect day-slice probes for the rest
+          def has_data(code, t0, t1):
+              u = (f'{FDSN}/fdsnws/dataselect/1/query?network=S1&station={code}'
+                   f'&channel=HHZ,BHZ&nodata=404'
+                   f"&starttime={t0.strftime('%Y-%m-%dT%H:%M:%S')}"
+                   f"&endtime={t1.strftime('%Y-%m-%dT%H:%M:%S')}")
+              try:
+                  req = urllib.request.Request(u, method='HEAD')
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      return r.status == 200
+              except Exception:
+                  return False
+
+          probed = 0
+          for code, s in stations.items():
+              if man.get(code):
+                  s['latestData'] = man[code]
+                  continue
+              if s['endTime']:
+                  s['latestData'] = prev.get(code)
+                  continue
+              probed += 1
+              found = None
+              for d in range(7):
+                  t1 = now - datetime.timedelta(days=d)
+                  t0 = t1 - datetime.timedelta(days=1)
+                  if has_data(code, t0, t1):
+                      found = t0.strftime('%Y-%m-%dT%H:%M:%SZ')
+                      break
+              s['latestData'] = found or prev.get(code)
+          print(f'probed {probed} station(s) not in the manifest')
+
+          # Fail-loud sanity: if NOTHING looks recent, something upstream is
+          # broken — do not publish a file that would yellow the whole map.
+          def fresh(ts):
+              try:
+                  dt = datetime.datetime.fromisoformat(str(ts).replace('Z', ''))
+                  return (now - dt).days < 2
+              except Exception:
+                  return False
+          n_fresh = sum(1 for s in stations.values() if fresh(s['latestData']))
+          print(f'{n_fresh} station(s) with data in the last 2 days')
+          if n_fresh == 0:
+              print('ERROR: zero stations with recent data — refusing to publish')
               sys.exit(1)
 
-          for line in avail_lines[1:]:
-              cols = line.strip().split()
-              if len(cols) < 8:
-                  continue
-              code = cols[1]
-              end_time = cols[7]
-              if code in stations:
-                  current = stations[code]["latestData"]
-                  if current is None or end_time > current:
-                      stations[code]["latestData"] = end_time
-
-          # Step 3: Build GeoJSON
-          features = []
-          for s in stations.values():
-              features.append({
-                  "type": "Feature",
-                  "properties": {
-                      "code": s["code"],
-                      "name": s["name"],
-                      "elevation": s["elevation"],
-                      "startTime": s["startTime"],
-                      "endTime": s["endTime"],
-                      "latestData": s["latestData"]
-                  },
-                  "geometry": {
-                      "type": "Point",
-                      "coordinates": [s["lng"], s["lat"]]
-                  }
-              })
+          features = [{
+              "type": "Feature",
+              "properties": {k: s[k] for k in
+                             ("code", "name", "elevation", "startTime",
+                              "endTime", "latestData")},
+              "geometry": {"type": "Point", "coordinates": [s["lng"], s["lat"]]},
+          } for s in stations.values()]
 
           geojson = {
               "type": "FeatureCollection",
               "metadata": {
-                  "source": "EarthScope FDSN station + availability services",
+                  "source": "EarthScope station service + waveform manifest + dataselect probes",
                   "network": "S1",
-                  "fetched": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                  "fetched": now.strftime('%Y-%m-%dT%H:%M:%SZ'),
               },
-              "features": features
+              "features": features,
           }
-
-          with open('data/ausis_stations.geojson', 'w') as f:
-              json.dump(geojson, f, indent=2)
-
-          avail_count = sum(1 for s in stations.values() if s["latestData"])
-          print(f'Saved {len(features)} stations ({avail_count} with availability data)')
+          with open('data/ausis_stations.geojson', 'w') as fh:
+              json.dump(geojson, fh, indent=2)
+          print(f'Saved {len(features)} stations')
           EOF
 
       - name: Commit if changed

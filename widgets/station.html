@@ -146,7 +146,8 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
   const vs = (statusFile.stations || {})[CODE];
   const lastMs = p.latestData ? Date.parse(p.latestData) : NaN;
   const daysAgo = isNaN(lastMs) ? null : (Date.now() - lastMs) / 86400000;
-  const inManifest = !!(wfManifest.stations && wfManifest.stations[CODE]);
+  const wfFresh = wfManifest.generated && (Date.now() - Date.parse(wfManifest.generated)) < 6 * 3600000;
+  const inManifest = wfFresh && !!(wfManifest.stations && wfManifest.stations[CODE]);
   let live = inManifest || (vs && vs.streaming) || (daysAgo !== null && daysAgo <= LIVE_THRESHOLD_DAYS);
   const pillColor = p.endTime ? '#ef4444' : (live ? '#22c55e' : '#f59e0b');
   const pillText = p.endTime ? 'DECOMMISSIONED' : (live ? 'LIVE' : 'NO RECENT DATA');
@@ -183,7 +184,6 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
     tiles += tile('Ground movement (last hour)', entry.peak_um_s.toPrecision(3) + ' µm/s', esc(hairPhrase(entry.peak_um_s)));
     if (rank > 0) tiles += tile('Liveliest right now', '#' + rank + ' of ' + peaks.length, rank <= 5 ? 'on the leaderboard!' : 'across all AuSIS schools');
   }
-  tiles += tile('Your sensor sits at', Math.round(p.elevation || 0) + ' m', c[1].toFixed(3) + ', ' + c[0].toFixed(3));
   if (neighbours.length) tiles += tile('Nearest AuSIS schools', esc(neighbours[0].n), neighbours[0].km + ' km away'
     + (neighbours[1] ? ' · then ' + esc(neighbours[1].n) + ' (' + neighbours[1].km + ' km)' : ''));
   document.getElementById('tiles').innerHTML = tiles;
