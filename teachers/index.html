@@ -19,18 +19,29 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
-.wrap { max-width: 1060px; margin: 0 auto; padding: 14px; }
+.wrap { max-width: min(1500px, 96vw); margin: 0 auto; padding: 14px; }
 .head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; }
 .head img.ausis { height: 54px; }
 .head img.partner { height: 40px; }
 .head h1 { font-size: 21px; color: #282572; }
 .head .sub { font-size: 12.5px; color: #6b7280; margin-top: 3px; }
-.grid { display: grid; grid-template-columns: 1fr 340px; gap: 12px; margin-top: 12px; }
+.grid { display: grid; grid-template-columns: 1fr clamp(320px, 26vw, 430px); gap: 12px; margin-top: 12px; }
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
 .card h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; padding: 11px 14px 7px; }
 .card .note { font-size: 11px; color: #94a3b8; padding: 0 14px 8px; }
-#map { height: 520px; }
+#map { height: clamp(420px, 58vh, 780px); }
+/* Projector / TV distances: scale the chrome up on big screens */
+@media (min-width: 1500px) {
+  .head h1 { font-size: 27px; }
+  .head .sub { font-size: 15px; }
+  .head img.ausis { height: 66px; }
+  .card h2 { font-size: 14px; }
+  .legend { font-size: 13px; }
+  .res .t { font-size: 17px; }
+  .res .d { font-size: 13px; }
+  .foot { font-size: 13px; }
+}
 .side iframe { display: block; width: 100%; border: none; }
 .side .card { margin-bottom: 12px; }
 .resources { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
@@ -121,8 +132,10 @@ Promise.all([
         || (days !== null && days <= LIVE_THRESHOLD_DAYS);
       colour = live ? '#22c55e' : '#f59e0b';
     }
+    const big = window.innerWidth >= 1500;   // projector / TV distances
     L.circleMarker([c[1], c[0]], {
-      radius: 7, color: '#fff', weight: 1.5, fillColor: colour, fillOpacity: 0.95
+      radius: big ? 10 : 7, color: '#fff', weight: big ? 2 : 1.5,
+      fillColor: colour, fillOpacity: 0.95
     }).addTo(map)
       .bindTooltip(p.name + ' — click to open dashboard', { direction: 'top' })
       .on('click', () => { window.location.href = '../widgets/station.html?code=' + p.code; });
