@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+  teachers/index.html — the AuSIS Teacher Hub.
+  One bookmarkable front door for everything teacher-facing:
+  a map of every school seismometer (click a school -> its dashboard with the
+  live drum), the wiggle leaderboard, the latest recorded earthquake, and a
+  resources row (worksheets, event galleries, posters, AuSIS site).
+
+  Reads the same published data as everything else; static, no backend.
+  URL: https://auscope.github.io/AuScope_Outreach/teachers/
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuSIS Teacher Hub</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
+.wrap { max-width: min(1500px, 96vw); margin: 0 auto; padding: 14px; }
+.head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; }
+.head img.ausis { height: 54px; }
+.head img.partner { height: 40px; }
+.head h1 { font-size: 21px; color: #282572; }
+.head .sub { font-size: 12.5px; color: #6b7280; margin-top: 3px; }
+.grid { display: grid; grid-template-columns: 1fr clamp(320px, 26vw, 430px); gap: 12px; margin-top: 12px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+.card h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #282572; padding: 11px 14px 7px; }
+.card .note { font-size: 11px; color: #94a3b8; padding: 0 14px 8px; }
+#map { height: clamp(420px, 58vh, 780px); }
+/* Projector / TV distances: scale the chrome up on big screens */
+@media (min-width: 1500px) {
+  .head h1 { font-size: 27px; }
+  .head .sub { font-size: 15px; }
+  .head img.ausis { height: 66px; }
+  .card h2 { font-size: 14px; }
+  .legend { font-size: 13px; }
+  .res .t { font-size: 17px; }
+  .res .d { font-size: 13px; }
+  .foot { font-size: 13px; }
+}
+.side iframe { display: block; width: 100%; border: none; }
+.side .card { margin-bottom: 12px; }
+.resources { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
+.res { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 13px 15px; text-decoration: none; display: block; }
+.res:hover { border-color: #282572; }
+.res .t { font-size: 14px; font-weight: 700; color: #282572; }
+.res .d { font-size: 11.5px; color: #6b7280; margin-top: 3px; line-height: 1.45; }
+.foot { text-align: center; font-size: 11px; color: #94a3b8; padding: 14px 0 8px; }
+.legend { display: flex; gap: 14px; padding: 0 14px 10px; font-size: 11px; color: #6b7280; }
+.tri { display: inline-block; margin-right: 4px; vertical-align: -3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <div>
+      <h1>AuSIS Teacher Hub</h1>
+      <div class="sub">Live seismometers, earthquakes and classroom resources — click your school on the map to open its dashboard</div>
+    </div>
+    <div style="flex:1"></div>
+    <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Find your school</h2>
+      <div class="legend">
+        <span><span class="tri" id="tri-live"></span>live</span>
+        <span><span class="tri" id="tri-quiet"></span>no recent data</span>
+        <span><span class="tri" id="tri-ended"></span>decommissioned</span>
+        <span style="margin-left:auto">click a school &rarr; live drum, catches &amp; more</span>
+      </div>
+      <div id="map"></div>
+    </div>
+    <div class="side">
+      <div class="card"><h2>Biggest wiggles right now</h2><iframe src="../widgets/top_wiggles.html" height="330" title="Wiggle leaderboard"></iframe></div>
+      <div class="card"><h2>Latest earthquake recorded</h2><iframe src="../widgets/latest_quake.html" height="430" title="Latest recorded earthquake"></iframe></div>
+    </div>
+  </div>
+
+  <div class="resources">
+    <a class="res" href="../widgets/event.html"><div class="t">Earthquake worksheets</div>
+      <div class="d">Printable class activities for every recorded quake — pick the event and the year level (1&ndash;4, 5&ndash;8, 9&ndash;12).</div></a>
+    <a class="res" href="../widgets/events_gallery.html?mode=local"><div class="t">Local earthquakes</div>
+      <div class="d">Every Australian-region quake the network recorded in the last month, with its record section.</div></a>
+    <a class="res" href="../widgets/events_gallery.html?mode=tele"><div class="t">International earthquakes</div>
+      <div class="d">Big distant quakes — Japan, Mexico, the Pacific — seen from Australian classrooms.</div></a>
+    <a class="res" href="../AuSIS_Map.html"><div class="t">Public AuSIS map</div>
+      <div class="d">The full interactive map with earthquakes, waveform popups and record sections.</div></a>
+    <a class="res" href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener"><div class="t">AuSIS program site</div>
+      <div class="d">Stories, education resources, competitions and contacts from the AuSIS team at ANU.</div></a>
+    <a class="res" href="https://sites.google.com/view/ausis2/feedback" target="_blank" rel="noopener"><div class="t">Need help?</div>
+      <div class="d">Seismometer offline or questions about your station — contact the AuSIS team.</div></a>
+  </div>
+
+  <div class="foot">AuSIS · Australian Seismometers in Schools · ANU · supported by AuScope &amp; NCRIS ·
+    data via EarthScope &amp; Geoscience Australia, updated automatically</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const LIVE_THRESHOLD_DAYS = 7;
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+
+// Same station symbol as the public map: black triangle, status-coloured
+// stroke — stations are triangles, earthquakes are circles.
+function triangleSVG(size, strokeColor) {
+  const h = size / 2;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + '<polygon points="' + h + ',2 ' + (size - 2) + ',' + (size - 2) + ' 2,' + (size - 2)
+    + '" fill="#000" stroke="' + strokeColor + '" stroke-width="2" stroke-linejoin="round"/></svg>';
+}
+function triangleIcon(size, strokeColor) {
+  return L.divIcon({ html: triangleSVG(size, strokeColor), className: '',
+    iconSize: [size, size], iconAnchor: [size / 2, size - 2] });
+}
+document.getElementById('tri-live').innerHTML = triangleSVG(15, '#22c55e');
+document.getElementById('tri-quiet').innerHTML = triangleSVG(15, '#f59e0b');
+document.getElementById('tri-ended').innerHTML = triangleSVG(15, '#ef4444');
+
+const map = L.map('map', { center: [-27, 134], zoom: 4, minZoom: 3, maxZoom: 12 });
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { attribution: 'Tiles &copy; Esri', opacity: 0.8 }).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+  { opacity: 0.6 }).addTo(map);
+
+Promise.all([
+  fetch('../data/ausis_stations.geojson?v=' + hourStamp()).then(r => r.json()),
+  fetch('../data/ausis_status.json?v=' + hourStamp()).then(r => r.json()).catch(() => ({})),
+  fetch('https://raw.githubusercontent.com/AuScope/AuScope_Outreach/waveforms/manifest.json?v=' + hourStamp())
+    .then(r => r.json()).catch(() => ({})),
+]).then(([geo, status, manifest]) => {
+  const vs = status.stations || {};
+  const wf = manifest.stations || {};
+  const wfFresh = manifest.generated && (Date.now() - Date.parse(manifest.generated)) < 6 * 3600000;
+  (geo.features || []).forEach(f => {
+    const p = f.properties, c = f.geometry.coordinates;
+    let colour = '#ef4444';
+    if (!p.endTime) {
+      const days = p.latestData ? (Date.now() - Date.parse(p.latestData)) / 86400000 : null;
+      const live = (wfFresh && wf[p.code]) || (vs[p.code] && vs[p.code].streaming)
+        || (days !== null && days <= LIVE_THRESHOLD_DAYS);
+      colour = live ? '#22c55e' : '#f59e0b';
+    }
+    const big = window.innerWidth >= 1500;   // projector / TV distances
+    L.marker([c[1], c[0]], { icon: triangleIcon(big ? 26 : 19, colour) }).addTo(map)
+      .bindTooltip(p.name + ' — click to open dashboard', { direction: 'top' })
+      .on('click', () => { window.location.href = '../widgets/station.html?code=' + p.code; });
+  });
+}).catch(() => {
+  document.getElementById('map').outerHTML =
+    '<div style="padding:30px;text-align:center;color:#6b7280">Station data unavailable right now — try again shortly.</div>';
+});
+</script>
+</body>
+</html>

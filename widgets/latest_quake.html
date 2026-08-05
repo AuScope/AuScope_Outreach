@@ -77,7 +77,10 @@ fetch(EV_BASE + 'manifest.json?v=' + hourStamp())
       + '<img class="section-img" alt="Seismic record section for this earthquake across ' + n + ' school seismometers" '
       + 'src="' + EV_BASE + encodeURIComponent(best.event_id) + '.png?v=' + hourStamp() + '">'
       + '<div class="card-foot">'
-      + '<span class="src">Recorded by ' + n + ' school seismometers &middot; blue/red dashes = predicted P &amp; S waves</span>'
+      + '<span class="src">' + (best.n_recorded
+          ? 'Seen at ' + best.n_recorded + ' of ' + best.n_with_data + ' school seismometers &middot; ' + n + ' clearest shown'
+          : 'Recorded by ' + n + ' school seismometers')
+      + ' &middot; dashes = predicted arrivals</span>'
       + '<a href="' + MAP_URL + '#quake=' + encodeURIComponent(best.event_id) + '" target="_blank" rel="noopener">Explore on the map &rarr;</a>'
       + '</div>';
   })

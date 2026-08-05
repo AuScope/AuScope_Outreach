@@ -197,7 +197,8 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 // ── Constants ─────────────────────────────────────────────────
 const LIVE_THRESHOLD_DAYS = 7;    // latestData within this = "Live streaming"
 const STATUS_STALE_HOURS  = 48;   // committed status older than this = show badge, ignore overrides
-const WAVEFORM_FRESH_HOURS = 3;   // manifest older than this no longer proves a station is live
+const WAVEFORM_FRESH_HOURS = 6;   // manifest older than this no longer proves a station is
+                                  // live (6 h: GitHub cron drops make 2-5 h gaps normal)
 
 // Waveform (last-hour) settings
 // The plots are pre-rendered hourly by a GitHub Action

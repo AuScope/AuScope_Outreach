@@ -42,6 +42,8 @@ import time
 import traceback
 from datetime import datetime, timezone, timedelta
 
+import numpy as np
+
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -101,7 +103,7 @@ LOCAL_VIEW_MIN_S    = 180     # never show less than this after origin
 LOCAL_CODA_FACTOR   = 1.6     # view ends at S_farthest * this ...
 LOCAL_CODA_PAD_S    = 60      # ... plus this pad
 
-TELE_PRE_MIN    = 0
+TELE_PRE_MIN    = 5      # pre-origin quiet is needed for the SNR count below
 TELE_POST_MIN   = 60
 TELE_MAX_DIST   = None   # no cap — the whole point is "even from far away"
 TELE_BP_HZ      = (0.02, 0.1)  # long-period band-pass — teleseism surface waves
@@ -128,10 +130,18 @@ BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
 P_CLR        = "#2563eb"  # predicted P arrival — blue
 S_CLR        = "#dc2626"  # predicted S arrival — red
+LG_CLR       = "#6b7280"  # Lg / surface-wave arrival — grey
+
+# The biggest shaking on Australian regional records is Lg (crust-guided
+# shear energy, ~3.5 km/s), which always FOLLOWS direct S — without a mark
+# it reads as "S is early". Teleseismic sections likewise peak at the
+# surface waves (~4 km/s), minutes after S.
+LG_KM_S      = 3.5
+SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 3
+RENDER_VERSION = 6
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -310,6 +320,61 @@ def pick_channel(channels):
     return sorted(channels)[0] if channels else None
 
 
+def count_recorded(st, origin, mode):
+    """How many stations visibly recorded the event: robust post/pre amplitude
+    ratio per station on mode-filtered raw counts (a ratio needs no physical
+    units, so no response removal). Returns (recorded_codes, n_with_data).
+    Outreach-grade signal detection, not a scientific pick."""
+    o = UTCDateTime(origin)
+    recorded, n_tot = [], 0
+    for code in sorted(set(tr.stats.station for tr in st)):
+        try:
+            sub = st.select(station=code)
+            cha = pick_channel(set(tr.stats.channel for tr in sub))
+            if cha is None:
+                continue
+            merged = sub.select(channel=cha).merge(method=1, fill_value="latest")
+            if not len(merged) or not len(merged[0].data):
+                continue
+            tr = merged[0].copy()
+            tr.detrend("demean")
+            if mode == "tele":
+                tr.filter("bandpass", freqmin=TELE_BP_HZ[0],
+                          freqmax=TELE_BP_HZ[1], corners=2, zerophase=True)
+            else:
+                tr.filter("highpass", freq=LOCAL_HP_HZ, corners=2, zerophase=True)
+            noise = tr.slice(endtime=o - 10)
+            sig = tr.slice(starttime=o + 10)
+            if len(noise.data) < 100 or len(sig.data) < 100:
+                continue
+            # A local quake is ~30 s of signal in a 15-minute window, so a
+            # whole-window percentile washes it out. Compare the LOUDEST
+            # 10-second RMS after origin against the TYPICAL 10-second RMS
+            # before it — catches brief packets, resists single-sample spikes.
+            sr = tr.stats.sampling_rate
+
+            def chunk_rms(data, secs=10.0):
+                nsamp = max(1, int(sr * secs))
+                m = len(data) // nsamp
+                if m < 1:
+                    return None
+                a = np.asarray(data[:m * nsamp], dtype=np.float64).reshape(m, nsamp)
+                return np.sqrt((a * a).mean(axis=1))
+
+            nr = chunk_rms(noise.data)
+            sg = chunk_rms(sig.data)
+            if nr is None or sg is None:
+                continue
+            n_amp = float(np.median(nr))
+            s_amp = float(sg.max())
+            n_tot += 1
+            if n_amp > 0 and s_amp / n_amp >= 4.0:
+                recorded.append(code)
+        except Exception:
+            continue
+    return recorded, n_tot
+
+
 def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
                   mag, place, mode, depth):
     """Fetch nearest candidates, keep best N_KEEP with data, render section.
@@ -335,12 +400,18 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
 
     t1 = UTCDateTime(origin) - pre_min * 60
     t2 = UTCDateTime(origin) + post_min * 60
-    bulk = [(NETWORK, code, "*", CHANNEL_GLOB, t1, t2) for code, _ in ranked]
+    # Fetch the WHOLE network, not just the drawn candidates: big quakes are
+    # recorded by most of the fleet, and the "seen at N of M stations" count
+    # (and each school's personal catch list) comes from this stream.
+    bulk = [(NETWORK, code, "*", CHANNEL_GLOB, t1, t2) for code in sorted(sites)]
     st = retrying(f"{eid} waveforms",
                   lambda: client.get_waveforms_bulk(bulk))
     if not st or not len(st):
         print(f"  {eid}: no waveform data for any candidate")
         return None
+
+    recorded_codes, n_with_data = count_recorded(st, origin, mode)
+    print(f"  {eid}: visible at {len(recorded_codes)} of {n_with_data} stations with data")
 
     dist_by_code = dict(ranked)
     lanes = []
@@ -387,6 +458,17 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
 
     lanes.sort(key=lambda x: x[1])  # nearest -> furthest
 
+    # Tele fetch now starts 5 min early (for the SNR noise window) — keep the
+    # displayed drum starting just before the origin line as before.
+    if mode == "tele":
+        w0 = UTCDateTime(origin) - 60
+        for _, _, _, tr, _ in lanes:
+            tr.trim(w0, t2)
+        lanes = [l for l in lanes if len(l[3].data)]
+        if len(lanes) < MIN_TRACES:
+            print(f"  {eid}: <{MIN_TRACES} usable trace(s) after view trim, skipped")
+            return None
+
     # Adaptive local view: trim to origin-context .. S-at-farthest + coda.
     # Done AFTER response removal/filtering so edge tapers stay off-screen.
     if mode == "local":
@@ -409,6 +491,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
               f"(farthest lane {far_km:.0f} km, S ~{s_far:.0f}s)")
 
     render_section(eid, origin, mag, place, lanes, mode, depth,
+                    len(recorded_codes), n_with_data,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     return {
         "event_id": eid,
@@ -417,13 +500,20 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         "place": place,
         "mode": mode,
         "v": RENDER_VERSION,
+        "depth": round(depth, 1) if depth is not None else None,
+        "lat": round(ev_lat, 3),
+        "lon": round(ev_lon, 3),
+        "n_recorded": len(recorded_codes),
+        "n_with_data": n_with_data,
+        "recorded_codes": recorded_codes,
         "stations": [{"code": c, "dist_km": round(d), "channel": ch,
                        "site": nm}
                      for c, d, ch, _, nm in lanes],
     }
 
 
-def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
+def render_section(eid, origin, mag, place, lanes, mode, depth,
+                   n_rec, n_tot, out_path):
     n = len(lanes)
     fig, axes = plt.subplots(n, 1, figsize=(PLOT_W, ROW_H * n + 0.8),
                              sharex=True, squeeze=False)
@@ -442,18 +532,23 @@ def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
             ax.spines[sp].set_visible(False)
         ax.grid(True, axis="x", color="#e5e7eb", linewidth=0.5)
         # TOP edge: school name prominent; station code small/grey beneath.
-        # If metadata had no usable name, fall back to the code as the label.
+        # White boxes behind the labels so dashed arrival lines can't cut
+        # through the text. If metadata had no usable name, fall back to code.
+        label_box = dict(facecolor="white", alpha=0.85, edgecolor="none",
+                         boxstyle="square,pad=0.15")
         if site:
             ax.text(0.006, 0.96, site,
                     transform=ax.transAxes, va="top", ha="left",
-                    fontsize=10.5, fontweight="bold", color="#282572")
+                    fontsize=10.5, fontweight="bold", color="#282572",
+                    bbox=label_box, zorder=5)
             ax.text(0.006, 0.70, f"S1.{code}",
                     transform=ax.transAxes, va="top", ha="left",
-                    fontsize=8, color="#94a3b8")
+                    fontsize=8, color="#94a3b8", bbox=label_box, zorder=5)
         else:
             ax.text(0.006, 0.96, f"S1.{code}",
                     transform=ax.transAxes, va="top", ha="left",
-                    fontsize=10.5, fontweight="bold", color="#282572")
+                    fontsize=10.5, fontweight="bold", color="#282572",
+                    bbox=label_box, zorder=5)
         # BOTTOM edge: distance
         ax.text(0.006, 0.06, f"{round(dist)} km",
                 transform=ax.transAxes, va="bottom", ha="left",
@@ -461,10 +556,15 @@ def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
         # Predicted P & S arrivals (iasp91) — the classroom moment: P beats
         # S to every station, and both get later with distance.
         p_sec, s_sec = ps_arrivals(dist, depth)
+        if mode == "tele":
+            big_sec, big_lbl = dist / SURF_KM_S, "Surf"
+        else:
+            big_sec, big_lbl = dist / LG_KM_S, "Lg"
         times_mpl = tr.times("matplotlib")
         x0, x1 = times_mpl[0], times_mpl[-1]
         lane_trans = mtransforms.blended_transform_factory(ax.transData, ax.transAxes)
-        for t_sec, lbl, clr in ((p_sec, "P", P_CLR), (s_sec, "S", S_CLR)):
+        for t_sec, lbl, clr in ((p_sec, "P", P_CLR), (s_sec, "S", S_CLR),
+                                 (big_sec, big_lbl, LG_CLR)):
             if t_sec is None:
                 continue
             t_mpl = o_mpl + t_sec / 86400.0
@@ -472,20 +572,23 @@ def render_section(eid, origin, mag, place, lanes, mode, depth, out_path):
                 continue
             ax.axvline(t_mpl, color=clr, linewidth=0.9, alpha=0.85,
                        linestyle=(0, (4, 3)))
-            ax.text(t_mpl, 0.94, " " + lbl, transform=lane_trans,
-                    va="top", ha="left", fontsize=8.5,
+            # Label at the BOTTOM of the dash — the top is where the bold
+            # school-name text lives and was masking P/S on some lanes.
+            ax.text(t_mpl, 0.04, " " + lbl, transform=lane_trans,
+                    va="bottom", ha="left", fontsize=8.5,
                     fontweight="bold", color=clr)
 
     axes[-1].xaxis_date()
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[-1].tick_params(labelsize=8, length=2)
+    seen = (f"seen at {n_rec}/{n_tot} stations · {n} shown"
+            if n_rec and n_tot else f"{n} AuSIS stations")
     if mode == "tele":
-        sub = (f"\n{n} AuSIS stations · red = origin · dashed = predicted P/S"
-               f" · {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz (µm/s)"
-               f" · distant earthquake")
+        sub = (f"\n{seen} · red = origin · dashed: P, S, Surf"
+               f" · {TELE_BP_HZ[0]:g}–{TELE_BP_HZ[1]:g} Hz (µm/s)")
     else:
-        sub = (f"\nnearest {n} AuSIS stations · red = origin"
-               f" · dashed = predicted P/S · {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
+        sub = (f"\n{seen} · red = origin · dashed: P, S, Lg"
+               f" · {LOCAL_HP_HZ:g} Hz high-pass (µm/s)")
     axes[0].set_title(
         f"M{mag:.1f}  {place}  ·  {origin.strftime('%Y-%m-%d %H:%M:%S')} UTC"
         + sub,
@@ -523,10 +626,17 @@ def main():
     # which still fall inside the age window; only fetch genuinely new ones.
     prev = load_manifest()
     qualifying_ids = {e[0] for e in events}
+    # GA revises origins/depths after first publication; the P/S/Lg marks are
+    # computed from them, so a kept section must still match the CURRENT
+    # catalogue values or it gets re-rendered.
+    current = {e[0]: (e[1].strftime("%Y-%m-%dT%H:%M:%SZ"),
+                      round(e[7], 1) if e[7] is not None else None)
+               for e in events}
     kept = {}
     for eid, meta in prev.items():
         if (eid in qualifying_ids
                 and meta.get("v") == RENDER_VERSION
+                and (meta.get("origin"), meta.get("depth")) == current.get(eid)
                 and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png"))):
             kept[eid] = meta
     todo = [e for e in events if e[0] not in kept]

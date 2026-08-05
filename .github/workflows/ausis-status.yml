@@ -1,13 +1,13 @@
 name: Hourly AuSIS Status Check
 
-# Server-side "is it really streaming?" check. The availability index at
-# EarthScope lags real time by ~6 h, so stations that look stale there are
-# re-checked against dataselect for the last 24 h. Result is committed to
-# data/ausis_status.json, which the map reads same-origin — the browser never
-# calls EarthScope (their June 2026 migration broke browser CORS, not curl).
+# Server-side "is it really streaming?" check, availability-free since
+# EarthScope retired fdsnws-availability on 2026-07-27 (HTTP 410):
+# a station in the FRESH hourly waveform manifest is streaming by proof;
+# every other active station gets a dataselect last-24h probe. Result is
+# committed to data/ausis_status.json for the map/widgets (same-origin).
 #
-# FAILS LOUD: an upstream fetch error exits non-zero and auto-files an issue,
-# instead of silently leaving a frozen file the map would trust forever.
+# FAILS LOUD on a broken station file; probe errors mark a station
+# not-streaming rather than crashing the run.
 
 on:
   schedule:
@@ -25,89 +25,65 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check intermittent stations via dataselect
+      - name: Probe stations not proven by the waveform manifest
         run: |
           python3 << 'EOF'
           import json, urllib.request, datetime, sys
 
-          LIVE_THRESHOLD_DAYS = 7
           FDSN = 'https://service.earthscope.org'
+          MANIFEST = ('https://raw.githubusercontent.com/AuScope/'
+                      'AuScope_Outreach/waveforms/manifest.json')
           now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
           checked = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-          # Step 1: Get latest availability for all stations
-          url = FDSN + '/fdsnws/availability/1/extent?network=S1&channel=BH?,HH?&format=text'
           try:
-              resp = urllib.request.urlopen(url, timeout=30)
-              lines = resp.read().decode('utf-8').strip().split('\n')
+              with open('data/ausis_stations.geojson') as fh:
+                  feats = json.load(fh)['features']
           except Exception as e:
-              print(f'ERROR: availability fetch failed: {e}')
-              sys.exit(1)   # fail visibly — a silent skip freezes the map's status
-
-          latest = {}
-          for line in lines[1:]:
-              cols = line.strip().split()
-              if len(cols) < 8:
-                  continue
-              code = cols[1]
-              dt = datetime.datetime.fromisoformat(cols[7].replace('Z', ''))
-              if code not in latest or dt > latest[code]:
-                  latest[code] = dt
-
-          if not latest:
-              print('ERROR: availability response contained no stations')
+              print(f'ERROR: cannot read station file: {e}')
               sys.exit(1)
+          active = [f['properties']['code'] for f in feats
+                    if not f['properties'].get('endTime')]
 
-          # Step 2: Find stations that appear stale (>7 days)
-          stale = []
-          for code, dt in latest.items():
-              if code == 'TEST':
-                  continue
-              days_ago = (now - dt).days
-              if days_ago > LIVE_THRESHOLD_DAYS:
-                  stale.append(code)
+          proven = set()
+          try:
+              with urllib.request.urlopen(MANIFEST, timeout=30) as r:
+                  m = json.load(r)
+              gen = m.get('generated')
+              age_h = ((now - datetime.datetime.fromisoformat(
+                  str(gen).replace('Z', ''))).total_seconds() / 3600
+                  if gen else 99)
+              if age_h <= 6:      # cron drops make 2-5 h gaps normal
+                  proven = set((m.get('stations') or {}).keys())
+              print(f'manifest {age_h:.1f} h old — {len(proven)} proven streaming')
+          except Exception as e:
+              print(f'WARNING: manifest unavailable ({e}) — probing everything')
 
-          if not stale:
-              print('No stale stations to check')
-              # Still write the file to confirm we checked
-              status = {'checked': checked, 'stations': {}}
-              with open('data/ausis_status.json', 'w') as f:
-                  json.dump(status, f, indent=2)
-              sys.exit(0)
+          to_probe = [c for c in active if c not in proven]
+          print(f'probing {len(to_probe)} station(s)')
 
-          print(f'Checking {len(stale)} stale stations: {", ".join(stale)}')
-
-          # Step 3: For each stale station, check dataselect for last 24hrs
-          yesterday = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT00:00:00')
+          yesterday = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%S')
           today = now.strftime('%Y-%m-%dT%H:%M:%S')
-
           stations = {}
-          for code in stale:
-              url = (f'{FDSN}/fdsnws/dataselect/1/query'
-                     f'?network=S1&station={code}&channel=HHZ&nodata=404'
+          for code in to_probe:
+              url = (f'{FDSN}/fdsnws/dataselect/1/query?network=S1'
+                     f'&station={code}&channel=HHZ,BHZ&nodata=404'
                      f'&starttime={yesterday}&endtime={today}')
+              streaming = False
               try:
                   req = urllib.request.Request(url, method='HEAD')
-                  resp = urllib.request.urlopen(req, timeout=15)
-                  streaming = (resp.status == 200)
-              except urllib.error.HTTPError:
-                  streaming = False
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      streaming = (r.status == 200)
               except Exception:
                   streaming = False
+              stations[code] = {'streaming': streaming, 'checkedAt': checked}
+              print(f'  {code}: {"STREAMING" if streaming else "quiet"}')
+          for code in proven:
+              stations[code] = {'streaming': True, 'checkedAt': checked}
 
-              stations[code] = {
-                  'streaming': streaming,
-                  'checkedAt': checked
-              }
-              status_text = 'STREAMING' if streaming else 'DOWN'
-              print(f'  {code}: {status_text}')
-
-          # Step 4: Write status file
-          status = {'checked': checked, 'stations': stations}
-          with open('data/ausis_status.json', 'w') as f:
-              json.dump(status, f, indent=2)
-
-          print(f'\nSaved status for {len(stations)} stations')
+          with open('data/ausis_status.json', 'w') as fh:
+              json.dump({'checked': checked, 'stations': stations}, fh, indent=2)
+          print(f'Saved status for {len(stations)} station(s)')
           EOF
 
       - name: Commit if changed

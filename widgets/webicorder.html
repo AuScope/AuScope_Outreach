@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!--
+  widgets/webicorder.html?code=AUYLT[&hours=24][&compact=1]
+  Live drum-style seismogram (webicorder) for one AuSIS station, in the
+  classic IRIS style: 24 hours of drum lines, refreshed with only the newest
+  few minutes of data every 10 minutes (and on tab focus) — polite to the
+  upstream service, honest about its ~minutes latency.
+
+  Data path: EarthScope fdsnws-dataselect (anonymous, CORS-enabled), parsed
+  and drawn in-browser by the vendored seisplotjs bundle. No backend. This
+  page is deliberately NOT load-bearing: if EarthScope changes, this page
+  greys out and everything else on the site keeps working.
+
+  Embed (e.g. Google Sites / station dashboard):
+    <iframe src=".../widgets/webicorder.html?code=AUYLT&hours=12&compact=1"
+            width="100%" height="560" frameborder="0" style="border:none;"></iframe>
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuSIS live webicorder</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #fff; }
+.head { display: flex; align-items: center; gap: 10px; padding: 10px 14px 6px; }
+.head img { height: 40px; }
+.head img.partner { height: 30px; }
+body.compact .head img.partner { display: none; }
+.head .t1 { font-size: 16px; font-weight: 700; color: #282572; }
+.head .t2 { font-size: 12px; color: #6b7280; }
+.head .grow { flex: 1; }
+.head button {
+  font-family: inherit; font-size: 12px; padding: 5px 12px; cursor: pointer;
+  background: #fff; color: #282572; border: 1px solid #cbd5e1; border-radius: 5px;
+}
+.head button:hover { background: #f8fafc; }
+.fseg { display: flex; border: 1px solid #cbd5e1; border-radius: 5px; overflow: hidden; }
+.fseg button { border: none; border-radius: 0; border-left: 1px solid #cbd5e1; padding: 5px 10px; }
+.fseg button:first-child { border-left: none; }
+.fseg button.active { background: #282572; color: #fff; }
+#status { padding: 0 14px 6px; font-size: 11px; color: #94a3b8; }
+#status.err { color: #b45309; font-size: 13px; padding: 14px; }
+#heli { height: 640px; padding: 0 6px; }
+body.compact #heli { height: 520px; }
+body.compact .head img { height: 30px; }
+body.compact .head .t1 { font-size: 14px; }
+.foot { padding: 6px 14px 10px; font-size: 10.5px; color: #94a3b8; }
+.foot a { color: #2563eb; text-decoration: none; }
+sp-helicorder { --sp-helicorder-color-even: #282572; --sp-helicorder-color-odd: #b45309; }
+</style>
+</head>
+<body>
+<div class="head">
+  <img src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+  <div>
+    <div class="t1" id="title">AuSIS live webicorder</div>
+    <div class="t2" id="subtitle">loading station&hellip;</div>
+  </div>
+  <div class="grow"></div>
+  <div class="fseg" role="group" aria-label="Filter">
+    <button type="button" data-f="raw" class="active">Raw</button><button type="button" data-f="local" title="1 Hz high-pass — sharpens nearby earthquakes">Local</button><button type="button" data-f="distant" title="0.02–0.1 Hz band-pass — reveals distant earthquakes">Distant</button>
+  </div>
+  <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
+  <button id="refresh" type="button" title="Fetch the newest data now">Refresh</button>
+</div>
+<div id="status">loading&hellip;</div>
+<div id="heli"></div>
+<div class="foot">Drum updates every 10 minutes (data reaches the archive with a delay of a minute or two).
+  Times shown in your local timezone. Data: EarthScope &middot; AuSIS network S1 &middot;
+  <a id="maplink" href="https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html" target="_blank" rel="noopener">AuSIS map</a></div>
+
+<script type="module">
+import * as sp from '../assets/vendor/seisplotjs_3.2.6_standalone.mjs';
+
+const params = new URLSearchParams(window.location.search);
+const CODE = (params.get('code') || 'AUANU').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const HOURS = Math.min(48, Math.max(3, parseInt(params.get('hours') || '24', 10) || 24));
+if (params.get('compact')) document.body.classList.add('compact');
+
+const FDSN_HOST = 'service.earthscope.org';
+const REFRESH_MS = 10 * 60 * 1000;
+const statusEl = document.getElementById('status');
+const heliDiv = document.getElementById('heli');
+document.getElementById('maplink').href =
+  'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html#station=' + CODE;
+
+let segments = [];        // all RAW SeismogramSegments collected so far
+let lastEnd = null;       // luxon DateTime of newest data we hold
+let channel = null;       // e.g. HHZ
+let heliEl = null;
+let refreshing = false;
+let filterMode = 'raw';   // raw | local (1 Hz HP) | distant (0.02-0.1 Hz BP)
+
+// Same filter vocabulary as the map's hourly plots. Filtering happens
+// client-side per contiguous segment (keeps IIR edge effects at real gaps).
+function filteredSegments() {
+  if (filterMode === 'raw') return segments;
+  const out = [];
+  for (const seg of segments) {
+    try {
+      let s = new sp.seismogram.Seismogram([seg]);
+      s = sp.filter.removeTrend(s);
+      const delta = 1 / seg.sampleRate;
+      const butter = (filterMode === 'local')
+        ? sp.filter.createButterworth(2, sp.filter.HIGH_PASS, 1.0, 0, delta)
+        : sp.filter.createButterworth(2, sp.filter.BAND_PASS, 0.02, 0.1, delta);
+      s = sp.filter.applyFilter(butter, s);
+      out.push(...s.segments);
+    } catch (e) { out.push(seg); }
+  }
+  return out;
+}
+
+document.querySelectorAll('.fseg button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterMode = btn.dataset.f;
+    document.querySelectorAll('.fseg button').forEach(b =>
+      b.classList.toggle('active', b === btn));
+    try { rebuild(windowNow()); } catch (e) { /* no data yet */ }
+  });
+});
+
+function setStatus(msg, isErr) {
+  statusEl.textContent = msg;
+  statusEl.className = isErr ? 'err' : '';
+}
+
+function windowNow() {
+  const plotEnd = sp.luxon.DateTime.utc().endOf('hour').plus({ milliseconds: 1 });
+  return sp.util.durationEnd(sp.luxon.Duration.fromObject({ hours: HOURS }), plotEnd);
+}
+
+function dsQuery() {
+  return new sp.fdsndataselect.DataSelectQuery(FDSN_HOST)
+    .networkCode('S1').stationCode(CODE).locationCode('*');
+}
+
+async function stationMeta() {
+  // School name from the committed station file; preferred channel from the
+  // hourly waveform manifest. Both optional — the drum works without them.
+  let name = CODE, cha = null;
+  try {
+    const g = await (await fetch('../data/ausis_stations.geojson')).json();
+    const f = (g.features || []).find(x => x.properties.code === CODE);
+    if (f) name = f.properties.name || CODE;
+  } catch (e) { /* fine */ }
+  try {
+    const m = await (await fetch('https://raw.githubusercontent.com/AuScope/AuScope_Outreach/waveforms/manifest.json')).json();
+    const entry = m.stations && m.stations[CODE];
+    if (entry && entry.channel) cha = entry.channel.split('.').pop();
+  } catch (e) { /* fine */ }
+  return { name, cha };
+}
+
+function rebuild(timeWindow, name) {
+  // Drop segments that fell off the left edge of the drum
+  segments = segments.filter(s => s.endTime >= timeWindow.start);
+  if (!segments.length) throw new Error('no data in window');
+  const seis = new sp.seismogram.Seismogram(filteredSegments());
+  const seisData = sp.seismogram.SeismogramDisplayData.fromSeismogram(seis);
+  seisData.addMarkers([{ markertype: 'predicted', name: 'now', time: sp.luxon.DateTime.utc() }]);
+
+  const cfg = new sp.helicorder.HelicorderConfig(timeWindow);
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  cfg.yLabelTimeZone = tz; cfg.xAxisTimeZone = tz; cfg.yLabelRightTimeZone = tz;
+  cfg.xLabel = ''; cfg.xSublabel = '';
+  cfg.title = '';
+  const fresh = new sp.helicorder.Helicorder(seisData, cfg);
+  if (heliEl) { heliEl.replaceWith(fresh); } else { heliDiv.appendChild(fresh); }
+  heliEl = fresh;
+  fresh.draw();
+}
+
+async function fetchRange(interval) {
+  const q = dsQuery().channelCode(channel).timeRange(interval);
+  const seisArray = await q.querySeismograms();
+  let added = 0;
+  for (const s of seisArray) {
+    for (const seg of s.segments) {
+      segments.push(seg);
+      added++;
+      if (!lastEnd || seg.endTime > lastEnd) lastEnd = seg.endTime;
+    }
+  }
+  return added;
+}
+
+async function initialLoad() {
+  const meta = await stationMeta();
+  document.getElementById('title').textContent = meta.name;
+  document.getElementById('subtitle').textContent =
+    'S1.' + CODE + ' · last ' + HOURS + ' hours · live drum';
+  setStatus('fetching the last ' + HOURS + ' hours…');
+
+  const tw = windowNow();
+  const tryChannels = meta.cha ? [meta.cha, 'HHZ', 'BHZ'] : ['HHZ', 'BHZ', 'EHZ', 'SHZ'];
+  for (const cha of [...new Set(tryChannels)]) {
+    try {
+      channel = cha;
+      const added = await fetchRange(tw);
+      if (added > 0) break;
+    } catch (e) { /* try next channel */ }
+    channel = null;
+  }
+  if (!channel || !segments.length) {
+    setStatus('No live data is available for ' + CODE + ' right now. ' +
+      'The station may be offline — check the AuSIS map for its status.', true);
+    return;
+  }
+  document.getElementById('subtitle').textContent =
+    'S1.' + CODE + '..' + channel + ' · last ' + HOURS + ' hours · live drum';
+  rebuild(tw, meta.name);
+  setStatus('updated ' + new Date().toLocaleTimeString() +
+    ' · newest data ' + lastEnd.toLocal().toFormat('HH:mm:ss'));
+  setInterval(refresh, REFRESH_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && lastEnd &&
+        sp.luxon.DateTime.utc().diff(lastEnd).as('minutes') > 3) refresh();
+  });
+}
+
+async function refresh() {
+  if (refreshing || !channel) return;
+  refreshing = true;
+  try {
+    const start = (lastEnd || sp.luxon.DateTime.utc().minus({ minutes: 15 })).minus({ seconds: 60 });
+    const interval = sp.luxon.Interval.fromDateTimes(start, sp.luxon.DateTime.utc());
+    if (interval.length('seconds') > 30) await fetchRange(interval);
+    rebuild(windowNow());
+    setStatus('updated ' + new Date().toLocaleTimeString() +
+      ' · newest data ' + lastEnd.toLocal().toFormat('HH:mm:ss'));
+  } catch (e) {
+    setStatus('refresh failed (' + (e && e.message ? e.message : e) + ') — will retry', false);
+  }
+  refreshing = false;
+}
+
+document.getElementById('refresh').addEventListener('click', refresh);
+
+initialLoad().catch(e => {
+  setStatus('Could not load the live feed: ' + (e && e.message ? e.message : e) +
+    ' — the hourly plots on the AuSIS map still work.', true);
+});
+</script>
+</body>
+</html>
