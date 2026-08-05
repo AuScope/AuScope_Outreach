@@ -98,7 +98,9 @@ fetch(RAW + 'manifest.json?v=' + hourStamp())
         + '<span class="place">' + esc(e.place || 'Unknown location') + '</span>'
         + '<span class="ago">' + timeAgo(t) + '</span></div>'
         + '<div class="facts">' + esc(String(e.origin).replace('T', ' ').replace('Z', ' UTC'))
-        + ' · recorded by ' + n + ' school seismometers'
+        + (e.n_recorded ? ' · seen at ' + e.n_recorded + ' of ' + e.n_with_data
+            + ' school seismometers · ' + n + ' clearest shown'
+            : ' · recorded by ' + n + ' school seismometers')
         + (nearest ? ' · nearest: ' + esc(nearest.site || nearest.code) + ' (' + nearest.dist_km + ' km)' : '')
         + (e.depth != null ? ' · depth ' + Math.round(e.depth) + ' km' : '') + '</div>'
         + '<img class="section-img" loading="lazy" alt="Record section for this earthquake across ' + n + ' schools" '

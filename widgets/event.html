@@ -215,7 +215,9 @@ function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T
       <img src="../assets/ausis-logo.png" alt="AuSIS">
       <div>
         <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} — ${esc(e.place)}</h1>
-        <div class="sub">Recorded by ${n} AuSIS school seismometers · ${esc(when.toUTCString())}</div>
+        <div class="sub">${e.n_recorded
+          ? 'Seen at ' + e.n_recorded + ' of ' + e.n_with_data + ' AuSIS school seismometers · ' + n + ' clearest shown'
+          : 'Recorded by ' + n + ' AuSIS school seismometers'} · ${esc(when.toUTCString())}</div>
       </div>
       <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
     </div>

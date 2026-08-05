@@ -188,17 +188,25 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
     + (neighbours[1] ? ' · then ' + esc(neighbours[1].n) + ' (' + neighbours[1].km + ' km)' : ''));
   document.getElementById('tiles').innerHTML = tiles;
 
-  // Earthquakes this station appears in (event sections, last 30 days)
+  // Earthquakes this station recorded (last 30 days): drawn in the section
+  // OR detected by the network-wide signal check (recorded_codes) — big
+  // quakes are seen by most of the fleet, not just the 5 lanes drawn.
   const mine = (evManifest.events || [])
-    .map(e => ({ e, hit: (e.stations || []).find(s => s.code === CODE) }))
-    .filter(x => x.hit)
+    .map(e => {
+      const drawn = (e.stations || []).find(s => s.code === CODE);
+      if (!drawn && !(e.recorded_codes || []).includes(CODE)) return null;
+      const dist = drawn ? drawn.dist_km
+        : (e.lat != null && e.lon != null ? haversineKm(c[1], c[0], e.lat, e.lon) : null);
+      return { e, dist };
+    })
+    .filter(Boolean)
     .sort((a, b) => Date.parse(b.e.origin) - Date.parse(a.e.origin));
   document.getElementById('catches').innerHTML = mine.length
-    ? mine.slice(0, 8).map(x =>
+    ? mine.slice(0, 10).map(x =>
         '<a class="catch" href="' + MAP_URL + '#quake=' + encodeURIComponent(x.e.event_id) + '" target="_blank" rel="noopener">'
         + '<span class="mag">M ' + Number(x.e.mag).toFixed(1) + '</span>'
         + '<span class="place">' + esc(x.e.place || 'Unknown location') + '</span>'
-        + '<span class="d">' + x.hit.dist_km + ' km away · ' + esc(String(x.e.origin).slice(0, 10)) + '</span></a>').join('')
+        + '<span class="d">' + (x.dist != null ? x.dist + ' km away · ' : '') + esc(String(x.e.origin).slice(0, 10)) + '</span></a>').join('')
     : '<div class="none">Nothing in the last 30 days — earthquakes big and close enough to make a clean record are rarer than you\'d think. The drum above still shows everything your sensor hears.</div>';
 
   // Links
