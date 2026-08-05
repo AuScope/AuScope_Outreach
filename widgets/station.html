@@ -214,6 +214,7 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
     '<a href="webicorder.html?code=' + CODE + '" target="_blank" rel="noopener">Open the full 24-hour drum</a>'
     + '<a href="' + MAP_URL + '#station=' + CODE + '" target="_blank" rel="noopener">See your school on the map</a>'
     + '<a href="poster.html?code=' + CODE + '" target="_blank" rel="noopener">Print the classroom QR poster</a>'
+    + '<a href="event.html" target="_blank" rel="noopener">Earthquake worksheets</a>'
     + '<a href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener">AuSIS resources</a>';
 })().catch(e => {
   document.getElementById('school').textContent = 'Could not load station data';
