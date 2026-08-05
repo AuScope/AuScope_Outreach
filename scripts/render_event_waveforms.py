@@ -141,7 +141,7 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 6
+RENDER_VERSION = 7
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -549,10 +549,11 @@ def render_section(eid, origin, mag, place, lanes, mode, depth,
                     transform=ax.transAxes, va="top", ha="left",
                     fontsize=10.5, fontweight="bold", color="#282572",
                     bbox=label_box, zorder=5)
-        # BOTTOM edge: distance
-        ax.text(0.006, 0.06, f"{round(dist)} km",
-                transform=ax.transAxes, va="bottom", ha="left",
-                fontsize=9.5, color="#555")
+        # TOP-RIGHT: distance, boxed so dashes and big wave packets can't
+        # make it hard to read (was bottom-left, colliding with the frame)
+        ax.text(0.994, 0.96, f"Distance: {round(dist)} km",
+                transform=ax.transAxes, va="top", ha="right",
+                fontsize=9.5, color="#555", bbox=label_box, zorder=5)
         # Predicted P & S arrivals (iasp91) — the classroom moment: P beats
         # S to every station, and both get later with distance.
         p_sec, s_sec = ps_arrivals(dist, depth)
