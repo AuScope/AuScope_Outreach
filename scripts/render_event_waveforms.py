@@ -28,7 +28,10 @@ Render-once: a manifest on the event-waveforms branch lists rendered event
 ids. Only new qualifying events are fetched; revisions are NOT chased; events
 that age past MAX_AGE_DAYS are pruned. Steady state does almost no work.
 
-Output (./out/):  <event_id>.png  +  manifest.json
+Output (./out/):  <event_id>.png  +  <event_id>.waves.json  +  manifest.json
+The .waves.json holds decimated per-station samples so the browser can offer
+real measurement (pick P and S, triangulate an epicentre, animate the
+wavefront) instead of only showing a picture.
 Published by .github/workflows/event_waveforms.yml to a flat, force-pushed
 `event-waveforms` branch.
 """
@@ -141,7 +144,7 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 7
+RENDER_VERSION = 8
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -493,6 +496,9 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
     render_section(eid, origin, mag, place, lanes, mode, depth,
                     len(recorded_codes), n_with_data,
                     os.path.join(OUT_DIR, f"{eid}.png"))
+    has_waves = write_waveform_json(eid, origin, mag, place, depth, ev_lat,
+                                    ev_lon, lanes, mode, sites,
+                                    os.path.join(OUT_DIR, f"{eid}.waves.json"))
     return {
         "event_id": eid,
         "origin": origin.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -503,6 +509,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         "depth": round(depth, 1) if depth is not None else None,
         "lat": round(ev_lat, 3),
         "lon": round(ev_lon, 3),
+        "waves": has_waves,
         "n_recorded": len(recorded_codes),
         "n_with_data": n_with_data,
         "recorded_codes": recorded_codes,
@@ -510,6 +517,73 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
                        "site": nm}
                      for c, d, ch, _, nm in lanes],
     }
+
+
+# Sample rate the browser exercises get. 10 Hz resolves an S-P reading to
+# 0.1 s (far finer than a student can click) and keeps a whole event under
+# the JSON small enough to gzip well on GitHub Pages. Teleseisms are
+# band-passed to 0.1 Hz anyway, so 1 Hz still gives ten samples per cycle.
+WAVE_HZ = {"local": 10.0, "tele": 1.0}
+
+
+def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
+                        lanes, mode, sites, out_path):
+    """Decimated per-station traces for the browser: arrival picking,
+    triangulation and network animation all read this one file."""
+    target_hz = WAVE_HZ.get(mode, 10.0)
+    o = UTCDateTime(origin)
+    stations = []
+    for code, dist, cha, tr, site in lanes:
+        try:
+            t = tr.copy()
+            factor = max(1, int(round(t.stats.sampling_rate / target_hz)))
+            if factor > 1:
+                t.decimate(factor, no_filter=False)   # anti-alias on the way down
+            data = t.data.astype(float)
+            if not len(data):
+                continue
+            # int16 with a per-station scale keeps the JSON small and lossless
+            # enough to read a pick from; units stay um/s via `scale`.
+            peak = float(max(abs(data.min()), abs(data.max()))) or 1.0
+            scale = peak / 32000.0
+            samples = [int(round(v / scale)) for v in data]
+            p_sec, s_sec = ps_arrivals(dist, depth)
+            lat, lon = sites.get(code, (None, None, None))[:2]
+            stations.append({
+                "code": code,
+                "site": site,
+                "lat": round(lat, 4) if lat is not None else None,
+                "lon": round(lon, 4) if lon is not None else None,
+                "dist_km": round(dist),
+                "channel": cha,
+                "hz": round(t.stats.sampling_rate, 4),
+                "t0": round(float(t.stats.starttime - o), 3),   # s from origin
+                "scale_um_s": scale,
+                "peak_um_s": round(peak, 4),
+                "p_s": round(p_sec, 2) if p_sec is not None else None,
+                "s_s": round(s_sec, 2) if s_sec is not None else None,
+                "samples": samples,
+            })
+        except Exception as exc:
+            print(f"  {eid}/{code}: waveform json skipped ({short(exc)})")
+    if not stations:
+        return False
+    doc = {
+        "event_id": eid,
+        "origin": origin.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "mag": mag,
+        "place": place,
+        "depth_km": round(depth, 1) if depth is not None else None,
+        "lat": round(ev_lat, 4),
+        "lon": round(ev_lon, 4),
+        "mode": mode,
+        "v": RENDER_VERSION,
+        "units": "um/s (multiply samples by scale_um_s)",
+        "stations": stations,
+    }
+    with open(out_path, "w") as fh:
+        json.dump(doc, fh, separators=(",", ":"))
+    return True
 
 
 def render_section(eid, origin, mag, place, lanes, mode, depth,
@@ -638,7 +712,9 @@ def main():
         if (eid in qualifying_ids
                 and meta.get("v") == RENDER_VERSION
                 and (meta.get("origin"), meta.get("depth")) == current.get(eid)
-                and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png"))):
+                and os.path.exists(os.path.join(OUT_DIR, f"{eid}.png"))
+                and (not meta.get("waves")
+                     or os.path.exists(os.path.join(OUT_DIR, f"{eid}.waves.json")))):
             kept[eid] = meta
     todo = [e for e in events if e[0] not in kept]
     print(f"{len(kept)} already rendered & still valid, {len(todo)} new to render")
