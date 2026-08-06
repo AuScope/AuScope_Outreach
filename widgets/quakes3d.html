@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <!--
   widgets/quakes3d.html[?mode=region|globe]
-  Earthquakes in 3D: 24 months of the same Geoscience-Australia-sourced store
-  the map uses, plotted at (longitude, latitude, -depth) so students can spin
-  the Earth and SEE where earthquakes live.
+  Earthquakes in 3D: the same Geoscience-Australia-sourced store the map uses,
+  plotted at (longitude, latitude, -depth) so students can see where
+  earthquakes actually live.
 
-    region : Australia and its neighbours as a tilting block. Australian
-             quakes sit in a shallow crustal skin; the Indonesian and
-             Tonga-Kermadec slabs dive away beneath the surface.
-    globe  : the whole planet. 24 months of seismicity draws the Ring of Fire
-             by itself — nobody has to be told where the plate edges are.
+    region : a flat (plate-carree) world you can tilt, with depth downward and
+             an adjustable depth stretch. Focus toggles between the whole
+             world and Australia + neighbours. Centred on the Pacific so the
+             Ring of Fire stays in one piece and the seam falls in the
+             Atlantic. This is the CROSS-SECTION view: slabs as slanting
+             sheets, Australia as a thin shallow skin.
+    globe  : a true sphere showing surface positions only, depth by colour.
+             An orthographic projection cannot show radial depth except at the
+             limb, so depth structure deliberately lives in the flat view.
 
   Rendered with plain canvas 2D — rotation matrices and an orthographic
   projection, ~150 lines of maths. Deliberately NOT WebGL/three.js: 700 KB of
@@ -88,7 +92,10 @@ canvas.dragging { cursor: grabbing; }
   <div class="stage">
     <div class="bar">
       <div class="seg" id="mode" role="group" aria-label="View">
-        <button type="button" data-m="region" class="active">Australia</button><button type="button" data-m="globe">Globe &mdash; Ring of Fire</button>
+        <button type="button" data-m="region" class="active">Flat map</button><button type="button" data-m="globe">Globe</button>
+      </div>
+      <div class="seg" id="focus" role="group" aria-label="Focus">
+        <button type="button" data-f="world" class="active">World</button><button type="button" data-f="au">Australia</button>
       </div>
       <div class="seg" id="preset" role="group" aria-label="Camera angle">
         <button type="button" data-p="top">Top</button><button type="button" data-p="tilt" class="active">Tilt</button><button type="button" data-p="side">Side</button>
@@ -178,19 +185,30 @@ function project(p) {
 }
 
 // Region mode: local flat-Earth kilometres around a centre, depth downward.
-const C_LON = 142, C_LAT = -20;
-const CLIP_LON = 62, CLIP_LAT = 52;   // ONE clip for quakes, land and plates
+// The flat map is a plate-carree (equirectangular) world in DEGREES, centred
+// on the Pacific so the Ring of Fire stays in one piece and the seam falls in
+// the quiet Atlantic. 'Focus' just narrows the same frame — no second
+// coordinate system, and no hard-coded clip that could empty a coastline.
+const FOCUS = {
+  world: { lon: 180, lat: 0,   clipLon: 999, clipLat: 999, label: 'World' },
+  au:    { lon: 142, lat: -20, clipLon: 62,  clipLat: 52,  label: 'Australia' },
+};
+let focus = 'world';
+const F = () => FOCUS[focus];
+const KM_PER_DEG = 111.19;
 let zShift = 0;   // half the visible depth extent — keeps the block centred
-function regionZ(depth) { return -(depth || 0) * vex + zShift; }
-function regionXYZ(lon, lat, depth) {
-  let dl = lon - C_LON;
-  if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
+// Depth is expressed in degrees so it shares the map's units; vex stretches it.
+function flatZ(depth) { return -((depth || 0) / KM_PER_DEG) * vex + zShift; }
+function flatDLon(lon) { return ((lon - F().lon + 540) % 360) - 180; }
+function flatXYZ(lon, lat, depth) {
   return {
-    x: dl * 111.32 * Math.cos(C_LAT * Math.PI / 180),
-    y: (lat - C_LAT) * 110.57,
-    z: regionZ(depth),
+    x: flatDLon(lon) * Math.cos(F().lat * Math.PI / 180),   // aspect correction
+    y: lat - F().lat,
+    z: flatZ(depth),
   };
 }
+// Keep the old names working for the surface grid/ticks
+const regionZ = flatZ, regionXYZ = flatXYZ;
 // Globe mode: a true sphere. Events are drawn ON the surface and depth is
 // shown by colour, not by radius: under an orthographic projection a deep
 // event facing the camera lands on exactly the same pixel as a shallow one,
@@ -201,7 +219,7 @@ function globeXYZ(lon, lat, depth) {
   const la = lat * Math.PI / 180, lo = lon * Math.PI / 180;
   return { x: r * Math.cos(la) * Math.sin(lo), y: -r * Math.cos(la) * Math.cos(lo), z: r * Math.sin(la) };
 }
-const toXYZ = (lon, lat, depth) => mode === 'globe' ? globeXYZ(lon, lat, depth) : regionXYZ(lon, lat, depth);
+const toXYZ = (lon, lat, depth) => mode === 'globe' ? globeXYZ(lon, lat, depth) : flatXYZ(lon, lat, depth);
 
 // ── Drawing ─────────────────────────────────────────────────
 function sizeCanvas() {
@@ -224,8 +242,8 @@ function draw() {
   const inView = quakes.filter(q => {
     if (q.t < cutoffT || q.mag < minMag) return false;
     if (mode === 'region') {
-      const dl = ((q.lon - C_LON + 540) % 360) - 180;
-      if (Math.abs(dl) > CLIP_LON || Math.abs(q.lat - C_LAT) > CLIP_LAT) return false;
+      if (Math.abs(flatDLon(q.lon)) > F().clipLon
+          || Math.abs(q.lat - F().lat) > F().clipLat) return false;
     }
     return true;
   });
@@ -233,10 +251,10 @@ function draw() {
   if (mode === 'region') {
     let maxDepth = 0;
     inView.forEach(q => { if (q.depth > maxDepth) maxDepth = q.depth; });
-    zShift = maxDepth * vex / 2;
-    fitH = 2200; fitZ = zShift;
+    zShift = (maxDepth / KM_PER_DEG) * vex / 2;
+    fitH = 20; fitZ = zShift;
     inView.forEach(q => {
-      const p = regionXYZ(q.lon, q.lat, q.depth);
+      const p = flatXYZ(q.lon, q.lat, q.depth);
       const rh = Math.hypot(p.x, p.y);
       if (rh > fitH) fitH = rh;
       if (Math.abs(p.z) > fitZ) fitZ = Math.abs(p.z);
@@ -273,16 +291,19 @@ function draw() {
   ctx.lineWidth = 1.2;
   ctx.strokeStyle = mode === 'globe' ? '#4d6ea8' : '#5b82c4';
   land.forEach(ring => {
-    let started = false;
+    let started = false, lastLon = null;
     ctx.beginPath();
     for (let i = 0; i < ring.length; i++) {
       const [lon, lat] = ring[i];
-      if (mode === 'region') {
-        const dl = ((lon - C_LON + 540) % 360) - 180;
-        if (Math.abs(dl) > CLIP_LON || Math.abs(lat - C_LAT) > CLIP_LAT) { started = false; continue; }
-      }
+      if (mode === 'region'
+          && (Math.abs(flatDLon(lon)) > F().clipLon
+              || Math.abs(lat - F().lat) > F().clipLat)) { started = false; continue; }
       const p = project(toXYZ(lon, lat, 0));
       if (mode === 'globe' && p.d < 0) { started = false; continue; }   // far side
+      if (mode !== 'globe' && lastLon !== null && Math.abs(flatDLon(lon) - lastLon) > 180) {
+        started = false;                            // wrapped across the seam
+      }
+      lastLon = mode === 'globe' ? null : flatDLon(lon);
       const sx = cx + p.x * scale, sy = cy - p.y * scale;
       if (!started) { ctx.moveTo(sx, sy); started = true; } else { ctx.lineTo(sx, sy); }
     }
@@ -295,16 +316,19 @@ function draw() {
     ctx.strokeStyle = 'rgba(250,204,21,.85)';
     ctx.lineWidth = 1.6;
     plates.forEach(line => {
-      let started = false;
+      let started = false, lastLon = null;
       ctx.beginPath();
       for (let i = 0; i < line.length; i++) {
         const [lon, lat] = line[i];
-        if (mode === 'region') {
-          const dl = ((lon - C_LON + 540) % 360) - 180;
-          if (Math.abs(dl) > CLIP_LON || Math.abs(lat - C_LAT) > CLIP_LAT) { started = false; continue; }
-        }
+        if (mode === 'region'
+            && (Math.abs(flatDLon(lon)) > F().clipLon
+                || Math.abs(lat - F().lat) > F().clipLat)) { started = false; continue; }
         const q = project(toXYZ(lon, lat, 0));
         if (mode === 'globe' && q.d < 0) { started = false; continue; }
+        if (mode !== 'globe' && lastLon !== null && Math.abs(flatDLon(lon) - lastLon) > 180) {
+          started = false;                          // wrapped across the seam
+        }
+        lastLon = mode === 'globe' ? null : flatDLon(lon);
         const sx = cx + q.x * scale, sy = cy - q.y * scale;
         if (!started) { ctx.moveTo(sx, sy); started = true; } else { ctx.lineTo(sx, sy); }
       }
@@ -315,7 +339,7 @@ function draw() {
   // Depth reference grid + surface plane (region only): gives the eye a floor
   if (mode === 'region') {
     ctx.strokeStyle = 'rgba(120,150,210,.30)'; ctx.lineWidth = 1;
-    const span = 4200;
+    const span = focus === 'world' ? 178 : 55;
     const corners = [[-span, -span], [span, -span], [span, span], [-span, span]].map(([x, y]) => {
       const p = project({ x, y, z: regionZ(0) });
       return [cx + p.x * scale, cy - p.y * scale];
@@ -489,6 +513,11 @@ function setPresetActive(p) {
   document.querySelectorAll('#preset button').forEach(b =>
     b.classList.toggle('active', b.dataset.p === p));
 }
+document.querySelectorAll('#focus button').forEach(b => b.addEventListener('click', () => {
+  focus = b.dataset.f;
+  document.querySelectorAll('#focus button').forEach(x => x.classList.toggle('active', x === b));
+  az = 0; zoom = 1; clearPick(); tale(); draw();
+}));
 document.querySelectorAll('#preset button').forEach(b => b.addEventListener('click', () => {
   el = b.dataset.p === 'top' ? Math.PI / 2 - 0.02 : b.dataset.p === 'side' ? 0.05 : 0.62;
   setPresetActive(b.dataset.p);
@@ -499,6 +528,7 @@ document.querySelectorAll('#mode button').forEach(b => b.addEventListener('click
   document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('active', x === b));
   document.getElementById('stationsctl').style.display = mode === 'region' ? '' : 'none';
   document.getElementById('vexctl').style.display = mode === 'region' ? '' : 'none';
+  document.getElementById('focus').style.display = mode === 'region' ? '' : 'none';
   // Sensible defaults per mode (depth scale applies to the Australia view only)
   if (mode === 'region') {
     vex = 6;
@@ -552,15 +582,25 @@ function bias() {
 }
 
 function tale() {
+  const worldTale =
+    '<b>What to look for:</b> this is the whole planet flattened out, with depth going downward. '
+    + 'Tilt to the <b>Side</b> view and turn the depth scale up: the earthquakes are not scattered '
+    + 'at random, they hang in <b>slanting sheets</b>. Each sheet is a slab of ocean floor sliding '
+    + 'down into the mantle, still breaking as it goes — which is why the dots get deeper (and change '
+    + 'colour) the further you follow them from the trench. The deepest, around <b>670 km</b> under '
+    + 'Fiji and Tonga, are the deepest earthquakes known anywhere. Tick <b>plate boundaries</b> to '
+    + 'check your reading, and switch focus to <b>Australia</b> to see how quiet our own plate is by '
+    + 'comparison. Depth is <b>stretched</b> — real slabs are far less steep than they look.';
   document.getElementById('tale').innerHTML = mode === 'region'
-    ? '<b>What to look for:</b> tilt to the <b>Side</b> view and turn the depth scale up. Australian '
+    ? (focus === 'world' ? worldTale
+    : '<b>What to look for:</b> tilt to the <b>Side</b> view and turn the depth scale up. Australian '
       + 'earthquakes sit in a thin red skin near the surface — our continent is one rigid old plate, so it '
       + 'only breaks in the shallow crust. To the north and east the dots plunge downward in slanting sheets: '
       + 'those are <b>subduction zones</b>, where one tectonic plate slides beneath another and keeps '
       + 'breaking as it goes. Colours run from red (shallow) to purple (deepest). Note the depth scale is '
       + '<b>stretched</b> (that is what the slider does) — real slabs are far less steep than they look here, '
       + 'because 600 km of depth is tiny next to 9,000 km of map. Tick <b>plate boundaries</b> to '
-      + 'check your reading: the yellow lines are where geologists say the plates meet.'
+      + 'check your reading: the yellow lines are where geologists say the plates meet.')
     : '<b>What to look for:</b> spin the globe. Nobody drew the plate boundaries — the earthquakes did. '
       + 'This is the <b>Ring of Fire</b>, the belt of subduction zones around the Pacific. Follow one arc '
       + 'and watch the colours change across it: red at the trench where the plates meet, then orange, '
@@ -604,8 +644,13 @@ Promise.all([
   bias();
   draw();
 }).catch(e => {
-  document.getElementById('sub').textContent = 'Could not load earthquake data — try again shortly.';
-  console.warn(e);
+  // Distinguish "the data never arrived" from "we failed to draw it" — the
+  // old shared catch blamed the feed for render bugs.
+  const drawFailed = quakes.length > 0;
+  document.getElementById('sub').textContent = drawFailed
+    ? 'Something went wrong drawing the view — please tell the AuSIS team.'
+    : 'Could not load earthquake data — try again shortly.';
+  console.error(e);
 });
 if (mode === 'globe') {
   document.querySelector('#mode button[data-m="globe"]').click();
