@@ -49,9 +49,11 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 canvas { display: block; width: 100%; background: #0b1020; cursor: grab; touch-action: none; }
 canvas.dragging { cursor: grabbing; }
 
-.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 9px 14px; border-top: 1px solid #f1f5f9; font-size: 11.5px; color: #6b7280; align-items: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 9px 14px; background: #0b1020; font-size: 11.5px; color: #c7d2e8; align-items: center; }
 .legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
-.legend .hint { margin-left: auto; color: #94a3b8; }
+.legend .hint { margin-left: auto; color: #8fa3c8; }
+.bias { display: none; padding: 8px 14px; background: #fef3c7; border-top: 1px solid #f59e0b; font-size: 11.5px; color: #92400e; line-height: 1.5; }
+.bias.on { display: block; }
 
 .info { position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s; background: rgba(255,255,255,.97); border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 12.5px; max-width: 290px; box-shadow: 0 3px 12px rgba(0,0,0,.25); }
 .info.on { opacity: 1; }
@@ -97,11 +99,11 @@ canvas.dragging { cursor: grabbing; }
           <option value="1">24 hours</option>
           <option value="7">7 days</option>
           <option value="30">30 days</option>
-          <option value="365">12 months</option>
-          <option value="730" selected>24 months</option>
+          <option value="90">3 months</option>
+          <option value="99999" selected>everything we have</option>
         </select>
       </label>
-      <label class="ctl">Magnitude &ge; <input type="range" id="minmag" min="0" max="7" step="0.5" value="0"><b id="minmagv">any</b></label>
+      <label class="ctl">Magnitude &ge; <input type="range" id="minmag" min="0" max="7" step="0.5" value="4.5"><b id="minmagv">4.5</b></label>
       <label class="ctl"><input type="checkbox" id="showplates"> plate boundaries</label>
       <label class="ctl" id="stationsctl"><input type="checkbox" id="showstations" checked> AuSIS</label>
     </div>
@@ -110,6 +112,7 @@ canvas.dragging { cursor: grabbing; }
       <div class="info" id="info"></div>
     </div>
     <div class="legend" id="legend"></div>
+    <div class="bias" id="bias"></div>
   </div>
 
   <div class="tale" id="tale"></div>
@@ -137,7 +140,8 @@ let az     = 0.0;      // azimuth: spin. In globe mode this IS the longitude fac
 let el     = 0.62;     // elevation above horizon: pi/2 = straight down
 let zoom   = 1;
 let vex    = 6;        // depth exaggeration
-let winDays = 730, minMag = 0, showStations = true;
+let winDays = 99999, minMag = 4.5, showStations = true;
+let coverageDays = null;   // measured from the data, never assumed
 
 let quakes = [], stations = [], land = [], plates = [];
 let showPlates = false;
@@ -175,13 +179,16 @@ function project(p) {
 
 // Region mode: local flat-Earth kilometres around a centre, depth downward.
 const C_LON = 142, C_LAT = -20;
+const CLIP_LON = 62, CLIP_LAT = 52;   // ONE clip for quakes, land and plates
+let zShift = 0;   // half the visible depth extent — keeps the block centred
+function regionZ(depth) { return -(depth || 0) * vex + zShift; }
 function regionXYZ(lon, lat, depth) {
   let dl = lon - C_LON;
   if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
   return {
     x: dl * 111.32 * Math.cos(C_LAT * Math.PI / 180),
     y: (lat - C_LAT) * 110.57,
-    z: -(depth || 0) * vex,
+    z: regionZ(depth),
   };
 }
 // Globe mode: a true sphere. Events are drawn ON the surface and depth is
@@ -200,7 +207,10 @@ const toXYZ = (lon, lat, depth) => mode === 'globe' ? globeXYZ(lon, lat, depth) 
 function sizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
   const w = cv.clientWidth;
-  const h = Math.max(440, Math.min(Math.round(window.innerHeight * 0.72), 900));
+  const small = window.innerWidth < 700;
+  const h = small
+    ? Math.max(300, Math.round(window.innerHeight * 0.52))
+    : Math.max(440, Math.min(Math.round(window.innerHeight * 0.72), 900));
   cv.style.height = h + 'px';
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -210,23 +220,45 @@ function sizeCanvas() {
 function draw() {
   const { w, h } = sizeCanvas();
   const cx = w / 2, cy = h / 2;
+  const nowT = Date.now(), cutoffT = nowT - winDays * 86400000;
+  const inView = quakes.filter(q => {
+    if (q.t < cutoffT || q.mag < minMag) return false;
+    if (mode === 'region') {
+      const dl = ((q.lon - C_LON + 540) % 360) - 180;
+      if (Math.abs(dl) > CLIP_LON || Math.abs(q.lat - C_LAT) > CLIP_LAT) return false;
+    }
+    return true;
+  });
+  let fitH = 1, fitZ = 0;          // half-extents: horizontal, vertical
+  if (mode === 'region') {
+    let maxDepth = 0;
+    inView.forEach(q => { if (q.depth > maxDepth) maxDepth = q.depth; });
+    zShift = maxDepth * vex / 2;
+    fitH = 2200; fitZ = zShift;
+    inView.forEach(q => {
+      const p = regionXYZ(q.lon, q.lat, q.depth);
+      const rh = Math.hypot(p.x, p.y);
+      if (rh > fitH) fitH = rh;
+      if (Math.abs(p.z) > fitZ) fitZ = Math.abs(p.z);
+    });
+  } else {
+    zShift = 0; fitH = 1.02; fitZ = 1.02;
+  }
   // Scale so the scene fills the canvas: region is ~5000 km across, globe r=1
-  const scale = (mode === 'globe' ? Math.min(w, h) * 0.40 : Math.min(w, h) / 8200) * zoom;
+  // Fit to the bounding sphere of what is visible, so raising the depth scale
+  // stretches the picture instead of pushing the deepest events off-canvas.
+  // Rotation-invariant, so the framing never jumps while you drag.
+  const needV = fitH * Math.abs(Math.sin(el)) + fitZ * Math.abs(Math.cos(el));
+  const scale = Math.min((w / 2) * 0.94 / fitH, (h / 2) * 0.94 / Math.max(needV, 1e-6)) * zoom;
 
   ctx.fillStyle = '#0b1020';
   ctx.fillRect(0, 0, w, h);
 
-  const now = Date.now(), cutoff = now - winDays * 86400000;
-  const visible = quakes.filter(q => {
-    if (q.t < cutoff || q.mag < minMag) return false;
-    if (mode === 'region') {
-      // Flat projection is only meaningful near the centre — beyond that a
-      // wrapped longitude would plot Chile next to Queensland.
-      const dl = ((q.lon - C_LON + 540) % 360) - 180;
-      if (Math.abs(dl) > 62 || Math.abs(q.lat - C_LAT) > 52) return false;
-    }
-    return true;
-  });
+  // Flat projection is only meaningful near the centre — beyond that a wrapped
+  // longitude would plot Chile next to Queensland, so region mode clips (and
+  // the coastline/plate layers use the SAME clip, never drawing land whose
+  // earthquakes have been removed).
+  const visible = inView;
 
   // Globe: faint sphere so "inside the Earth" reads as inside
   if (mode === 'globe') {
@@ -247,7 +279,7 @@ function draw() {
       const [lon, lat] = ring[i];
       if (mode === 'region') {
         const dl = ((lon - C_LON + 540) % 360) - 180;
-        if (Math.abs(dl) > 65 || Math.abs(lat - C_LAT) > 60) { started = false; continue; }
+        if (Math.abs(dl) > CLIP_LON || Math.abs(lat - C_LAT) > CLIP_LAT) { started = false; continue; }
       }
       const p = project(toXYZ(lon, lat, 0));
       if (mode === 'globe' && p.d < 0) { started = false; continue; }   // far side
@@ -269,7 +301,7 @@ function draw() {
         const [lon, lat] = line[i];
         if (mode === 'region') {
           const dl = ((lon - C_LON + 540) % 360) - 180;
-          if (Math.abs(dl) > 65 || Math.abs(lat - C_LAT) > 60) { started = false; continue; }
+          if (Math.abs(dl) > CLIP_LON || Math.abs(lat - C_LAT) > CLIP_LAT) { started = false; continue; }
         }
         const q = project(toXYZ(lon, lat, 0));
         if (mode === 'globe' && q.d < 0) { started = false; continue; }
@@ -285,7 +317,7 @@ function draw() {
     ctx.strokeStyle = 'rgba(120,150,210,.30)'; ctx.lineWidth = 1;
     const span = 4200;
     const corners = [[-span, -span], [span, -span], [span, span], [-span, span]].map(([x, y]) => {
-      const p = project({ x, y, z: 0 });
+      const p = project({ x, y, z: regionZ(0) });
       return [cx + p.x * scale, cy - p.y * scale];
     });
     ctx.beginPath();
@@ -293,9 +325,11 @@ function draw() {
     ctx.closePath(); ctx.stroke();
     // depth ticks at 200/400/600 km on the near corner
     ctx.fillStyle = 'rgba(160,185,235,.75)'; ctx.font = '10px Arial';
-    [200, 400, 600].forEach(dkm => {
-      const a = project({ x: -span, y: -span, z: 0 });
-      const b = project({ x: -span, y: -span, z: -dkm * vex });
+    const deepest = inView.reduce((m, q) => Math.max(m, q.depth), 0);
+    const ticks = deepest > 450 ? [200, 400, 600] : deepest > 150 ? [100, 200, 300] : [20, 50, 100];
+    ticks.filter(t => t <= Math.max(deepest, 60) * 1.15).forEach(dkm => {
+      const a = project({ x: -span, y: -span, z: regionZ(0) });
+      const b = project({ x: -span, y: -span, z: regionZ(dkm) });
       ctx.strokeStyle = 'rgba(120,150,210,.28)';
       ctx.beginPath();
       ctx.moveTo(cx + a.x * scale, cy - a.y * scale);
@@ -343,20 +377,29 @@ function draw() {
     pts.push({ q, sx, sy, r });
   });
 
+  // Report what is actually DRAWN, over the span we actually hold.
+  const span = winDays >= 99999
+    ? (coverageDays ? 'the last ' + coverageDays + ' days' : 'our whole catalogue')
+    : 'the last ' + (winDays === 1 ? '24 hours' : winDays + ' days');
   document.getElementById('sub').textContent =
-    visible.length + ' earthquakes' + (winDays >= 730 ? ' over 24 months' : ' in the last ' +
-      (winDays === 1 ? '24 hours' : winDays === 365 ? '12 months' : winDays + ' days')) +
-    ' · drag to rotate, scroll to zoom';
+    drawn.length + ' earthquakes in ' + span + ' · drag to rotate, scroll to zoom';
 }
 
 // ── Interaction ─────────────────────────────────────────────
-let dragging = false, lastX = 0, lastY = 0, moved = 0;
+let dragging = false, dragId = null, lastX = 0, lastY = 0, moved = 0, touchCount = 0;
 cv.addEventListener('pointerdown', e => {
-  dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
+  touchCount++;
+  if (touchCount > 1) {          // second finger down: this is a pinch, not a drag
+    dragging = false; dragId = null; cv.classList.remove('dragging');
+    return;
+  }
+  dragging = true; dragId = e.pointerId; moved = 0;
+  lastX = e.clientX; lastY = e.clientY;
   cv.classList.add('dragging'); cv.setPointerCapture(e.pointerId);
 });
 cv.addEventListener('pointermove', e => {
-  if (!dragging) { hover(e); return; }
+  if (!dragging) { if (touchCount === 0) hover(e); return; }
+  if (e.pointerId !== dragId) return;
   const dx = e.clientX - lastX, dy = e.clientY - lastY;
   moved += Math.abs(dx) + Math.abs(dy);
   lastX = e.clientX; lastY = e.clientY;
@@ -367,13 +410,21 @@ cv.addEventListener('pointermove', e => {
   draw();
 });
 cv.addEventListener('pointerup', e => {
-  dragging = false; cv.classList.remove('dragging');
+  touchCount = Math.max(0, touchCount - 1);
+  if (e.pointerId !== dragId) return;
+  dragging = false; dragId = null; cv.classList.remove('dragging');
   if (moved < 5) pick(e);           // a click, not a drag
 });
-cv.addEventListener('pointercancel', () => { dragging = false; cv.classList.remove('dragging'); });
+cv.addEventListener('pointercancel', e => {
+  touchCount = Math.max(0, touchCount - 1);
+  if (e.pointerId !== dragId) return;
+  dragging = false; dragId = null; cv.classList.remove('dragging');
+});
 cv.addEventListener('wheel', e => {
+  const next = Math.max(0.4, Math.min(6, zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12)));
+  if (next === zoom) return;        // pinned at a limit: let the page scroll on
   e.preventDefault();
-  zoom = Math.max(0.4, Math.min(6, zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12)));
+  zoom = next;
   draw();
 }, { passive: false });
 
@@ -398,10 +449,11 @@ cv.addEventListener('touchend', () => { pinch = null; });
 function nearest(e) {
   const rect = cv.getBoundingClientRect();
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  let best = null, bestD = 18;
+  let best = null, bestD = Infinity;
   for (const p of pts) {
     const d = Math.hypot(p.sx - mx, p.sy - my);
-    if (d < Math.max(bestD, p.r + 4) && d < bestD + p.r) { best = p; bestD = d; }
+    // Inside the dot, or within a finger-friendly halo of it
+    if (d <= Math.max(p.r + 6, 14) && d < bestD) { best = p; bestD = d; }
   }
   return best ? { hit: best, mx, my } : null;
 }
@@ -409,9 +461,11 @@ function hover(e) {
   const n = nearest(e);
   cv.style.cursor = n ? 'pointer' : 'grab';
 }
+function clearPick() { picked = null; infoEl.classList.remove('on'); }
+
 function pick(e) {
   const n = nearest(e);
-  if (!n) { picked = null; infoEl.classList.remove('on'); draw(); return; }
+  if (!n) { clearPick(); draw(); return; }
   const q = n.hit.q;
   picked = q;
   const when = new Date(q.t);
@@ -423,9 +477,10 @@ function pick(e) {
     + ' km deep</b> &middot; ' + when.getUTCDate() + ' ' + mo[when.getUTCMonth()] + ' ' + when.getUTCFullYear() + '</div>'
     + '<div class="d" style="margin-top:5px"><a style="pointer-events:auto;color:#2563eb" target="_blank" rel="noopener" href="'
     + MAP_URL + '#quake=' + encodeURIComponent(q.id) + '">See it on the map &rarr;</a></div>';
-  infoEl.style.left = Math.min(n.mx + 14, cv.clientWidth - 300) + 'px';
-  infoEl.style.top = Math.max(6, n.my - 10) + 'px';
   infoEl.classList.add('on');
+  const bw = infoEl.offsetWidth || 290, bh = infoEl.offsetHeight || 110;
+  infoEl.style.left = Math.max(6, Math.min(n.mx + 14, cv.clientWidth - bw - 6)) + 'px';
+  infoEl.style.top = Math.max(6, Math.min(n.my - 10, cv.clientHeight - bh - 6)) + 'px';
   draw();
 }
 
@@ -458,13 +513,13 @@ document.querySelectorAll('#mode button').forEach(b => b.addEventListener('click
   draw();
 }));
 document.getElementById('vex').addEventListener('input', function() {
-  vex = +this.value; document.getElementById('vexv').innerHTML = vex + '&times;'; draw();
+  vex = +this.value; document.getElementById('vexv').innerHTML = vex + '&times;'; clearPick(); draw();
 });
-document.getElementById('win').addEventListener('change', function() { winDays = +this.value; draw(); });
+document.getElementById('win').addEventListener('change', function() { winDays = +this.value; clearPick(); draw(); });
 document.getElementById('minmag').addEventListener('input', function() {
   minMag = +this.value;
   document.getElementById('minmagv').textContent = minMag === 0 ? 'any' : minMag.toFixed(1);
-  draw();
+  clearPick(); bias(); draw();
 });
 document.getElementById('showstations').addEventListener('change', function() {
   showStations = this.checked; draw();
@@ -472,12 +527,29 @@ document.getElementById('showstations').addEventListener('change', function() {
 document.getElementById('showplates').addEventListener('change', function() {
   showPlates = this.checked; draw();
 });
-window.addEventListener('resize', draw);
+window.addEventListener('resize', function() { clearPick(); draw(); });
 
 document.getElementById('legend').innerHTML =
   BANDS.map(b => '<span><span class="sw" style="background:' + b.c + '"></span>' + b.label + '</span>').join('')
   + '<span><span class="sw" style="background:#facc15;border-radius:0;height:3px;width:15px;vertical-align:3px"></span>plate boundary</span>'
   + '<span class="hint">circle size = magnitude &middot; click an earthquake for details</span>';
+
+// The GA feed keeps every Australian event but only M4.5+ elsewhere, so below
+// that threshold Australia looks busier than its neighbours — the opposite of
+// the truth. Say so, plainly, whenever the slider is under 4.5.
+function bias() {
+  const el = document.getElementById('bias');
+  if (minMag < 4.5) {
+    el.innerHTML = '<b>Careful comparing regions right now.</b> Our catalogue lists <i>every</i> '
+      + 'Australian earthquake, however small, but only magnitude 4.5 and above elsewhere. Below '
+      + 'M4.5 that makes Australia look busier than its neighbours &mdash; the reverse of reality. '
+      + 'Slide magnitude back to <b>4.5</b> for a fair comparison. (Catalogue completeness is a real '
+      + 'problem seismologists deal with every day.)';
+    el.classList.add('on');
+  } else {
+    el.classList.remove('on');
+  }
+}
 
 function tale() {
   document.getElementById('tale').innerHTML = mode === 'region'
@@ -501,11 +573,18 @@ function tale() {
 }
 
 // ── Load ────────────────────────────────────────────────────
+const jsonOr = (url, fallback) => fetch(url)
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + url); return r.json(); })
+  .catch(e => { console.warn(e); return fallback; });
+
+// Only the earthquakes are essential; coastline, stations and plates are
+// decoration and must never be able to blank the widget.
 Promise.all([
-  fetch('../data/earthquakes_24mo.geojson?v=' + hourStamp()).then(r => r.json()),
-  fetch('../assets/vendor/land_110m.json').then(r => r.json()),
-  fetch('../data/ausis_stations.geojson?v=' + hourStamp()).then(r => r.json()).catch(() => ({ features: [] })),
-  fetch('../assets/vendor/plates_pb2002.json').then(r => r.json()).catch(() => ({ lines: [] })),
+  fetch('../data/earthquakes_24mo.geojson?v=' + hourStamp())
+    .then(r => { if (!r.ok) throw new Error('earthquake data HTTP ' + r.status); return r.json(); }),
+  jsonOr('../assets/vendor/land_110m.json', { rings: [] }),
+  jsonOr('../data/ausis_stations.geojson?v=' + hourStamp(), { features: [] }),
+  jsonOr('../assets/vendor/plates_pb2002.json', { lines: [] }),
 ]).then(([qs, ld, st, pl]) => {
   land = ld.rings || [];
   plates = pl.lines || [];
@@ -515,9 +594,14 @@ Promise.all([
              mag: p.mag == null ? 0 : p.mag, place: p.place || 'Unknown location',
              t: Date.parse(p.time) };
   }).filter(q => q.id && !isNaN(q.t) && q.mag != null);
+  if (quakes.length) {
+    const ts = quakes.map(q => q.t);
+    coverageDays = Math.max(1, Math.round((Date.now() - Math.min(...ts)) / 86400000));
+  }
   stations = (st.features || []).filter(f => !f.properties.endTime)
     .map(f => ({ lon: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
   tale();
+  bias();
   draw();
 }).catch(e => {
   document.getElementById('sub').textContent = 'Could not load earthquake data — try again shortly.';
