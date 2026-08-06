@@ -119,7 +119,7 @@ function haversineKm(la1, lo1, la2, lo2) {
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-let ev = null, cur = 0, picks = {};       // picks[code] = {p, s}
+let ev = null, cur = 0, picks = {}, notice = '';   // picks[code] = {p, s}
 let kFactor = 8;                          // S-P seconds -> km
 let map = null, circleLayer = null, revealed = false;
 
@@ -139,7 +139,7 @@ function sizeTrace() {
   return { w, h };
 }
 const xOfT = (t, w) => ((t - tMin) / (tMax - tMin)) * w;
-const tOfX = (x, w) => tMin + (x / w) * (tMax - tMin);
+const tOfX = (x, w) => Math.min(tMax, Math.max(tMin, tMin + (x / w) * (tMax - tMin)));
 
 function drawTrace() {
   const st = station();
@@ -247,17 +247,22 @@ function updateReadout() {
   const st = station(), pk = picks[st.code] || {};
   const el = document.getElementById('readout');
   const have = pk.p != null && pk.s != null;
-  const sp = have ? Math.abs(pk.s - pk.p) : null;
+  const sp = have ? pk.s - pk.p : null;          // signed: S must follow P
   el.querySelector('#rP').textContent = pk.p == null ? '—' : pk.p.toFixed(1) + ' s';
   el.querySelector('#rS').textContent = pk.s == null ? '—' : pk.s.toFixed(1) + ' s';
-  el.querySelector('#rSP').textContent = have ? sp.toFixed(1) + ' s' : '—';
-  el.querySelector('#rD').textContent = have ? Math.round(sp * kFactor) + ' km' : '—';
-  el.querySelector('#checkBtn').disabled = !have;
+  const ok = have && sp > 0;
+  el.querySelector('#rSP').textContent = !have ? '—'
+    : ok ? sp.toFixed(1) + ' s' : 'S is before P';
+  el.querySelector('#rD').textContent = ok ? Math.round(sp * kFactor) + ' km' : '—';
+  el.querySelector('#checkBtn').disabled = !ok;
+  const warn = document.getElementById('order');
+  if (warn) warn.style.display = (have && !ok) ? '' : 'none';
 }
 
 function check() {
   const st = station(), pk = picks[st.code];
-  const sp = Math.abs(pk.s - pk.p);
+  const sp = pk.s - pk.p;
+  if (!(sp > 0)) return;
   const est = sp * kFactor, real = st.dist_km;
   const errPct = Math.abs(est - real) / real * 100;
   const v = document.getElementById('verdict');
@@ -290,7 +295,7 @@ function renderStationBar() {
     document.getElementById('verdict').className = 'verdict';
     setWindowForStation(); renderStationBar(); drawTrace(); updateReadout();
   }));
-  const n = ev.stations.filter(s => { const p = picks[s.code] || {}; return p.p != null && p.s != null; }).length;
+  const n = ev.stations.filter(s => { const p = picks[s.code] || {}; return p.p != null && p.s != null && p.s > p.p; }).length;
   const btn = document.getElementById('locateBtn');
   if (btn) {
     btn.disabled = n < 3;
@@ -305,7 +310,7 @@ function setWindowForStation() {
 }
 
 // ── Stage 2: triangulation ──────────────────────────────────
-function locate() {
+function locate(keepView) {
   document.getElementById('mapcard').style.display = '';
   if (!map) {
     map = L.map('map', { center: [-27, 134], zoom: 4 });
@@ -319,8 +324,9 @@ function locate() {
   const used = [];
   ev.stations.forEach(s => {
     const pk = picks[s.code] || {};
-    if (pk.p == null || pk.s == null || s.lat == null) return;
-    const km = Math.abs(pk.s - pk.p) * kFactor;
+    if (pk.p == null || pk.s == null || s.lat == null || pk.s <= pk.p) return;
+    const km = (pk.s - pk.p) * kFactor;
+    if (!(km > 0)) return;
     used.push({ s, km });
     L.circle([s.lat, s.lon], { radius: km * 1000, color: '#2563eb', weight: 2,
       fillOpacity: .05 }).addTo(circleLayer);
@@ -329,7 +335,7 @@ function locate() {
         + 'fill="#000" stroke="#22c55e" stroke-width="2" stroke-linejoin="round"/></svg>' }) })
       .bindTooltip(s.site || s.code, { direction: 'top' }).addTo(circleLayer);
   });
-  if (used.length) {
+  if (used.length && !keepView) {
     const target = L.latLngBounds(used.map(u => [u.s.lat, u.s.lon])).pad(0.6);
     const fit = () => { map.invalidateSize(); map.fitBounds(target); };
     fit();
@@ -356,18 +362,23 @@ function revealEpicentre() {
     .addTo(circleLayer);
   // How close was the best crossing? Use the circle-residual at the true spot.
   let worst = 0, n = 0;
+  const used_pts = [];
   ev.stations.forEach(s => {
     const pk = picks[s.code] || {};
-    if (pk.p == null || pk.s == null || s.lat == null) return;
-    const est = Math.abs(pk.s - pk.p) * kFactor;
+    if (pk.p == null || pk.s == null || s.lat == null || pk.s <= pk.p) return;
+    const est = (pk.s - pk.p) * kFactor;
     const real = haversineKm(s.lat, s.lon, ev.lat, ev.lon);
     worst = Math.max(worst, Math.abs(est - real)); n++;
+    used_pts.push([s.lat, s.lon]);
   });
   document.getElementById('locateNote').innerHTML =
     '<b>The red dot is where Geoscience Australia put it.</b> Across your ' + n + ' schools, your '
     + 'circles were out by at most <b>' + Math.round(worst) + ' km</b>. Seismologists do exactly this, '
     + 'with more stations and a better Earth model &mdash; and they still get a range, not a point.';
-  map.setView([ev.lat, ev.lon], map.getZoom());
+  // Fit the schools AND the answer, rather than recentring on the answer and
+  // pushing the students' own circles off screen.
+  const all = used_pts.concat([[ev.lat, ev.lon]]);
+  map.fitBounds(L.latLngBounds(all).pad(0.25));
 }
 
 // ── Build the page ──────────────────────────────────────────
@@ -377,7 +388,9 @@ function build() {
   document.getElementById('sub').textContent =
     'M' + Number(ev.mag).toFixed(1) + ' · ' + ev.place + ' · ' + fmtWhen(when);
 
-  document.getElementById('body').innerHTML = `
+  document.getElementById('body').innerHTML = (notice
+      ? '<div class="card"><div class="verdict on ok" style="border:none">' + notice + '</div></div>'
+      : '') + `
     <div class="card">
       <h2>Step 1 — read the waves</h2>
       <div class="lead">Pick a school, then <b>drag the blue P marker</b> to where the trace first
@@ -393,6 +406,8 @@ function build() {
         <span class="vel">&times; <input id="kf" type="number" min="4" max="12" step="0.1" value="8"> km/s
           = <span class="val" id="rD">—</span></span>
         <button id="checkBtn" type="button" disabled>Check this school</button>
+        <span id="order" style="display:none;color:#b91c1c;font-size:12px">
+          The S wave always arrives <b>after</b> the P wave &mdash; drag the red marker to the right of the blue one.</span>
       </div>
       <div class="verdict" id="verdict"></div>
     </div>
@@ -430,7 +445,11 @@ function build() {
   document.getElementById('locateBtn').addEventListener('click', locate);
   document.getElementById('revealBtn').addEventListener('click', revealEpicentre);
   document.getElementById('kf').addEventListener('input', function () {
-    kFactor = Math.max(1, +this.value || 8); updateReadout();
+    const v = parseFloat(this.value);
+    kFactor = (isFinite(v) && v > 0) ? Math.min(20, v) : 8;
+    updateReadout();
+    // The teacher notes promise the circles move with this number — honour it.
+    if (document.getElementById('mapcard').style.display !== 'none') locate(true);
   });
   setWindowForStation(); renderStationBar(); drawTrace(); updateReadout();
 }
@@ -442,8 +461,20 @@ function build() {
     const man = await (await fetch(RAW + 'manifest.json?v=' + hourStamp())).json();
     const withWaves = (man.events || []).filter(e => e.waves)
       .sort((a, b) => Date.parse(b.origin) - Date.parse(a.origin));
-    if (!withWaves.length) throw new Error('no events with waveform data yet');
-    const pick = withWaves.find(e => e.event_id === id) || withWaves[0];
+    // The S-P ruler is a REGIONAL method: multiplying by ~8 km/s only holds
+    // while P and S travel roughly straight through the crust. For a
+    // teleseism they dive through the mantle and the rule is simply wrong, so
+    // this exercise offers local events only.
+    const usable = withWaves.filter(e => e.mode !== 'tele');
+    if (!usable.length) throw new Error(
+      'no nearby earthquakes with waveform data in the last 30 days — this exercise needs one '
+      + 'close enough for the S-P method to work');
+    const asked = id ? withWaves.find(e => e.event_id === id) : null;
+    const pick = (asked && asked.mode !== 'tele') ? asked : usable[0];
+    if (id && !asked) notice = 'That earthquake is not in the current 30-day list, so here is the most recent one instead.';
+    else if (asked && asked.mode === 'tele') notice =
+      'That was a distant earthquake, where the S&minus;P ruler does not work (the waves travel down '
+      + 'through the mantle, not straight across). Showing the most recent nearby earthquake instead.';
     const r = await fetch(RAW + encodeURIComponent(pick.event_id) + '.waves.json?v=' + hourStamp());
     if (!r.ok) throw new Error('waveform data HTTP ' + r.status);
     ev = await r.json();

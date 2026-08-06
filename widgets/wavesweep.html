@@ -145,7 +145,9 @@ function drawRef() {
 
 function tick(now) {
   if (playing) {
-    const dt = lastFrame ? (now - lastFrame) / 1000 : 0;
+    // Clamp the frame delta: a backgrounded tab stops firing rAF, and without
+    // this the banked wall-clock time jumps the replay to the end.
+    const dt = lastFrame ? Math.min((now - lastFrame) / 1000, 0.25) : 0;
     lastFrame = now;
     t += dt * speed;
     if (t >= tEnd) { t = tEnd; setPlaying(false); }
@@ -172,7 +174,7 @@ function build() {
         <span><span class="dot" style="background:#ef4444"></span>ground moving up</span>
         <span><span class="dot" style="background:#3b82f6"></span>ground moving down</span>
         <span><span class="dot" style="background:#64748b;opacity:.4"></span>quiet / no data yet</span>
-        <span style="margin-left:auto">bigger circle = stronger shaking at that school</span>
+        <span style="margin-left:auto">bigger circle = strong <i>for that school</i> — each is scaled to its own peak</span>
       </div>
       <div class="bar">
         <button id="playBtn" type="button">▶ Play</button>
@@ -201,6 +203,7 @@ function build() {
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
     { opacity: .55 }).addTo(map);
 
+  let isNear = true;
   marks = anim.filter(s => s.lat != null).map(st => ({
     st,
     m: L.circleMarker([st.lat, st.lon], { radius: 5, color: '#fff', weight: 1,
@@ -222,6 +225,7 @@ function build() {
     const span = Math.max(b.getNorth() - b.getSouth(), b.getEast() - b.getWest()) || 10;
     const near = Math.abs(ev.lat - b.getCenter().lat) < span
               && Math.abs(ev.lon - b.getCenter().lng) < span;
+    isNear = near;
     const target = (near ? b.extend([ev.lat, ev.lon]) : b).pad(0.12);
     const fit = () => { map.invalidateSize(); map.fitBounds(target); };
     fit();
@@ -247,18 +251,31 @@ function build() {
   }
 
   // Reference trace = the station that recorded the strongest signal soonest
-  refSta = anim.slice().sort((a, b) => a.t0 - b.t0)[0];
+  // Prefer the nearest of the drawn lanes — those are the traces the emitter
+  // already vetted as clean. Sorting anim by t0 picked alphabetically (every
+  // t0 is identical) and usually landed on the farthest station in the file.
+  const laneCodes = (ev.stations || []).slice()
+    .sort((a, b) => a.dist_km - b.dist_km).map(x => x.code);
+  refSta = laneCodes.map(c => anim.find(a => a.code === c)).find(Boolean) || anim[0];
   refCv = document.getElementById('ref'); refCtx = refCv.getContext('2d');
+  const refName = refSta
+    ? ((ev.stations.find(x => x.code === refSta.code) || {}).site || refSta.code) : '';
   document.getElementById('reflabel').textContent =
-    'One school’s trace for reference (' + (refSta ? refSta.code : '') + ') — the yellow line is "now"';
+    'One school’s trace for reference (' + refName + ') — the yellow line is “now”';
 
-  document.getElementById('lead').innerHTML =
-    '<b>What to look for:</b> press play. The circles are AuSIS schools, and each one flashes with the '
-    + 'ground motion its own seismometer actually recorded. Nothing here is simulated. Watch the '
-    + 'shaking start near the yellow marker and <b>spread outwards</b> — that is a real wave travelling '
-    + 'through the Earth at a few kilometres per second, arriving at each school in turn. Every school '
-    + 'is scaled to its own strongest wiggle, so the colour tells you <i>when</i> a school shook, not '
-    + 'how hard it shook compared with its neighbours.';
+  const common = ' Every school is scaled to <b>its own</b> strongest wiggle, so colour and size tell '
+    + 'you <i>when</i> a school shook — not how hard it shook compared with its neighbours. For real '
+    + 'relative amplitudes use the record section.';
+  document.getElementById('lead').innerHTML = isNear
+    ? '<b>What to look for:</b> press play. The circles are AuSIS schools, and each flashes with the '
+      + 'ground motion its own seismometer actually recorded — nothing here is simulated. Watch the '
+      + 'shaking start near the yellow marker and <b>spread outwards</b>: that is a real wave crossing '
+      + 'the country at a few kilometres per second, reaching each school in turn.' + common
+    : '<b>What to look for:</b> press play. This earthquake happened far outside this view, so the '
+      + 'waves do not spread from a point on screen — they arrive <b>from one side</b>, sweeping across '
+      + 'the country. Watch which schools light up first and which are last: the order tells you which '
+      + 'direction the waves came from. Every school here is thousands of kilometres from the source, '
+      + 'yet all of them felt it.' + common;
 
   document.getElementById('playBtn').addEventListener('click', () => {
     if (t >= tEnd) t = tStart;
