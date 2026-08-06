@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!--
+  widgets/locate.html?id=<event_id>[&level=junior|middle|senior]
+  "Find the earthquake" — the measurement exercise, done on real samples from
+  the students' own school seismometers.
+
+    Stage 1  Pick the P and S arrivals on a station's trace by dragging two
+             markers. The page reads off S-P and converts it to a distance.
+    Stage 2  With three or more stations picked, draw a circle of that radius
+             around each school. Where they cross is the students' epicentre.
+             Then reveal Geoscience Australia's answer and the error in km.
+
+  Reads <event_id>.waves.json from the event-waveforms branch (decimated
+  samples written by scripts/render_event_waveforms.py). Everything is
+  client-side and self-marking: there is no teacher marking channel, and one
+  part-time maintainer cannot be one.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find the earthquake — AuSIS</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
+.wrap { max-width: min(1180px, 97vw); margin: 0 auto; padding: 12px; }
+.hubback { display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; margin-bottom: 8px; }
+.hubback:hover { text-decoration: underline; }
+.head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; }
+.head img.ausis { height: 46px; } .head img.partner { height: 34px; }
+.head h1 { font-size: 19px; color: #282572; }
+.head .sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 12px; overflow: hidden; }
+.card h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #282572; padding: 11px 14px 4px; }
+.card .lead { padding: 0 14px 10px; font-size: 13px; line-height: 1.55; color: #4b5563; }
+.card .lead b { color: #282572; }
+
+.stationbar { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px 10px; }
+.stationbar button {
+  font-family: inherit; font-size: 12px; padding: 6px 11px; cursor: pointer;
+  background: #fff; color: #282572; border: 1px solid #cbd5e1; border-radius: 6px;
+}
+.stationbar button:hover { background: #f1f5f9; }
+.stationbar button.active { background: #282572; color: #fff; border-color: #282572; }
+.stationbar button .tick { color: #16a34a; font-weight: 700; }
+.stationbar button.active .tick { color: #86efac; }
+
+canvas#trace { display: block; width: 100%; background: #0b1020; touch-action: none; cursor: crosshair; }
+.readout { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; padding: 10px 14px; font-size: 13px; border-top: 1px solid #f1f5f9; }
+.readout .val { font-family: monospace; font-weight: 700; color: #282572; }
+.readout .pill { padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; color: #fff; }
+.readout .pill.p { background: #2563eb; } .readout .pill.s { background: #dc2626; }
+.readout button, .actions button {
+  font-family: inherit; font-size: 13px; padding: 7px 15px; cursor: pointer;
+  background: #282572; color: #fff; border: none; border-radius: 6px;
+}
+.readout button.ghost, .actions button.ghost { background: #fff; color: #282572; border: 1px solid #cbd5e1; }
+.readout button:disabled { background: #cbd5e1; cursor: not-allowed; }
+.vel { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6b7280; }
+.vel input { width: 62px; font-family: monospace; font-size: 12px; padding: 3px 5px; border: 1px solid #cbd5e1; border-radius: 5px; }
+
+.verdict { display: none; padding: 10px 14px; font-size: 13px; line-height: 1.55; border-top: 1px solid #f1f5f9; }
+.verdict.on { display: block; }
+.verdict.good { background: #dcfce7; color: #166534; }
+.verdict.ok   { background: #fef3c7; color: #92400e; }
+.verdict.off  { background: #fee2e2; color: #991b1b; }
+
+#map { height: clamp(360px, 52vh, 620px); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid #f1f5f9; font-size: 13px; }
+.muted { color: #94a3b8; font-size: 12px; }
+.notes { margin-top: 12px; font-size: 11.5px; color: #94a3b8; line-height: 1.55; padding: 0 4px 10px; }
+.err { padding: 26px 14px; text-align: center; color: #b45309; font-size: 14px; }
+@media (min-width: 1400px) { .head h1 { font-size: 23px; } .card .lead, .readout, .actions { font-size: 15px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="hubback" href="../teachers/">&larr; AuSIS Teacher Hub</a>
+  <div class="head">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <div>
+      <h1>Find the earthquake</h1>
+      <div class="sub" id="sub">Loading&hellip;</div>
+    </div>
+    <div style="flex:1"></div>
+    <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
+  </div>
+
+  <div id="body"><div class="card"><div class="err">Loading the earthquake&hellip;</div></div></div>
+
+  <div class="notes" id="notes"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const RAW = 'https://raw.githubusercontent.com/AuScope/AuScope_Outreach/event-waveforms/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+const params = new URLSearchParams(location.search);
+const P_CLR = '#2563eb', S_CLR = '#dc2626';
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function fmtWhen(d) {
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getUTCDate() + ' ' + mo[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ', '
+    + String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0') + ' UTC';
+}
+function haversineKm(la1, lo1, la2, lo2) {
+  const R = 6371, r = Math.PI / 180;
+  const dLa = (la2-la1)*r, dLo = (lo2-lo1)*r;
+  const a = Math.sin(dLa/2)**2 + Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+let ev = null, cur = 0, picks = {};       // picks[code] = {p, s}
+let kFactor = 8;                          // S-P seconds -> km
+let map = null, circleLayer = null, revealed = false;
+
+// ── Trace drawing ───────────────────────────────────────────
+let cv, ctx, tMin = 0, tMax = 1;          // seconds from origin, view window
+
+function station() { return ev.stations[cur]; }
+function tOf(i, st) { return st.t0 + i / st.hz; }
+
+function sizeTrace() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth;
+  const h = Math.max(200, Math.min(Math.round(window.innerHeight * 0.34), 340));
+  cv.style.height = h + 'px';
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w, h };
+}
+const xOfT = (t, w) => ((t - tMin) / (tMax - tMin)) * w;
+const tOfX = (x, w) => tMin + (x / w) * (tMax - tMin);
+
+function drawTrace() {
+  const st = station();
+  const { w, h } = sizeTrace();
+  ctx.fillStyle = '#0b1020'; ctx.fillRect(0, 0, w, h);
+
+  // time grid every 10/30/60 s depending on span
+  const span = tMax - tMin;
+  const step = span > 1200 ? 300 : span > 400 ? 60 : span > 120 ? 30 : 10;
+  ctx.strokeStyle = 'rgba(120,150,210,.22)'; ctx.lineWidth = 1;
+  ctx.fillStyle = '#8fa3c8'; ctx.font = '10px Arial';
+  for (let t = Math.ceil(tMin / step) * step; t < tMax; t += step) {
+    const x = xOfT(t, w);
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h - 14); ctx.stroke();
+    ctx.fillText(t + ' s', x + 3, h - 3);
+  }
+
+  // origin time (t = 0) — the moment the earthquake happened
+  if (tMin < 0 && tMax > 0) {
+    const x = xOfT(0, w);
+    ctx.strokeStyle = '#b91c1c'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h - 14); ctx.stroke();
+    ctx.fillStyle = '#fca5a5'; ctx.fillText('earthquake', x + 4, 12);
+  }
+
+  // the trace itself
+  const mid = (h - 14) / 2, amp = (h - 14) * 0.42;
+  let peak = 1;
+  for (let i = 0; i < st.samples.length; i++) {
+    const t = tOf(i, st);
+    if (t < tMin || t > tMax) continue;
+    const v = Math.abs(st.samples[i]); if (v > peak) peak = v;
+  }
+  ctx.strokeStyle = '#a5b4fc'; ctx.lineWidth = 1; ctx.beginPath();
+  let started = false;
+  for (let i = 0; i < st.samples.length; i++) {
+    const t = tOf(i, st);
+    if (t < tMin || t > tMax) continue;
+    const x = xOfT(t, w), y = mid - (st.samples[i] / peak) * amp;
+    if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+  }
+  ctx.stroke();
+
+  // the student's markers
+  const pk = picks[st.code] || {};
+  [['p', pk.p, P_CLR, 'P'], ['s', pk.s, S_CLR, 'S']].forEach(([key, t, clr, label]) => {
+    if (t == null) return;
+    const x = xOfT(t, w);
+    ctx.strokeStyle = clr; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h - 14); ctx.stroke();
+    ctx.fillStyle = clr;
+    ctx.beginPath(); ctx.arc(x, 13, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+    ctx.fillText(label, x, 17); ctx.textAlign = 'left';
+  });
+
+  // the answer, once revealed
+  if (revealed) {
+    [[st.p_s, P_CLR], [st.s_s, S_CLR]].forEach(([t, clr]) => {
+      if (t == null || t < tMin || t > tMax) return;
+      const x = xOfT(t, w);
+      ctx.strokeStyle = clr; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h - 14); ctx.stroke();
+      ctx.setLineDash([]);
+    });
+  }
+}
+
+// ── Picking interaction ─────────────────────────────────────
+let dragKey = null;
+function nearestMarker(t) {
+  const pk = picks[station().code] || {};
+  const tol = (tMax - tMin) * 0.03;
+  let best = null, bd = tol;
+  [['p', pk.p], ['s', pk.s]].forEach(([k, v]) => {
+    if (v == null) return;
+    const d = Math.abs(v - t); if (d < bd) { best = k; bd = d; }
+  });
+  return best;
+}
+function setupTrace() {
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect();
+    const t = tOfX(e.clientX - r.left, cv.clientWidth);
+    const pk = picks[station().code] = picks[station().code] || {};
+    dragKey = nearestMarker(t) || (pk.p == null ? 'p' : pk.s == null ? 's' : nearestMarker(t));
+    if (!dragKey) return;
+    pk[dragKey] = t;
+    cv.setPointerCapture(e.pointerId);
+    drawTrace(); updateReadout();
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!dragKey) return;
+    const r = cv.getBoundingClientRect();
+    picks[station().code][dragKey] = tOfX(e.clientX - r.left, cv.clientWidth);
+    drawTrace(); updateReadout();
+  });
+  ['pointerup', 'pointercancel'].forEach(t =>
+    cv.addEventListener(t, () => { dragKey = null; renderStationBar(); }));
+  window.addEventListener('resize', () => { drawTrace(); });
+}
+
+// ── Readout + verdict ───────────────────────────────────────
+function updateReadout() {
+  const st = station(), pk = picks[st.code] || {};
+  const el = document.getElementById('readout');
+  const have = pk.p != null && pk.s != null;
+  const sp = have ? Math.abs(pk.s - pk.p) : null;
+  el.querySelector('#rP').textContent = pk.p == null ? '—' : pk.p.toFixed(1) + ' s';
+  el.querySelector('#rS').textContent = pk.s == null ? '—' : pk.s.toFixed(1) + ' s';
+  el.querySelector('#rSP').textContent = have ? sp.toFixed(1) + ' s' : '—';
+  el.querySelector('#rD').textContent = have ? Math.round(sp * kFactor) + ' km' : '—';
+  el.querySelector('#checkBtn').disabled = !have;
+}
+
+function check() {
+  const st = station(), pk = picks[st.code];
+  const sp = Math.abs(pk.s - pk.p);
+  const est = sp * kFactor, real = st.dist_km;
+  const errPct = Math.abs(est - real) / real * 100;
+  const v = document.getElementById('verdict');
+  v.className = 'verdict on ' + (errPct < 15 ? 'good' : errPct < 35 ? 'ok' : 'off');
+  v.innerHTML = '<b>Your estimate: ' + Math.round(est) + ' km.</b> '
+    + esc(st.site || st.code) + ' is really <b>' + real + ' km</b> from this earthquake — '
+    + (errPct < 15 ? 'that is a very good pick, within ' : errPct < 35 ? 'not bad, within ' : 'out by ')
+    + Math.round(errPct) + '%. '
+    + (st.p_s != null
+        ? 'The dashed lines now show where the P and S waves were predicted to arrive ('
+          + st.p_s.toFixed(1) + ' s and ' + st.s_s.toFixed(1) + ' s), so you can see how close your '
+          + 'reading was.'
+        : '');
+  revealed = true;
+  drawTrace();
+}
+
+// ── Station bar ─────────────────────────────────────────────
+function renderStationBar() {
+  const bar = document.getElementById('stationbar');
+  bar.innerHTML = ev.stations.map((s, i) => {
+    const pk = picks[s.code] || {};
+    const done = pk.p != null && pk.s != null;
+    return '<button type="button" data-i="' + i + '"' + (i === cur ? ' class="active"' : '') + '>'
+      + (done ? '<span class="tick">&#10003;</span> ' : '')
+      + esc(s.site || s.code) + ' <span class="muted">' + s.dist_km + ' km</span></button>';
+  }).join('');
+  bar.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    cur = +b.dataset.i; revealed = false;
+    document.getElementById('verdict').className = 'verdict';
+    setWindowForStation(); renderStationBar(); drawTrace(); updateReadout();
+  }));
+  const n = ev.stations.filter(s => { const p = picks[s.code] || {}; return p.p != null && p.s != null; }).length;
+  const btn = document.getElementById('locateBtn');
+  if (btn) {
+    btn.disabled = n < 3;
+    btn.textContent = n < 3 ? 'Pick ' + (3 - n) + ' more school' + (3 - n > 1 ? 's' : '') + ' to locate it'
+                            : 'Draw the circles and locate it';
+  }
+}
+function setWindowForStation() {
+  const st = station();
+  const last = st.t0 + st.samples.length / st.hz;
+  tMin = st.t0; tMax = last;
+}
+
+// ── Stage 2: triangulation ──────────────────────────────────
+function locate() {
+  document.getElementById('mapcard').style.display = '';
+  if (!map) {
+    map = L.map('map', { center: [-27, 134], zoom: 4 });
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      { attribution: 'Tiles &copy; Esri', opacity: .85 }).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+      { opacity: .6 }).addTo(map);
+    circleLayer = L.layerGroup().addTo(map);
+  }
+  circleLayer.clearLayers();
+  const used = [];
+  ev.stations.forEach(s => {
+    const pk = picks[s.code] || {};
+    if (pk.p == null || pk.s == null || s.lat == null) return;
+    const km = Math.abs(pk.s - pk.p) * kFactor;
+    used.push({ s, km });
+    L.circle([s.lat, s.lon], { radius: km * 1000, color: '#2563eb', weight: 2,
+      fillOpacity: .05 }).addTo(circleLayer);
+    L.marker([s.lat, s.lon], { icon: L.divIcon({ className: '', iconSize: [16, 16],
+      html: '<svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,2 14,14 2,14" '
+        + 'fill="#000" stroke="#22c55e" stroke-width="2" stroke-linejoin="round"/></svg>' }) })
+      .bindTooltip(s.site || s.code, { direction: 'top' }).addTo(circleLayer);
+  });
+  if (used.length) {
+    map.fitBounds(L.latLngBounds(used.map(u => [u.s.lat, u.s.lon])).pad(0.6));
+  }
+  document.getElementById('locateNote').innerHTML =
+    'Each circle says "the earthquake was <i>this far</i> from this school". Where they cross is your '
+    + 'epicentre. They will not meet at a perfect point — real readings never do.';
+  document.getElementById('revealBtn').style.display = '';
+}
+
+function revealEpicentre() {
+  L.marker([ev.lat, ev.lon], { icon: L.divIcon({ className: '', iconSize: [22, 22],
+    html: '<div style="width:18px;height:18px;border-radius:50%;background:#b91c1c;'
+      + 'border:3px solid #fff;box-shadow:0 0 6px rgba(0,0,0,.6)"></div>' }) })
+    .bindTooltip('Geoscience Australia: M' + Number(ev.mag).toFixed(1) + ' here', { permanent: false })
+    .addTo(circleLayer);
+  // How close was the best crossing? Use the circle-residual at the true spot.
+  let worst = 0, n = 0;
+  ev.stations.forEach(s => {
+    const pk = picks[s.code] || {};
+    if (pk.p == null || pk.s == null || s.lat == null) return;
+    const est = Math.abs(pk.s - pk.p) * kFactor;
+    const real = haversineKm(s.lat, s.lon, ev.lat, ev.lon);
+    worst = Math.max(worst, Math.abs(est - real)); n++;
+  });
+  document.getElementById('locateNote').innerHTML =
+    '<b>The red dot is where Geoscience Australia put it.</b> Across your ' + n + ' schools, your '
+    + 'circles were out by at most <b>' + Math.round(worst) + ' km</b>. Seismologists do exactly this, '
+    + 'with more stations and a better Earth model &mdash; and they still get a range, not a point.';
+  map.setView([ev.lat, ev.lon], map.getZoom());
+}
+
+// ── Build the page ──────────────────────────────────────────
+function build() {
+  const when = new Date(ev.origin);
+  document.title = 'Find the earthquake — M' + Number(ev.mag).toFixed(1) + ' ' + ev.place;
+  document.getElementById('sub').textContent =
+    'M' + Number(ev.mag).toFixed(1) + ' · ' + ev.place + ' · ' + fmtWhen(when);
+
+  document.getElementById('body').innerHTML = `
+    <div class="card">
+      <h2>Step 1 — read the waves</h2>
+      <div class="lead">Pick a school, then <b>drag the blue P marker</b> to where the trace first
+        lifts off the flat line, and <b>the red S marker</b> to where the shaking suddenly gets much
+        bigger. The gap between them tells you how far away the earthquake was: the further away,
+        the bigger the gap. Tap the trace to place a marker, drag to fine-tune.</div>
+      <div class="stationbar" id="stationbar"></div>
+      <canvas id="trace"></canvas>
+      <div class="readout" id="readout">
+        <span><span class="pill p">P</span> <span class="val" id="rP">—</span></span>
+        <span><span class="pill s">S</span> <span class="val" id="rS">—</span></span>
+        <span>S &minus; P = <span class="val" id="rSP">—</span></span>
+        <span class="vel">&times; <input id="kf" type="number" min="4" max="12" step="0.1" value="8"> km/s
+          = <span class="val" id="rD">—</span></span>
+        <button id="checkBtn" type="button" disabled>Check this school</button>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+
+    <div class="card">
+      <h2>Step 2 — find the epicentre</h2>
+      <div class="lead">One school tells you <i>how far</i> the earthquake was, but not which
+        direction. Pick the P and S at <b>three or more schools</b> and the circles will cross in
+        one place &mdash; that is the earthquake. This is why a network of schools beats a single
+        seismometer.</div>
+      <div class="actions">
+        <button id="locateBtn" type="button" disabled>Pick 3 schools to locate it</button>
+        <button id="revealBtn" class="ghost" type="button" style="display:none">Reveal the real answer</button>
+        <a class="muted" href="${MAP_URL}#quake=${encodeURIComponent(ev.event_id)}" target="_blank" rel="noopener">see this quake on the map &rarr;</a>
+      </div>
+      <div id="mapcard" style="display:none">
+        <div id="map"></div>
+        <div class="lead" id="locateNote" style="padding-top:10px"></div>
+      </div>
+    </div>`;
+
+  document.getElementById('notes').innerHTML =
+    '<b>Teacher notes.</b> The &times;8 factor is V<sub>p</sub>V<sub>s</sub>/(V<sub>p</sub>&minus;V<sub>s</sub>): '
+    + 'with V<sub>p</sub> &asymp; 6.4 and V<sub>s</sub> &asymp; 3.7 km/s it comes out near 8.8, and senior '
+    + 'students can change the number above and watch the circles move. Australian crust is fast, so '
+    + 'readings here often suit a slightly larger factor. Samples are decimated to 10 Hz (1 Hz for '
+    + 'distant quakes), so a pick is good to about a tenth of a second &mdash; finer than anyone can click. '
+    + 'The "real" distances and the dashed predicted arrivals come from the iasp91 Earth model and the '
+    + 'Geoscience Australia catalogue, both of which carry their own uncertainty: disagreement is a '
+    + 'result, not a mistake.';
+
+  cv = document.getElementById('trace'); ctx = cv.getContext('2d');
+  setupTrace();
+  document.getElementById('checkBtn').addEventListener('click', check);
+  document.getElementById('locateBtn').addEventListener('click', locate);
+  document.getElementById('revealBtn').addEventListener('click', revealEpicentre);
+  document.getElementById('kf').addEventListener('input', function () {
+    kFactor = Math.max(1, +this.value || 8); updateReadout();
+  });
+  setWindowForStation(); renderStationBar(); drawTrace(); updateReadout();
+}
+
+// ── Load ────────────────────────────────────────────────────
+(async function () {
+  const id = (params.get('id') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  try {
+    const man = await (await fetch(RAW + 'manifest.json?v=' + hourStamp())).json();
+    const withWaves = (man.events || []).filter(e => e.waves)
+      .sort((a, b) => Date.parse(b.origin) - Date.parse(a.origin));
+    if (!withWaves.length) throw new Error('no events with waveform data yet');
+    const pick = withWaves.find(e => e.event_id === id) || withWaves[0];
+    const r = await fetch(RAW + encodeURIComponent(pick.event_id) + '.waves.json?v=' + hourStamp());
+    if (!r.ok) throw new Error('waveform data HTTP ' + r.status);
+    ev = await r.json();
+    if (!ev.stations || ev.stations.length < 2) throw new Error('not enough stations');
+    build();
+  } catch (e) {
+    document.getElementById('sub').textContent = 'Could not load this exercise';
+    document.getElementById('body').innerHTML =
+      '<div class="card"><div class="err">' + esc(e.message)
+      + '<br><br>Waveform data is published a few hours after each earthquake — '
+      + 'try again later, or pick a different event from the '
+      + '<a href="events_gallery.html?mode=local">earthquake list</a>.</div></div>';
+    console.error(e);
+  }
+})();
+if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+</script>
+</body>
+</html>
