@@ -34,6 +34,7 @@ server-side in Actions, where redirects and CORS changes can't break the pages.
 | `webicorder.html?code=X` | Live 24 h drum (IRIS-webicorder style), seconds-fresh via EarthScope dataselect |
 | `poster.html?code=X` | Printable A4 classroom QR poster (QR generated in-browser) |
 | `event.html?id=X` | Printable class worksheet for a recorded earthquake (S-P exercise) |
+| `quakes3d.html` | 3D earthquake viewer: tilting Australia block + rotatable Ring of Fire globe |
 
 All widgets read the same published data (same-origin `data/` + the render branches on
 the AuScope org repo), take their subject from the query string, and are embeddable as

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<!--
+  widgets/quakes3d.html[?mode=region|globe]
+  Earthquakes in 3D: 24 months of the same Geoscience-Australia-sourced store
+  the map uses, plotted at (longitude, latitude, -depth) so students can spin
+  the Earth and SEE where earthquakes live.
+
+    region : Australia and its neighbours as a tilting block. Australian
+             quakes sit in a shallow crustal skin; the Indonesian and
+             Tonga-Kermadec slabs dive away beneath the surface.
+    globe  : the whole planet. 24 months of seismicity draws the Ring of Fire
+             by itself — nobody has to be told where the plate edges are.
+
+  Rendered with plain canvas 2D — rotation matrices and an orthographic
+  projection, ~150 lines of maths. Deliberately NOT WebGL/three.js: 700 KB of
+  library and a GPU dependency is the wrong trade for school hardware, and
+  767 points draw at 60 fps anywhere.
+
+  Static, no backend, same published data as everything else.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earthquakes in 3D — AuSIS</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
+.wrap { max-width: min(1500px, 97vw); margin: 0 auto; padding: 12px; }
+.hubback { display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; margin-bottom: 8px; }
+.hubback:hover { text-decoration: underline; }
+.head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; }
+.head img.ausis { height: 46px; }
+.head img.partner { height: 34px; }
+.head h1 { font-size: 19px; color: #282572; }
+.head .sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+.stage { margin-top: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 9px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+.seg { display: flex; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; }
+.seg button { font-family: inherit; font-size: 12px; padding: 5px 12px; cursor: pointer; background: #fff; color: #282572; border: none; border-left: 1px solid #cbd5e1; }
+.seg button:first-child { border-left: none; }
+.seg button:hover { background: #f1f5f9; }
+.seg button.active { background: #282572; color: #fff; font-weight: 700; }
+.ctl { display: flex; align-items: center; gap: 6px; color: #6b7280; }
+.ctl input[type=range] { width: 108px; accent-color: #282572; }
+.ctl select { font-family: inherit; font-size: 12px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 5px; background: #fff; color: #282572; }
+.ctl b { color: #282572; font-family: monospace; min-width: 30px; }
+canvas { display: block; width: 100%; background: #0b1020; cursor: grab; touch-action: none; }
+canvas.dragging { cursor: grabbing; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 9px 14px; border-top: 1px solid #f1f5f9; font-size: 11.5px; color: #6b7280; align-items: center; }
+.legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend .hint { margin-left: auto; color: #94a3b8; }
+
+.info { position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s; background: rgba(255,255,255,.97); border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 12.5px; max-width: 290px; box-shadow: 0 3px 12px rgba(0,0,0,.25); }
+.info.on { opacity: 1; }
+.info .m { font-weight: 700; color: #b91c1c; font-size: 14px; }
+.info .p { color: #282572; font-weight: 700; margin: 2px 0; }
+.info .d { color: #6b7280; font-size: 11.5px; }
+.stagewrap { position: relative; }
+
+.tale { margin-top: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 13px 16px; font-size: 13px; line-height: 1.6; color: #4b5563; }
+.tale b { color: #282572; }
+.foot { text-align: center; font-size: 11px; color: #94a3b8; padding: 12px 0 8px; }
+@media (min-width: 1500px) {
+  .head h1 { font-size: 24px; } .head .sub { font-size: 14px; }
+  .bar, .legend, .tale { font-size: 14px; }
+  .seg button { font-size: 14px; padding: 7px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="hubback" href="../teachers/">&larr; AuSIS Teacher Hub</a>
+  <div class="head">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <div>
+      <h1>Earthquakes in 3D</h1>
+      <div class="sub" id="sub">Loading two years of earthquakes&hellip;</div>
+    </div>
+    <div style="flex:1"></div>
+    <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
+  </div>
+
+  <div class="stage">
+    <div class="bar">
+      <div class="seg" id="mode" role="group" aria-label="View">
+        <button type="button" data-m="region" class="active">Australia</button><button type="button" data-m="globe">Globe &mdash; Ring of Fire</button>
+      </div>
+      <div class="seg" id="preset" role="group" aria-label="Camera angle">
+        <button type="button" data-p="top">Top</button><button type="button" data-p="tilt" class="active">Tilt</button><button type="button" data-p="side">Side</button>
+      </div>
+      <label class="ctl">Depth scale <input type="range" id="vex" min="1" max="20" step="1" value="6"><b id="vexv">6&times;</b></label>
+      <label class="ctl">Since
+        <select id="win">
+          <option value="1">24 hours</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+          <option value="365">12 months</option>
+          <option value="730" selected>24 months</option>
+        </select>
+      </label>
+      <label class="ctl">Magnitude &ge; <input type="range" id="minmag" min="0" max="7" step="0.5" value="0"><b id="minmagv">any</b></label>
+      <label class="ctl" id="stationsctl"><input type="checkbox" id="showstations" checked> schools</label>
+    </div>
+    <div class="stagewrap">
+      <canvas id="cv"></canvas>
+      <div class="info" id="info"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="tale" id="tale"></div>
+  <div class="foot">AuSIS &middot; Australian Seismometers in Schools &middot; earthquake data from Geoscience Australia, updated hourly</div>
+</div>
+
+<script>
+// ── Depth colour scheme (shallow hot → deep cool, the standard convention) ──
+const BANDS = [
+  { max: 20,   c: '#ef4444', label: '0–20 km' },
+  { max: 70,   c: '#f97316', label: '20–70 km' },
+  { max: 150,  c: '#eab308', label: '70–150 km' },
+  { max: 300,  c: '#22c55e', label: '150–300 km' },
+  { max: 500,  c: '#38bdf8', label: '300–500 km' },
+  { max: 1e9,  c: '#a855f7', label: '500 km +' },
+];
+const depthColor = d => (BANDS.find(b => d < b.max) || BANDS[5]).c;
+
+const R_EARTH = 6371;
+const params = new URLSearchParams(location.search);
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+
+let mode   = params.get('mode') === 'globe' ? 'globe' : 'region';
+let az     = 0.0;      // azimuth: spin. In globe mode this IS the longitude facing you
+let el     = 0.62;     // elevation above horizon: pi/2 = straight down
+let zoom   = 1;
+let vex    = 6;        // depth exaggeration
+let winDays = 730, minMag = 0, showStations = true;
+
+let quakes = [], stations = [], land = [];
+let pts = [];          // projected screen points, rebuilt each draw (for picking)
+let picked = null;
+
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const infoEl = document.getElementById('info');
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+
+// ── Projection ──────────────────────────────────────────────
+// World axes: x east, y north, z up (depth is negative z). The camera sits at
+// azimuth `az` / elevation `el`; we build its right and up vectors and take
+// dot products — a plain orthographic projection, no perspective, so distances
+// across the scene stay comparable (what you want for reading a slab).
+function project(p) {
+  const sa = Math.sin(az), ca = Math.cos(az), se = Math.sin(el), ce = Math.cos(el);
+  // Camera sits south of the scene at azimuth `az`, elevation `el`, looking at
+  // the origin. Derived so that at el = 90 deg you get a proper map (north up,
+  // east right) and at el = 0 you get a side elevation with depth downward.
+  const dx = ce * sa, dy = -ce * ca, dz = se;       // origin -> camera
+  const rx = ca,      ry = sa,       rz = 0;        // screen right  = up x camDir
+  const ux = -se * sa, uy = se * ca, uz = ce;       // screen up     = camDir x right
+  return {
+    x: p.x * rx + p.y * ry + p.z * rz,
+    y: p.x * ux + p.y * uy + p.z * uz,
+    d: p.x * dx + p.y * dy + p.z * dz,              // >0 = toward camera
+  };
+}
+
+// Region mode: local flat-Earth kilometres around a centre, depth downward.
+const C_LON = 142, C_LAT = -20;
+function regionXYZ(lon, lat, depth) {
+  let dl = lon - C_LON;
+  if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
+  return {
+    x: dl * 111.32 * Math.cos(C_LAT * Math.PI / 180),
+    y: (lat - C_LAT) * 110.57,
+    z: -(depth || 0) * vex,
+  };
+}
+// Globe mode: true sphere, radius 1, depth pushed inward (exaggerated).
+function globeXYZ(lon, lat, depth) {
+  const r = 1 - ((depth || 0) / R_EARTH) * vex;
+  const la = lat * Math.PI / 180, lo = lon * Math.PI / 180;
+  return { x: r * Math.cos(la) * Math.sin(lo), y: -r * Math.cos(la) * Math.cos(lo), z: r * Math.sin(la) };
+}
+const toXYZ = (lon, lat, depth) => mode === 'globe' ? globeXYZ(lon, lat, depth) : regionXYZ(lon, lat, depth);
+
+// ── Drawing ─────────────────────────────────────────────────
+function sizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth;
+  const h = Math.max(360, Math.min(Math.round(window.innerHeight * 0.62), 760));
+  cv.style.height = h + 'px';
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w, h };
+}
+
+function draw() {
+  const { w, h } = sizeCanvas();
+  const cx = w / 2, cy = h / 2;
+  // Scale so the scene fills the canvas: region is ~5000 km across, globe r=1
+  const scale = (mode === 'globe' ? Math.min(w, h) * 0.40 : Math.min(w, h) / 11000) * zoom;
+
+  ctx.fillStyle = '#0b1020';
+  ctx.fillRect(0, 0, w, h);
+
+  const now = Date.now(), cutoff = now - winDays * 86400000;
+  const visible = quakes.filter(q => {
+    if (q.t < cutoff || q.mag < minMag) return false;
+    if (mode === 'region') {
+      // Flat projection is only meaningful near the centre — beyond that a
+      // wrapped longitude would plot Chile next to Queensland.
+      const dl = ((q.lon - C_LON + 540) % 360) - 180;
+      if (Math.abs(dl) > 62 || Math.abs(q.lat - C_LAT) > 52) return false;
+    }
+    return true;
+  });
+
+  // Globe: faint sphere so "inside the Earth" reads as inside
+  if (mode === 'globe') {
+    ctx.beginPath();
+    ctx.arc(cx, cy, scale, 0, Math.PI * 2);
+    ctx.fillStyle = '#111a33';
+    ctx.fill();
+    ctx.strokeStyle = '#22305c'; ctx.lineWidth = 1; ctx.stroke();
+  }
+
+  // Coastlines (near hemisphere only on the globe)
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = mode === 'globe' ? '#4d6ea8' : '#5b82c4';
+  land.forEach(ring => {
+    let started = false;
+    ctx.beginPath();
+    for (let i = 0; i < ring.length; i++) {
+      const [lon, lat] = ring[i];
+      if (mode === 'region') {
+        const dl = ((lon - C_LON + 540) % 360) - 180;
+        if (Math.abs(dl) > 65 || Math.abs(lat - C_LAT) > 60) { started = false; continue; }
+      }
+      const p = project(toXYZ(lon, lat, 0));
+      if (mode === 'globe' && p.d < 0) { started = false; continue; }   // far side
+      const sx = cx + p.x * scale, sy = cy - p.y * scale;
+      if (!started) { ctx.moveTo(sx, sy); started = true; } else { ctx.lineTo(sx, sy); }
+    }
+    ctx.stroke();
+  });
+
+  // Depth reference grid + surface plane (region only): gives the eye a floor
+  if (mode === 'region') {
+    ctx.strokeStyle = 'rgba(120,150,210,.30)'; ctx.lineWidth = 1;
+    const span = 4200;
+    const corners = [[-span, -span], [span, -span], [span, span], [-span, span]].map(([x, y]) => {
+      const p = project({ x, y, z: 0 });
+      return [cx + p.x * scale, cy - p.y * scale];
+    });
+    ctx.beginPath();
+    corners.forEach(([sx, sy], i) => i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy));
+    ctx.closePath(); ctx.stroke();
+    // depth ticks at 200/400/600 km on the near corner
+    ctx.fillStyle = 'rgba(160,185,235,.75)'; ctx.font = '10px Arial';
+    [200, 400, 600].forEach(dkm => {
+      const a = project({ x: -span, y: -span, z: 0 });
+      const b = project({ x: -span, y: -span, z: -dkm * vex });
+      ctx.strokeStyle = 'rgba(120,150,210,.28)';
+      ctx.beginPath();
+      ctx.moveTo(cx + a.x * scale, cy - a.y * scale);
+      ctx.lineTo(cx + b.x * scale, cy - b.y * scale);
+      ctx.stroke();
+      ctx.fillText(dkm + ' km', cx + b.x * scale + 4, cy - b.y * scale);
+    });
+  }
+
+  // Stations (region mode): the schools, on the surface
+  pts = [];
+  if (mode === 'region' && showStations) {
+    stations.forEach(s => {
+      const p = project(regionXYZ(s.lon, s.lat, 0));
+      const sx = cx + p.x * scale, sy = cy - p.y * scale;
+      if (sx < -20 || sx > w + 20 || sy < -20 || sy > h + 20) return;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy - 5); ctx.lineTo(sx + 4.5, sy + 3); ctx.lineTo(sx - 4.5, sy + 3);
+      ctx.closePath();
+      ctx.fillStyle = '#0b1020'; ctx.fill();
+      ctx.strokeStyle = '#7dd3a0'; ctx.lineWidth = 1.4; ctx.stroke();
+    });
+  }
+
+  // Earthquakes, painter's algorithm: farthest first so near ones sit on top
+  const drawn = visible.map(q => {
+    const p = project(toXYZ(q.lon, q.lat, q.depth));
+    return { q, p };
+  }).filter(o => mode !== 'globe' || o.p.d > -0.15)
+    .sort((a, b) => a.p.d - b.p.d);
+
+  drawn.forEach(({ q, p }) => {
+    const sx = cx + p.x * scale, sy = cy - p.y * scale;
+    if (sx < -30 || sx > w + 30 || sy < -30 || sy > h + 30) return;
+    const r = Math.max(1.5, Math.min(8.5, 1.1 + q.mag * 0.92)) * (mode === 'globe' ? 0.85 : 1);
+    ctx.beginPath();
+    ctx.arc(sx, sy, r, 0, Math.PI * 2);
+    ctx.fillStyle = depthColor(q.depth);
+    ctx.globalAlpha = picked && picked.id === q.id ? 1 : 0.78;
+    ctx.fill();
+    if (picked && picked.id === q.id) {
+      ctx.globalAlpha = 1; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    pts.push({ q, sx, sy, r });
+  });
+
+  document.getElementById('sub').textContent =
+    visible.length + ' earthquakes' + (winDays >= 730 ? ' over 24 months' : ' in the last ' +
+      (winDays === 1 ? '24 hours' : winDays === 365 ? '12 months' : winDays + ' days')) +
+    ' · drag to rotate, scroll to zoom';
+}
+
+// ── Interaction ─────────────────────────────────────────────
+let dragging = false, lastX = 0, lastY = 0, moved = 0;
+cv.addEventListener('pointerdown', e => {
+  dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
+  cv.classList.add('dragging'); cv.setPointerCapture(e.pointerId);
+});
+cv.addEventListener('pointermove', e => {
+  if (!dragging) { hover(e); return; }
+  const dx = e.clientX - lastX, dy = e.clientY - lastY;
+  moved += Math.abs(dx) + Math.abs(dy);
+  lastX = e.clientX; lastY = e.clientY;
+  az += dx * 0.006;
+  const elMin = mode === 'globe' ? -Math.PI / 2 + 0.02 : 0.02;
+  el = Math.max(elMin, Math.min(Math.PI / 2 - 0.001, el + dy * 0.006));
+  setPresetActive(null);
+  draw();
+});
+cv.addEventListener('pointerup', e => {
+  dragging = false; cv.classList.remove('dragging');
+  if (moved < 5) pick(e);           // a click, not a drag
+});
+cv.addEventListener('pointercancel', () => { dragging = false; cv.classList.remove('dragging'); });
+cv.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom = Math.max(0.4, Math.min(6, zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12)));
+  draw();
+}, { passive: false });
+
+// Pinch zoom
+let pinch = null;
+cv.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                       e.touches[0].clientY - e.touches[1].clientY);
+  }
+}, { passive: true });
+cv.addEventListener('touchmove', e => {
+  if (e.touches.length === 2 && pinch) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                         e.touches[0].clientY - e.touches[1].clientY);
+    zoom = Math.max(0.4, Math.min(6, zoom * (d / pinch)));
+    pinch = d; draw();
+  }
+}, { passive: true });
+cv.addEventListener('touchend', () => { pinch = null; });
+
+function nearest(e) {
+  const rect = cv.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  let best = null, bestD = 18;
+  for (const p of pts) {
+    const d = Math.hypot(p.sx - mx, p.sy - my);
+    if (d < Math.max(bestD, p.r + 4) && d < bestD + p.r) { best = p; bestD = d; }
+  }
+  return best ? { hit: best, mx, my } : null;
+}
+function hover(e) {
+  const n = nearest(e);
+  cv.style.cursor = n ? 'pointer' : 'grab';
+}
+function pick(e) {
+  const n = nearest(e);
+  if (!n) { picked = null; infoEl.classList.remove('on'); draw(); return; }
+  const q = n.hit.q;
+  picked = q;
+  const when = new Date(q.t);
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  infoEl.innerHTML =
+    '<div class="m">M ' + q.mag.toFixed(1) + '</div>'
+    + '<div class="p">' + esc(q.place) + '</div>'
+    + '<div class="d"><b style="color:' + depthColor(q.depth) + '">' + Math.round(q.depth)
+    + ' km deep</b> &middot; ' + when.getUTCDate() + ' ' + mo[when.getUTCMonth()] + ' ' + when.getUTCFullYear() + '</div>'
+    + '<div class="d" style="margin-top:5px"><a style="pointer-events:auto;color:#2563eb" target="_blank" rel="noopener" href="'
+    + MAP_URL + '#quake=' + encodeURIComponent(q.id) + '">See it on the map &rarr;</a></div>';
+  infoEl.style.left = Math.min(n.mx + 14, cv.clientWidth - 300) + 'px';
+  infoEl.style.top = Math.max(6, n.my - 10) + 'px';
+  infoEl.classList.add('on');
+  draw();
+}
+
+// ── Controls ────────────────────────────────────────────────
+function setPresetActive(p) {
+  document.querySelectorAll('#preset button').forEach(b =>
+    b.classList.toggle('active', b.dataset.p === p));
+}
+document.querySelectorAll('#preset button').forEach(b => b.addEventListener('click', () => {
+  el = b.dataset.p === 'top' ? Math.PI / 2 - 0.02 : b.dataset.p === 'side' ? 0.05 : 0.62;
+  setPresetActive(b.dataset.p);
+  draw();
+}));
+document.querySelectorAll('#mode button').forEach(b => b.addEventListener('click', () => {
+  mode = b.dataset.m;
+  document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('active', x === b));
+  document.getElementById('stationsctl').style.display = mode === 'region' ? '' : 'none';
+  // Sensible defaults per mode
+  const vexEl = document.getElementById('vex');
+  vexEl.max = mode === 'globe' ? 10 : 20;
+  vex = mode === 'globe' ? 4 : 6;
+  vexEl.value = vex; document.getElementById('vexv').innerHTML = vex + '&times;';
+  az = mode === 'globe' ? 134 * Math.PI / 180 : 0;
+  el = mode === 'globe' ? -0.35 : 0.62; zoom = 1; picked = null;
+  infoEl.classList.remove('on');
+  setPresetActive('tilt');
+  tale();
+  draw();
+}));
+document.getElementById('vex').addEventListener('input', function() {
+  vex = +this.value; document.getElementById('vexv').innerHTML = vex + '&times;'; draw();
+});
+document.getElementById('win').addEventListener('change', function() { winDays = +this.value; draw(); });
+document.getElementById('minmag').addEventListener('input', function() {
+  minMag = +this.value;
+  document.getElementById('minmagv').textContent = minMag === 0 ? 'any' : minMag.toFixed(1);
+  draw();
+});
+document.getElementById('showstations').addEventListener('change', function() {
+  showStations = this.checked; draw();
+});
+window.addEventListener('resize', draw);
+
+document.getElementById('legend').innerHTML =
+  BANDS.map(b => '<span><span class="sw" style="background:' + b.c + '"></span>' + b.label + '</span>').join('')
+  + '<span class="hint">circle size = magnitude &middot; click an earthquake for details</span>';
+
+function tale() {
+  document.getElementById('tale').innerHTML = mode === 'region'
+    ? '<b>What to look for:</b> tilt to the <b>Side</b> view and turn the depth scale up. Australian '
+      + 'earthquakes sit in a thin red skin near the surface — our continent is one rigid old plate, so it '
+      + 'only breaks in the shallow crust. To the north and east the dots plunge downward in slanting sheets: '
+      + 'those are <b>subduction zones</b>, where one tectonic plate slides beneath another and keeps '
+      + 'breaking as it goes. Colours run from red (shallow) to purple (deepest).'
+    : '<b>What to look for:</b> spin the globe. Nobody drew the plate boundaries — the earthquakes did. '
+      + 'This is the <b>Ring of Fire</b>, the belt of subduction zones around the Pacific. Watch how the '
+      + 'colours change as slabs dive: red at the trench, then orange, green and purple as the sinking plate '
+      + 'reaches hundreds of kilometres down. The deepest here are under Fiji and Tonga — around '
+      + '<b>670 km</b>, the deepest earthquakes anywhere on Earth. Australia sits quietly in the middle of '
+      + 'its plate, away from the ring.';
+}
+
+// ── Load ────────────────────────────────────────────────────
+Promise.all([
+  fetch('../data/earthquakes_24mo.geojson?v=' + hourStamp()).then(r => r.json()),
+  fetch('../assets/vendor/land_110m.json').then(r => r.json()),
+  fetch('../data/ausis_stations.geojson?v=' + hourStamp()).then(r => r.json()).catch(() => ({ features: [] })),
+]).then(([qs, ld, st]) => {
+  land = ld.rings || [];
+  quakes = (qs.features || []).map(f => {
+    const p = f.properties || {}, c = f.geometry.coordinates;
+    return { id: p.id, lon: c[0], lat: c[1], depth: p.depth == null ? 0 : p.depth,
+             mag: p.mag == null ? 0 : p.mag, place: p.place || 'Unknown location',
+             t: Date.parse(p.time) };
+  }).filter(q => q.id && !isNaN(q.t) && q.mag != null);
+  stations = (st.features || []).filter(f => !f.properties.endTime)
+    .map(f => ({ lon: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
+  tale();
+  draw();
+}).catch(e => {
+  document.getElementById('sub').textContent = 'Could not load earthquake data — try again shortly.';
+  console.warn(e);
+});
+if (mode === 'globe') {
+  document.querySelector('#mode button[data-m="globe"]').click();
+}
+if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+</script>
+</body>
+</html>
