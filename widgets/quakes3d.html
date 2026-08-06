@@ -102,7 +102,8 @@ canvas.dragging { cursor: grabbing; }
         </select>
       </label>
       <label class="ctl">Magnitude &ge; <input type="range" id="minmag" min="0" max="7" step="0.5" value="0"><b id="minmagv">any</b></label>
-      <label class="ctl" id="stationsctl"><input type="checkbox" id="showstations" checked> schools</label>
+      <label class="ctl"><input type="checkbox" id="showplates"> plate boundaries</label>
+      <label class="ctl" id="stationsctl"><input type="checkbox" id="showstations" checked> AuSIS</label>
     </div>
     <div class="stagewrap">
       <canvas id="cv"></canvas>
@@ -138,7 +139,8 @@ let zoom   = 1;
 let vex    = 6;        // depth exaggeration
 let winDays = 730, minMag = 0, showStations = true;
 
-let quakes = [], stations = [], land = [];
+let quakes = [], stations = [], land = [], plates = [];
+let showPlates = false;
 let pts = [];          // projected screen points, rebuilt each draw (for picking)
 let picked = null;
 
@@ -198,7 +200,7 @@ const toXYZ = (lon, lat, depth) => mode === 'globe' ? globeXYZ(lon, lat, depth) 
 function sizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
   const w = cv.clientWidth;
-  const h = Math.max(360, Math.min(Math.round(window.innerHeight * 0.62), 760));
+  const h = Math.max(440, Math.min(Math.round(window.innerHeight * 0.72), 900));
   cv.style.height = h + 'px';
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -209,7 +211,7 @@ function draw() {
   const { w, h } = sizeCanvas();
   const cx = w / 2, cy = h / 2;
   // Scale so the scene fills the canvas: region is ~5000 km across, globe r=1
-  const scale = (mode === 'globe' ? Math.min(w, h) * 0.40 : Math.min(w, h) / 11000) * zoom;
+  const scale = (mode === 'globe' ? Math.min(w, h) * 0.40 : Math.min(w, h) / 8200) * zoom;
 
   ctx.fillStyle = '#0b1020';
   ctx.fillRect(0, 0, w, h);
@@ -254,6 +256,29 @@ function draw() {
     }
     ctx.stroke();
   });
+
+  // Plate boundaries (optional). Drawn after the coastlines so they sit on top,
+  // in a warm colour that reads clearly against the cool coastline blue.
+  if (showPlates) {
+    ctx.strokeStyle = 'rgba(250,204,21,.85)';
+    ctx.lineWidth = 1.6;
+    plates.forEach(line => {
+      let started = false;
+      ctx.beginPath();
+      for (let i = 0; i < line.length; i++) {
+        const [lon, lat] = line[i];
+        if (mode === 'region') {
+          const dl = ((lon - C_LON + 540) % 360) - 180;
+          if (Math.abs(dl) > 65 || Math.abs(lat - C_LAT) > 60) { started = false; continue; }
+        }
+        const q = project(toXYZ(lon, lat, 0));
+        if (mode === 'globe' && q.d < 0) { started = false; continue; }
+        const sx = cx + q.x * scale, sy = cy - q.y * scale;
+        if (!started) { ctx.moveTo(sx, sy); started = true; } else { ctx.lineTo(sx, sy); }
+      }
+      ctx.stroke();
+    });
+  }
 
   // Depth reference grid + surface plane (region only): gives the eye a floor
   if (mode === 'region') {
@@ -444,10 +469,14 @@ document.getElementById('minmag').addEventListener('input', function() {
 document.getElementById('showstations').addEventListener('change', function() {
   showStations = this.checked; draw();
 });
+document.getElementById('showplates').addEventListener('change', function() {
+  showPlates = this.checked; draw();
+});
 window.addEventListener('resize', draw);
 
 document.getElementById('legend').innerHTML =
   BANDS.map(b => '<span><span class="sw" style="background:' + b.c + '"></span>' + b.label + '</span>').join('')
+  + '<span><span class="sw" style="background:#facc15;border-radius:0;height:3px;width:15px;vertical-align:3px"></span>plate boundary</span>'
   + '<span class="hint">circle size = magnitude &middot; click an earthquake for details</span>';
 
 function tale() {
@@ -458,14 +487,17 @@ function tale() {
       + 'those are <b>subduction zones</b>, where one tectonic plate slides beneath another and keeps '
       + 'breaking as it goes. Colours run from red (shallow) to purple (deepest). Note the depth scale is '
       + '<b>stretched</b> (that is what the slider does) — real slabs are far less steep than they look here, '
-      + 'because 600 km of depth is tiny next to 9,000 km of map.'
+      + 'because 600 km of depth is tiny next to 9,000 km of map. Tick <b>plate boundaries</b> to '
+      + 'check your reading: the yellow lines are where geologists say the plates meet.'
     : '<b>What to look for:</b> spin the globe. Nobody drew the plate boundaries — the earthquakes did. '
       + 'This is the <b>Ring of Fire</b>, the belt of subduction zones around the Pacific. Follow one arc '
       + 'and watch the colours change across it: red at the trench where the plates meet, then orange, '
       + 'green and purple inland as the sinking plate keeps breaking hundreds of kilometres down. The '
       + 'purple ones near Fiji and Tonga are about <b>670 km</b> deep — the deepest earthquakes anywhere '
       + 'on Earth. Australia sits quietly in the middle of its plate, away from the ring. Switch to the '
-      + '<b>Australia</b> view to see those depths as an actual cross-section.';
+      + '<b>Australia</b> view to see those depths as an actual cross-section. When students have '
+      + 'spotted the pattern themselves, tick <b>plate boundaries</b> — the yellow lines are the real '
+      + 'plate edges, and the match is the whole point.';
 }
 
 // ── Load ────────────────────────────────────────────────────
@@ -473,8 +505,10 @@ Promise.all([
   fetch('../data/earthquakes_24mo.geojson?v=' + hourStamp()).then(r => r.json()),
   fetch('../assets/vendor/land_110m.json').then(r => r.json()),
   fetch('../data/ausis_stations.geojson?v=' + hourStamp()).then(r => r.json()).catch(() => ({ features: [] })),
-]).then(([qs, ld, st]) => {
+  fetch('../assets/vendor/plates_pb2002.json').then(r => r.json()).catch(() => ({ lines: [] })),
+]).then(([qs, ld, st, pl]) => {
   land = ld.rings || [];
+  plates = pl.lines || [];
   quakes = (qs.features || []).map(f => {
     const p = f.properties || {}, c = f.geometry.coordinates;
     return { id: p.id, lon: c[0], lat: c[1], depth: p.depth == null ? 0 : p.depth,
