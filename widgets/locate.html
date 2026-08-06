@@ -330,7 +330,17 @@ function locate() {
       .bindTooltip(s.site || s.code, { direction: 'top' }).addTo(circleLayer);
   });
   if (used.length) {
-    map.fitBounds(L.latLngBounds(used.map(u => [u.s.lat, u.s.lon])).pad(0.6));
+    const target = L.latLngBounds(used.map(u => [u.s.lat, u.s.lon])).pad(0.6);
+    const fit = () => { map.invalidateSize(); map.fitBounds(target); };
+    fit();
+    // Same guard as wavesweep: a container laid out at zero width fits to
+    // zoom 0 and never recovers.
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(es => {
+        for (const e of es) if (e.contentRect.width > 50) { fit(); ro.disconnect(); }
+      });
+      ro.observe(document.getElementById('map'));
+    }
   }
   document.getElementById('locateNote').innerHTML =
     'Each circle says "the earthquake was <i>this far</i> from this school". Where they cross is your '

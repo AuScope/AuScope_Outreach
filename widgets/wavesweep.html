@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!--
+  widgets/wavesweep.html?id=<event_id>
+  Watch the wave cross the country. Every AuSIS school that recorded the
+  earthquake pulses with the ground motion its own seismometer measured,
+  time-synchronised, so the wavefront visibly sweeps across the network.
+
+  This is not a simulation — it is replayed from the samples the schools
+  recorded, published by scripts/render_event_waveforms.py in the "anim"
+  block of <event_id>.waves.json.
+
+  Each station is normalised to its OWN peak (the convention IRIS uses for
+  its Ground Motion Visualizations): without that the closest station
+  saturates and the wavefront is invisible everywhere else. So colour shows
+  WHEN a school shook, not how hard relative to its neighbours.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch the wave — AuSIS</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #374151; }
+.wrap { max-width: min(1240px, 97vw); margin: 0 auto; padding: 12px; }
+.hubback { display: inline-block; font-size: 12px; color: #2563eb; text-decoration: none; margin-bottom: 8px; }
+.hubback:hover { text-decoration: underline; }
+.head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; }
+.head img.ausis { height: 46px; } .head img.partner { height: 34px; }
+.head h1 { font-size: 19px; color: #282572; }
+.head .sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 12px; overflow: hidden; }
+#map { height: clamp(380px, 56vh, 680px); background: #0b1020; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 10px 14px; border-top: 1px solid #f1f5f9; font-size: 13px; }
+.bar button { font-family: inherit; font-size: 14px; padding: 7px 18px; cursor: pointer; background: #282572; color: #fff; border: none; border-radius: 6px; min-width: 92px; }
+.bar button.ghost { background: #fff; color: #282572; border: 1px solid #cbd5e1; min-width: 0; }
+.bar input[type=range] { flex: 1; min-width: 180px; accent-color: #282572; }
+.clock { font-family: monospace; font-weight: 700; color: #282572; min-width: 86px; }
+.speed { display: flex; align-items: center; gap: 5px; color: #6b7280; font-size: 12px; }
+canvas#ref { display: block; width: 100%; height: 90px; background: #0b1020; }
+.reflabel { padding: 7px 14px 0; font-size: 11.5px; color: #94a3b8; }
+.lead { padding: 11px 14px; font-size: 13px; line-height: 1.55; color: #4b5563; border-top: 1px solid #f1f5f9; }
+.lead b { color: #282572; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 9px 14px; background: #0b1020; font-size: 11.5px; color: #c7d2e8; }
+.legend .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; vertical-align: -2px; }
+.err { padding: 26px 14px; text-align: center; color: #b45309; font-size: 14px; }
+.notes { margin-top: 12px; font-size: 11.5px; color: #94a3b8; line-height: 1.55; padding: 0 4px 10px; }
+@media (min-width: 1400px) { .head h1 { font-size: 23px; } .bar, .lead { font-size: 15px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="hubback" href="../teachers/">&larr; AuSIS Teacher Hub</a>
+  <div class="head">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <div>
+      <h1>Watch the wave cross the country</h1>
+      <div class="sub" id="sub">Loading&hellip;</div>
+    </div>
+    <div style="flex:1"></div>
+    <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
+  </div>
+  <div id="body"><div class="card"><div class="err">Loading the earthquake&hellip;</div></div></div>
+  <div class="notes" id="notes"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const RAW = 'https://raw.githubusercontent.com/AuScope/AuScope_Outreach/event-waveforms/';
+const MAP_URL = 'https://auscope.github.io/AuScope_Outreach/AuSIS_Map.html';
+const params = new URLSearchParams(location.search);
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function haversineKm(la1, lo1, la2, lo2) {
+  const R = 6371, r = Math.PI / 180;
+  const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
+  const a = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * r) * Math.cos(la2 * r) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+let ev = null, anim = [], map = null, marks = [], refCv, refCtx, refSta = null;
+let t = 0, tStart = 0, tEnd = 60, playing = false, speed = 4, lastFrame = 0;
+
+// Value of a station at event-time `t` (seconds from origin), -100..100
+function valueAt(st, t) {
+  const i = Math.round((t - st.t0) * st.hz);
+  return (i < 0 || i >= st.v.length) ? null : st.v[i];
+}
+
+function draw() {
+  marks.forEach(({ st, m }) => {
+    const v = valueAt(st, t);
+    if (v == null) { m.setStyle({ fillOpacity: .12, color: '#64748b', weight: 1 }); m.setRadius(5); return; }
+    const a = Math.abs(v) / 100;
+    m.setStyle({
+      fillColor: v >= 0 ? '#ef4444' : '#3b82f6',      // up = red, down = blue
+      fillOpacity: 0.25 + 0.75 * a,
+      color: '#fff',
+      weight: a > 0.35 ? 2 : 1,
+    });
+    m.setRadius(5 + 16 * a * a);                       // squared: emphasise arrivals
+  });
+  drawRef();
+  const el = document.getElementById('clock');
+  if (el) el.textContent = (t < 0 ? '' : '+') + t.toFixed(0) + ' s';
+  const sl = document.getElementById('scrub');
+  if (sl && document.activeElement !== sl) sl.value = t;
+}
+
+function drawRef() {
+  if (!refSta || !refCv) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = refCv.clientWidth, h = 90;
+  if (refCv.width !== Math.round(w * dpr)) {
+    refCv.width = Math.round(w * dpr); refCv.height = Math.round(h * dpr);
+    refCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  refCtx.fillStyle = '#0b1020'; refCtx.fillRect(0, 0, w, h);
+  const x = tt => ((tt - tStart) / (tEnd - tStart)) * w;
+  refCtx.strokeStyle = '#a5b4fc'; refCtx.lineWidth = 1; refCtx.beginPath();
+  let started = false;
+  for (let i = 0; i < refSta.v.length; i++) {
+    const tt = refSta.t0 + i / refSta.hz;
+    if (tt < tStart || tt > tEnd) continue;
+    const px = x(tt), py = h / 2 - (refSta.v[i] / 100) * (h * 0.42);
+    if (!started) { refCtx.moveTo(px, py); started = true; } else { refCtx.lineTo(px, py); }
+  }
+  refCtx.stroke();
+  // origin and the moving cursor
+  if (tStart < 0) {
+    refCtx.strokeStyle = '#b91c1c'; refCtx.lineWidth = 1.4;
+    refCtx.beginPath(); refCtx.moveTo(x(0), 0); refCtx.lineTo(x(0), h); refCtx.stroke();
+  }
+  refCtx.strokeStyle = '#fbbf24'; refCtx.lineWidth = 2;
+  refCtx.beginPath(); refCtx.moveTo(x(t), 0); refCtx.lineTo(x(t), h); refCtx.stroke();
+}
+
+function tick(now) {
+  if (playing) {
+    const dt = lastFrame ? (now - lastFrame) / 1000 : 0;
+    lastFrame = now;
+    t += dt * speed;
+    if (t >= tEnd) { t = tEnd; setPlaying(false); }
+    draw();
+  }
+  requestAnimationFrame(tick);
+}
+function setPlaying(p) {
+  playing = p; lastFrame = 0;
+  const b = document.getElementById('playBtn');
+  if (b) b.textContent = p ? '❚❚ Pause' : (t >= tEnd ? '↻ Replay' : '▶ Play');
+}
+
+function build() {
+  const when = new Date(ev.origin);
+  document.title = 'Watch the wave — M' + Number(ev.mag).toFixed(1) + ' ' + ev.place;
+  document.getElementById('sub').textContent =
+    'M' + Number(ev.mag).toFixed(1) + ' · ' + ev.place + ' · recorded at ' + anim.length + ' AuSIS schools';
+
+  document.getElementById('body').innerHTML = `
+    <div class="card">
+      <div id="map"></div>
+      <div class="legend">
+        <span><span class="dot" style="background:#ef4444"></span>ground moving up</span>
+        <span><span class="dot" style="background:#3b82f6"></span>ground moving down</span>
+        <span><span class="dot" style="background:#64748b;opacity:.4"></span>quiet / no data yet</span>
+        <span style="margin-left:auto">bigger circle = stronger shaking at that school</span>
+      </div>
+      <div class="bar">
+        <button id="playBtn" type="button">▶ Play</button>
+        <span class="clock" id="clock">0 s</span>
+        <input type="range" id="scrub" min="${tStart}" max="${tEnd}" step="0.5" value="${tStart}">
+        <span class="speed">speed
+          <select id="speed">
+            <option value="1">1×</option>
+            <option value="4" selected>4×</option>
+            <option value="10">10×</option>
+            <option value="30">30×</option>
+          </select>
+        </span>
+        <button class="ghost" id="resetBtn" type="button">Back to start</button>
+      </div>
+      <div class="reflabel" id="reflabel"></div>
+      <canvas id="ref"></canvas>
+      <div class="lead" id="faraway" style="display:none"></div>
+      <div class="lead" id="lead"></div>
+    </div>`;
+
+  // Map
+  map = L.map('map', { center: [-27, 134], zoom: 4, zoomControl: true });
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', opacity: .82 }).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+    { opacity: .55 }).addTo(map);
+
+  marks = anim.filter(s => s.lat != null).map(st => ({
+    st,
+    m: L.circleMarker([st.lat, st.lon], { radius: 5, color: '#fff', weight: 1,
+      fillColor: '#64748b', fillOpacity: .3 })
+      .bindTooltip(esc(st.code), { direction: 'top' })
+      .addTo(map),
+  }));
+  // Epicentre
+  const epi = L.marker([ev.lat, ev.lon], { icon: L.divIcon({ className: '', iconSize: [20, 20],
+    html: '<div style="width:16px;height:16px;border-radius:50%;background:#facc15;'
+      + 'border:3px solid #b45309;box-shadow:0 0 8px rgba(0,0,0,.7)"></div>' }) })
+    .bindTooltip('the earthquake', { direction: 'top' }).addTo(map);
+  // Frame the SCHOOLS, not the epicentre: for a teleseism the source is in
+  // Japan or Chile and including it shrinks Australia to a speck.
+  const staPts = marks.map(x => [x.st.lat, x.st.lon]);
+  if (staPts.length) {
+    const b = L.latLngBounds(staPts);
+    // Only pull the epicentre into view if it is genuinely nearby.
+    const span = Math.max(b.getNorth() - b.getSouth(), b.getEast() - b.getWest()) || 10;
+    const near = Math.abs(ev.lat - b.getCenter().lat) < span
+              && Math.abs(ev.lon - b.getCenter().lng) < span;
+    const target = (near ? b.extend([ev.lat, ev.lon]) : b).pad(0.12);
+    const fit = () => { map.invalidateSize(); map.fitBounds(target); };
+    fit();
+    // A map laid out at zero width (hidden tab, slow iframe, display:none
+    // parent) fits to zoom 0 and never recovers. Re-fit the first time the
+    // container actually has a width, then stop watching.
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(entries => {
+        for (const e of entries) {
+          if (e.contentRect.width > 50) { fit(); ro.disconnect(); }
+        }
+      });
+      ro.observe(document.getElementById('map'));
+    }
+    if (!near) {
+      const km = Math.round(haversineKm(b.getCenter().lat, b.getCenter().lng, ev.lat, ev.lon) / 10) * 10;
+      epi.bindTooltip('the earthquake — about ' + km.toLocaleString() + ' km away', { direction: 'top' });
+      document.getElementById('faraway').style.display = '';
+      document.getElementById('faraway').innerHTML =
+        'This earthquake happened <b>' + km.toLocaleString() + ' km away</b> near ' + esc(ev.place)
+        + ', off the edge of this view — zoom out to see it. The waves still reached every school below.';
+    }
+  }
+
+  // Reference trace = the station that recorded the strongest signal soonest
+  refSta = anim.slice().sort((a, b) => a.t0 - b.t0)[0];
+  refCv = document.getElementById('ref'); refCtx = refCv.getContext('2d');
+  document.getElementById('reflabel').textContent =
+    'One school’s trace for reference (' + (refSta ? refSta.code : '') + ') — the yellow line is "now"';
+
+  document.getElementById('lead').innerHTML =
+    '<b>What to look for:</b> press play. The circles are AuSIS schools, and each one flashes with the '
+    + 'ground motion its own seismometer actually recorded. Nothing here is simulated. Watch the '
+    + 'shaking start near the yellow marker and <b>spread outwards</b> — that is a real wave travelling '
+    + 'through the Earth at a few kilometres per second, arriving at each school in turn. Every school '
+    + 'is scaled to its own strongest wiggle, so the colour tells you <i>when</i> a school shook, not '
+    + 'how hard it shook compared with its neighbours.';
+
+  document.getElementById('playBtn').addEventListener('click', () => {
+    if (t >= tEnd) t = tStart;
+    setPlaying(!playing);
+  });
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    t = tStart; setPlaying(false); draw();
+  });
+  document.getElementById('scrub').addEventListener('input', function () {
+    t = +this.value; setPlaying(false); draw();
+  });
+  document.getElementById('speed').addEventListener('change', function () { speed = +this.value; });
+  window.addEventListener('resize', drawRef);
+
+  document.getElementById('notes').innerHTML =
+    '<b>Teacher notes.</b> Replayed from the schools’ own recordings, decimated to '
+    + (anim[0] ? anim[0].hz : 2) + ' Hz. Each station is normalised to its own peak — the convention '
+    + 'IRIS uses for Ground Motion Visualizations — because otherwise the nearest school saturates and '
+    + 'the wavefront is invisible everywhere else. The trade-off is that this view shows <i>timing</i>, '
+    + 'not relative amplitude; for real amplitudes use the record section. At 1× the replay is '
+    + 'real time. <a href="' + MAP_URL + '#quake=' + encodeURIComponent(ev.event_id) + '" target="_blank" rel="noopener">See this earthquake on the map</a>.';
+
+  draw();
+  requestAnimationFrame(tick);
+}
+
+(async function () {
+  const id = (params.get('id') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  try {
+    const man = await (await fetch(RAW + 'manifest.json?v=' + hourStamp())).json();
+    const cands = (man.events || []).filter(e => e.waves)
+      .sort((a, b) => Date.parse(b.origin) - Date.parse(a.origin));
+    if (!cands.length) throw new Error('no events with waveform data yet');
+    const pick = cands.find(e => e.event_id === id) || cands[0];
+    const r = await fetch(RAW + encodeURIComponent(pick.event_id) + '.waves.json?v=' + hourStamp());
+    if (!r.ok) throw new Error('waveform data HTTP ' + r.status);
+    ev = await r.json();
+    anim = (ev.anim || []).filter(s => s.v && s.v.length);
+    if (anim.length < 3) throw new Error('this earthquake was only recorded clearly at '
+      + anim.length + ' school' + (anim.length === 1 ? '' : 's') + ' — not enough to watch it travel');
+    tStart = Math.min(...anim.map(s => s.t0));
+    tEnd = Math.max(...anim.map(s => s.t0 + s.v.length / s.hz));
+    t = tStart;
+    build();
+  } catch (e) {
+    document.getElementById('sub').textContent = 'Could not load this replay';
+    document.getElementById('body').innerHTML =
+      '<div class="card"><div class="err">' + esc(e.message)
+      + '<br><br>Try another event from the <a href="events_gallery.html?mode=local">earthquake list</a>.</div></div>';
+    console.error(e);
+  }
+})();
+if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+</script>
+</body>
+</html>

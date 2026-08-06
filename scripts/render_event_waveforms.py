@@ -144,7 +144,7 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 8
+RENDER_VERSION = 9
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -323,13 +323,23 @@ def pick_channel(channels):
     return sorted(channels)[0] if channels else None
 
 
-def count_recorded(st, origin, mode):
+# Wavefront animation: 2 Hz for local events (the front crosses in a couple of
+# minutes) and 1 Hz for teleseisms, which are band-limited to 0.1 Hz anyway.
+# Frames are capped so a 65-minute teleseismic window cannot bloat the file —
+# the interesting part is over long before the cap.
+ANIM_HZ = {"local": 2.0, "tele": 1.0}
+ANIM_MAX_FRAMES = 1800
+
+
+def count_recorded(st, origin, mode, sites=None):
     """How many stations visibly recorded the event: robust post/pre amplitude
     ratio per station on mode-filtered raw counts (a ratio needs no physical
-    units, so no response removal). Returns (recorded_codes, n_with_data).
+    units, so no response removal). Returns (recorded_codes, n_with_data,
+    anim) where `anim` carries a decimated, per-station normalised trace for
+    every station that recorded — the input to the wavefront animation.
     Outreach-grade signal detection, not a scientific pick."""
     o = UTCDateTime(origin)
-    recorded, n_tot = [], 0
+    recorded, n_tot, anim = [], 0, []
     for code in sorted(set(tr.stats.station for tr in st)):
         try:
             sub = st.select(station=code)
@@ -373,9 +383,35 @@ def count_recorded(st, origin, mode):
             n_tot += 1
             if n_amp > 0 and s_amp / n_amp >= 4.0:
                 recorded.append(code)
+                # Decimated + self-normalised for the animation. Per-station
+                # normalisation is deliberate (and what IRIS does for GMVs):
+                # without it the nearest station saturates and the wavefront
+                # is invisible everywhere else.
+                try:
+                    a = tr.copy()
+                    hz = ANIM_HZ.get(mode, 2.0)
+                    f = max(1, int(round(a.stats.sampling_rate / hz)))
+                    if f > 1:
+                        a.decimate(f, no_filter=False)
+                    d = a.data.astype(float)[:ANIM_MAX_FRAMES]
+                    pk = float(max(abs(d.min()), abs(d.max()))) or 1.0
+                    lat = lon = None
+                    if sites and code in sites:
+                        lat, lon = sites[code][0], sites[code][1]
+                    anim.append({
+                        "code": code,
+                        "lat": round(lat, 4) if lat is not None else None,
+                        "lon": round(lon, 4) if lon is not None else None,
+                        "t0": round(float(a.stats.starttime - o), 2),
+                        "hz": round(a.stats.sampling_rate, 4),
+                        # -100..100 of that station's own peak
+                        "v": [int(round(v / pk * 100)) for v in d],
+                    })
+                except Exception:
+                    pass
         except Exception:
             continue
-    return recorded, n_tot
+    return recorded, n_tot, anim
 
 
 def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
@@ -413,7 +449,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         print(f"  {eid}: no waveform data for any candidate")
         return None
 
-    recorded_codes, n_with_data = count_recorded(st, origin, mode)
+    recorded_codes, n_with_data, anim = count_recorded(st, origin, mode, sites)
     print(f"  {eid}: visible at {len(recorded_codes)} of {n_with_data} stations with data")
 
     dist_by_code = dict(ranked)
@@ -497,7 +533,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
                     len(recorded_codes), n_with_data,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     has_waves = write_waveform_json(eid, origin, mag, place, depth, ev_lat,
-                                    ev_lon, lanes, mode, sites,
+                                    ev_lon, lanes, mode, sites, anim,
                                     os.path.join(OUT_DIR, f"{eid}.waves.json"))
     return {
         "event_id": eid,
@@ -527,7 +563,7 @@ WAVE_HZ = {"local": 10.0, "tele": 1.0}
 
 
 def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
-                        lanes, mode, sites, out_path):
+                        lanes, mode, sites, anim, out_path):
     """Decimated per-station traces for the browser: arrival picking,
     triangulation and network animation all read this one file."""
     target_hz = WAVE_HZ.get(mode, 10.0)
@@ -580,6 +616,10 @@ def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
         "v": RENDER_VERSION,
         "units": "um/s (multiply samples by scale_um_s)",
         "stations": stations,
+        # Whole-network wavefront animation: every station that recorded the
+        # event, each normalised to its OWN peak (see count_recorded).
+        "anim": anim or [],
+        "anim_note": "v is -100..100 of each station's own peak, not a shared scale",
     }
     with open(out_path, "w") as fh:
         json.dump(doc, fh, separators=(",", ":"))

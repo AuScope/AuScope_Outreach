@@ -35,6 +35,7 @@ server-side in Actions, where redirects and CORS changes can't break the pages.
 | `poster.html?code=X` | Printable A4 classroom QR poster (QR generated in-browser) |
 | `event.html?id=X` | Printable class worksheet for a recorded earthquake (S-P exercise) |
 | `locate.html?id=X` | Pick P and S arrivals on real waveform samples, then triangulate the epicentre from three schools |
+| `wavesweep.html?id=X` | Animated replay of an earthquake crossing the network, from the schools' own recordings |
 | `quakes3d.html` | 3D earthquake viewer: tilting Australia block + rotatable Ring of Fire globe |
 
 All widgets read the same published data (same-origin `data/` + the render branches on
