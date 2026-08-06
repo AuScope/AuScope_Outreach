@@ -91,7 +91,7 @@ canvas.dragging { cursor: grabbing; }
       <div class="seg" id="preset" role="group" aria-label="Camera angle">
         <button type="button" data-p="top">Top</button><button type="button" data-p="tilt" class="active">Tilt</button><button type="button" data-p="side">Side</button>
       </div>
-      <label class="ctl">Depth scale <input type="range" id="vex" min="1" max="20" step="1" value="6"><b id="vexv">6&times;</b></label>
+      <label class="ctl" id="vexctl">Depth scale <input type="range" id="vex" min="1" max="20" step="1" value="6"><b id="vexv">6&times;</b></label>
       <label class="ctl">Since
         <select id="win">
           <option value="1">24 hours</option>
@@ -182,9 +182,13 @@ function regionXYZ(lon, lat, depth) {
     z: -(depth || 0) * vex,
   };
 }
-// Globe mode: true sphere, radius 1, depth pushed inward (exaggerated).
+// Globe mode: a true sphere. Events are drawn ON the surface and depth is
+// shown by colour, not by radius: under an orthographic projection a deep
+// event facing the camera lands on exactly the same pixel as a shallow one,
+// so a "depth" radius would be invisible in the middle of the disc and
+// misleading near its edge. Depth structure belongs to the Australia view.
 function globeXYZ(lon, lat, depth) {
-  const r = 1 - ((depth || 0) / R_EARTH) * vex;
+  const r = 1;   // surface positions only — see note above
   const la = lat * Math.PI / 180, lo = lon * Math.PI / 180;
   return { x: r * Math.cos(la) * Math.sin(lo), y: -r * Math.cos(la) * Math.cos(lo), z: r * Math.sin(la) };
 }
@@ -414,11 +418,13 @@ document.querySelectorAll('#mode button').forEach(b => b.addEventListener('click
   mode = b.dataset.m;
   document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('active', x === b));
   document.getElementById('stationsctl').style.display = mode === 'region' ? '' : 'none';
-  // Sensible defaults per mode
-  const vexEl = document.getElementById('vex');
-  vexEl.max = mode === 'globe' ? 10 : 20;
-  vex = mode === 'globe' ? 4 : 6;
-  vexEl.value = vex; document.getElementById('vexv').innerHTML = vex + '&times;';
+  document.getElementById('vexctl').style.display = mode === 'region' ? '' : 'none';
+  // Sensible defaults per mode (depth scale applies to the Australia view only)
+  if (mode === 'region') {
+    vex = 6;
+    document.getElementById('vex').value = vex;
+    document.getElementById('vexv').innerHTML = vex + '&times;';
+  }
   az = mode === 'globe' ? 134 * Math.PI / 180 : 0;
   el = mode === 'globe' ? -0.35 : 0.62; zoom = 1; picked = null;
   infoEl.classList.remove('on');
@@ -450,13 +456,16 @@ function tale() {
       + 'earthquakes sit in a thin red skin near the surface — our continent is one rigid old plate, so it '
       + 'only breaks in the shallow crust. To the north and east the dots plunge downward in slanting sheets: '
       + 'those are <b>subduction zones</b>, where one tectonic plate slides beneath another and keeps '
-      + 'breaking as it goes. Colours run from red (shallow) to purple (deepest).'
+      + 'breaking as it goes. Colours run from red (shallow) to purple (deepest). Note the depth scale is '
+      + '<b>stretched</b> (that is what the slider does) — real slabs are far less steep than they look here, '
+      + 'because 600 km of depth is tiny next to 9,000 km of map.'
     : '<b>What to look for:</b> spin the globe. Nobody drew the plate boundaries — the earthquakes did. '
-      + 'This is the <b>Ring of Fire</b>, the belt of subduction zones around the Pacific. Watch how the '
-      + 'colours change as slabs dive: red at the trench, then orange, green and purple as the sinking plate '
-      + 'reaches hundreds of kilometres down. The deepest here are under Fiji and Tonga — around '
-      + '<b>670 km</b>, the deepest earthquakes anywhere on Earth. Australia sits quietly in the middle of '
-      + 'its plate, away from the ring.';
+      + 'This is the <b>Ring of Fire</b>, the belt of subduction zones around the Pacific. Follow one arc '
+      + 'and watch the colours change across it: red at the trench where the plates meet, then orange, '
+      + 'green and purple inland as the sinking plate keeps breaking hundreds of kilometres down. The '
+      + 'purple ones near Fiji and Tonga are about <b>670 km</b> deep — the deepest earthquakes anywhere '
+      + 'on Earth. Australia sits quietly in the middle of its plate, away from the ring. Switch to the '
+      + '<b>Australia</b> view to see those depths as an actual cross-section.';
 }
 
 // ── Load ────────────────────────────────────────────────────
