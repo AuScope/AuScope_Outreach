@@ -144,7 +144,7 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 9
+RENDER_VERSION = 10
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -323,12 +323,30 @@ def pick_channel(channels):
     return sorted(channels)[0] if channels else None
 
 
-# Wavefront animation: 2 Hz for local events (the front crosses in a couple of
-# minutes) and 1 Hz for teleseisms, which are band-limited to 0.1 Hz anyway.
-# Frames are capped so a 65-minute teleseismic window cannot bloat the file —
-# the interesting part is over long before the cap.
-ANIM_HZ = {"local": 2.0, "tele": 1.0}
-ANIM_MAX_FRAMES = 1800
+# Wavefront animation. Local events are high-passed at 1 Hz, so the animation
+# MUST sample well above that or the decimator's anti-alias filter removes the
+# very band the high-pass kept. Teleseisms are band-limited to 0.1 Hz, so
+# 0.5 Hz is ample and lets a full hour fit inside the frame cap.
+# ANIM_PRE_S trims the pre-event padding that only exists for the SNR test.
+ANIM_HZ = {"local": 5.0, "tele": 0.5}
+ANIM_PRE_S = 60
+ANIM_MAX_FRAMES = 2400
+
+
+def decimate_to(tr, target_hz):
+    """Decimate towards target_hz in stages. ObsPy rejects any single factor
+    above 16, so a 40 Hz trace heading for 0.5 Hz has to go in steps."""
+    guard = 0
+    while guard < 8:
+        guard += 1
+        factor = int(round(tr.stats.sampling_rate / target_hz))
+        if factor <= 1:
+            break
+        step = next((k for k in (10, 8, 7, 6, 5, 4, 3, 2) if factor % k == 0), None)
+        if step is None:                      # not an exact divisor
+            step = min(factor, 10)
+        tr.decimate(step, no_filter=False)
+    return tr
 
 
 def count_recorded(st, origin, mode, sites=None):
@@ -351,6 +369,8 @@ def count_recorded(st, origin, mode, sites=None):
                 continue
             tr = merged[0].copy()
             tr.detrend("demean")
+            tr.detrend("linear")
+            tr.taper(0.05, type="hann")   # else the filter rings at the edge
             if mode == "tele":
                 tr.filter("bandpass", freqmin=TELE_BP_HZ[0],
                           freqmax=TELE_BP_HZ[1], corners=2, zerophase=True)
@@ -389,12 +409,20 @@ def count_recorded(st, origin, mode, sites=None):
                 # is invisible everywhere else.
                 try:
                     a = tr.copy()
-                    hz = ANIM_HZ.get(mode, 2.0)
-                    f = max(1, int(round(a.stats.sampling_rate / hz)))
-                    if f > 1:
-                        a.decimate(f, no_filter=False)
-                    d = a.data.astype(float)[:ANIM_MAX_FRAMES]
-                    pk = float(max(abs(d.min()), abs(d.max()))) or 1.0
+                    # Keep only a little pre-event context: the long pre-roll
+                    # exists for the SNR test, not for the animation, and
+                    # carrying it wasted frames and invited edge artefacts.
+                    a.trim(starttime=o - ANIM_PRE_S)
+                    decimate_to(a, ANIM_HZ.get(mode, 2.0))
+                    # Discard the decimator's own edge transient before the
+                    # peak is measured.
+                    edge = int(round(a.stats.sampling_rate * 5))
+                    d = a.data.astype(float)[edge:edge + ANIM_MAX_FRAMES]
+                    if not len(d):
+                        raise ValueError("no animation samples")
+                    pk = float(max(abs(d.min()), abs(d.max())))
+                    if pk <= 0:
+                        raise ValueError("flat animation trace")
                     lat = lon = None
                     if sites and code in sites:
                         lat, lon = sites[code][0], sites[code][1]
@@ -402,13 +430,14 @@ def count_recorded(st, origin, mode, sites=None):
                         "code": code,
                         "lat": round(lat, 4) if lat is not None else None,
                         "lon": round(lon, 4) if lon is not None else None,
-                        "t0": round(float(a.stats.starttime - o), 2),
+                        "t0": round(float(a.stats.starttime - o)
+                                    + edge / a.stats.sampling_rate, 2),
                         "hz": round(a.stats.sampling_rate, 4),
                         # -100..100 of that station's own peak
                         "v": [int(round(v / pk * 100)) for v in d],
                     })
-                except Exception:
-                    pass
+                except Exception as exc:
+                    print(f"    anim skipped for {code}: {short(exc)}")
         except Exception:
             continue
     return recorded, n_tot, anim
@@ -572,9 +601,7 @@ def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
     for code, dist, cha, tr, site in lanes:
         try:
             t = tr.copy()
-            factor = max(1, int(round(t.stats.sampling_rate / target_hz)))
-            if factor > 1:
-                t.decimate(factor, no_filter=False)   # anti-alias on the way down
+            decimate_to(t, target_hz)                 # anti-alias on the way down
             data = t.data.astype(float)
             if not len(data):
                 continue
@@ -794,6 +821,9 @@ def main():
             eid = fn[:-4]
             if eid not in rendered:
                 os.remove(os.path.join(OUT_DIR, fn))
+                wj = os.path.join(OUT_DIR, fn.replace(".png", ".waves.json"))
+                if os.path.exists(wj):
+                    os.remove(wj)
 
     manifest = {
         "generated": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
