@@ -349,8 +349,14 @@ function drawSection(lanes, mode, myCode) {
   let state = 'none';                              // no school chosen
   if (MYCODE) {
     if (myLane) state = 'recorded';
-    else if (cov && cov.recorded && cov.recorded.indexOf(MYCODE) >= 0) state = 'far';
-    else if (cov && cov.quiet && cov.quiet.indexOf(MYCODE) >= 0) state = 'quiet';
+    // No coverage block means the file was published by an older pipeline,
+    // which happens whenever the pages deploy ahead of the re-render. Without
+    // it we know NOTHING about this school, and the old fall-through told
+    // every school its seismometer was offline - a false claim about someone
+    // else's instrument. Say we cannot tell instead.
+    else if (!cov || !cov.recorded || !cov.quiet) state = 'unknown';
+    else if (cov.recorded.indexOf(MYCODE) >= 0) state = 'far';
+    else if (cov.quiet.indexOf(MYCODE) >= 0) state = 'quiet';
     else state = 'off';
   }
 
@@ -536,6 +542,10 @@ function drawSection(lanes, mode, myCode) {
       + 'too far away, or too buried in local noise to stand out. That is the normal outcome: '
       + (nRec != null && nHad ? 'only ' + nRec + ' of the ' + nHad + ' schools that were recording picked it up. ' : '')
       + '<b>Worth asking the class:</b> what would have to change for us to see it?</div>';
+  } else if (state === 'unknown') {
+    banner = '<div class="mybanner off">This earthquake was published before per-school details '
+      + 'were recorded, so we cannot say whether ' + esc(myName) + ' picked it up. The lanes below '
+      + 'are the clearest traces from across the network.</div>';
   } else if (state === 'off') {
     banner = '<div class="mybanner off"><b>' + esc(myName) + ' was not recording when this earthquake happened.</b> '
       + 'The lanes below are from schools that were. If this keeps happening, the seismometer may need '

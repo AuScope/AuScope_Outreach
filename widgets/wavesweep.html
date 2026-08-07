@@ -312,9 +312,13 @@ function build() {
   // be added - the point is that a class can find their own.
   setTraces([]);
   refCv = document.getElementById('ref'); refCtx = refCv.getContext('2d');
-  document.getElementById('reflabel').innerHTML =
-    '<b>The same earthquake at ' + refStas.length + ' schools</b>, nearest at the top. '
+  // Older published files carry no dist_km, so the stack cannot be ordered by
+  // distance - do not claim it is.
+  const sorted = refStas.every(s => s.dist_km != null);
+  const stackLabel = () => '<b>The same earthquake at ' + refStas.length + ' schools</b>'
+    + (sorted ? ', nearest at the top. ' : '. ')
     + 'The yellow line is "now" &ndash; watch it cross each trace in turn.';
+  document.getElementById('reflabel').innerHTML = stackLabel();
 
   const addSel = document.getElementById('addsta');
   const extras = [];
@@ -333,9 +337,7 @@ function build() {
     if (!this.value) return;
     extras.push(this.value);
     setTraces(extras);
-    document.getElementById('reflabel').innerHTML =
-      '<b>The same earthquake at ' + refStas.length + ' schools</b>, nearest at the top. '
-      + 'The yellow line is "now" &ndash; watch it cross each trace in turn.';
+    document.getElementById('reflabel').innerHTML = stackLabel();
     renderAddOptions();
     this.value = '';
     drawRef();
