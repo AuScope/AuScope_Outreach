@@ -334,7 +334,25 @@ function renderStationBar() {
 function setWindowForStation() {
   const st = station();
   const last = st.t0 + st.samples.length / st.hz;
-  tMin = st.t0; tMax = last;
+  // The published window has to run long enough for the FARTHEST school's S
+  // wave to arrive, which leaves a nearby school's P and S squashed into the
+  // first few percent of the trace - impossible to pick accurately. Zoom to
+  // the span this station's arrivals must lie in.
+  //
+  // Derived from DISTANCE only (already printed on the station button), never
+  // from the predicted p_s/s_s - sizing the window around the answer itself
+  // would point straight at it.
+  //
+  // Honest caveat: arrival time and any sensible window BOTH scale with
+  // distance, so S lands at a roughly similar fraction across stations
+  // (~48% here, where it used to be ~17-26%). A student who noticed that
+  // could guess rather than measure. Judged worth it: the exercise is
+  // self-marking rather than assessed, and at 17% the P and S markers were
+  // within a few pixels of each other, which made honest measurement
+  // impossible. Precision for everyone beats denying a shortcut to one.
+  const need = Math.max(180, st.dist_km / 2.2 + 90);   // ~1.6x the Lg time
+  tMin = st.t0;
+  tMax = Math.min(last, Math.max(st.t0 + 120, need));
 }
 
 // ── Stage 2: triangulation ──────────────────────────────────
@@ -485,9 +503,18 @@ function build() {
     if (document.getElementById('mapcard').style.display !== 'none') locate(true);
   });
   const hint = document.getElementById('scrollhint');
-  if (hint && ev.stations.length > 4)
-    hint.textContent = ev.stations.length + ' schools recorded this earthquake. '
-      + 'Scroll the row sideways to reach them all; each one has its own colour on the map below.';
+  // Lanes are no longer the same as "schools that recorded it": a school can
+  // record an event and still be too far away for the S-P distance rule, so
+  // it gets no lane here. Say both numbers rather than conflating them.
+  const nRec = (ev.coverage && ev.coverage.recorded) ? ev.coverage.recorded.length : null;
+  if (hint && ev.stations.length > 3) {
+    hint.textContent = (nRec && nRec > ev.stations.length)
+      ? nRec + ' schools recorded this earthquake; the ' + ev.stations.length
+        + ' close enough to measure from are shown. Scroll the row sideways to reach '
+        + 'them all - each has its own colour on the map below.'
+      : ev.stations.length + ' schools recorded this earthquake. Scroll the row sideways to '
+        + 'reach them all; each one has its own colour on the map below.';
+  }
   setWindowForStation(); renderStationBar(); drawTrace(); updateReadout();
 }
 

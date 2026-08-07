@@ -222,6 +222,9 @@ async function jget(url) { const r = await fetch(url); if (!r.ok) throw new Erro
   // Links
   document.getElementById('links').innerHTML =
     '<a href="webicorder.html?code=' + CODE + '" target="_blank" rel="noopener">Open the full 24-hour drum</a>'
+    // Carries the code, so the worksheet is built around THIS school's own
+    // trace rather than whichever schools happened to be nearest.
+    + '<a href="event.html?code=' + CODE + '" target="_blank" rel="noopener">Worksheets for this school</a>'
     + '<a href="poster.html?code=' + CODE + '" target="_blank" rel="noopener">Print the classroom QR poster</a>';
 })().catch(e => {
   document.getElementById('school').textContent = 'Could not load station data';

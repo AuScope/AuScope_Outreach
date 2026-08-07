@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <!--
-  widgets/event.html?id=ga2026ndzjfe
+  widgets/event.html?id=ga2026ndzjfe[&code=AUXXX][&level=junior|middle|senior]
   Printable class worksheet for one recorded earthquake: the record section
   with P/S marks, the event facts, and the classic S−P exercise (measure the
   gap, estimate the distance, check against the printed distances). Entirely
   generated from the published event manifest + quake store - a fresh
   worksheet exists for every event within hours, automatically.
+
+  With ?code= the sheet is built around THAT school: its own trace is the
+  highlighted lane, drawn as print-sharp SVG from <id>.waves.json, with one
+  clearly closer and one clearly further school for comparison. Only about a
+  third of schools record any given local earthquake, so the sheet states
+  which of three cases the school is in rather than pretending:
+    recorded  - your trace is the first lane
+    quiet     - your sensor was listening and this one was too small/far to
+                show up, which is the lesson, not a failure
+    off       - your sensor was not recording then; generic sheet instead.
 -->
 <html lang="en">
 <head>
@@ -32,6 +42,18 @@ body { font-family: Arial, Helvetica, sans-serif; background: #e5e7eb; color: #3
 .fact { border: 1px solid #e2e8f0; border-radius: 3mm; padding: 2.5mm 4mm; font-size: 10pt; }
 .fact b { color: #282572; }
 .section-img { width: 100%; height: auto; margin-top: 5mm; border: 1px solid #e2e8f0; }
+.section-svg { display: block; width: 100%; height: auto; margin-top: 5mm; border: 1px solid #e2e8f0; }
+.mybanner { margin-top: 5mm; padding: 3mm 4mm; border-radius: 2mm; font-size: 10pt; line-height: 1.55; }
+.mybanner b { color: inherit; }
+.mybanner.yes { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+.mybanner.quiet { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.mybanner.off { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; }
+/* Backgrounds must survive printing or the highlighted lane loses its point */
+@media print {
+  .mybanner, .section-svg rect { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* A lane split across a page break is unreadable and unmeasurable */
+  .section-svg, .section-img, .mybanner { break-inside: avoid; page-break-inside: avoid; }
+}
 h2 { font-size: 12pt; color: #b45309; margin-top: 6mm; }
 ol.tasks { margin: 3mm 0 0 6mm; font-size: 10.5pt; line-height: 1.75; }
 ol.tasks li { margin-bottom: 2.5mm; }
@@ -44,6 +66,7 @@ ol.tasks li { margin-bottom: 2.5mm; }
 <body>
 <div class="toolbar"><a class="hubback" href="../teachers/">&larr; Teacher Hub</a> 
   <select id="picker" title="Choose a recorded earthquake"></select>
+  <select id="school" title="Choose your school to use its own seismometer trace"></select>
   <select id="level" title="Choose the year level">
     <option value="junior">Years 1&ndash;4</option>
     <option value="middle" selected>Years 5&ndash;8</option>
@@ -60,6 +83,12 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function haversineKm(la1, lo1, la2, lo2) {
+  const R = 6371, r = Math.PI / 180;
+  const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
+  const a = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * r) * Math.cos(la2 * r) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
 // Kid-readable UTC: "28 Jul 2026, 07:27 UTC" - no T, no Z
 function fmtWhen(d) {
   const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -68,9 +97,176 @@ function fmtWhen(d) {
     + String(d.getUTCMinutes()).padStart(2, '0') + ' UTC';
 }
 
+// ── School-centred record section ───────────────────────────────────────
+// Drawn as SVG, not canvas: this sheet is printed on A4 and vector strokes
+// stay sharp where a raster canvas goes fuzzy.
+const LG_KM_S = 3.5, SURF_KM_S = 4.0;   // must match render_event_waveforms.py
+const SVG_W = 720, LANE_H = 104, AXIS_H = 40, PAD_L = 8, PAD_R = 8;
+
+function svgEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Min/max envelope per pixel column: a lane holds thousands of samples but
+// only ~700 columns of print, and drawing them all bloats the SVG for nothing.
+function envelope(samples, t0, hz, tMin, tMax, x0, x1) {
+  const cols = Math.max(64, Math.round(x1 - x0));
+  const lo = new Float64Array(cols).fill(Infinity);
+  const hi = new Float64Array(cols).fill(-Infinity);
+  let any = false;
+  for (let i = 0; i < samples.length; i++) {
+    const t = t0 + i / hz;
+    if (t < tMin || t > tMax) continue;
+    const c = Math.min(cols - 1, Math.max(0, Math.floor((t - tMin) / (tMax - tMin) * cols)));
+    const v = samples[i];
+    if (v < lo[c]) lo[c] = v;
+    if (v > hi[c]) hi[c] = v;
+    any = true;
+  }
+  if (!any) return null;
+  return { cols, lo, hi };
+}
+
+function lanePath(env, x0, x1, mid, amp, peak) {
+  const { cols, lo, hi } = env;
+  const w = x1 - x0;
+  let up = '', down = [];
+  for (let c = 0; c < cols; c++) {
+    if (!isFinite(lo[c])) continue;
+    const x = (x0 + (c + 0.5) / cols * w).toFixed(1);
+    up += (up ? 'L' : 'M') + x + ' ' + (mid - hi[c] / peak * amp).toFixed(1);
+    down.push('L' + x + ' ' + (mid - lo[c] / peak * amp).toFixed(1));
+  }
+  if (!up) return '';
+  return up + down.reverse().join('');
+}
+
+// Choose comparison schools that make the moveout visible: one clearly
+// closer and one clearly further beats "the next two along", which can be
+// three schools at almost the same distance showing almost the same arrival.
+function pickComparisons(all, mine, n) {
+  const sorted = all.slice().sort((a, b) => a.dist_km - b.dist_km);
+  if (!mine) return sorted.slice(0, n);
+  const i = sorted.findIndex(x => x.code === mine.code);
+  const closer = sorted.slice(0, i), further = sorted.slice(i + 1);
+  const nearestTo = (arr, target) => arr.length
+    ? arr.reduce((b, x) => Math.abs(x.dist_km - target) < Math.abs(b.dist_km - target) ? x : b)
+    : null;
+  const out = [];
+  const a = nearestTo(closer, mine.dist_km * 0.6);
+  const b = nearestTo(further, mine.dist_km * 1.6);
+  if (a) out.push(a);
+  if (b) out.push(b);
+  // Short of partners on one side, take more from the other rather than
+  // silently printing a one-lane sheet.
+  const pool = sorted.filter(x => x.code !== mine.code && !out.includes(x));
+  while (out.length < n - 1 && pool.length) out.push(pool.shift());
+  out.push(mine);
+  return out.sort((x, y) => x.dist_km - y.dist_km);
+}
+
+function drawSection(lanes, mode, myCode) {
+  if (!lanes.length) return '';
+  const isTeleMode = mode === 'tele';
+  const t0 = Math.min.apply(null, lanes.map(l => l.t0));
+  const tData = Math.max.apply(null, lanes.map(l => l.t0 + l.samples.length / l.hz));
+  // Fit the axis to THESE lanes. The published window runs long enough for
+  // the most distant school in the network, which can be several times what
+  // three lanes need - and that squeezes the S-P gap a student has to
+  // measure down to a few millimetres of printed paper.
+  const lastArrival = Math.max.apply(null, lanes.map(l =>
+    Math.max(l.s_s || 0, l.dist_km / (isTeleMode ? SURF_KM_S : LG_KM_S))));
+  const tEnd = Math.min(tData, Math.max(t0 + 120, lastArrival * 1.35 + 30));
+  const x0 = PAD_L + 4, x1 = SVG_W - PAD_R;
+  const H = lanes.length * LANE_H + AXIS_H;
+  const xOf = t => x0 + (t - t0) / (tEnd - t0) * (x1 - x0);
+  const gv = LG_KM_S, sv = SURF_KM_S;
+  let out = '<svg class="section-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '
+    + SVG_W + ' ' + H + '" role="img" aria-label="Seismic record section with predicted P and S arrivals">'
+    + '<rect width="' + SVG_W + '" height="' + H + '" fill="#fff"/>';
+
+  lanes.forEach((L, i) => {
+    const yTop = i * LANE_H, mid = yTop + LANE_H / 2 + 4, amp = LANE_H * 0.33;
+    const isMine = L.code === myCode;
+    if (isMine) out += '<rect x="0" y="' + yTop + '" width="' + SVG_W + '" height="' + LANE_H
+      + '" fill="#fff7ed"/>';
+    if (i) out += '<line x1="0" y1="' + yTop + '" x2="' + SVG_W + '" y2="' + yTop
+      + '" stroke="#e2e8f0" stroke-width="1"/>';
+    // Each lane is scaled to its OWN peak (the record-section convention, and
+    // what the PNG does); the printed peak below is how amplitudes compare.
+    let peak = 1;
+    for (let k = 0; k < L.samples.length; k++) {
+      const v = Math.abs(L.samples[k]); if (v > peak) peak = v;
+    }
+    const env = envelope(L.samples, L.t0, L.hz, t0, tEnd, x0, x1);
+    // Stroked as well as filled: where the ground was genuinely still, the
+    // min/max outline has zero height and a fill alone renders nothing, which
+    // reads as missing data rather than as a quiet trace.
+    if (env) {
+      const clr = isMine ? '#282572' : '#475569';
+      out += '<path d="' + lanePath(env, x0, x1, mid, amp, peak)
+        + '" fill="' + clr + '" stroke="' + clr + '" stroke-width="0.6"/>';
+    }
+    // predicted arrivals for THIS lane
+    const isTele = mode === 'tele';
+    const marks = [[L.p_s, '#2563eb', 'P', 0], [L.s_s, '#dc2626', 'S', 0],
+                   [L.dist_km / (isTele ? sv : gv), '#6b7280', isTele ? 'Surf' : 'Lg', 1]];
+    marks.forEach(([tt, clr, lbl, row]) => {
+      if (tt == null || tt < t0 || tt > tEnd) return;
+      const x = xOf(tt).toFixed(1);
+      // Lg/Surf gets its own row: at short range it lands within a second or
+      // two of S and the two labels sat on top of each other.
+      const ty = yTop + LANE_H - (row ? 20 : 7);
+      out += '<line x1="' + x + '" y1="' + (yTop + 6) + '" x2="' + x + '" y2="' + (yTop + LANE_H - 6)
+        + '" stroke="' + clr + '" stroke-width="1.2" stroke-dasharray="5 4"/>'
+        + '<text x="' + x + '" y="' + ty + '" font-family="Arial" font-size="11" '
+        + 'font-weight="bold" fill="' + clr + '" text-anchor="middle">' + lbl + '</text>';
+    });
+    const name = svgEsc(L.site || L.code) + (isMine ? '  (your school)' : '');
+    out += '<text x="' + (x0 + 3) + '" y="' + (yTop + 15) + '" font-family="Arial" font-size="11.5" '
+      + 'font-weight="bold" fill="' + (isMine ? '#b45309' : '#282572') + '">' + name + '</text>'
+      + '<text x="' + (x1 - 3) + '" y="' + (yTop + 15) + '" font-family="Arial" font-size="10.5" '
+      + 'fill="#6b7280" text-anchor="end">' + L.dist_km.toLocaleString() + ' km &#183; peak '
+      + (L.peak_um_s != null ? Number(L.peak_um_s).toPrecision(3) : '?') + ' &#181;m/s</text>';
+  });
+
+  // origin line across every lane
+  if (t0 < 0 && tEnd > 0) {
+    const x = xOf(0).toFixed(1);
+    out += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + (lanes.length * LANE_H)
+      + '" stroke="#b91c1c" stroke-width="1.6"/>';
+  }
+  // shared time axis
+  const span = tEnd - t0;
+  const step = span > 1800 ? 300 : span > 900 ? 120 : span > 400 ? 60 : span > 150 ? 30 : 10;
+  const yA = lanes.length * LANE_H;
+  out += '<line x1="' + x0 + '" y1="' + yA + '" x2="' + x1 + '" y2="' + yA + '" stroke="#94a3b8"/>';
+  for (let t = Math.ceil(t0 / step) * step; t < tEnd; t += step) {
+    const x = xOf(t).toFixed(1);
+    out += '<line x1="' + x + '" y1="' + yA + '" x2="' + x + '" y2="' + (yA + 5) + '" stroke="#94a3b8"/>'
+      + '<text x="' + x + '" y="' + (yA + 18) + '" font-family="Arial" font-size="11" fill="#6b7280" '
+      + 'text-anchor="middle">' + t + '</text>';
+  }
+  // Caption on its own line: beside the ticks it collided with the last label
+  out += '<text x="' + ((x0 + x1) / 2) + '" y="' + (yA + 33) + '" font-family="Arial" font-size="10.5" '
+    + 'fill="#94a3b8" text-anchor="middle">seconds after the earthquake</text>';
+  return out + '</svg>';
+}
+
 (async function() {
   const params = new URLSearchParams(window.location.search);
   let id = (params.get('id') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  // A teacher prints for the same school over and over; remember the choice.
+  // localStorage throws in sandboxed or third-party-blocked iframes, and this
+  // page is designed to be embedded.
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (err) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (err) { /* fine */ } },
+    del(k) { try { localStorage.removeItem(k); } catch (err) { /* fine */ } },
+  };
+  let MYCODE = (params.get('code') || store.get('ausis-my-school') || '')
+    .replace(/[^A-Za-z0-9_-]/g, '').toUpperCase();
   const LEVEL = ['junior', 'middle', 'senior'].includes(params.get('level'))
     ? params.get('level') : 'middle';
   document.getElementById('level').value = LEVEL;
@@ -93,15 +289,98 @@ function fmtWhen(d) {
   if (!id || !events.some(e => e.event_id === id)) id = events[0].event_id;
   picker.value = id;
   picker.addEventListener('change', () => {
-    window.location.search = '?id=' + encodeURIComponent(picker.value);
+    const u = new URLSearchParams(window.location.search);
+    u.set('id', picker.value);
+    window.location.search = u.toString();
   });
+
+  // Every AuSIS school, so a school that did NOT record this event can still
+  // be chosen and told so honestly.
+  let schools = [];
+  try {
+    const geo = await (await fetch('../data/ausis_stations.geojson?v=' + hourStamp())).json();
+    schools = (geo.features || []).map(f => ({
+      code: f.properties.code,
+      name: f.properties.name || f.properties.code,
+      lat: f.geometry && f.geometry.coordinates ? f.geometry.coordinates[1] : null,
+      lon: f.geometry && f.geometry.coordinates ? f.geometry.coordinates[0] : null,
+      ended: !!f.properties.endTime,
+    })).filter(x => x.code && !x.ended).sort((a, b) => a.name.localeCompare(b.name));
+  } catch (err) { /* the sheet still works without a school */ }
+  const schoolSel = document.getElementById('school');
+  if (schools.length) {
+    schoolSel.innerHTML = '<option value="">No particular school (show the clearest traces)</option>'
+      + schools.map(x => '<option value="' + esc(x.code) + '"'
+        + (x.code === MYCODE ? ' selected' : '') + '>' + esc(x.name) + '</option>').join('');
+    if (!schools.some(x => x.code === MYCODE)) MYCODE = '';
+    schoolSel.addEventListener('change', function () {
+      if (this.value) store.set('ausis-my-school', this.value);
+      else store.del('ausis-my-school');
+      const u = new URLSearchParams(window.location.search);
+      if (this.value) u.set('code', this.value); else u.delete('code');
+      window.location.search = u.toString();
+    });
+  } else {
+    schoolSel.style.display = 'none';
+  }
 
   const e = events.find(x => x.event_id === id);
   const when = new Date(e.origin);
   const isLocal = e.mode !== 'tele';
-  const n = (e.stations || []).length;
-  const nearest = (e.stations || []).slice().sort((a, b) => a.dist_km - b.dist_km)[0];
+  const mySchool = schools.find(x => x.code === MYCODE) || {};
+  const myName = mySchool.name || MYCODE;
+  // How far this school actually is, so the "no lane for you" message can
+  // give the real reason instead of assuming one.
+  const myKm = (mySchool.lat != null && e.lat != null)
+    ? Math.round(haversineKm(mySchool.lat, mySchool.lon, e.lat, e.lon)) : null;
+
+  // Pull the samples so the sheet can be built around one school's own trace.
+  let waves = null;
+  if (e.waves) {
+    try {
+      const r = await fetch(RAW + encodeURIComponent(e.event_id) + '.waves.json?v=' + hourStamp());
+      if (r.ok) waves = await r.json();
+    } catch (err) { /* fall back to the generic sheet below */ }
+  }
+
+  // Which of the three cases is this school in?
+  const cov = (waves && waves.coverage) || null;
+  const myLane = waves ? (waves.stations || []).find(x => x.code === MYCODE) : null;
+  let state = 'none';                              // no school chosen
+  if (MYCODE) {
+    if (myLane) state = 'recorded';
+    else if (cov && cov.recorded && cov.recorded.indexOf(MYCODE) >= 0) state = 'far';
+    else if (cov && cov.quiet && cov.quiet.indexOf(MYCODE) >= 0) state = 'quiet';
+    else state = 'off';
+  }
+
+  // Lanes for the drawn section: your school plus a clearly closer and a
+  // clearly further one, or simply the nearest few when no school is chosen.
+  let drawn = [];
+  if (waves && (waves.stations || []).length) {
+    // With a school chosen, three lanes keep the comparison focused on it.
+    // Without one, match the PNG record section's five nearest.
+    drawn = myLane ? pickComparisons(waves.stations, myLane, 3)
+                   : waves.stations.slice().sort((a, b) => a.dist_km - b.dist_km).slice(0, 5);
+  }
+  const useSvg = drawn.length > 0;
+  const shown = useSvg ? drawn : (e.stations || []);
+  const n = shown.length;
+  const nearest = shown.slice().sort((a, b) => a.dist_km - b.dist_km)[0];
   document.title = 'AuSIS worksheet - M' + Number(e.mag).toFixed(1) + ' ' + e.place;
+
+  const MINE = (state === 'recorded');
+  const myLabel = MINE ? esc(myName) : 'the top lane';
+  const yourLane = MINE ? "<b>your school's lane</b> (the highlighted one)" : 'a school lane';
+  const yourDist = MINE ? myLane.dist_km : (nearest ? nearest.dist_km : null);
+  // An extra question that only makes sense once your own school is on the
+  // sheet: same earthquake, different sensors, different numbers.
+  const compareQ = MINE ? `
+          <li><b>Compare your school with the others.</b> Each lane prints its strongest ground
+              movement in micrometres per second. ${esc(myName)}: <span class="blank"></span> µm/s.
+              A school closer to the epicentre: <span class="blank"></span> µm/s. Why is the closer
+              one usually bigger, and what else could make a school's wiggle small?
+              <span class="blank" style="min-width:50mm"></span></li>` : '';
 
   const hintFoot = 'Predicted arrivals use the iasp91 Earth model - real arrivals can differ by a second or two, ' +
     'which is itself worth discussing. The grey dashed line marks the arrival that usually carries the BIGGEST ' +
@@ -121,13 +400,16 @@ function fmtWhen(d) {
           <li>With a ruler, join the start of the wiggles on each line, top to bottom. Is your line straight up
               and down, or does it lean? Which way?</li>
           <li>Which school had the <b>biggest</b> wiggle? Was it the closest one? <span class="blank"></span></li>
+          ${MINE ? '<li>Find <b>' + esc(myName) + '</b> - that is your own school\'s seismometer, in your own '
+            + 'building. Did your school feel it before or after the other schools on this page? '
+            + '<span class="blank"></span></li>' : ''}
         </ol>
         <div class="hint">Teacher notes: the leaning line IS wave travel - shaking spreads out like ripples in a pond,
           about 3–8 km every second. ${hintFoot}</div>`,
       middle: `
         <h2>Your turn: how far away was it? (Years 5–8)</h2>
         <ol class="tasks">
-          <li>Pick a school lane. The <b style="color:#2563eb">blue dashed line</b> is the predicted arrival of the
+          <li>Start with ${yourLane}. The <b style="color:#2563eb">blue dashed line</b> is the predicted arrival of the
               <b>P wave</b> (fast, arrives first). The <b style="color:#dc2626">red dashed line</b> is the
               <b>S wave</b> (slower). Read the time between them off the axis:
               S − P = <span class="blank"></span> seconds.</li>
@@ -138,7 +420,7 @@ function fmtWhen(d) {
           <li>The <b style="color:#6b7280">grey dashed line (Lg)</b> marks where the biggest shaking usually
               arrives - waves bouncing along inside the crust. Does the biggest wiggle in your lane land near it?</li>
           <li>Look across all ${n} schools, nearest at the top. What happens to the S−P gap as distance grows?
-              Why? <span class="blank" style="min-width:60mm"></span></li>
+              Why? <span class="blank" style="min-width:60mm"></span></li>${compareQ}
         </ol>
         <div class="hint">Teacher notes: P ~6–8 km/s, S ~3.5–4.5 km/s in the crust; the ×8 rule comes from
           (Vp·Vs)/(Vp−Vs) ≈ 8. ${hintFoot}</div>`,
@@ -151,14 +433,16 @@ function fmtWhen(d) {
           <li>Derive that constant: if waves leave together, show the separation after distance d is
               d(1/V<sub>s</sub> − 1/V<sub>p</sub>), so d = (S−P) · V<sub>p</sub>V<sub>s</sub>/(V<sub>p</sub>−V<sub>s</sub>).
               Evaluate with V<sub>p</sub> = 6.4, V<sub>s</sub> = 3.7 km/s.</li>
-          <li>The origin time is ${esc(when.toISOString().slice(11, 19))} UTC (solid red line). Using the nearest
-              lane (${nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km + ' km' : '–'}), estimate
-              V<sub>p</sub> directly: <span class="blank"></span> km/s.</li>
+          <li>The origin time is ${esc(when.toISOString().slice(11, 19))} UTC (solid red line). Using
+              ${MINE ? 'your own school\'s lane' : 'the nearest lane'}
+              (${MINE ? esc(myName) + ', ' + myLane.dist_km.toLocaleString() + ' km'
+                      : (nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km.toLocaleString() + ' km' : '–')}),
+              estimate V<sub>p</sub> directly: <span class="blank"></span> km/s.</li>
           <li>The biggest amplitudes arrive at the <b style="color:#6b7280">grey Lg mark</b> (≈3.5 km/s), after
               direct S. Lg is shear energy trapped in the crustal waveguide. Why would guided waves lose energy
               more slowly with distance than body waves? (Hint: spreading in 2D vs 3D.)</li>
           <li>One S−P time gives a distance, not a location. How many stations do you need to find the epicentre,
-              and how would you construct it? Sketch on the back.</li>
+              and how would you construct it? Sketch on the back.</li>${compareQ}
         </ol>
         <div class="hint">Teacher notes: expect d/(S−P) ≈ 8–9 km/s on cratonic paths (Australian crust is fast -
           predictions from a global average model run a touch late here, a good uncertainty discussion).
@@ -169,15 +453,18 @@ function fmtWhen(d) {
         <h2>Waves from far away (Years 1–4)</h2>
         <ol class="tasks">
           <li>This earthquake happened near <b>${esc(e.place)}</b> - find it on a globe or map.
-              It is about <b>${nearest ? Math.round(nearest.dist_km / 100) * 100 : '–'} km</b> from the nearest
-              school on this page!</li>
+              It is about <b>${yourDist != null ? (Math.round(yourDist / 100) * 100).toLocaleString() : '–'} km</b>
+              from ${MINE ? 'your school' : 'the nearest school on this page'}!</li>
           <li>The waves travelled all that way through the Earth. About how long do you think they took -
               seconds, minutes, or hours? Circle your guess, then check with your teacher using the marks.</li>
           <li>Nobody at these schools felt anything - the ground moved less than the width of a hair. What
               instrument "felt" it for us? <span class="blank"></span></li>
           <li>Which school's wiggle looks biggest to you? Put a star on it.</li>
+          ${MINE ? '<li><b>' + esc(myName) + '</b> is your school. Your own seismometer felt an earthquake '
+            + 'from ' + myLane.dist_km.toLocaleString() + ' km away, without anyone noticing a thing. '
+            + 'Draw what you think the ground was doing.</li>' : ''}
         </ol>
-        <div class="hint">Teacher notes: the P wave took roughly ${nearest ? Math.round(nearest.dist_km / 10 / 60) : '–'}
+        <div class="hint">Teacher notes: the P wave took roughly ${yourDist != null ? Math.round(yourDist / 10 / 60) : '–'}
           minutes (mantle P averages ~10 km/s over these paths). ${hintFoot}</div>`,
       middle: `
         <h2>Your turn: waves across the planet (Years 5–8)</h2>
@@ -189,6 +476,7 @@ function fmtWhen(d) {
               (A jet airliner does ~0.25 km/s. How many times faster is the wave?)</li>
           <li>The biggest slow rolling wiggles arrive near the <b style="color:#6b7280">grey dashed line</b> -
               these are <b>surface waves</b>. Roughly how long after P did they arrive? <span class="blank"></span> minutes.</li>
+          ${compareQ}
           <li>The wiggles are measured in µm/s - millionths of a metre per second. Nobody felt anything. What
               does that tell you about the seismometer? <span class="blank" style="min-width:55mm"></span></li>
         </ol>
@@ -198,7 +486,7 @@ function fmtWhen(d) {
         <h2>Probing the deep Earth (Years 9–12)</h2>
         <ol class="tasks">
           <li>Measure the P travel time from origin (red) to the blue mark: <span class="blank"></span> s.
-              Average speed over ${nearest ? nearest.dist_km : '–'} km: <span class="blank"></span> km/s.
+              Average speed over ${yourDist != null ? yourDist.toLocaleString() : '–'} km${MINE ? ' (your school)' : ''}: <span class="blank"></span> km/s.
               Crustal P is ~6 km/s - what does the higher average tell you about the mantle, and why does
               wave speed rise with depth?</li>
           <li>Surface waves (grey mark) average ≈4 km/s along the surface. Verify from the plot, and explain
@@ -206,8 +494,9 @@ function fmtWhen(d) {
           <li>This was M${Number(e.mag).toFixed(1)}. Radiated energy scales as 10<sup>1.5M</sup> - compute how
               many times more energy this released than a local M3.0: <span class="blank"></span>.</li>
           <li>The display is band-passed 0.02–0.1 Hz (periods 10–50 s). Why do long periods survive
-              ${nearest ? Math.round(nearest.dist_km / 1000) : '–'},000 km better than the 1 Hz energy a nearby
+              ${yourDist != null ? Math.round(yourDist / 1000) : '–'},000 km better than the 1 Hz energy a nearby
               quake shows? (Consider attenuation and scattering.)</li>
+          ${compareQ}
           <li>Estimate arrival-time uncertainty: the marks assume the iasp91 global model and the catalogue depth
               (${esc(String(e.depth != null ? e.depth : 'unknown'))} km). Name two reasons the real onset could differ
               by a few seconds.</li>
@@ -219,13 +508,48 @@ function fmtWhen(d) {
   const tasksLocal = TASKS.local[LEVEL];
   const tasksTele = TASKS.tele[LEVEL];
 
+  const nRec = (cov && cov.recorded) ? cov.recorded.length : e.n_recorded;
+  const nHad = (cov && cov.recorded && cov.quiet)
+    ? cov.recorded.length + cov.quiet.length : e.n_with_data;
+  let banner = '';
+  if (state === 'recorded') {
+    banner = '<div class="mybanner yes"><b>' + esc(myName) + ' recorded this earthquake.</b> '
+      + 'Your school\'s own trace is the highlighted lane below, ' + myLane.dist_km.toLocaleString()
+      + ' km from where it happened. The other lanes are schools closer to and further from the '
+      + 'epicentre, so you can see the waves arrive at different times.</div>';
+  } else if (state === 'far') {
+    // Only ONE of the reasons a lane can be missing is distance, and for a
+    // distant earthquake there is no distance cap at all - so do not assert
+    // a reason we have not established.
+    const tooFar = isLocal && myKm != null && myKm > 1500;
+    banner = '<div class="mybanner quiet"><b>' + esc(myName) + ' did pick this earthquake up'
+      + (myKm != null ? ', ' + myKm.toLocaleString() + ' km away' : '') + '.</b> '
+      + (tooFar
+          ? 'That is beyond the range this worksheet\'s distance method works over, so the lanes below '
+            + 'are schools nearer the epicentre.'
+          : 'Its trace could not be prepared for this sheet, so the lanes below are other schools.')
+      + ' Use them for the measuring, then look at your own school\'s drum on the map to see what it '
+      + 'caught.</div>';
+  } else if (state === 'quiet') {
+    banner = '<div class="mybanner quiet"><b>' + esc(myName) + ' was listening, but did not see this one.</b> '
+      + 'Your seismometer was running and recording the whole time - this earthquake was simply too small, '
+      + 'too far away, or too buried in local noise to stand out. That is the normal outcome: '
+      + (nRec != null && nHad ? 'only ' + nRec + ' of the ' + nHad + ' schools that were recording picked it up. ' : '')
+      + '<b>Worth asking the class:</b> what would have to change for us to see it?</div>';
+  } else if (state === 'off') {
+    banner = '<div class="mybanner off"><b>' + esc(myName) + ' was not recording when this earthquake happened.</b> '
+      + 'The lanes below are from schools that were. If this keeps happening, the seismometer may need '
+      + 'attention - the AuSIS team can help.</div>';
+  }
+
   document.getElementById('page').innerHTML = `
     <div class="head">
       <img src="../assets/ausis-logo.png" alt="AuSIS">
       <div>
         <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} - ${esc(e.place)}</h1>
-        <div class="sub">${e.n_recorded
-          ? 'Seen at ' + e.n_recorded + ' of ' + e.n_with_data + ' AuSIS school seismometers · ' + n + ' clearest shown'
+        <div class="sub">${nRec
+          ? 'Seen at ' + nRec + ' of ' + nHad + ' AuSIS school seismometers · ' + n
+            + (state === 'recorded' ? ' shown, including yours' : ' shown')
           : 'Recorded by ' + n + ' AuSIS school seismometers'} · ${fmtWhen(when)}</div>
       </div>
       <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
@@ -235,10 +559,16 @@ function fmtWhen(d) {
       <div class="fact"><b>Magnitude</b> ${Number(e.mag).toFixed(1)}</div>
       <div class="fact"><b>When</b> ${fmtWhen(when)}</div>
       <div class="fact"><b>Type</b> ${isLocal ? 'Australian region' : 'Distant (teleseismic)'}</div>
-      <div class="fact"><b>Nearest school shown</b> ${nearest ? esc(nearest.site || nearest.code) + ' - ' + nearest.dist_km + ' km' : '–'}</div>
+      <div class="fact"><b>${state === 'recorded' ? 'Your school' : 'Nearest school shown'}</b> ${
+        state === 'recorded'
+          ? esc(myName) + ' - ' + myLane.dist_km.toLocaleString() + ' km'
+          : (nearest ? esc(nearest.site || nearest.code) + ' - ' + nearest.dist_km.toLocaleString() + ' km' : '–')}</div>
     </div>
-    <img class="section-img" alt="Seismic record section with predicted P and S arrivals"
-         src="${RAW + encodeURIComponent(e.event_id)}.png?v=${hourStamp()}">
+    ${banner}
+    ${useSvg
+      ? drawSection(drawn, e.mode, state === 'recorded' ? MYCODE : null)
+      : '<img class="section-img" alt="Seismic record section with predicted P and S arrivals" src="'
+        + RAW + encodeURIComponent(e.event_id) + '.png?v=' + hourStamp() + '">'}
     ${isLocal ? tasksLocal : tasksTele}`;
 })().catch(err => {
   document.getElementById('page').innerHTML = '<div class="err">Could not load: ' + esc(err && err.message ? err.message : err) + '</div>';

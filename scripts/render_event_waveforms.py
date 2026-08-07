@@ -18,10 +18,11 @@ Selection (from data/earthquakes_24mo.geojson), two classes:
   - both: origin age between MIN_AGE_HOURS and MAX_AGE_DAYS.
 
 Per event:
-  - 14 nearest streaming stations are candidates (capped by mode)
+  - every streaming station in range is a candidate (distance-capped by mode)
   - ONE bulk FDSN request for the mode's window
-  - keep the 8 closest that returned usable data (5 are drawn in the PNG,
-    all 8 are published for the picking exercise);
+  - publish a lane for EVERY station that visibly recorded it, ordered by
+    distance (the nearest PNG_LANES are drawn in the PNG; all of them are
+    published so a worksheet can show the student's own school);
     skip the event if fewer than MIN_TRACES have data
   - response removed -> um/s, mode-appropriate filter, one PNG per event
 
@@ -118,8 +119,13 @@ TELE_POST_MIN   = 60
 TELE_MAX_DIST   = None   # no cap - the whole point is "even from far away"
 TELE_BP_HZ      = (0.02, 0.1)  # long-period band-pass - teleseism surface waves
 
-N_CANDIDATES = 14        # nearest streaming stations considered per event
-N_KEEP       = 8         # stations kept per event (5 drawn, all offered for picking)
+# A lane is published for EVERY school that recorded the event, so the
+# printable worksheet can always show the student's OWN school's trace. The
+# PNG record section still draws only the nearest PNG_LANES (more rows and it
+# stops being readable in a map popup). MAX_LANES is a file-size guard, set
+# above the network size so it does not bite today.
+PNG_LANES    = 5
+MAX_LANES    = 60
 MIN_TRACES   = 2         # skip the event if fewer than this have data
 
 NETWORK      = "S1"
@@ -151,7 +157,7 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 12
+RENDER_VERSION = 14
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
@@ -360,11 +366,15 @@ def count_recorded(st, origin, mode, sites=None, ev_lat=None, ev_lon=None):
     """How many stations visibly recorded the event: robust post/pre amplitude
     ratio per station on mode-filtered raw counts (a ratio needs no physical
     units, so no response removal). Returns (recorded_codes, n_with_data,
-    anim) where `anim` carries a decimated, per-station normalised trace for
-    every station that recorded - the input to the wavefront animation.
+    quiet, anim) where `anim` carries a decimated, per-station normalised
+    trace for every station that recorded - the input to the wavefront
+    animation - and `quiet` lists the stations that WERE streaming but saw
+    nothing above noise. The worksheet needs that distinction: "your sensor
+    was listening and this quake was too small or too far to show up" is a
+    different (and more useful) lesson than "your sensor was offline".
     Outreach-grade signal detection, not a scientific pick."""
     o = UTCDateTime(origin)
-    recorded, n_tot, anim = [], 0, []
+    recorded, n_tot, anim, quiet = [], 0, [], []
     for code in sorted(set(tr.stats.station for tr in st)):
         try:
             sub = st.select(station=code)
@@ -408,7 +418,9 @@ def count_recorded(st, origin, mode, sites=None, ev_lat=None, ev_lon=None):
             n_amp = float(np.median(nr))
             s_amp = float(sg.max())
             n_tot += 1
-            if n_amp > 0 and s_amp / n_amp >= 4.0:
+            if not (n_amp > 0 and s_amp / n_amp >= 4.0):
+                quiet.append(code)
+            else:
                 recorded.append(code)
                 # Decimated + self-normalised for the animation. Per-station
                 # normalisation is deliberate (and what IRIS does for GMVs):
@@ -453,12 +465,12 @@ def count_recorded(st, origin, mode, sites=None, ev_lat=None, ev_lon=None):
                     print(f"    anim skipped for {code}: {short(exc)}")
         except Exception:
             continue
-    return recorded, n_tot, anim
+    return recorded, n_tot, quiet, anim
 
 
 def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
                   mag, place, mode, depth):
-    """Fetch nearest candidates, keep best N_KEEP with data, render section.
+    """Fetch the network, publish a lane per recording school, render section.
     `mode` is 'local' or 'tele' and selects distance cap / window / filter."""
     if mode == "tele":
         max_dist = TELE_MAX_DIST
@@ -474,7 +486,6 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
     )
     if max_dist is not None:
         ranked = [(c, d) for c, d in ranked if d <= max_dist]
-    ranked = ranked[:N_CANDIDATES]
     if not ranked:
         print(f"  {eid}: no candidate stations")
         return None
@@ -491,13 +502,28 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         print(f"  {eid}: no waveform data for any candidate")
         return None
 
-    recorded_codes, n_with_data, anim = count_recorded(st, origin, mode, sites,
-                                                       ev_lat, ev_lon)
+    recorded_codes, n_with_data, quiet_codes, anim = count_recorded(
+        st, origin, mode, sites, ev_lat, ev_lon)
     print(f"  {eid}: visible at {len(recorded_codes)} of {n_with_data} stations with data")
 
     dist_by_code = dict(ranked)
+    # Only stations that visibly recorded get a lane: a flat noise trace is
+    # not something to hand a student, and it would bloat the file.
+    recorded_set = set(recorded_codes)
+    in_range = [(c, d) for c, d in ranked if c in recorded_set]
+    candidates = in_range[:MAX_LANES]
+    quiet_in_range = len(ranked) - len(in_range)
+    if quiet_in_range:
+        print(f"  {eid}: {len(in_range)} lane(s) from recording stations "
+              f"({quiet_in_range} in range did not record it)")
+    # A cap that silently drops coverage reads as "these schools saw nothing",
+    # which is a physical claim we would not have established. Say it plainly.
+    if len(in_range) > len(candidates):
+        print(f"  {eid}: WARNING capped at MAX_LANES={MAX_LANES}, dropping "
+              f"{len(in_range) - len(candidates)} station(s) that DID record it "
+              f"- those schools will not find their own trace")
     lanes = []
-    for code, _ in ranked:
+    for code, _ in candidates:
         sub = st.select(station=code)
         if not len(sub):
             continue
@@ -531,8 +557,6 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
             continue
         site_name = sites.get(code, (None, None, None))[2]
         lanes.append((code, dist_by_code[code], cha, tr, site_name))
-        if len(lanes) >= N_KEEP:
-            break
 
     if len(lanes) < MIN_TRACES:
         print(f"  {eid}: only {len(lanes)} usable trace(s) (<{MIN_TRACES}), skipped")
@@ -572,14 +596,19 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         print(f"  {eid}: view window {view_len:.0f}s "
               f"(farthest lane {far_km:.0f} km, S ~{s_far:.0f}s)")
 
-    # The PNG stays at 5 lanes (more rows and it stops being readable in a
-    # popup); the JSON carries all of them so the picking exercise has depth.
-    render_section(eid, origin, mag, place, lanes[:5], mode, depth,
+    # The PNG stays at PNG_LANES rows; the JSON carries every recording school
+    # so a worksheet can always feature the student's own.
+    render_section(eid, origin, mag, place, lanes[:PNG_LANES], mode, depth,
                     len(recorded_codes), n_with_data,
                     os.path.join(OUT_DIR, f"{eid}.png"))
+    waves_path = os.path.join(OUT_DIR, f"{eid}.waves.json")
     has_waves = write_waveform_json(eid, origin, mag, place, depth, ev_lat,
                                     ev_lon, lanes, mode, sites, anim,
-                                    os.path.join(OUT_DIR, f"{eid}.waves.json"))
+                                    waves_path, recorded_codes, quiet_codes)
+    if has_waves and os.path.exists(waves_path):
+        kb = os.path.getsize(waves_path) / 1024
+        note = "  <-- large, check before adding lanes" if kb > 900 else ""
+        print(f"  {eid}: waves.json {kb:.0f} KB ({len(lanes)} lanes){note}")
     return {
         "event_id": eid,
         "origin": origin.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -604,11 +633,17 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
 # 0.1 s (far finer than a student can click) and keeps a whole event under
 # the JSON small enough to gzip well on GitHub Pages. Teleseisms are
 # band-passed to 0.1 Hz anyway, so 1 Hz still gives ten samples per cycle.
-WAVE_HZ = {"local": 10.0, "tele": 1.0}
+# Local lanes stay at 10 Hz: locate.html picks P and S off them and promises
+# ~0.1 s precision. Teleseismic lanes are band-passed to 0.02-0.1 Hz, so 1 Hz
+# was 5x oversampled for a signal whose Nyquist need is 0.2 Hz - 0.5 Hz loses
+# nothing visible and halves the biggest published files (a lane is now
+# published for EVERY recording school, ~50 of them for a big teleseism).
+WAVE_HZ = {"local": 10.0, "tele": 0.5}
 
 
 def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
-                        lanes, mode, sites, anim, out_path):
+                        lanes, mode, sites, anim, out_path,
+                        recorded_codes=None, quiet_codes=None):
     """Decimated per-station traces for the browser: arrival picking,
     triangulation and network animation all read this one file."""
     target_hz = WAVE_HZ.get(mode, 10.0)
@@ -659,6 +694,13 @@ def write_waveform_json(eid, origin, mag, place, depth, ev_lat, ev_lon,
         "v": RENDER_VERSION,
         "units": "um/s (multiply samples by scale_um_s)",
         "stations": stations,
+        # Which schools saw it, and which were listening but saw nothing.
+        # event.html needs the difference: "too small or too far for your
+        # sensor" is a real lesson; "your sensor was offline" is not.
+        "coverage": {
+            "recorded": sorted(recorded_codes or []),
+            "quiet": sorted(quiet_codes or []),
+        },
         # Whole-network wavefront animation: every station that recorded the
         # event, each normalised to its OWN peak (see count_recorded).
         "anim": anim or [],
