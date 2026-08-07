@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  teachers/index.html — the AuSIS Teacher Hub.
+  teachers/index.html - the AuSIS Teacher Hub.
   One bookmarkable front door for everything teacher-facing:
   a map of every school seismometer (click a school -> its dashboard with the
   live drum), the wiggle leaderboard, the latest recorded earthquake, and a
@@ -57,10 +57,10 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 <body>
 <div class="wrap">
   <div class="head">
-    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS - Australian Seismometers in Schools">
     <div>
       <h1>AuSIS Teacher Hub</h1>
-      <div class="sub">Live seismometers, earthquakes and classroom resources — click your school on the map to open its dashboard</div>
+      <div class="sub">Live seismometers, earthquakes and classroom resources - click your school on the map to open its dashboard</div>
     </div>
     <div style="flex:1"></div>
     <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
@@ -78,30 +78,28 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
       <div id="map"></div>
     </div>
     <div class="side">
-      <div class="card"><h2>Biggest wiggles right now</h2><iframe src="../widgets/top_wiggles.html" height="330" title="Wiggle leaderboard"></iframe></div>
-      <div class="card"><h2>Latest earthquake recorded</h2><iframe src="../widgets/latest_quake.html" height="430" title="Latest recorded earthquake"></iframe></div>
+      <div class="card"><iframe src="../widgets/top_wiggles.html" height="410" title="Biggest wiggles in the last hour"></iframe></div>
+      <div class="card"><iframe src="../widgets/latest_quake.html" height="430" title="Latest earthquake recorded"></iframe></div>
     </div>
   </div>
 
   <div class="resources">
     <a class="res" href="../widgets/quakes3d.html"><div class="t">Earthquakes in 3D</div>
-      <div class="d">Spin the Earth and see where earthquakes really live &mdash; Australia's shallow crust, the slabs diving beneath Indonesia and Tonga, and the whole Ring of Fire.</div></a>
+      <div class="d">Spin the Earth and see where earthquakes really live - Australia's shallow crust, the slabs diving beneath Indonesia and Tonga, and the whole Ring of Fire.</div></a>
     <a class="res" href="../widgets/locate.html"><div class="t">Find the earthquake</div>
-      <div class="d">Students drag markers to read the P and S arrivals on their own school's trace, then use three schools to triangulate the epicentre &mdash; and check it against the real answer.</div></a>
+      <div class="d">Students drag markers to read the P and S arrivals on their own school's trace, then use three schools to triangulate the epicentre - and check it against the real answer.</div></a>
     <a class="res" href="../widgets/wavesweep.html"><div class="t">Watch the wave</div>
-      <div class="d">Replay a real earthquake sweeping across the network &mdash; every school flashes with the ground motion its own seismometer recorded.</div></a>
+      <div class="d">Replay a real earthquake sweeping across the network - every school flashes with the ground motion its own seismometer recorded.</div></a>
     <a class="res" href="../widgets/event.html"><div class="t">Earthquake worksheets</div>
-      <div class="d">Printable class activities for every recorded quake — pick the event and the year level (1&ndash;4, 5&ndash;8, 9&ndash;12).</div></a>
+      <div class="d">Printable class activities for every recorded quake - pick the event and the year level (1&ndash;4, 5&ndash;8, 9&ndash;12).</div></a>
     <a class="res" href="../widgets/events_gallery.html?mode=local"><div class="t">Local earthquakes</div>
       <div class="d">Every Australian-region quake the network recorded in the last month, with its record section.</div></a>
     <a class="res" href="../widgets/events_gallery.html?mode=tele"><div class="t">International earthquakes</div>
-      <div class="d">Big distant quakes — Japan, Mexico, the Pacific — seen from Australian classrooms.</div></a>
+      <div class="d">Big distant quakes - Japan, Mexico, the Pacific - seen from Australian classrooms.</div></a>
     <a class="res" href="../AuSIS_Map.html"><div class="t">Public AuSIS map</div>
       <div class="d">The full interactive map with earthquakes, waveform popups and record sections.</div></a>
-    <a class="res ausis-site" href="https://sites.google.com/view/ausis2/" target="_blank" rel="noopener"><div class="t">AuSIS program site</div>
-      <div class="d">Stories, education resources, competitions and contacts from the AuSIS team at ANU.</div></a>
     <a class="res ausis-site" href="https://sites.google.com/view/ausis2/feedback" target="_blank" rel="noopener"><div class="t">Need help?</div>
-      <div class="d">Seismometer offline or questions about your station — contact the AuSIS team.</div></a>
+      <div class="d">Seismometer offline or questions about your station - contact the AuSIS team.</div></a>
   </div>
 
   <div class="foot">AuSIS · Australian Seismometers in Schools · ANU · supported by AuScope &amp; NCRIS ·
@@ -115,7 +113,7 @@ const LIVE_THRESHOLD_DAYS = 7;
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
 
 // Same station symbol as the public map: black triangle, status-coloured
-// stroke — stations are triangles, earthquakes are circles.
+// stroke - stations are triangles, earthquakes are circles.
 function triangleSVG(size, strokeColor) {
   const h = size / 2;
   return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
@@ -155,13 +153,13 @@ Promise.all([
       colour = live ? '#22c55e' : '#f59e0b';
     }
     const big = window.innerWidth >= 1500;   // projector / TV distances
-    L.marker([c[1], c[0]], { icon: triangleIcon(big ? 26 : 19, colour) }).addTo(map)
-      .bindTooltip(p.name + ' — click to open dashboard', { direction: 'top' })
+    L.marker([c[1], c[0]], { icon: triangleIcon(big ? 18 : 13, colour) }).addTo(map)
+      .bindTooltip(p.name + ' - click to open dashboard', { direction: 'top' })
       .on('click', () => { window.location.href = '../widgets/station.html?code=' + p.code; });
   });
 }).catch(() => {
   document.getElementById('map').outerHTML =
-    '<div style="padding:30px;text-align:center;color:#6b7280">Station data unavailable right now — try again shortly.</div>';
+    '<div style="padding:30px;text-align:center;color:#6b7280">Station data unavailable right now - try again shortly.</div>';
 });
 </script>
 <script>

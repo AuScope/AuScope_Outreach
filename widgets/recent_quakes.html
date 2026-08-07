@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   widgets/recent_quakes.html
-  Embeddable "Recent earthquakes" list — the scannable table view of the
+  Embeddable "Recent earthquakes" list - the scannable table view of the
   same 24-month GA-sourced store the map uses. Magnitude chips follow the
   map's recency convention (red <24 h, orange <7 d, yellow older); rows with
   a wave glyph have an AuSIS record section and deep-link to it on the map.
@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recent earthquakes — AuSIS</title>
+<title>Recent earthquakes - AuSIS</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: transparent; }
@@ -104,7 +104,7 @@ fetch(EV_BASE + 'manifest.json?v=' + hourStamp())
   })
   .catch(function() {
     document.getElementById('list').innerHTML =
-      '<div class="empty">Earthquake data not available right now — try again shortly.</div>';
+      '<div class="empty">Earthquake data not available right now - try again shortly.</div>';
   });
 
 // Same-page map bridge: when the AuSIS map is iframed on the same page

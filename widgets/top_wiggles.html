@@ -4,7 +4,7 @@
   Embeddable "Biggest wiggles in the last hour" leaderboard. Ranks stations
   by peak ground velocity from the hourly waveform manifest (peak_um_s),
   joined with school names from the same-origin station file. Movement is
-  movement — earthquakes, ocean swell, or the lunchtime rush — that's part
+  movement - earthquakes, ocean swell, or the lunchtime rush - that's part
   of the conversation.
 
   Embed on auscope.org.au:
@@ -15,7 +15,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biggest wiggles — AuSIS school seismometers</title>
+<title>Biggest wiggles - AuSIS school seismometers</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: transparent; }
@@ -41,7 +41,7 @@ li .hair { font-size: 10.5px; color: #94a3b8; white-space: nowrap; }
     <div class="card-sub" id="sub">Peak ground velocity at AuSIS school seismometers</div>
   </div>
   <ol id="list"><div class="empty">Loading&hellip;</div></ol>
-  <div class="card-foot">Movement can be earthquakes, ocean swell &mdash; or the school gym. Click a school to see its waveform.</div>
+  <div class="card-foot">Movement can be earthquakes, ocean swell - or the school gym. Click a school to see its waveform.</div>
 </div>
 <script>
 const REPO = 'AuScope/AuScope_Outreach';
@@ -75,7 +75,7 @@ Promise.all([
     return { code: code, peak: e.peak_um_s, name: names[code] || code };
   }).filter(function(r) { return typeof r.peak === 'number' && r.peak > 0; })
     .sort(function(a, b) { return b.peak - a.peak; })
-    .slice(0, 5);
+    .slice(0, 10);
   if (!rows.length) throw 0;
   if (res[0].generated) {
     document.getElementById('sub').textContent =
@@ -90,7 +90,7 @@ Promise.all([
   }).join('');
 }).catch(function() {
   document.getElementById('list').innerHTML =
-    '<div class="empty">Leaderboard data not available yet — it appears after the next hourly update.</div>';
+    '<div class="empty">Leaderboard data not available yet - it appears after the next hourly update.</div>';
 });
 
 // Same-page map bridge: when the AuSIS map is iframed on the same page

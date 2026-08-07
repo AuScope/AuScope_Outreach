@@ -41,7 +41,7 @@ jobs:
           git add -f data/earthquakes_24mo.geojson
           if ! git diff --cached --quiet; then
             git commit -q -m "earthquake store $(date -u +%FT%TZ)"
-            # Another hourly job may have pushed to main since checkout —
+            # Another hourly job may have pushed to main since checkout -
             # rebase (disjoint files) so the push can't fail non-fast-forward.
             git pull --rebase -q origin main
             git push

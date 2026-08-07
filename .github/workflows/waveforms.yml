@@ -5,7 +5,7 @@ name: Hourly AuSIS waveforms
 # from EarthScope, and publishes the PNGs to the `waveforms` branch.
 #
 # The `waveforms` branch is FORCE-PUSHED with a single fresh commit every run,
-# so it never accumulates history — the repository footprint stays flat
+# so it never accumulates history - the repository footprint stays flat
 # (~3 MB total, forever) no matter how long this runs.
 #
 # The previous branch contents are restored into out/ before rendering, so a
@@ -14,7 +14,7 @@ name: Hourly AuSIS waveforms
 
 on:
   schedule:
-    - cron: "7 * * * *"      # hourly at :07 — GitHub's :00 slot is the most
+    - cron: "7 * * * *"      # hourly at :07 - GitHub's :00 slot is the most
                              # congested and has the worst delay/drop odds
   workflow_dispatch:          # allow manual runs for testing
 
@@ -34,7 +34,7 @@ jobs:
       - name: Checkout (main, for the script)
         uses: actions/checkout@v4
         with:
-          # pip installs third-party code in this job — don't leave the write
+          # pip installs third-party code in this job - don't leave the write
           # token in .git/config while it runs. The publish step supplies the
           # token explicitly; the restore fetch is anonymous (public repo).
           persist-credentials: false
@@ -56,7 +56,7 @@ jobs:
             git --work-tree=out checkout origin/waveforms -- . 2>/dev/null || true
             echo "Restored $(ls out/*.png 2>/dev/null | wc -l) existing PNG(s)."
           else
-            echo "No waveforms branch yet — first run."
+            echo "No waveforms branch yet - first run."
           fi
 
       - name: Render waveforms

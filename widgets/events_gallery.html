@@ -4,7 +4,7 @@
   Auto-generated version of the AuSIS site's hand-written "Earthquake Events"
   pages: a newest-first feed of recorded events with their record sections
   and per-event actions (map, printable worksheet, GA event page). Embed
-  ?mode=local on the Local page and ?mode=tele on the International page —
+  ?mode=local on the Local page and ?mode=tele on the International page -
   they then update themselves within hours of every qualifying earthquake.
 
     <iframe src=".../widgets/events_gallery.html?mode=local"
@@ -87,7 +87,7 @@ fetch(RAW + 'manifest.json?v=' + hourStamp())
     if (!evs.length) {
       document.getElementById('feed').innerHTML =
         '<div class="empty">No ' + (MODE === 'tele' ? 'international' : 'local')
-        + ' earthquakes with clean recordings in the last 30 days — check back after the next one.</div>';
+        + ' earthquakes with clean recordings in the last 30 days - check back after the next one.</div>';
       return;
     }
     document.getElementById('feed').innerHTML = evs.map(function(e) {
@@ -119,7 +119,7 @@ fetch(RAW + 'manifest.json?v=' + hourStamp())
   })
   .catch(function() {
     document.getElementById('feed').innerHTML =
-      '<div class="empty">Event data not available right now — try again shortly.</div>';
+      '<div class="empty">Event data not available right now - try again shortly.</div>';
   });
 </script>
 <script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>

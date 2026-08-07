@@ -2,7 +2,7 @@ name: Daily AuSIS Station Backup
 
 # Rebuilds data/ausis_stations.geojson (station metadata + latest-data
 # timestamps) server-side. The map and every widget read this committed file
-# — the browser never calls a third-party API.
+# - the browser never calls a third-party API.
 #
 # EarthScope RETIRED fdsnws-availability on 2026-07-27 (HTTP 410, Seattle
 # datacenter decommissioning; replacement "not ready before the legacy
@@ -68,7 +68,7 @@ jobs:
                   "lng": float(parts[3].strip()),
               }
           if not stations:
-              print('ERROR: no stations returned — keeping existing backup')
+              print('ERROR: no stations returned - keeping existing backup')
               sys.exit(1)
 
           # Step 2: previous values (preserved for long-quiet stations)
@@ -80,7 +80,7 @@ jobs:
           except Exception:
               pass
 
-          # Step 3: hourly waveform manifest — precise end times for streamers
+          # Step 3: hourly waveform manifest - precise end times for streamers
           man = {}
           try:
               with urllib.request.urlopen(MANIFEST, timeout=30) as r:
@@ -90,7 +90,7 @@ jobs:
               print(f'manifest: {len(man)} station end-times '
                     f'(generated {m.get("generated")})')
           except Exception as e:
-              print(f'WARNING: manifest read failed ({e}) — probes only')
+              print(f'WARNING: manifest read failed ({e}) - probes only')
 
           # Step 4: dataselect day-slice probes for the rest
           def has_data(code, t0, t1):
@@ -125,7 +125,7 @@ jobs:
           print(f'probed {probed} station(s) not in the manifest')
 
           # Fail-loud sanity: if NOTHING looks recent, something upstream is
-          # broken — do not publish a file that would yellow the whole map.
+          # broken - do not publish a file that would yellow the whole map.
           def fresh(ts):
               try:
                   dt = datetime.datetime.fromisoformat(str(ts).replace('Z', ''))
@@ -135,7 +135,7 @@ jobs:
           n_fresh = sum(1 for s in stations.values() if fresh(s['latestData']))
           print(f'{n_fresh} station(s) with data in the last 2 days')
           if n_fresh == 0:
-              print('ERROR: zero stations with recent data — refusing to publish')
+              print('ERROR: zero stations with recent data - refusing to publish')
               sys.exit(1)
 
           features = [{
@@ -167,7 +167,7 @@ jobs:
           git add data/ausis_stations.geojson
           if ! git diff --cached --quiet; then
             git commit -m "Daily AuSIS station backup $(date -u +%Y-%m-%d)"
-            # Another hourly job may have pushed to main since checkout —
+            # Another hourly job may have pushed to main since checkout -
             # rebase (disjoint files) so the push can't fail non-fast-forward.
             git pull --rebase -q origin main
             git push

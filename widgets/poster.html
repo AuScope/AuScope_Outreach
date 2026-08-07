@@ -4,7 +4,7 @@
   Printable A4 classroom poster: hangs next to the seismometer, QR code
   opens that school's live dashboard on a phone. QR is generated in the
   browser (vendored qrcode-generator, no network) so one page serves all
-  schools — nothing is pre-generated or stored.
+  schools - nothing is pre-generated or stored.
 -->
 <html lang="en">
 <head>
@@ -44,11 +44,11 @@ h1 { font-size: 26pt; color: #282572; line-height: 1.25; }
 <body>
 <div class="toolbar"><a class="hubback" href="../teachers/">&larr; Teacher Hub</a> <button onclick="window.print()">Print this poster</button></div>
 <div class="page">
-  <img class="logo" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+  <img class="logo" src="../assets/ausis-logo.png" alt="AuSIS - Australian Seismometers in Schools">
   <h1>This school hosts a real,<br>working seismometer</h1>
   <div class="school" id="school">&nbsp;</div>
   <div class="code" id="code"></div>
-  <div class="tagline">It listens to the ground 24 hours a day — earthquakes on the other
+  <div class="tagline">It listens to the ground 24 hours a day - earthquakes on the other
     side of the planet, waves crashing on the coast, even the rumble of lunchtime.
     The same data is used by real seismologists.</div>
   <div id="qr"></div>
@@ -58,7 +58,7 @@ h1 { font-size: 26pt; color: #282572; line-height: 1.25; }
   <div class="spacer"></div>
   <div class="foot">
     <img src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope" style="height:12mm;vertical-align:middle;margin-right:4mm">
-    AuSIS — Australian Seismometers in Schools · ANU · supported by AuScope &amp; NCRIS
+    AuSIS - Australian Seismometers in Schools · ANU · supported by AuScope &amp; NCRIS
   </div>
 </div>
 <script src="../assets/vendor/qrcode-generator_1.4.4.js"></script>
@@ -90,7 +90,7 @@ function esc(s) {
       const since = String(f.properties.startTime || '').slice(0, 4);
       if (since) document.getElementById('facts').innerHTML =
         'Recording here since <b>' + esc(since) + '</b> · one of <b>50+</b> school seismometers across Australia';
-      document.title = 'AuSIS poster — ' + f.properties.name;
+      document.title = 'AuSIS poster - ' + f.properties.name;
     } else {
       document.getElementById('school').textContent = CODE;
     }

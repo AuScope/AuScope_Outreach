@@ -3,7 +3,7 @@
   widgets/latest_quake.html
   Embeddable "Latest earthquake recorded by AuSIS" card. Reads the same
   published data as the map (event-waveforms manifest + section PNG from the
-  AuScope org repo branches) — no backend, no third-party API calls beyond
+  AuScope org repo branches) - no backend, no third-party API calls beyond
   raw.githubusercontent.com (CORS-enabled).
 
   Embed on auscope.org.au:
@@ -86,7 +86,7 @@ fetch(EV_BASE + 'manifest.json?v=' + hourStamp())
   })
   .catch(function() {
     document.getElementById('empty').textContent =
-      'No recent earthquake sections available right now — check back soon.';
+      'No recent earthquake sections available right now - check back soon.';
   });
 
 // Same-page map bridge: when the AuSIS map is iframed on the same page

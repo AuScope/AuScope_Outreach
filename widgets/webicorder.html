@@ -3,7 +3,7 @@
   widgets/webicorder.html?code=AUYLT[&hours=24][&compact=1]
   Live drum-style seismogram (webicorder) for one AuSIS station, in the
   classic IRIS style: 24 hours of drum lines, refreshed with only the newest
-  few minutes of data every 10 minutes (and on tab focus) — polite to the
+  few minutes of data every 10 minutes (and on tab focus) - polite to the
   upstream service, honest about its ~minutes latency.
 
   Data path: EarthScope fdsnws-dataselect (anonymous, CORS-enabled), parsed
@@ -42,7 +42,7 @@ body.compact .head img.partner { display: none; }
 #status { padding: 0 14px 6px; font-size: 11px; color: #94a3b8; }
 #status.err { color: #b45309; font-size: 13px; padding: 14px; }
 #heli { height: 640px; padding: 0 6px; }
-body.compact #heli { height: 520px; }
+body.compact #heli { height: 600px; }
 body.compact .head img { height: 30px; }
 body.compact .head .t1 { font-size: 14px; }
 .foot { padding: 6px 14px 10px; font-size: 10.5px; color: #94a3b8; }
@@ -55,14 +55,14 @@ sp-helicorder { --sp-helicorder-color-even: #282572; --sp-helicorder-color-odd: 
 </head>
 <body>
 <div class="head">
-  <img src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+  <img src="../assets/ausis-logo.png" alt="AuSIS - Australian Seismometers in Schools">
   <div>
     <div class="t1" id="title">AuSIS live webicorder</div>
     <div class="t2" id="subtitle">loading station&hellip;</div>
   </div>
   <div class="grow"></div>
   <div class="fseg" role="group" aria-label="Filter">
-    <button type="button" data-f="raw" class="active">Raw</button><button type="button" data-f="local" title="1 Hz high-pass — sharpens nearby earthquakes">Local</button><button type="button" data-f="distant" title="0.02–0.1 Hz band-pass — reveals distant earthquakes">Distant</button>
+    <button type="button" data-f="raw" class="active">Raw</button><button type="button" data-f="local" title="1 Hz high-pass - sharpens nearby earthquakes">Local</button><button type="button" data-f="distant" title="0.02–0.1 Hz band-pass - reveals distant earthquakes">Distant</button>
   </div>
   <img class="partner" src="../assets/2025_AuScope_Logo_Icon-Colour.png" alt="AuScope">
   <button id="refresh" type="button" title="Fetch the newest data now">Refresh</button>
@@ -141,7 +141,7 @@ function dsQuery() {
 
 async function stationMeta() {
   // School name from the committed station file; preferred channel from the
-  // hourly waveform manifest. Both optional — the drum works without them.
+  // hourly waveform manifest. Both optional - the drum works without them.
   let name = CODE, cha = null;
   try {
     const g = await (await fetch('../data/ausis_stations.geojson')).json();
@@ -173,7 +173,29 @@ function rebuild(timeWindow, name) {
   if (heliEl) { heliEl.replaceWith(fresh); } else { heliDiv.appendChild(fresh); }
   heliEl = fresh;
   fresh.draw();
+  reportHeight();
 }
+
+// Embedded in station.html, the drum used to be squeezed into a fixed-height
+// iframe: the whole page scrolled, so the bottom time axis and the caption
+// under it were only reachable by scrolling inside the frame. Publish our
+// real height instead and let the embedder size the frame to it.
+let lastReported = 0;
+function reportHeight() {
+  if (window.self === window.top) return;
+  // Measure the bottom of the LAST element, not documentElement.scrollHeight:
+  // when the body is shorter than the frame the latter just echoes the frame
+  // height straight back, and the frame never shrinks to fit.
+  const last = document.querySelector('.foot');
+  const h = last
+    ? Math.ceil(last.getBoundingClientRect().bottom + window.scrollY + 10)
+    : Math.ceil(document.body.scrollHeight);
+  if (!h || Math.abs(h - lastReported) < 2) return;
+  lastReported = h;
+  parent.postMessage({ type: 'ausis-drum-height', height: h }, '*');
+}
+window.addEventListener('resize', reportHeight);
+if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
 
 async function fetchRange(interval) {
   const q = dsQuery().channelCode(channel).timeRange(interval);
@@ -208,7 +230,7 @@ async function initialLoad() {
   }
   if (!channel || !segments.length) {
     setStatus('No live data is available for ' + CODE + ' right now. ' +
-      'The station may be offline — check the AuSIS map for its status.', true);
+      'The station may be offline - check the AuSIS map for its status.', true);
     return;
   }
   document.getElementById('subtitle').textContent =
@@ -234,7 +256,7 @@ async function refresh() {
     setStatus('updated ' + new Date().toLocaleTimeString() +
       ' · newest data ' + lastEnd.toLocal().toFormat('HH:mm:ss'));
   } catch (e) {
-    setStatus('refresh failed (' + (e && e.message ? e.message : e) + ') — will retry', false);
+    setStatus('refresh failed (' + (e && e.message ? e.message : e) + ') - will retry', false);
   }
   refreshing = false;
 }
@@ -243,7 +265,7 @@ document.getElementById('refresh').addEventListener('click', refresh);
 
 initialLoad().catch(e => {
   setStatus('Could not load the live feed: ' + (e && e.message ? e.message : e) +
-    ' — the hourly plots on the AuSIS map still work.', true);
+    ' - the hourly plots on the AuSIS map still work.', true);
 });
 </script>
 <script>if (window.self !== window.top) document.querySelectorAll('.hubback').forEach(function(a){a.target='_blank';a.rel='noopener';});</script>

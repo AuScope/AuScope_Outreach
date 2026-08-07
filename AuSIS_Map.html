@@ -11,7 +11,7 @@
   force-pushed `waveforms` / `event-waveforms` branches on
   raw.githubusercontent.com. Upstream services (EarthScope FDSN, Geoscience
   Australia) are only ever contacted server-side, where redirects and missing
-  CORS headers cannot break the page — the June 2026 EarthScope migration
+  CORS headers cannot break the page - the June 2026 EarthScope migration
   (service.iris.edu -> service.earthscope.org, 307 without CORS headers)
   broke exactly the browser-side fetches this design removes.
 -->
@@ -69,7 +69,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-frame.failed img.wf-img { display: none; }
 .wf-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; text-align: center; padding: 8px; }
 .wf-frame.failed .wf-status { font-size: 0; font-style: normal; }
-.wf-frame.failed .wf-status::after { content: "Waveform image unavailable right now — plots refresh hourly, so try again shortly."; font-size: 11px; }
+.wf-frame.failed .wf-status::after { content: "Waveform image unavailable right now - plots refresh hourly, so try again shortly."; font-size: 11px; }
 .wf-foot { font-size: 10px; color: #94a3b8; margin-top: 3px; }
 /* Earthquake popups */
 .q-title { font-weight: 700; font-size: 15px; color: #b91c1c; margin-bottom: 2px; }
@@ -88,9 +88,9 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
    detector puts on #map. The Leaflet popup maxWidth option is raised (700)
    so the larger tiers have room; CSS constrains content per tier. Source
    PNGs are rendered at 2x DPI so even the large tier stays sharp.
-     compact  (embed ~644)         : 332 / 360   — unchanged baseline
-     medium   (small laptop)       : 424 / 452   — scaled middle step
-     large    (fullscreen/new-tab) : 509 / 531   — was 636/664, −20%        */
+     compact  (embed ~644)         : 332 / 360 - unchanged baseline
+     medium   (small laptop)       : 424 / 452 - scaled middle step
+     large    (fullscreen/new-tab) : 509 / 531 - was 636/664, −20%        */
 .leaflet-popup-content { max-width: 332px; }                       /* compact */
 #map.medium   .leaflet-popup-content { max-width: 452px; }
 #map.medium   .wf            { width: 424px; }
@@ -125,7 +125,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   font-size: 10px; color: #7f1d1d; white-space: nowrap; width: max-content !important;
   border: 1px solid rgba(185,28,28,0.35); font-family: Arial, Helvetica, sans-serif;
 }
-/* Controls — hidden by default for clean map view */
+/* Controls - hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
 .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
@@ -188,7 +188,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   <span class="legend-item"><span class="legend-icon" id="legend-streaming"></span> <span id="legend-streaming-text">Live streaming</span></span>
   <span class="legend-item"><span class="legend-icon" id="legend-offline"></span> Intermittent</span>
   <span class="legend-item"><span class="legend-icon" id="legend-ended"></span> Decommissioned</span>
-  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes — red: last 24 h, orange: last 7 days, yellow: older. Circle size = magnitude."><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
+  <span class="legend-item legend-quakes" id="legend-quakes" title="Show or hide recent earthquakes - red: last 24 h, orange: last 7 days, yellow: older. Circle size = magnitude."><span class="quake-dot"></span> <span id="legend-quakes-text">Earthquakes</span></span>
   <span id="stale-badge" style="display:none"></span>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -208,7 +208,7 @@ const WAVEFORM_FRESH_HOURS = 6;   // manifest older than this no longer proves a
 // It must be the exact owner/repo as it appears in the GitHub URL
 // (case-sensitive on raw.githubusercontent.com) and the repo must be PUBLIC.
 const WAVEFORM_MINUTES = 60;                       // length of trace shown
-const WAVEFORM_REPO    = 'AuScope/AuScope_Outreach'; // owner/repo — VERIFY exact casing
+const WAVEFORM_REPO    = 'AuScope/AuScope_Outreach'; // owner/repo - VERIFY exact casing
 const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
@@ -220,7 +220,7 @@ const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to d
 
 // Earthquake layer settings.
 // Data is the 24-month rolling store built hourly from Geoscience Australia
-// (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
+// (scripts/update_quakes.py), committed to data/ on main. Read same-origin -
 // no cross-origin call to GA from the browser.
 const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
 var quakeWindowDays = 7;                // display window; set by the toolbar selector
@@ -231,7 +231,7 @@ const SHOW_QUAKES_DEFAULT = true;       // earthquakes layer on by default
 let stations = [],
     map = null,
     verifiedStatus = {},   // from data/ausis_status.json (hourly ausis-status.yml)
-    statusChecked = null,  // its "checked" timestamp — drives the staleness badge
+    statusChecked = null,  // its "checked" timestamp - drives the staleness badge
     stationsFetched = null,// data/ausis_stations.geojson "fetched" timestamp (daily ausis-backup.yml)
     waveformManifest = {}, // from waveforms branch: { generated, stations:{CODE:{...}} }
     eventSections = {},    // from event-waveforms branch: { event_id: {...} }
@@ -269,16 +269,16 @@ function triangleIcon(size, strokeColor) {
   const stroke = strokeColor || '#fff';
   return L.divIcon({ html: triangleSVG(size, stroke), className: '', iconSize: [size, size], iconAnchor: [h, size - 2], popupAnchor: [0, -(size - 4)] });
 }
-// Single source of truth for station status — every marker colour, z-order,
+// Single source of truth for station status - every marker colour, z-order,
 // popup row, count and waveform gate derives from this one ladder.
 // Returns 'live' | 'intermittent' | 'ended' | 'unknown'.
 function stationStatus(s) {
   if (s.endTime) return 'ended';
   // A station in a fresh waveform manifest streamed within the last render
-  // window — the strongest live signal we have.
+  // window - the strongest live signal we have.
   if (wfHasPlot(s.code)) return 'live';
   // Hourly server-side status check (dataselect probe) overrides a lagging
-  // availability index — but only while the check itself is fresh.
+  // availability index - but only while the check itself is fresh.
   if (verifiedStatus[s.code] && verifiedStatus[s.code].streaming) return 'live';
   if (s.latestData) {
     var daysAgo = (Date.now() - s.latestData.getTime()) / 86400000;
@@ -319,7 +319,7 @@ function initMap() {
   quakeLinkLayer = L.layerGroup().addTo(map); // connectors to nearby stations
   if (quakesVisible) quakeLayer.addTo(map);
 
-  // Tools button — three dots toggle
+  // Tools button - three dots toggle
   const ToolbarControl = L.Control.extend({
     onAdd: function() {
       const wrap = L.DomUtil.create('div', 'toolbar-wrap');
@@ -351,9 +351,9 @@ function initMap() {
       quakeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:middle">'
         + '<path d="M1 8 L4 8 L6 3 L8 13 L10 5 L12 8 L15 8" fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
 
-      // Time-window selector — a small flyout shown while earthquakes are on
+      // Time-window selector - a small flyout shown while earthquakes are on
       const quakeWin = L.DomUtil.create('div', 'quake-win-panel', buttons);
-      quakeWin.innerHTML = '<label for="quake-window">Earthquakes — show</label>'
+      quakeWin.innerHTML = '<label for="quake-window">Earthquakes - show</label>'
         + '<select id="quake-window" aria-label="Earthquake time window">'
         + '<option value="1">Last 24 hours</option>'
         + '<option value="7" selected>Last 7 days</option>'
@@ -413,7 +413,7 @@ function initMap() {
   });
 
   // Popup open: quakes draw dashed links to nearby stations.
-  // Station waveforms need no JS here — the <img> is embedded in the popup
+  // Station waveforms need no JS here - the <img> is embedded in the popup
   // HTML with its src preset, so the browser loads it in place.
   map.on('popupopen', function(e) {
     var src = e.popup && e.popup._source;
@@ -433,7 +433,7 @@ function formatDate(d) {
   return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : esc(d);
 }
 function formatDateTime(d) {
-  // d is a Date — show UTC and local browser time, compactly
+  // d is a Date - show UTC and local browser time, compactly
   var utc = d.toISOString().replace('T', ' ').replace(/:\d\d\.\d+Z$/, ' UTC');
   var loc = d.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
   return utc + ' &middot; ' + loc + ' local';
@@ -458,7 +458,7 @@ async function fetchStationsFromBackup() {
 }
 
 // Fetch the waveform manifest from the `waveforms` branch. Tells us which
-// stations have a fresh plot and when it was generated — a fresh entry is
+// stations have a fresh plot and when it was generated - a fresh entry is
 // also the strongest "live" signal, so markers refresh after each load.
 async function fetchWaveformManifest() {
   try {
@@ -467,7 +467,7 @@ async function fetchWaveformManifest() {
     waveformManifest = await resp.json();
     if (stations.length) { refreshMarkers(); updateHeader(); }
   } catch (e) {
-    // Branch may not exist yet (first Action run pending) — that's fine.
+    // Branch may not exist yet (first Action run pending) - that's fine.
   }
 }
 
@@ -483,7 +483,7 @@ async function fetchEventSections() {
     eventSections = byId;
     updateSpotlight();
   } catch (e) {
-    // event-waveforms branch may not exist yet — fine, popups just omit it.
+    // event-waveforms branch may not exist yet - fine, popups just omit it.
   }
 }
 
@@ -493,7 +493,7 @@ function hourStamp() {
 }
 
 // ── Latest-earthquake spotlight ──────────────────────────────
-// Chip pointing at the newest event (≤7 days) that has a record section —
+// Chip pointing at the newest event (≤7 days) that has a record section -
 // the sections are the best thing the pipeline makes; don't bury them.
 var spotlightDismissed = false;
 
@@ -518,7 +518,7 @@ function updateSpotlight() {
   var e = best.e;
   el.querySelector('.sp-mag').textContent = 'M' + (e.mag != null ? Number(e.mag).toFixed(1) : '?');
   el.querySelector('.sp-text').textContent =
-    ' ' + (e.place || 'earthquake') + ' · ' + timeAgo(best.t) + ' — see the waves →';
+    ' ' + (e.place || 'earthquake') + ' · ' + timeAgo(best.t) + ' - see the waves →';
   el._qid = best.id;
   el.classList.add('on');
 }
@@ -563,7 +563,7 @@ try {
       }
     }
   };
-} catch (e) { /* no BroadcastChannel — widgets just open new tabs */ }
+} catch (e) { /* no BroadcastChannel - widgets just open new tabs */ }
 
 // ── Deep links: #station=CODE / #quake=ID open the matching popup ──
 var deepLinkDone = { station: false, quake: false };
@@ -591,7 +591,7 @@ function clearQuakeLinks() {
 
 // Draw faint dashed lines from a quake to its nearest AuSIS stations, each
 // with a midpoint label: distance and rough seismic travel time (~3.5 km/s
-// S/surface-wave speed) — distance ÷ time = wave speed, done by the reader.
+// S/surface-wave speed) - distance ÷ time = wave speed, done by the reader.
 function drawQuakeLinks(lat, lng) {
   if (!quakeLinkLayer) return;
   quakeLinkLayer.clearLayers();
@@ -626,7 +626,7 @@ function stationZIndex(s) {
 
 function buildPopupHtml(s) {
   var status = stationStatus(s);
-  // Show the waveform block whenever a fresh plot exists — never hide healthy
+  // Show the waveform block whenever a fresh plot exists - never hide healthy
   // pipeline output behind a possibly-stale status heuristic. Fall back to
   // the status when the manifest itself failed to load.
   var showWf = wfHasPlot(s.code) || status === 'live';
@@ -691,7 +691,7 @@ function addMarkers() {
   var sorted = stations.slice().sort(function(a, b) { return stationZIndex(a) - stationZIndex(b); });
   sorted.forEach(function(s) {
     var icon = triangleIcon(size, stationStrokeColor(s));
-    // Bind a FUNCTION so the popup re-renders on every open — status, image
+    // Bind a FUNCTION so the popup re-renders on every open - status, image
     // URL and hourStamp cache-buster stay current on long-lived embeds.
     var m = L.marker([s.lat, s.lng], { icon: icon, zIndexOffset: stationZIndex(s) }).bindPopup(function() { return buildPopupHtml(s); }, { maxWidth: 700, minWidth: 240 }).addTo(map);
     m._station = s;
@@ -699,14 +699,14 @@ function addMarkers() {
   });
 }
 
-// Update existing markers in place — no remove/add, no flash
+// Update existing markers in place - no remove/add, no flash
 function refreshMarkers() {
   var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
   stations.forEach(function(s) {
     if (s.marker) {
       s.marker.setIcon(triangleIcon(size, stationStrokeColor(s)));
       s.marker.setZIndexOffset(stationZIndex(s));
-      // Popup content is a bound function — it re-renders on next open.
+      // Popup content is a bound function - it re-renders on next open.
     }
   });
 }
@@ -726,9 +726,9 @@ function updateHeader() {
 // Seismic-map convention (GA / USGS): colour = recency (red = newest),
 // size = magnitude. Magnitude is not double-encoded in colour.
 function quakeColor(ageDays) {
-  if (ageDays < 1) return '#dc2626';   // last 24 hours — red
-  if (ageDays < 7) return '#f97316';   // last 7 days — orange
-  return '#facc15';                    // older — yellow
+  if (ageDays < 1) return '#dc2626';   // last 24 hours - red
+  if (ageDays < 7) return '#f97316';   // last 7 days - orange
+  return '#facc15';                    // older - yellow
 }
 function quakeRadius(m) {
   return 0.8 * Math.max(4, Math.min(22, 3 + m * 2.6));
@@ -831,7 +831,7 @@ function renderQuakes() {
   });
 }
 
-// Centre a point 25% below the viewport middle before opening its popup —
+// Centre a point 25% below the viewport middle before opening its popup -
 // waveform/section popups are tall and open upward, so a dead-centre marker
 // gets its popup clipped by the top of the (550px) iframe.
 function setViewForPopup(latlng, zoom) {
@@ -877,7 +877,7 @@ function updateQuakeLegend() {
 
 // Load the hourly server-side status check (data/ausis_status.json, written
 // by .github/workflows/ausis-status.yml). Streaming overrides are only
-// trusted while the check itself is fresh — a frozen file must never pin a
+// trusted while the check itself is fresh - a frozen file must never pin a
 // station green (or hide that the pipeline died).
 async function loadVerifiedStatus() {
   try {
@@ -899,7 +899,7 @@ async function loadVerifiedStatus() {
   }
 }
 
-// Amber footer badge when the committed status data has stopped updating —
+// Amber footer badge when the committed status data has stopped updating -
 // a silently-frozen pipeline must be visible on the page, not just in logs.
 function updateStalenessBadge() {
   var el = document.getElementById('stale-badge');
@@ -959,7 +959,7 @@ setInterval(fetchQuakes, QUAKE_REFRESH_MS);
 
 // Station data comes entirely from same-origin files committed by the
 // scheduled Actions (ausis-status.yml hourly, ausis-backup.yml daily). The
-// browser never calls a third-party API — upstream migrations, redirects and
+// browser never calls a third-party API - upstream migrations, redirects and
 // CORS changes are absorbed server-side where they can't break the page.
 loadVerifiedStatus().then(function() {
   return fetchStationsFromBackup();

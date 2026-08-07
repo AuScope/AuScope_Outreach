@@ -195,7 +195,7 @@ To add a new program or data source, create a `.geojson` file in the `data/` fol
 
 ```
 AuScope_Outreach/
-  index.html                            # Combined map — all programs, layer toggles
+  index.html                            # Combined map - all programs, layer toggles
   AuSIS_Map.html                        # AuSIS station map (live IRIS + local fallback)
   AuScope_Outreach.html                 # Schools outreach map (AuSIS, Mag, EarthBank, GPlates)
   AuScope_CoastRI.html                  # CoastRI coastal monitoring map

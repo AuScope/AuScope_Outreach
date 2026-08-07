@@ -7,10 +7,10 @@ instrument response removed) for every streaming AuSIS (network S1) station,
 in three views:
 
     <CODE>_raw.png      response-removed velocity, no filter
-    <CODE>_local.png     1 Hz high-pass — enhances nearby (local) earthquakes
-    <CODE>_distant.png   0.02–0.1 Hz band-pass — enhances distant teleseisms
+    <CODE>_local.png     1 Hz high-pass - enhances nearby (local) earthquakes
+    <CODE>_distant.png   0.02–0.1 Hz band-pass - enhances distant teleseisms
 
-Strategy: TWO bulk FDSN requests for the whole network — one POST for the
+Strategy: TWO bulk FDSN requests for the whole network - one POST for the
 hour of waveforms (`S1 * * ?HZ`) and one for station responses (level=
 response). No per-station network calls; everything else is local CPU.
 Data comes from EarthScope (formerly IRIS), which carries S1.
@@ -77,7 +77,7 @@ TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "429", "too many requests")
 
 # Stations that miss one flaky upstream hour keep their previous plot (the
-# workflow restores the old branch contents into out/ first) — but only this
+# workflow restores the old branch contents into out/ first) - but only this
 # long, so a genuinely silent station ages out rather than showing forever.
 CARRY_HOURS = 6
 
@@ -107,7 +107,7 @@ def _retrying(label, call):
             if attempt < MAX_RETRIES and is_transient(exc):
                 wait = min(BACKOFF_CAP, BACKOFF_BASE * 2 ** (attempt - 1))
                 print(f"  {label}: transient (attempt {attempt}/{MAX_RETRIES})"
-                      f" — backing off {wait}s [{short(exc)}]")
+                      f" - backing off {wait}s [{short(exc)}]")
                 time.sleep(wait)
                 continue
             print(f"  {label}: giving up ({short(exc)})")
@@ -138,7 +138,7 @@ def bulk_fetch(t1, t2):
                             network=NETWORK, channel=CHANNEL_GLOB,
                             level="response", starttime=t1, endtime=t2))
         if inv is None:
-            print(f"  {centre}: responses unavailable — cannot make µm/s plots")
+            print(f"  {centre}: responses unavailable - cannot make µm/s plots")
             continue
 
         print(f"  {centre}: {len(st)} traces + response metadata OK")
@@ -182,9 +182,9 @@ def apply_variant(vel_tr, variant):
 
 VARIANT_SUB = {
     "raw":     "ground velocity (no filter)",
-    "local":   f"{LOCAL_HP_HZ:g} Hz high-pass — local earthquakes",
-    "distant": f"{DISTANT_BP_HZ[0]:g}–{DISTANT_BP_HZ[1]:g} Hz band-pass — distant earthquakes",
-    "spectrogram": "spectrogram — which frequencies are shaking",
+    "local":   f"{LOCAL_HP_HZ:g} Hz high-pass - local earthquakes",
+    "distant": f"{DISTANT_BP_HZ[0]:g}–{DISTANT_BP_HZ[1]:g} Hz band-pass - distant earthquakes",
+    "spectrogram": "spectrogram - which frequencies are shaking",
 }
 
 
@@ -212,7 +212,7 @@ def render_spectrogram(code, tr, cha, t2, out_path):
     fig.tight_layout(pad=0.4)
     fig.savefig(out_path, dpi=PLOT_DPI, facecolor="white")
     plt.close(fig)
-    # Spectrogram PNGs compress poorly (noisy colormap) — palette-quantise to
+    # Spectrogram PNGs compress poorly (noisy colormap) - palette-quantise to
     # keep them comparable to the line plots for school connections.
     try:
         from PIL import Image
@@ -222,7 +222,7 @@ def render_spectrogram(code, tr, cha, t2, out_path):
         print(f"  {code}: spectrogram quantise skipped ({short(exc)})")
 
 
-HAIR_UM = 70.0   # human hair diameter, µm — the relatable yardstick
+HAIR_UM = 70.0   # human hair diameter, µm - the relatable yardstick
 
 def hair_phrase(peak_um_s):
     """Translate a µm/s peak into hair-widths of movement per unit time."""
@@ -232,7 +232,7 @@ def hair_phrase(peak_um_s):
         return f" ≈ {peak_um_s / HAIR_UM:.0f} hair-widths of movement per second"
     secs = HAIR_UM / peak_um_s
     if secs > 3600:
-        return ""                        # essentially still — skip the phrase
+        return ""                        # essentially still - skip the phrase
     if secs >= 90:
         return f" ≈ a hair's width of movement every {secs / 60:.0f} min"
     return f" ≈ a hair's width of movement every {secs:.0f} s"
@@ -267,7 +267,7 @@ def render(code, tr, cha, variant, t2, out_path):
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
 
-    # Previous run's manifest (restored into out/ by the workflow) — used to
+    # Previous run's manifest (restored into out/ by the workflow) - used to
     # carry recent plots forward for stations that miss this hour.
     prev_stations = {}
     try:
@@ -345,7 +345,7 @@ def main():
                 "peak_um_s": round(peak, 3),   # feeds the top-wiggles widget
             }
             ok += 1
-            print(f"  {code}: OK ({cha}) — {', '.join(made)}")
+            print(f"  {code}: OK ({cha}) - {', '.join(made)}")
         except Exception as exc:
             print(f"  {code}: skipped ({short(exc)})")
 
@@ -379,7 +379,7 @@ def main():
         json.dump(manifest, fh, indent=2)
 
     # Diagnostics: which S1 stations EarthScope knows about (from the response
-    # inventory we already fetched — no extra request) but that returned no
+    # inventory we already fetched - no extra request) but that returned no
     # usable data this run. Turns "got N" into "got N of M, missing: ...".
     expected = set()
     try:

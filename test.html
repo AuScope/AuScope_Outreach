@@ -7,7 +7,7 @@
 
   Enhancements:
    - Click a streaming station to see its last hour of ground velocity
-     (response-removed µm/s) in three variants — raw, local (1 Hz high-pass)
+     (response-removed µm/s) in three variants - raw, local (1 Hz high-pass)
      and distant (0.02–0.1 Hz band-pass). PNGs are pre-rendered hourly by a
      GitHub Action (scripts/render_waveforms.py, data from EarthScope) and
      served from the force-pushed `waveforms` branch.
@@ -69,7 +69,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
 .wf-frame.loaded img.wf-img { opacity: 1; }
 .wf-frame.loaded .wf-status { display: none; }
 .wf-frame.failed img.wf-img { display: none; }
-.wf-frame.failed .wf-status::after { content: "No waveform yet — the hourly job only builds one while a station is streaming."; }
+.wf-frame.failed .wf-status::after { content: "No waveform yet - the hourly job only builds one while a station is streaming."; }
 .wf-frame.failed .wf-status { font-style: normal; }
 .wf-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; text-align: center; padding: 8px; }
 .wf-frame.failed .wf-status { font-size: 0; }
@@ -92,9 +92,9 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
    detector puts on #map. The Leaflet popup maxWidth option is raised (700)
    so the larger tiers have room; CSS constrains content per tier. Source
    PNGs are rendered at 2x DPI so even the large tier stays sharp.
-     compact  (embed ~644)         : 332 / 360   — unchanged baseline
-     medium   (small laptop)       : 424 / 452   — scaled middle step
-     large    (fullscreen/new-tab) : 509 / 531   — was 636/664, −20%        */
+     compact  (embed ~644)         : 332 / 360 - unchanged baseline
+     medium   (small laptop)       : 424 / 452 - scaled middle step
+     large    (fullscreen/new-tab) : 509 / 531 - was 636/664, −20%        */
 .leaflet-popup-content { max-width: 332px; }                       /* compact */
 #map.medium   .leaflet-popup-content { max-width: 452px; }
 #map.medium   .wf            { width: 424px; }
@@ -108,7 +108,7 @@ body { font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction:
   #map.medium .wf, #map.enlarged .wf { width: 332px; }
   #map.medium .q-section-img, #map.enlarged .q-section-img { width: 360px; }
 }
-/* Controls — hidden by default for clean map view */
+/* Controls - hidden by default for clean map view */
 .leaflet-control-zoom { display: none !important; }
 .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
 .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
@@ -182,7 +182,7 @@ const IRIS_BASE = 'https://service.iris.edu';
 // It must be the exact owner/repo as it appears in the GitHub URL
 // (case-sensitive on raw.githubusercontent.com) and the repo must be PUBLIC.
 const WAVEFORM_MINUTES = 60;                       // length of trace shown
-const WAVEFORM_REPO    = 'bvkay/AuScope_Outreach'; // owner/repo — VERIFY exact casing
+const WAVEFORM_REPO    = 'bvkay/AuScope_Outreach'; // owner/repo - VERIFY exact casing
 const WAVEFORM_BRANCH  = 'waveforms';              // branch holding the PNGs
 const WAVEFORM_BASE    = 'https://raw.githubusercontent.com/'
                        + WAVEFORM_REPO + '/' + WAVEFORM_BRANCH + '/';
@@ -194,7 +194,7 @@ const WAVEFORM_NEAR_LINKS = 5;                     // # of nearest stations to d
 
 // Earthquake layer settings.
 // Data is the 24-month rolling store built hourly from Geoscience Australia
-// (scripts/update_quakes.py), committed to data/ on main. Read same-origin —
+// (scripts/update_quakes.py), committed to data/ on main. Read same-origin -
 // no cross-origin call to GA from the browser.
 const QUAKE_STORE = 'data/earthquakes_24mo.geojson';
 var quakeWindowDays = 7;                // display window; set by the toolbar selector
@@ -274,7 +274,7 @@ function initMap() {
   quakeLinkLayer = L.layerGroup().addTo(map); // connectors to nearby stations
   if (quakesVisible) quakeLayer.addTo(map);
 
-  // Tools button — three dots toggle
+  // Tools button - three dots toggle
   const ToolbarControl = L.Control.extend({
     onAdd: function() {
       const wrap = L.DomUtil.create('div', 'toolbar-wrap');
@@ -306,9 +306,9 @@ function initMap() {
       quakeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:middle">'
         + '<path d="M1 8 L4 8 L6 3 L8 13 L10 5 L12 8 L15 8" fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
 
-      // Time-window selector — a small flyout shown while earthquakes are on
+      // Time-window selector - a small flyout shown while earthquakes are on
       const quakeWin = L.DomUtil.create('div', 'quake-win-panel', buttons);
-      quakeWin.innerHTML = '<label for="quake-window">Earthquakes — show</label>'
+      quakeWin.innerHTML = '<label for="quake-window">Earthquakes - show</label>'
         + '<select id="quake-window" aria-label="Earthquake time window">'
         + '<option value="1">Last 24 hours</option>'
         + '<option value="7" selected>Last 7 days</option>'
@@ -368,7 +368,7 @@ function initMap() {
   });
 
   // Popup open: quakes draw dashed links to nearby stations.
-  // Station waveforms need no JS here — the <img> is embedded in the popup
+  // Station waveforms need no JS here - the <img> is embedded in the popup
   // HTML with its src preset, so the browser loads it in place.
   map.on('popupopen', function(e) {
     var src = e.popup && e.popup._source;
@@ -388,7 +388,7 @@ function formatDate(d) {
   return p.length === 3 ? p[2] + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0] : d;
 }
 function formatDateTime(d) {
-  // d is a Date — show UTC and local browser time, compactly
+  // d is a Date - show UTC and local browser time, compactly
   var utc = d.toISOString().replace('T', ' ').replace(/:\d\d\.\d+Z$/, ' UTC');
   var loc = d.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
   return utc + ' &middot; ' + loc + ' local';
@@ -464,7 +464,7 @@ async function fetchWaveformManifest() {
     if (!resp.ok) return;
     waveformManifest = await resp.json();
   } catch (e) {
-    // Branch may not exist yet (first Action run pending) — that's fine.
+    // Branch may not exist yet (first Action run pending) - that's fine.
   }
 }
 
@@ -479,7 +479,7 @@ async function fetchEventSections() {
     (m.events || []).forEach(function(e) { byId[e.event_id] = e; });
     eventSections = byId;
   } catch (e) {
-    // event-waveforms branch may not exist yet — fine, popups just omit it.
+    // event-waveforms branch may not exist yet - fine, popups just omit it.
   }
 }
 
@@ -589,7 +589,7 @@ function addMarkers() {
   });
 }
 
-// Update existing markers in place — no remove/add, no flash
+// Update existing markers in place - no remove/add, no flash
 function refreshMarkers() {
   var size = Math.max(16, Math.min(32, map.getZoom() * 2.9));
   stations.forEach(function(s) {

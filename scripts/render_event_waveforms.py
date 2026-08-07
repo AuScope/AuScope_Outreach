@@ -10,7 +10,7 @@ axis so the wavefront is visibly later at more distant stations.
 Selection (from data/earthquakes_24mo.geojson), two classes:
   - LOCAL: Australian region (GA inAU flag OR near-coast bbox),
     magnitude >= LOCAL_MIN_MAG. Nearby stations (<=1500 km), short window
-    (origin-5 .. origin+15), 1 Hz high-pass — sharp regional arrival.
+    (origin-5 .. origin+15), 1 Hz high-pass - sharp regional arrival.
   - TELE : international, magnitude >= TELE_MIN_MAG. A big distant quake
     whose long-period surface waves reach Australia. No distance cap, long
     window (origin .. origin+60), 0.02-0.1 Hz band-pass. Threshold is high
@@ -18,9 +18,10 @@ Selection (from data/earthquakes_24mo.geojson), two classes:
   - both: origin age between MIN_AGE_HOURS and MAX_AGE_DAYS.
 
 Per event:
-  - 10 nearest streaming stations are candidates (capped by mode)
+  - 14 nearest streaming stations are candidates (capped by mode)
   - ONE bulk FDSN request for the mode's window
-  - keep the 5 closest that returned usable data (fall-through is implicit);
+  - keep the 8 closest that returned usable data (5 are drawn in the PNG,
+    all 8 are published for the picking exercise);
     skip the event if fewer than MIN_TRACES have data
   - response removed -> um/s, mode-appropriate filter, one PNG per event
 
@@ -61,9 +62,15 @@ from obspy.taup import TauPyModel
 
 # ── Age window ───────────────────────────────────────────────
 MIN_AGE_HOURS = 6
-MAX_AGE_DAYS  = 30   # sections stay published for a month (render-once, so
-                     # longer retention costs storage only, not compute)
-# (At a 1 h floor, expect many events to be skipped for missing data — that
+MAX_AGE_DAYS  = 30
+# Australia is seismically quiet, so a strict 30-day window can leave the
+# classroom exercises with nothing worth using. Keep the biggest events
+# indefinitely as a permanent teaching set.
+# Kept PER MODE: local events are M3-5 and teleseisms are M6.5+, so a single
+# magnitude ranking would retain six teleseisms and not one Australian quake -
+# and the locate.html exercise only works on locals.
+NOTABLE_KEEP  = {"local": 4, "tele": 4}
+# (At a 1 h floor, expect many events to be skipped for missing data - that
 #  is data latency, not a bug. Bump MIN_AGE_HOURS to ~6–12 if
 #  too few events have complete data to validate the renderer.)
 
@@ -71,13 +78,13 @@ MAX_AGE_DAYS  = 30   # sections stay published for a month (render-once, so
 STORE_PATH   = "data/earthquakes_24mo.geojson"
 
 # Two classes of event get a record section:
-#   LOCAL  — Australian region, magnitude >= LOCAL_MIN_MAG. Nearby school
+#   LOCAL - Australian region, magnitude >= LOCAL_MIN_MAG. Nearby school
 #            stations, short window, 1 Hz high-pass (sharp regional arrival).
-#   TELE   — anywhere else (international), magnitude >= TELE_MIN_MAG. A big
+#   TELE - anywhere else (international), magnitude >= TELE_MIN_MAG. A big
 #            distant quake whose long-period surface waves reach Australia.
 #            No distance cap, long window, long-period band-pass. Below ~M6.5
 #            a teleseism is not visible on a school sensor, so the threshold
-#            is high on purpose — do NOT lower it or sections become flat noise.
+#            is high on purpose - do NOT lower it or sections become flat noise.
 LOCAL_MIN_MAG = 3.0
 TELE_MIN_MAG  = 6.5
 # Generous continental + near-coast bounding box (pragmatic stand-in for a
@@ -93,7 +100,7 @@ AU_BBOX      = {"minlat": -46.0, "maxlat": -8.0, "minlon": 110.0, "maxlon": 156.
 LOCAL_PRE_MIN   = 5
 LOCAL_POST_MIN  = 15
 LOCAL_MAX_DIST  = 1500   # km cap for local events
-LOCAL_HP_HZ     = 1.0    # high-pass corner — emphasises regional arrivals
+LOCAL_HP_HZ     = 1.0    # high-pass corner - emphasises regional arrivals
 
 # Local sections are TRIMMED after filtering to an adaptive view window:
 # a little pre-origin context through predicted-S-at-the-farthest-lane plus
@@ -108,11 +115,11 @@ LOCAL_CODA_PAD_S    = 60      # ... plus this pad
 
 TELE_PRE_MIN    = 5      # pre-origin quiet is needed for the SNR count below
 TELE_POST_MIN   = 60
-TELE_MAX_DIST   = None   # no cap — the whole point is "even from far away"
-TELE_BP_HZ      = (0.02, 0.1)  # long-period band-pass — teleseism surface waves
+TELE_MAX_DIST   = None   # no cap - the whole point is "even from far away"
+TELE_BP_HZ      = (0.02, 0.1)  # long-period band-pass - teleseism surface waves
 
-N_CANDIDATES = 10        # nearest streaming stations considered per event
-N_KEEP       = 5         # stations drawn in the section
+N_CANDIDATES = 14        # nearest streaming stations considered per event
+N_KEEP       = 8         # stations kept per event (5 drawn, all offered for picking)
 MIN_TRACES   = 2         # skip the event if fewer than this have data
 
 NETWORK      = "S1"
@@ -131,12 +138,12 @@ ROW_H        = 0.95      # inches per station lane
 PLOT_DPI     = 192       # 2x so sections stay sharp when the map is enlarged
 BRAND        = "#282572"
 ORIGIN_CLR   = "#b91c1c"
-P_CLR        = "#2563eb"  # predicted P arrival — blue
-S_CLR        = "#dc2626"  # predicted S arrival — red
-LG_CLR       = "#6b7280"  # Lg / surface-wave arrival — grey
+P_CLR        = "#2563eb"  # predicted P arrival - blue
+S_CLR        = "#dc2626"  # predicted S arrival - red
+LG_CLR       = "#6b7280"  # Lg / surface-wave arrival - grey
 
 # The biggest shaking on Australian regional records is Lg (crust-guided
-# shear energy, ~3.5 km/s), which always FOLLOWS direct S — without a mark
+# shear energy, ~3.5 km/s), which always FOLLOWS direct S - without a mark
 # it reads as "S is early". Teleseismic sections likewise peak at the
 # surface waves (~4 km/s), minutes after S.
 LG_KM_S      = 3.5
@@ -144,14 +151,14 @@ SURF_KM_S    = 4.0
 
 # Bump to force re-render of already-published sections when the plot
 # changes (manifest entries carry "v"; mismatches are treated as new).
-RENDER_VERSION = 10
+RENDER_VERSION = 12
 
 TRANSIENT = ("503", "service unavailable", "timed out", "timeout",
              "temporarily unavailable", "connection reset",
              "connection aborted", "502", "504", "bad gateway",
              "429", "too many requests")
 
-# Event ids become filenames (out/<id>.png) — belt-and-braces guard on top of
+# Event ids become filenames (out/<id>.png) - belt-and-braces guard on top of
 # the same check in update_quakes.py, since the store is a committed file
 # anyone could edit.
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
@@ -349,12 +356,12 @@ def decimate_to(tr, target_hz):
     return tr
 
 
-def count_recorded(st, origin, mode, sites=None):
+def count_recorded(st, origin, mode, sites=None, ev_lat=None, ev_lon=None):
     """How many stations visibly recorded the event: robust post/pre amplitude
     ratio per station on mode-filtered raw counts (a ratio needs no physical
     units, so no response removal). Returns (recorded_codes, n_with_data,
     anim) where `anim` carries a decimated, per-station normalised trace for
-    every station that recorded — the input to the wavefront animation.
+    every station that recorded - the input to the wavefront animation.
     Outreach-grade signal detection, not a scientific pick."""
     o = UTCDateTime(origin)
     recorded, n_tot, anim = [], 0, []
@@ -383,7 +390,7 @@ def count_recorded(st, origin, mode, sites=None):
             # A local quake is ~30 s of signal in a 15-minute window, so a
             # whole-window percentile washes it out. Compare the LOUDEST
             # 10-second RMS after origin against the TYPICAL 10-second RMS
-            # before it — catches brief packets, resists single-sample spikes.
+            # before it - catches brief packets, resists single-sample spikes.
             sr = tr.stats.sampling_rate
 
             def chunk_rms(data, secs=10.0):
@@ -424,10 +431,16 @@ def count_recorded(st, origin, mode, sites=None):
                     if pk <= 0:
                         raise ValueError("flat animation trace")
                     lat = lon = None
+                    site_name = None
                     if sites and code in sites:
-                        lat, lon = sites[code][0], sites[code][1]
+                        lat, lon, site_name = (sites[code] + (None,))[:3]
+                    dist = None
+                    if None not in (lat, lon, ev_lat, ev_lon):
+                        dist = int(round(haversine_km(ev_lat, ev_lon, lat, lon)))
                     anim.append({
                         "code": code,
+                        "site": site_name or code,
+                        "dist_km": dist,
                         "lat": round(lat, 4) if lat is not None else None,
                         "lon": round(lon, 4) if lon is not None else None,
                         "t0": round(float(a.stats.starttime - o)
@@ -478,7 +491,8 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         print(f"  {eid}: no waveform data for any candidate")
         return None
 
-    recorded_codes, n_with_data, anim = count_recorded(st, origin, mode, sites)
+    recorded_codes, n_with_data, anim = count_recorded(st, origin, mode, sites,
+                                                       ev_lat, ev_lon)
     print(f"  {eid}: visible at {len(recorded_codes)} of {n_with_data} stations with data")
 
     dist_by_code = dict(ranked)
@@ -526,7 +540,7 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
 
     lanes.sort(key=lambda x: x[1])  # nearest -> furthest
 
-    # Tele fetch now starts 5 min early (for the SNR noise window) — keep the
+    # Tele fetch now starts 5 min early (for the SNR noise window) - keep the
     # displayed drum starting just before the origin line as before.
     if mode == "tele":
         w0 = UTCDateTime(origin) - 60
@@ -558,7 +572,9 @@ def process_event(client, resp_inv, sites, eid, origin, ev_lat, ev_lon,
         print(f"  {eid}: view window {view_len:.0f}s "
               f"(farthest lane {far_km:.0f} km, S ~{s_far:.0f}s)")
 
-    render_section(eid, origin, mag, place, lanes, mode, depth,
+    # The PNG stays at 5 lanes (more rows and it stops being readable in a
+    # popup); the JSON carries all of them so the picking exercise has depth.
+    render_section(eid, origin, mag, place, lanes[:5], mode, depth,
                     len(recorded_codes), n_with_data,
                     os.path.join(OUT_DIR, f"{eid}.png"))
     has_waves = write_waveform_json(eid, origin, mag, place, depth, ev_lat,
@@ -695,7 +711,7 @@ def render_section(eid, origin, mag, place, lanes, mode, depth,
         ax.text(0.994, 0.96, f"Distance: {round(dist)} km",
                 transform=ax.transAxes, va="top", ha="right",
                 fontsize=9.5, color="#555", bbox=label_box, zorder=5)
-        # Predicted P & S arrivals (iasp91) — the classroom moment: P beats
+        # Predicted P & S arrivals (iasp91) - the classroom moment: P beats
         # S to every station, and both get later with distance.
         p_sec, s_sec = ps_arrivals(dist, depth)
         if mode == "tele":
@@ -714,7 +730,7 @@ def render_section(eid, origin, mag, place, lanes, mode, depth,
                 continue
             ax.axvline(t_mpl, color=clr, linewidth=0.9, alpha=0.85,
                        linestyle=(0, (4, 3)))
-            # Label at the BOTTOM of the dash — the top is where the bold
+            # Label at the BOTTOM of the dash - the top is where the bold
             # school-name text lives and was masking P/S on some lanes.
             ax.text(t_mpl, 0.04, " " + lbl, transform=lane_trans,
                     va="bottom", ha="left", fontsize=8.5,
@@ -760,7 +776,7 @@ def main():
     events = qualifying_events(now)
     n_local = sum(1 for e in events if e[6] == "local")
     n_tele = sum(1 for e in events if e[6] == "tele")
-    print(f"{len(events)} event(s) qualify — {n_local} local "
+    print(f"{len(events)} event(s) qualify - {n_local} local "
           f"(AU, M>={LOCAL_MIN_MAG}), {n_tele} international "
           f"(M>={TELE_MIN_MAG}); age {MIN_AGE_HOURS}h–{MAX_AGE_DAYS}d")
 
@@ -768,6 +784,18 @@ def main():
     # which still fall inside the age window; only fetch genuinely new ones.
     prev = load_manifest()
     qualifying_ids = {e[0] for e in events}
+    # Plus the biggest of each kind we have ever rendered: they never age out,
+    # so a quiet month still leaves teachers a set worth using.
+    notable_ids = set()
+    for mode, keep in NOTABLE_KEEP.items():
+        best = sorted((m for m in prev.values()
+                       if m.get("mag") is not None and m.get("mode") == mode),
+                      key=lambda m: m["mag"], reverse=True)[:keep]
+        if best:
+            notable_ids |= {m["event_id"] for m in best}
+            print(f"keeping {len(best)} notable {mode} event(s) regardless of age: "
+                  + ", ".join(f"M{m['mag']:.1f}" for m in best))
+    qualifying_ids |= notable_ids
     # GA revises origins/depths after first publication; the P/S/Lg marks are
     # computed from them, so a kept section must still match the CURRENT
     # catalogue values or it gets re-rendered.

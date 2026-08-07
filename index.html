@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
     index.html
-    Combined AuScope interactive map — all programs, all layers.
+    Combined AuScope interactive map - all programs, all layers.
     Categorised layer panel with show/hide toggles per program
     and per category. Designed to scale as new categories are added
     (Seismic, MT, Geochem, VLBI, etc.).
@@ -121,7 +121,7 @@
     <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
         // ── Configuration ─────────────────────────────────────────────
-        // Categories and programs — add new categories/programs here
+        // Categories and programs - add new categories/programs here
         // Shape = category identity, colour = program identity
         // Icon style: minSize/maxSize/zoomFactor control scaling, sw/so control stroke
         var STYLE_DEFAULT  = { minSize: 16, maxSize: 32, zoomFactor: 2.9, sw: 2, so: 1 };
@@ -198,7 +198,7 @@
         var programLookup = {};  // id -> program config
         var programVisible = {}; // id -> boolean
 
-        // Build lookup — each program inherits shape and style from its category
+        // Build lookup - each program inherits shape and style from its category
         // Programs can override style individually (e.g. AuSIS uses DEFAULT in Seismic)
         CATEGORIES.forEach(function(cat) {
             cat.programs.forEach(function(prog) {
@@ -394,7 +394,7 @@
 
         // ── Layers panel builder ─────────────────────────────────────
         function buildLayersPanel(container) {
-            // Master toggle — select all / deselect all
+            // Master toggle - select all / deselect all
             var master = document.createElement('div');
             master.className = 'layers-master';
             var masterLabel = document.createElement('label');

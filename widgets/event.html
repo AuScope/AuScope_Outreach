@@ -4,7 +4,7 @@
   Printable class worksheet for one recorded earthquake: the record section
   with P/S marks, the event facts, and the classic S−P exercise (measure the
   gap, estimate the distance, check against the printed distances). Entirely
-  generated from the published event manifest + quake store — a fresh
+  generated from the published event manifest + quake store - a fresh
   worksheet exists for every event within hours, automatically.
 -->
 <html lang="en">
@@ -60,7 +60,7 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
-// Kid-readable UTC: "28 Jul 2026, 07:27 UTC" — no T, no Z
+// Kid-readable UTC: "28 Jul 2026, 07:27 UTC" - no T, no Z
 function fmtWhen(d) {
   const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return d.getUTCDate() + ' ' + mo[d.getUTCMonth()] + ' ' + d.getUTCFullYear()
@@ -88,7 +88,7 @@ function fmtWhen(d) {
   }
   const picker = document.getElementById('picker');
   picker.innerHTML = events.map(e =>
-    '<option value="' + esc(e.event_id) + '">M' + Number(e.mag).toFixed(1) + ' — '
+    '<option value="' + esc(e.event_id) + '">M' + Number(e.mag).toFixed(1) + ' - '
     + esc(e.place) + ' (' + esc(String(e.origin).slice(0, 10)) + ')</option>').join('');
   if (!id || !events.some(e => e.event_id === id)) id = events[0].event_id;
   picker.value = id;
@@ -101,11 +101,11 @@ function fmtWhen(d) {
   const isLocal = e.mode !== 'tele';
   const n = (e.stations || []).length;
   const nearest = (e.stations || []).slice().sort((a, b) => a.dist_km - b.dist_km)[0];
-  document.title = 'AuSIS worksheet — M' + Number(e.mag).toFixed(1) + ' ' + e.place;
+  document.title = 'AuSIS worksheet - M' + Number(e.mag).toFixed(1) + ' ' + e.place;
 
-  const hintFoot = 'Predicted arrivals use the iasp91 Earth model — real arrivals can differ by a second or two, ' +
+  const hintFoot = 'Predicted arrivals use the iasp91 Earth model - real arrivals can differ by a second or two, ' +
     'which is itself worth discussing. The grey dashed line marks the arrival that usually carries the BIGGEST ' +
-    'shaking (Lg crust-guided waves locally; surface waves for distant quakes) — it always follows S. ' +
+    'shaking (Lg crust-guided waves locally; surface waves for distant quakes) - it always follows S. ' +
     'More activities: sites.google.com/view/ausis2';
 
   const TASKS = {
@@ -122,7 +122,7 @@ function fmtWhen(d) {
               and down, or does it lean? Which way?</li>
           <li>Which school had the <b>biggest</b> wiggle? Was it the closest one? <span class="blank"></span></li>
         </ol>
-        <div class="hint">Teacher notes: the leaning line IS wave travel — shaking spreads out like ripples in a pond,
+        <div class="hint">Teacher notes: the leaning line IS wave travel - shaking spreads out like ripples in a pond,
           about 3–8 km every second. ${hintFoot}</div>`,
       middle: `
         <h2>Your turn: how far away was it? (Years 5–8)</h2>
@@ -136,7 +136,7 @@ function fmtWhen(d) {
           <li>Compare with the real distance printed at the bottom-left of that lane:
               <span class="blank"></span> km. How close were you?</li>
           <li>The <b style="color:#6b7280">grey dashed line (Lg)</b> marks where the biggest shaking usually
-              arrives — waves bouncing along inside the crust. Does the biggest wiggle in your lane land near it?</li>
+              arrives - waves bouncing along inside the crust. Does the biggest wiggle in your lane land near it?</li>
           <li>Look across all ${n} schools, nearest at the top. What happens to the S−P gap as distance grows?
               Why? <span class="blank" style="min-width:60mm"></span></li>
         </ol>
@@ -152,7 +152,7 @@ function fmtWhen(d) {
               d(1/V<sub>s</sub> − 1/V<sub>p</sub>), so d = (S−P) · V<sub>p</sub>V<sub>s</sub>/(V<sub>p</sub>−V<sub>s</sub>).
               Evaluate with V<sub>p</sub> = 6.4, V<sub>s</sub> = 3.7 km/s.</li>
           <li>The origin time is ${esc(when.toISOString().slice(11, 19))} UTC (solid red line). Using the nearest
-              lane (${nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km + ' km' : '—'}), estimate
+              lane (${nearest ? esc(nearest.site || nearest.code) + ', ' + nearest.dist_km + ' km' : '–'}), estimate
               V<sub>p</sub> directly: <span class="blank"></span> km/s.</li>
           <li>The biggest amplitudes arrive at the <b style="color:#6b7280">grey Lg mark</b> (≈3.5 km/s), after
               direct S. Lg is shear energy trapped in the crustal waveguide. Why would guided waves lose energy
@@ -160,7 +160,7 @@ function fmtWhen(d) {
           <li>One S−P time gives a distance, not a location. How many stations do you need to find the epicentre,
               and how would you construct it? Sketch on the back.</li>
         </ol>
-        <div class="hint">Teacher notes: expect d/(S−P) ≈ 8–9 km/s on cratonic paths (Australian crust is fast —
+        <div class="hint">Teacher notes: expect d/(S−P) ≈ 8–9 km/s on cratonic paths (Australian crust is fast -
           predictions from a global average model run a touch late here, a good uncertainty discussion).
           ${hintFoot}</div>`,
     },
@@ -168,16 +168,16 @@ function fmtWhen(d) {
       junior: `
         <h2>Waves from far away (Years 1–4)</h2>
         <ol class="tasks">
-          <li>This earthquake happened near <b>${esc(e.place)}</b> — find it on a globe or map.
-              It is about <b>${nearest ? Math.round(nearest.dist_km / 100) * 100 : '—'} km</b> from the nearest
+          <li>This earthquake happened near <b>${esc(e.place)}</b> - find it on a globe or map.
+              It is about <b>${nearest ? Math.round(nearest.dist_km / 100) * 100 : '–'} km</b> from the nearest
               school on this page!</li>
-          <li>The waves travelled all that way through the Earth. About how long do you think they took —
+          <li>The waves travelled all that way through the Earth. About how long do you think they took -
               seconds, minutes, or hours? Circle your guess, then check with your teacher using the marks.</li>
-          <li>Nobody at these schools felt anything — the ground moved less than the width of a hair. What
+          <li>Nobody at these schools felt anything - the ground moved less than the width of a hair. What
               instrument "felt" it for us? <span class="blank"></span></li>
           <li>Which school's wiggle looks biggest to you? Put a star on it.</li>
         </ol>
-        <div class="hint">Teacher notes: the P wave took roughly ${nearest ? Math.round(nearest.dist_km / 10 / 60) : '—'}
+        <div class="hint">Teacher notes: the P wave took roughly ${nearest ? Math.round(nearest.dist_km / 10 / 60) : '–'}
           minutes (mantle P averages ~10 km/s over these paths). ${hintFoot}</div>`,
       middle: `
         <h2>Your turn: waves across the planet (Years 5–8)</h2>
@@ -187,9 +187,9 @@ function fmtWhen(d) {
               <span class="blank"></span></li>
           <li>Estimate the P wave's average speed: distance ÷ time = <span class="blank"></span> km/s.
               (A jet airliner does ~0.25 km/s. How many times faster is the wave?)</li>
-          <li>The biggest slow rolling wiggles arrive near the <b style="color:#6b7280">grey dashed line</b> —
+          <li>The biggest slow rolling wiggles arrive near the <b style="color:#6b7280">grey dashed line</b> -
               these are <b>surface waves</b>. Roughly how long after P did they arrive? <span class="blank"></span> minutes.</li>
-          <li>The wiggles are measured in µm/s — millionths of a metre per second. Nobody felt anything. What
+          <li>The wiggles are measured in µm/s - millionths of a metre per second. Nobody felt anything. What
               does that tell you about the seismometer? <span class="blank" style="min-width:55mm"></span></li>
         </ol>
         <div class="hint">Teacher notes: teleseismic P dives through the mantle at 8–13 km/s; surface waves skim
@@ -198,15 +198,15 @@ function fmtWhen(d) {
         <h2>Probing the deep Earth (Years 9–12)</h2>
         <ol class="tasks">
           <li>Measure the P travel time from origin (red) to the blue mark: <span class="blank"></span> s.
-              Average speed over ${nearest ? nearest.dist_km : '—'} km: <span class="blank"></span> km/s.
-              Crustal P is ~6 km/s — what does the higher average tell you about the mantle, and why does
+              Average speed over ${nearest ? nearest.dist_km : '–'} km: <span class="blank"></span> km/s.
+              Crustal P is ~6 km/s - what does the higher average tell you about the mantle, and why does
               wave speed rise with depth?</li>
           <li>Surface waves (grey mark) average ≈4 km/s along the surface. Verify from the plot, and explain
               why the P–surface gap grows with distance while carrying most of the energy.</li>
-          <li>This was M${Number(e.mag).toFixed(1)}. Radiated energy scales as 10<sup>1.5M</sup> — compute how
+          <li>This was M${Number(e.mag).toFixed(1)}. Radiated energy scales as 10<sup>1.5M</sup> - compute how
               many times more energy this released than a local M3.0: <span class="blank"></span>.</li>
           <li>The display is band-passed 0.02–0.1 Hz (periods 10–50 s). Why do long periods survive
-              ${nearest ? Math.round(nearest.dist_km / 1000) : '—'},000 km better than the 1 Hz energy a nearby
+              ${nearest ? Math.round(nearest.dist_km / 1000) : '–'},000 km better than the 1 Hz energy a nearby
               quake shows? (Consider attenuation and scattering.)</li>
           <li>Estimate arrival-time uncertainty: the marks assume the iasp91 global model and the catalogue depth
               (${esc(String(e.depth != null ? e.depth : 'unknown'))} km). Name two reasons the real onset could differ
@@ -223,7 +223,7 @@ function fmtWhen(d) {
     <div class="head">
       <img src="../assets/ausis-logo.png" alt="AuSIS">
       <div>
-        <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} — ${esc(e.place)}</h1>
+        <h1>Earthquake worksheet: M${Number(e.mag).toFixed(1)} - ${esc(e.place)}</h1>
         <div class="sub">${e.n_recorded
           ? 'Seen at ' + e.n_recorded + ' of ' + e.n_with_data + ' AuSIS school seismometers · ' + n + ' clearest shown'
           : 'Recorded by ' + n + ' AuSIS school seismometers'} · ${fmtWhen(when)}</div>
@@ -235,7 +235,7 @@ function fmtWhen(d) {
       <div class="fact"><b>Magnitude</b> ${Number(e.mag).toFixed(1)}</div>
       <div class="fact"><b>When</b> ${fmtWhen(when)}</div>
       <div class="fact"><b>Type</b> ${isLocal ? 'Australian region' : 'Distant (teleseismic)'}</div>
-      <div class="fact"><b>Nearest school shown</b> ${nearest ? esc(nearest.site || nearest.code) + ' — ' + nearest.dist_km + ' km' : '—'}</div>
+      <div class="fact"><b>Nearest school shown</b> ${nearest ? esc(nearest.site || nearest.code) + ' - ' + nearest.dist_km + ' km' : '–'}</div>
     </div>
     <img class="section-img" alt="Seismic record section with predicted P and S arrivals"
          src="${RAW + encodeURIComponent(e.event_id)}.png?v=${hourStamp()}">

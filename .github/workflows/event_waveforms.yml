@@ -6,7 +6,7 @@ name: Event waveform sections
 # runs a little after the earthquake-store job. Render-once: only genuinely
 # new qualifying events are fetched each run.
 #
-# Published to a FORCE-PUSHED flat `event-waveforms` branch — one fresh commit
+# Published to a FORCE-PUSHED flat `event-waveforms` branch - one fresh commit
 # each run, history never accumulates.
 
 on:
@@ -30,7 +30,7 @@ jobs:
       - name: Checkout (main, for the script + quake store)
         uses: actions/checkout@v4
         with:
-          # pip installs third-party code in this job — don't leave the write
+          # pip installs third-party code in this job - don't leave the write
           # token in .git/config while it runs. The publish step supplies the
           # token explicitly; the restore fetch is anonymous (public repo).
           persist-credentials: false
@@ -52,7 +52,7 @@ jobs:
             git --work-tree=out checkout origin/event-waveforms -- . 2>/dev/null || true
             echo "Restored $(ls out/*.png 2>/dev/null | wc -l) existing section(s)."
           else
-            echo "No event-waveforms branch yet — first run."
+            echo "No event-waveforms branch yet - first run."
           fi
 
       - name: Render event sections

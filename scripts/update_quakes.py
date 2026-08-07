@@ -6,7 +6,7 @@ Maintains a 24-month rolling earthquake catalogue for the AuSIS map.
 
 Each hour:
   1. Fetch Geoscience Australia's pre-built recent-earthquakes feed
-     (https://earthquakes.ga.gov.au/cache/recent-earthquakes.json — a rolling
+     (https://earthquakes.ga.gov.au/cache/recent-earthquakes.json - a rolling
      ~7-day GeoJSON FeatureCollection, GA-authoritative).
   2. Normalise each event to a small, source-agnostic shape.
   3. MERGE into data/earthquakes_24mo.geojson keyed by event_id, keeping the
@@ -19,7 +19,7 @@ If GA fails AND there is no existing store to fall back on, USGS FDSN is used
 as a one-off seed so the map is never empty. Normal hourly operation uses GA.
 
 The browser never calls GA directly (CloudFront blocks non-app origins and
-CORS is unverified) — it reads the committed store same-origin.
+CORS is unverified) - it reads the committed store same-origin.
 """
 
 import json
@@ -42,7 +42,7 @@ GLOBAL_MIN_MAG = 4.5                 # keep global quakes only if at least this
 TIMEOUT        = 60
 
 # Event ids flow into filenames downstream (render_event_waveforms.py writes
-# out/<id>.png) — reject anything that isn't a plain token at ingest.
+# out/<id>.png) - reject anything that isn't a plain token at ingest.
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 
 # Mimic the GA web app so CloudFront doesn't 403 a "non-app" request.
@@ -168,7 +168,7 @@ def load_store():
                 if f.get("properties", {}).get("id")}
     except (json.JSONDecodeError, KeyError, OSError) as exc:
         # An existing-but-unreadable store must NOT be silently replaced with
-        # this week's feed — that would wipe up to 24 months of catalogue in
+        # this week's feed - that would wipe up to 24 months of catalogue in
         # a green run. Fail visibly instead; git history holds the last good.
         print(f"ERROR: existing store unreadable ({exc}); refusing to overwrite it.")
         sys.exit(1)
@@ -185,7 +185,7 @@ def main():
         source = "GA"
         print(f"GA: {len(incoming)} events fetched")
     except Exception as exc:
-        # ::warning:: surfaces on the run's summary page — a quiet GA outage
+        # ::warning:: surfaces on the run's summary page - a quiet GA outage
         # should be visible without reading logs line by line.
         print(f"::warning title=GA feed::GA fetch failed: {exc}")
         if not store:
@@ -232,13 +232,13 @@ def main():
 
     # Skip the write when the catalogue is unchanged. The 'generated' stamp
     # would otherwise differ every run, defeating the workflow's
-    # commit-if-changed guard — hourly no-op commits, and a dead GA feed that
+    # commit-if-changed guard - hourly no-op commits, and a dead GA feed that
     # still looks "fresh". No commits during an outage is the honest signal.
     if os.path.exists(STORE_PATH):
         try:
             with open(STORE_PATH) as fh:
                 if json.load(fh).get("features") == features:
-                    print(f"No catalogue changes this run — leaving {STORE_PATH} untouched.")
+                    print(f"No catalogue changes this run - leaving {STORE_PATH} untouched.")
                     return
         except (json.JSONDecodeError, OSError):
             pass  # unreadable now? fall through and rewrite it

@@ -5,7 +5,7 @@
   earthquake pulses with the ground motion its own seismometer measured,
   time-synchronised, so the wavefront visibly sweeps across the network.
 
-  This is not a simulation — it is replayed from the samples the schools
+  This is not a simulation - it is replayed from the samples the schools
   recorded, published by scripts/render_event_waveforms.py in the "anim"
   block of <event_id>.waves.json.
 
@@ -18,7 +18,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch the wave — AuSIS</title>
+<title>Watch the wave - AuSIS</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
@@ -29,8 +29,8 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 .hubback:hover { text-decoration: underline; }
 .head { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; }
 .head img.ausis { height: 46px; } .head img.partner { height: 34px; }
-.head h1 { font-size: 19px; color: #282572; }
-.head .sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.head h1 { font-size: 23px; color: #282572; }
+.head .sub { font-size: 15px; color: #4b5563; margin-top: 3px; font-weight: 600; }
 
 .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 12px; overflow: hidden; }
 #map { height: clamp(380px, 56vh, 680px); background: #0b1020; }
@@ -40,22 +40,31 @@ body { font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #3
 .bar input[type=range] { flex: 1; min-width: 180px; accent-color: #282572; }
 .clock { font-family: monospace; font-weight: 700; color: #282572; min-width: 86px; }
 .speed { display: flex; align-items: center; gap: 5px; color: #6b7280; font-size: 12px; }
-canvas#ref { display: block; width: 100%; height: 90px; background: #0b1020; }
-.reflabel { padding: 7px 14px 0; font-size: 11.5px; color: #94a3b8; }
+canvas#ref { display: block; width: 100%; background: #0b1020; }
+.reflabel { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+  padding: 9px 14px 6px; font-size: 12.5px; color: #64748b; }
+.reflabel select { font-family: inherit; font-size: 12.5px; padding: 4px 7px;
+  border: 1px solid #cbd5e1; border-radius: 5px; max-width: 260px; background: #fff; color: #282572; }
+.evbar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center;
+  padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+.evbar select { font-family: inherit; font-size: 13px; padding: 6px 9px;
+  border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #282572; max-width: 100%; }
+.evbar .lbl { color: #6b7280; }
 .lead { padding: 11px 14px; font-size: 13px; line-height: 1.55; color: #4b5563; border-top: 1px solid #f1f5f9; }
 .lead b { color: #282572; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 9px 14px; background: #0b1020; font-size: 11.5px; color: #c7d2e8; }
 .legend .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; vertical-align: -2px; }
 .err { padding: 26px 14px; text-align: center; color: #b45309; font-size: 14px; }
 .notes { margin-top: 12px; font-size: 11.5px; color: #94a3b8; line-height: 1.55; padding: 0 4px 10px; }
-@media (min-width: 1400px) { .head h1 { font-size: 23px; } .bar, .lead { font-size: 15px; } }
+@media (min-width: 1400px) { .head h1 { font-size: 28px; } .head .sub { font-size: 17px; }
+  .bar, .lead, .evbar { font-size: 15px; } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="hubback" href="../teachers/">&larr; AuSIS Teacher Hub</a>
   <div class="head">
-    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS — Australian Seismometers in Schools">
+    <img class="ausis" src="../assets/ausis-logo.png" alt="AuSIS - Australian Seismometers in Schools">
     <div>
       <h1>Watch the wave cross the country</h1>
       <div class="sub" id="sub">Loading&hellip;</div>
@@ -79,6 +88,10 @@ function esc(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 function hourStamp() { return new Date().toISOString().slice(0, 13).replace(/[-T]/g, ''); }
+function fmtShort(d) {
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getUTCDate() + ' ' + mo[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+}
 function haversineKm(la1, lo1, la2, lo2) {
   const R = 6371, r = Math.PI / 180;
   const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
@@ -86,7 +99,11 @@ function haversineKm(la1, lo1, la2, lo2) {
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-let ev = null, anim = [], map = null, marks = [], refCv, refCtx, refSta = null;
+let ev = null, anim = [], map = null, marks = [], refCv, refCtx;
+let refStas = [];              // the traces stacked under the map, nearest first
+let allEvents = [];            // every event with animation data, for the picker
+const BASE_TRACES = 4;         // shown by default; students may add their own
+const LANE_H = 62;
 let t = 0, tStart = 0, tEnd = 60, playing = false, speed = 4, lastFrame = 0;
 
 // Value of a station at event-time `t` (seconds from origin), -100..100
@@ -116,31 +133,61 @@ function draw() {
 }
 
 function drawRef() {
-  if (!refSta || !refCv) return;
+  if (!refStas.length || !refCv) return;
   const dpr = window.devicePixelRatio || 1;
-  const w = refCv.clientWidth, h = 90;
-  if (refCv.width !== Math.round(w * dpr)) {
+  const w = refCv.clientWidth, h = refStas.length * LANE_H;
+  if (refCv.height !== Math.round(h * dpr) || refCv.width !== Math.round(w * dpr)) {
+    refCv.style.height = h + 'px';
     refCv.width = Math.round(w * dpr); refCv.height = Math.round(h * dpr);
     refCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   refCtx.fillStyle = '#0b1020'; refCtx.fillRect(0, 0, w, h);
   const x = tt => ((tt - tStart) / (tEnd - tStart)) * w;
-  refCtx.strokeStyle = '#a5b4fc'; refCtx.lineWidth = 1; refCtx.beginPath();
-  let started = false;
-  for (let i = 0; i < refSta.v.length; i++) {
-    const tt = refSta.t0 + i / refSta.hz;
-    if (tt < tStart || tt > tEnd) continue;
-    const px = x(tt), py = h / 2 - (refSta.v[i] / 100) * (h * 0.42);
-    if (!started) { refCtx.moveTo(px, py); started = true; } else { refCtx.lineTo(px, py); }
-  }
-  refCtx.stroke();
-  // origin and the moving cursor
+
+  refStas.forEach((st, li) => {
+    const top = li * LANE_H, mid = top + LANE_H / 2, amp = LANE_H * 0.38;
+    if (li) {
+      refCtx.strokeStyle = 'rgba(148,163,184,.18)'; refCtx.lineWidth = 1;
+      refCtx.beginPath(); refCtx.moveTo(0, top); refCtx.lineTo(w, top); refCtx.stroke();
+    }
+    refCtx.strokeStyle = '#a5b4fc'; refCtx.lineWidth = 1; refCtx.beginPath();
+    let started = false;
+    for (let i = 0; i < st.v.length; i++) {
+      const tt = st.t0 + i / st.hz;
+      if (tt < tStart || tt > tEnd) continue;
+      const px = x(tt), py = mid - (st.v[i] / 100) * amp;
+      if (!started) { refCtx.moveTo(px, py); started = true; } else { refCtx.lineTo(px, py); }
+    }
+    refCtx.stroke();
+    // Name and distance, on a plate so the trace never eats the label
+    const label = (st.site || st.code) + (st.dist_km != null ? '  ' + st.dist_km.toLocaleString() + ' km' : '');
+    refCtx.font = 'bold 13px Arial';
+    const tw = refCtx.measureText(label).width;
+    refCtx.fillStyle = 'rgba(11,16,32,.8)'; refCtx.fillRect(6, top + 5, tw + 10, 19);
+    refCtx.fillStyle = '#c7d2e8'; refCtx.fillText(label, 11, top + 19);
+  });
+
+  // origin and the moving cursor, spanning every lane
   if (tStart < 0) {
-    refCtx.strokeStyle = '#b91c1c'; refCtx.lineWidth = 1.4;
+    refCtx.strokeStyle = '#b91c1c'; refCtx.lineWidth = 1.6;
     refCtx.beginPath(); refCtx.moveTo(x(0), 0); refCtx.lineTo(x(0), h); refCtx.stroke();
   }
   refCtx.strokeStyle = '#fbbf24'; refCtx.lineWidth = 2;
   refCtx.beginPath(); refCtx.moveTo(x(t), 0); refCtx.lineTo(x(t), h); refCtx.stroke();
+}
+
+// Rebuild the stack: the base traces plus whatever the class added, always
+// ordered nearest-to-furthest so the arrival visibly steps down the page.
+function setTraces(extraCodes) {
+  const byDist = anim.slice().sort((a, b) =>
+    (a.dist_km == null ? 1e9 : a.dist_km) - (b.dist_km == null ? 1e9 : b.dist_km));
+  const chosen = byDist.slice(0, BASE_TRACES);
+  (extraCodes || []).forEach(c => {
+    const st = anim.find(a => a.code === c);
+    if (st && !chosen.includes(st)) chosen.push(st);
+  });
+  refStas = chosen.sort((a, b) =>
+    (a.dist_km == null ? 1e9 : a.dist_km) - (b.dist_km == null ? 1e9 : b.dist_km));
 }
 
 function tick(now) {
@@ -163,18 +210,23 @@ function setPlaying(p) {
 
 function build() {
   const when = new Date(ev.origin);
-  document.title = 'Watch the wave — M' + Number(ev.mag).toFixed(1) + ' ' + ev.place;
+  document.title = 'Watch the wave - M' + Number(ev.mag).toFixed(1) + ' ' + ev.place;
   document.getElementById('sub').textContent =
     'M' + Number(ev.mag).toFixed(1) + ' · ' + ev.place + ' · recorded at ' + anim.length + ' AuSIS schools';
 
   document.getElementById('body').innerHTML = `
     <div class="card">
+      <div class="evbar">
+        <span class="lbl">Earthquake:</span>
+        <select id="evpick" title="Choose a different earthquake"></select>
+        <span class="lbl" id="evcount"></span>
+      </div>
       <div id="map"></div>
       <div class="legend">
         <span><span class="dot" style="background:#ef4444"></span>ground moving up</span>
         <span><span class="dot" style="background:#3b82f6"></span>ground moving down</span>
         <span><span class="dot" style="background:#64748b;opacity:.4"></span>quiet / no data yet</span>
-        <span style="margin-left:auto">bigger circle = strong <i>for that school</i> — each is scaled to its own peak</span>
+        <span style="margin-left:auto">bigger circle = strong <i>for that school</i> - each is scaled to its own peak</span>
       </div>
       <div class="bar">
         <button id="playBtn" type="button">▶ Play</button>
@@ -190,7 +242,12 @@ function build() {
         </span>
         <button class="ghost" id="resetBtn" type="button">Back to start</button>
       </div>
-      <div class="reflabel" id="reflabel"></div>
+      <div class="reflabel">
+        <span id="reflabel"></span>
+        <span style="margin-left:auto">Add a school:
+          <select id="addsta" title="Add another school's trace to the stack"></select>
+        </span>
+      </div>
       <canvas id="ref"></canvas>
       <div class="lead" id="faraway" style="display:none"></div>
       <div class="lead" id="lead"></div>
@@ -242,37 +299,70 @@ function build() {
     }
     if (!near) {
       const km = Math.round(haversineKm(b.getCenter().lat, b.getCenter().lng, ev.lat, ev.lon) / 10) * 10;
-      epi.bindTooltip('the earthquake — about ' + km.toLocaleString() + ' km away', { direction: 'top' });
+      epi.bindTooltip('the earthquake - about ' + km.toLocaleString() + ' km away', { direction: 'top' });
       document.getElementById('faraway').style.display = '';
       document.getElementById('faraway').innerHTML =
         'This earthquake happened <b>' + km.toLocaleString() + ' km away</b> near ' + esc(ev.place)
-        + ', off the edge of this view — zoom out to see it. The waves still reached every school below.';
+        + ', off the edge of this view - zoom out to see it. The waves still reached every school below.';
     }
   }
 
-  // Reference trace = the station that recorded the strongest signal soonest
-  // Prefer the nearest of the drawn lanes — those are the traces the emitter
-  // already vetted as clean. Sorting anim by t0 picked alphabetically (every
-  // t0 is identical) and usually landed on the farthest station in the file.
-  const laneCodes = (ev.stations || []).slice()
-    .sort((a, b) => a.dist_km - b.dist_km).map(x => x.code);
-  refSta = laneCodes.map(c => anim.find(a => a.code === c)).find(Boolean) || anim[0];
+  // The stack under the map: the nearest few schools by default, so students
+  // can see the same arrival stepping later at each one. Any other school can
+  // be added - the point is that a class can find their own.
+  setTraces([]);
   refCv = document.getElementById('ref'); refCtx = refCv.getContext('2d');
-  const refName = refSta
-    ? ((ev.stations.find(x => x.code === refSta.code) || {}).site || refSta.code) : '';
-  document.getElementById('reflabel').textContent =
-    'One school’s trace for reference (' + refName + ') — the yellow line is “now”';
+  document.getElementById('reflabel').innerHTML =
+    '<b>The same earthquake at ' + refStas.length + ' schools</b>, nearest at the top. '
+    + 'The yellow line is "now" &ndash; watch it cross each trace in turn.';
+
+  const addSel = document.getElementById('addsta');
+  const extras = [];
+  function renderAddOptions() {
+    const shown = new Set(refStas.map(x => x.code));
+    const opts = anim.slice()
+      .sort((a, b) => (a.site || a.code).localeCompare(b.site || b.code))
+      .filter(a => !shown.has(a.code))
+      .map(a => '<option value="' + esc(a.code) + '">' + esc(a.site || a.code)
+        + (a.dist_km != null ? ' (' + a.dist_km.toLocaleString() + ' km)' : '') + '</option>');
+    addSel.innerHTML = '<option value="">choose your school&hellip;</option>' + opts.join('');
+    addSel.disabled = !opts.length;
+  }
+  renderAddOptions();
+  addSel.addEventListener('change', function () {
+    if (!this.value) return;
+    extras.push(this.value);
+    setTraces(extras);
+    document.getElementById('reflabel').innerHTML =
+      '<b>The same earthquake at ' + refStas.length + ' schools</b>, nearest at the top. '
+      + 'The yellow line is "now" &ndash; watch it cross each trace in turn.';
+    renderAddOptions();
+    this.value = '';
+    drawRef();
+  });
+
+  // Other earthquakes, so a teacher is not stuck with whatever happened last.
+  const evSel = document.getElementById('evpick');
+  evSel.innerHTML = allEvents.map(e =>
+    '<option value="' + esc(e.event_id) + '"' + (e.event_id === ev.event_id ? ' selected' : '') + '>'
+    + 'M' + Number(e.mag).toFixed(1) + ' &middot; ' + esc(e.place) + ' &middot; '
+    + fmtShort(new Date(e.origin)) + '</option>').join('');
+  evSel.addEventListener('change', function () {
+    location.search = '?id=' + encodeURIComponent(this.value);
+  });
+  document.getElementById('evcount').textContent =
+    allEvents.length > 1 ? '(' + allEvents.length + ' to choose from)' : '';
 
   const common = ' Every school is scaled to <b>its own</b> strongest wiggle, so colour and size tell '
-    + 'you <i>when</i> a school shook — not how hard it shook compared with its neighbours. For real '
+    + 'you <i>when</i> a school shook - not how hard it shook compared with its neighbours. For real '
     + 'relative amplitudes use the record section.';
   document.getElementById('lead').innerHTML = isNear
     ? '<b>What to look for:</b> press play. The circles are AuSIS schools, and each flashes with the '
-      + 'ground motion its own seismometer actually recorded — nothing here is simulated. Watch the '
+      + 'ground motion its own seismometer actually recorded - nothing here is simulated. Watch the '
       + 'shaking start near the yellow marker and <b>spread outwards</b>: that is a real wave crossing '
       + 'the country at a few kilometres per second, reaching each school in turn.' + common
     : '<b>What to look for:</b> press play. This earthquake happened far outside this view, so the '
-      + 'waves do not spread from a point on screen — they arrive <b>from one side</b>, sweeping across '
+      + 'waves do not spread from a point on screen - they arrive <b>from one side</b>, sweeping across '
       + 'the country. Watch which schools light up first and which are last: the order tells you which '
       + 'direction the waves came from. Every school here is thousands of kilometres from the source, '
       + 'yet all of them felt it.' + common;
@@ -292,8 +382,8 @@ function build() {
 
   document.getElementById('notes').innerHTML =
     '<b>Teacher notes.</b> Replayed from the schools’ own recordings, decimated to '
-    + (anim[0] ? anim[0].hz : 2) + ' Hz. Each station is normalised to its own peak — the convention '
-    + 'IRIS uses for Ground Motion Visualizations — because otherwise the nearest school saturates and '
+    + (anim[0] ? anim[0].hz : 2) + ' Hz. Each station is normalised to its own peak - the convention '
+    + 'IRIS uses for Ground Motion Visualizations - because otherwise the nearest school saturates and '
     + 'the wavefront is invisible everywhere else. The trade-off is that this view shows <i>timing</i>, '
     + 'not relative amplitude; for real amplitudes use the record section. At 1× the replay is '
     + 'real time. <a href="' + MAP_URL + '#quake=' + encodeURIComponent(ev.event_id) + '" target="_blank" rel="noopener">See this earthquake on the map</a>.';
@@ -309,13 +399,16 @@ function build() {
     const cands = (man.events || []).filter(e => e.waves)
       .sort((a, b) => Date.parse(b.origin) - Date.parse(a.origin));
     if (!cands.length) throw new Error('no events with waveform data yet');
+    // Only offer events that actually animate: a section can exist with too
+    // few clean stations to be worth replaying.
+    allEvents = cands;
     const pick = cands.find(e => e.event_id === id) || cands[0];
     const r = await fetch(RAW + encodeURIComponent(pick.event_id) + '.waves.json?v=' + hourStamp());
     if (!r.ok) throw new Error('waveform data HTTP ' + r.status);
     ev = await r.json();
     anim = (ev.anim || []).filter(s => s.v && s.v.length);
     if (anim.length < 3) throw new Error('this earthquake was only recorded clearly at '
-      + anim.length + ' school' + (anim.length === 1 ? '' : 's') + ' — not enough to watch it travel');
+      + anim.length + ' school' + (anim.length === 1 ? '' : 's') + ' - not enough to watch it travel');
     tStart = Math.min(...anim.map(s => s.t0));
     tEnd = Math.max(...anim.map(s => s.t0 + s.v.length / s.hz));
     t = tStart;

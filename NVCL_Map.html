@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>National Virtual Core Library — AuScope</title>
+  <title>National Virtual Core Library - AuScope</title>
 
   <!--
     Font stack: prefer Calibre (sans) and Karmina (serif) if loaded by the
     parent page; fall back to Arial / Georgia (system fonts, universal).
-    No external font loading — keeps the iframe lightweight and avoids
+    No external font loading - keeps the iframe lightweight and avoids
     licensing issues with commercial typefaces.
   -->
 
@@ -54,7 +54,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Fullscreen button — top-right corner of the map */
+    /* Fullscreen button - top-right corner of the map */
     .fullscreen-btn {
       position: absolute;
       top: 12px;
@@ -84,14 +84,14 @@
       stroke-width: 2;
     }
 
-    /* Leaflet zoom controls — semi-transparent, full opacity on hover */
+    /* Leaflet zoom controls - semi-transparent, full opacity on hover */
     .leaflet-control-zoom {
       opacity: 0.5;
       transition: opacity 160ms ease;
     }
     .leaflet-control-zoom:hover { opacity: 1; }
 
-    /* AuScope logo — bottom-left corner of map */
+    /* AuScope logo - bottom-left corner of map */
     .auscope-watermark {
       position: absolute;
       bottom: 12px;
@@ -152,7 +152,7 @@
     /* Bigger footer in fullscreen */
     .page:fullscreen .footer { padding: 14px 20px; font-size: 13px; }
 
-    /* WebKit prefixed copy — Safari + older Chromium needs this since
+    /* WebKit prefixed copy - Safari + older Chromium needs this since
        :fullscreen and :-webkit-full-screen can't be combined in one selector */
     .page:-webkit-full-screen {
       background: var(--bg);
@@ -316,7 +316,7 @@
     .facility-logo[data-state="WA"] img    { height: 51px; }
     .facility-logo[data-state="SA"] img    { height: 32px; }
     .facility-logo[data-state="NT"] img    { height: 32px; }
-    /* QLD logo is trimmed — wide aspect, constrain by width instead of height */
+    /* QLD logo is trimmed - wide aspect, constrain by width instead of height */
     .facility-logo[data-state="QLD"] img   { height: auto; width: 100px; }
 
     /* ─── Legend ─────────────────────────── */
@@ -528,19 +528,19 @@
   <section class="stats" id="stats">
     <div class="stat">
       <div class="stat-label">As of</div>
-      <div class="stat-value" id="stat-date">—</div>
+      <div class="stat-value" id="stat-date">–</div>
     </div>
     <div class="stat">
       <div class="stat-label">Drill cores scanned</div>
-      <div class="stat-value" id="stat-cores">—</div>
+      <div class="stat-value" id="stat-cores">–</div>
     </div>
     <div class="stat">
       <div class="stat-label">Total length</div>
-      <div class="stat-value" id="stat-km">—<span class="stat-unit">km</span></div>
+      <div class="stat-value" id="stat-km">–<span class="stat-unit">km</span></div>
     </div>
     <div class="stat">
       <div class="stat-label">Active facilities</div>
-      <div class="stat-value" id="stat-nodes">—</div>
+      <div class="stat-value" id="stat-nodes">–</div>
     </div>
   </section>
 
@@ -575,7 +575,7 @@
     </button>
     <input type="range" id="time-slider" min="0" max="100" step="1" value="100"
            aria-label="Timeline scrubber">
-    <span class="time-label" id="time-label">—</span>
+    <span class="time-label" id="time-label">–</span>
     <div class="speed-toggle" role="group" aria-label="Animation speed">
       <button data-speed="200">Slow</button>
       <button data-speed="80" class="active">Normal</button>
@@ -612,7 +612,7 @@
   const NUM = new Intl.NumberFormat('en-AU');
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtMonth(m) {
-    if (!m) return '—';
+    if (!m) return '–';
     const [y, mo] = m.split('-');
     return MONTHS[parseInt(mo,10)-1] + ' ' + y;
   }
@@ -620,7 +620,7 @@
   // Facility metadata
   //
   // Gating: by default a facility's logo appears when its first borehole
-  // record reaches the timeline cursor. WA is the exception — its early
+  // record reaches the timeline cursor. WA is the exception - its early
   // records (2003 Lake Magenta etc.) were scanned on CSIRO's prototype
   // before GSWA had its own machine. WA uses onlineMonth instead, gated
   // to July 2009 when GSWA's HyLogger was installed at Carlisle.
@@ -691,7 +691,7 @@
     const icon = document.getElementById('fullscreen-icon');
     const page = document.querySelector('.page');
 
-    // Expand-corners icon (default state — not in fullscreen)
+    // Expand-corners icon (default state - not in fullscreen)
     const expandIcon = `
       <polyline points="3,8 3,3 8,3" />
       <polyline points="12,3 17,3 17,8" />
@@ -745,7 +745,7 @@
       minZoom: 3,
     });
 
-    // Tight Australia bounding box — covers mainland + Tas, no surrounding ocean
+    // Tight Australia bounding box - covers mainland + Tas, no surrounding ocean
     const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
     map.fitBounds(ausBounds, { padding: [4, 4] });
     map.setMaxBounds(ausBounds.pad(0.5));
@@ -799,7 +799,7 @@
 
   function repositionFacilities() {
     // Capture the initial fit-to-Australia zoom on first call. This is the
-    // baseline for our offset scaling — at this zoom we use the FACILITIES
+    // baseline for our offset scaling - at this zoom we use the FACILITIES
     // offsets as authored. At higher zooms (e.g. going to fullscreen, or
     // user zoom-in) we scale the offsets up so logos stay anchored in
     // geographic space rather than pixel space.
@@ -812,11 +812,11 @@
     // multiplier doubles with each level above the initial home zoom.
     const offsetScale = Math.pow(2, currentZoom - initialHomeZoom);
 
-    // Hide once zoomed more than 2 levels past the initial home zoom —
+    // Hide once zoomed more than 2 levels past the initial home zoom -
     // drill-hole detail wins.
     const zoomedIn = currentZoom > initialHomeZoom + 2;
 
-    // DIAGNOSTIC — remove once tuning is finished
+    // DIAGNOSTIC - remove once tuning is finished
     console.log(`zoom=${currentZoom}, initial=${initialHomeZoom}, scale=${offsetScale.toFixed(2)}, hidden=${zoomedIn}`);
 
     for (const [state, els] of facilityEls.entries()) {

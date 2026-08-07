@@ -34,7 +34,7 @@
         .popup-name { font-weight: 700; font-size: 14px; color: #282572; }
         .popup-program { font-size: 11px; color: #6b7280; margin-top: 2px; }
 
-        /* Controls — hidden by default for clean map view */
+        /* Controls - hidden by default for clean map view */
         .leaflet-control-zoom { display: none !important; }
         .toolbar-wrap, .toolbar-wrap .leaflet-bar { background: none !important; border: none !important; box-shadow: none !important; }
         .tools-toggle { display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 4px; border: 2px solid rgba(0,0,0,0.2); cursor: pointer; font-size: 18px; color: #333; text-decoration: none; }
@@ -170,7 +170,7 @@
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 18, opacity: 0.8 }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, opacity: 0.6 }).addTo(map);
 
-            // Tools button — three dots toggle
+            // Tools button - three dots toggle
             const ToolbarControl = L.Control.extend({
                 onAdd: function() {
                     const wrap = L.DomUtil.create('div', 'toolbar-wrap');
@@ -248,7 +248,7 @@
 
         // ── Data: GeoJSON from data/ folder ──────────────────────────
         // (AuSIS comes from data/ausis_stations.geojson, refreshed daily by
-        // the ausis-backup.yml Action — the browser never calls a third-party
+        // the ausis-backup.yml Action - the browser never calls a third-party
         // API. The old in-page IRIS fetch broke in June 2026 when EarthScope's
         // redirect stripped CORS from service.iris.edu.)
         async function fetchGeoJSON(url, program) {
