@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-08-10T09:15:58Z"
+    "fetched": "2026-08-17T08:38:35Z"
   },
   "features": [
     {
@@ -6338,6 +6338,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Dead Horse - Mudgee: SDH-3",
+        "boreholeId": "MIN_006217",
+        "boreholeLength": 189.96,
+        "elevation": 675,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1981",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-12",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 67.09,
+        "project": "Dead Horse - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7568,
+          -32.6743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Boona Hill Top: 79BC1",
         "boreholeId": "MIN_006219",
         "boreholeLength": 198.8,
@@ -8684,6 +8712,34 @@
         "coordinates": [
           145.562,
           -30.8714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dead Horse - Mudgee: DDH3",
+        "boreholeId": "MIN_012793",
+        "boreholeLength": 100.1,
+        "elevation": 575,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1985",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-12",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 97.05,
+        "project": "Dead Horse - Mudgee",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.7697,
+          -32.6658
         ]
       }
     },
@@ -13808,6 +13864,118 @@
         "coordinates": [
           147.3452,
           -32.2311
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "John Fardy: JF04",
+        "boreholeId": "MIN_024877",
+        "boreholeLength": 45.1,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1973",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-13",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 41.13,
+        "project": "John Fardy",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.4177,
+          -34.109
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "John Fardy: JF06",
+        "boreholeId": "MIN_024879",
+        "boreholeLength": 47.5,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1973",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-13",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 44.48,
+        "project": "John Fardy",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.4177,
+          -34.1088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "John Fardy: JF08",
+        "boreholeId": "MIN_024881",
+        "boreholeLength": 35.1,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1973",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-13",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 31.98,
+        "project": "John Fardy",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.4178,
+          -34.1088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "John Fardy: JF18",
+        "boreholeId": "MIN_024891",
+        "boreholeLength": 33.2,
+        "elevation": null,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": "diamond drill",
+        "drillEndDate": "1973",
+        "purpose": "Metallic minerals",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-08-13",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 28.01,
+        "project": "John Fardy",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.4177,
+          -34.1086
         ]
       }
     },
@@ -22662,7 +22830,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 22 - Northparkes: E22D248",
+        "name": "Endeavour 22 - Northparkes Mines: E22D248",
         "boreholeId": "MIN_068815",
         "boreholeLength": 759.5,
         "elevation": 10280.6,
@@ -22998,7 +23166,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 26 - Northparkes Evaluation 2011: E26D490",
+        "name": "Endeavour 26 - Northparkes Mines Evaluation 2011: E26D490",
         "boreholeId": "MIN_070094",
         "boreholeLength": 686.8,
         "elevation": -555.99,
@@ -23110,7 +23278,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 48 - Northparkes Evaluation 2011: E48D134",
+        "name": "Endeavour 48 - Northparkes Mines Evaluation 2011: E48D134",
         "boreholeId": "MIN_071276",
         "boreholeLength": 1599.8,
         "elevation": 287.28,
@@ -23138,7 +23306,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 48 - Northparkes Evaluation 2011: E48D202",
+        "name": "Endeavour 48 - Northparkes Mines Evaluation 2011: E48D202",
         "boreholeId": "MIN_071336",
         "boreholeLength": 668.6,
         "elevation": -322.56,
@@ -26358,7 +26526,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 26 - Northparkes Evaluation 2011: E26D460",
+        "name": "Endeavour 26 - Northparkes Mines Evaluation 2011: E26D460",
         "boreholeId": "MIN_124632",
         "boreholeLength": 962.2,
         "elevation": null,
@@ -27870,7 +28038,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 48 - Northparkes Evaluation: E48D269",
+        "name": "Endeavour 48 - Northparkes Mines: E48D269",
         "boreholeId": "MIN_158614",
         "boreholeLength": 531.1,
         "elevation": 286.52,
@@ -28486,7 +28654,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 26 - Northparkes Evaluation 2014: E26D559",
+        "name": "Endeavour 26 - Northparkes Mines Evaluation 2014: E26D559",
         "boreholeId": "MIN_170520",
         "boreholeLength": 471.7,
         "elevation": 283,
@@ -28990,7 +29158,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 26 - Northparkes: E26D572",
+        "name": "Endeavour 26 - Northparkes Mines: E26D572",
         "boreholeId": "MIN_229708",
         "boreholeLength": 471.8,
         "elevation": null,
@@ -29018,7 +29186,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 48 - Northparkes Exploration: E48D203",
+        "name": "Endeavour 48 - Northparkes Mines: E48D203",
         "boreholeId": "MIN_229709",
         "boreholeLength": 609.7,
         "elevation": null,
@@ -29746,6 +29914,62 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Mount Hope Project: 17MSD09",
+        "boreholeId": "MIN_235507",
+        "boreholeLength": 151,
+        "elevation": 236.795,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2017",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-08-12",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 199.84,
+        "project": "Mount Hope Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.9112,
+          -32.8534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Hope Project: 17MSD10",
+        "boreholeId": "MIN_235508",
+        "boreholeLength": 240,
+        "elevation": 236.614,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2017",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-08-12",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 199.84,
+        "project": "Mount Hope Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.9112,
+          -32.8534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Mount Hope Project: 17MSR08",
         "boreholeId": "MIN_235509",
         "boreholeLength": 130,
@@ -30300,6 +30524,34 @@
         "coordinates": [
           149.1016,
           -33.6833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mount Hope Project: 17MSD15",
+        "boreholeId": "MIN_252922",
+        "boreholeLength": 406.5,
+        "elevation": 240,
+        "custodian": "",
+        "drillingMethod": "",
+        "drillEndDate": "2017",
+        "purpose": "",
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-08-12",
+        "firstSeen": "2026-08-17",
+        "scannedMetres": 79.84,
+        "project": "Mount Hope Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.9109,
+          -32.8527
         ]
       }
     },
@@ -31706,7 +31958,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 27 - Northparkes Evaluation 2011: E27D248",
+        "name": "Endeavour 27 - Northparkes Mines Evaluation 2011: E27D248",
         "boreholeId": "MIN_363236",
         "boreholeLength": 431.85,
         "elevation": null,
@@ -31734,7 +31986,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 48 - Northparkes: E48D58",
+        "name": "Endeavour 48 - Northparkes Mines: E48D58",
         "boreholeId": "MIN_363237",
         "boreholeLength": 771.8,
         "elevation": null,
@@ -32826,7 +33078,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 26, Goonumbla - Northparkes: E26D277",
+        "name": "Endeavour 26 Goonumbla - Northparkes Mines: E26D277",
         "boreholeId": "MIN_389160",
         "boreholeLength": 256,
         "elevation": null,
