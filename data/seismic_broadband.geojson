@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-08-10T08:20:23Z"
+    "fetched": "2026-08-17T07:42:03Z"
   },
   "features": [
     {
@@ -2535,8 +2535,8 @@
         "sensor": "Guralp Certimus 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 238.0,
-        "startTime": "2021-04-21T00:56:39",
-        "endTime": "2021-06-19T21:05:44.68"
+        "startTime": "2021-04-21T00:56:40",
+        "endTime": "2021-06-19T21:05:43.68"
       },
       "geometry": {
         "type": "Point",
@@ -2555,8 +2555,8 @@
         "sensor": "Guralp Certimus 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 131.0,
-        "startTime": "2021-05-07T00:58:13",
-        "endTime": "2021-09-08T08:31:38.55"
+        "startTime": "2021-05-07T00:58:14",
+        "endTime": "2021-09-08T08:31:37.55"
       },
       "geometry": {
         "type": "Point",
@@ -2575,8 +2575,8 @@
         "sensor": "Guralp Certimus 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 141.0,
-        "startTime": "2021-05-27T03:32:39",
-        "endTime": "2021-07-23T10:19:35.93"
+        "startTime": "2021-05-27T03:32:40",
+        "endTime": "2021-07-23T10:19:34.93"
       },
       "geometry": {
         "type": "Point",
@@ -2595,8 +2595,8 @@
         "sensor": "Guralp Certimus 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 154.0,
-        "startTime": "2021-06-01T01:09:44",
-        "endTime": "2021-07-23T15:03:31.89"
+        "startTime": "2021-06-01T01:09:45",
+        "endTime": "2021-07-23T15:03:24.33"
       },
       "geometry": {
         "type": "Point",
@@ -2615,8 +2615,8 @@
         "sensor": "Guralp Certimus 120s (BB)",
         "sampleRate": 100.0,
         "elevation": 251.0,
-        "startTime": "2021-06-13T03:04:52",
-        "endTime": "2021-08-04T18:26:59.69"
+        "startTime": "2021-06-13T03:04:53",
+        "endTime": "2021-08-04T18:26:58.69"
       },
       "geometry": {
         "type": "Point",
@@ -2635,8 +2635,8 @@
         "sensor": "Guralp CMG-6T 60s (BB)",
         "sampleRate": 100.0,
         "elevation": -4996.0,
-        "startTime": "2020-10-27T23:59:59",
-        "endTime": "2021-06-14T08:57:19.99"
+        "startTime": "2020-10-28T00:00:00",
+        "endTime": "2021-06-14T08:57:18.66"
       },
       "geometry": {
         "type": "Point",
@@ -2655,8 +2655,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -3635.0,
-        "startTime": "2020-10-16T02:28:58.98",
-        "endTime": "2021-11-18T00:00:00.86"
+        "startTime": "2020-10-16T02:28:59.98",
+        "endTime": "2021-11-17T23:59:59.86"
       },
       "geometry": {
         "type": "Point",
@@ -2669,14 +2669,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "MRO05",
+        "network": "3F",
+        "channel": "HHZ",
+        "sensor": "Guralp CMG-6T 60s (BB)",
+        "sampleRate": 100.0,
+        "elevation": -521.0,
+        "startTime": "2020-10-24T21:36:00",
+        "endTime": "2021-07-12T06:09:18.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          158.8494,
+          -54.4049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "MRO06",
         "network": "3F",
         "channel": "BHZ",
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -520.0,
-        "startTime": "2020-10-29T01:25:58.96",
-        "endTime": "2021-11-17T04:59:00.98"
+        "startTime": "2020-10-29T01:25:59.96",
+        "endTime": "2021-11-17T04:58:59.98"
       },
       "geometry": {
         "type": "Point",
@@ -2695,8 +2715,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -3006.0,
-        "startTime": "2020-10-29T05:33:59",
-        "endTime": "2021-11-17T20:35:59.72"
+        "startTime": "2020-10-29T05:34:00",
+        "endTime": "2021-11-17T20:35:58.72"
       },
       "geometry": {
         "type": "Point",
@@ -2715,8 +2735,8 @@
         "sensor": "Guralp CMG-6T 60s (BB)",
         "sampleRate": 100.0,
         "elevation": -5363.0,
-        "startTime": "2020-10-24T00:14:40",
-        "endTime": "2021-10-25T05:33:55.99"
+        "startTime": "2020-10-24T00:14:41",
+        "endTime": "2021-10-25T05:33:54.99"
       },
       "geometry": {
         "type": "Point",
@@ -2735,8 +2755,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -896.0,
-        "startTime": "2020-10-26T01:28:59",
-        "endTime": "2021-11-16T21:28:01.82"
+        "startTime": "2020-10-26T01:29:00",
+        "endTime": "2021-11-16T21:28:00.82"
       },
       "geometry": {
         "type": "Point",
@@ -2755,8 +2775,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -2425.0,
-        "startTime": "2020-10-26T06:03:58.96",
-        "endTime": "2021-11-26T00:43:00.98"
+        "startTime": "2020-10-26T06:03:59.96",
+        "endTime": "2021-11-26T00:42:59.98"
       },
       "geometry": {
         "type": "Point",
@@ -2775,8 +2795,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -3764.0,
-        "startTime": "2020-10-20T00:27:59",
-        "endTime": "2021-11-26T03:57:01"
+        "startTime": "2020-10-20T00:28:00",
+        "endTime": "2021-11-26T03:57:00"
       },
       "geometry": {
         "type": "Point",
@@ -2795,8 +2815,8 @@
         "sensor": "Guralp CMG-6T 60s (BB)",
         "sampleRate": 100.0,
         "elevation": -5104.0,
-        "startTime": "2020-10-22T23:59:59",
-        "endTime": "2021-11-12T00:00:00.99"
+        "startTime": "2020-10-23T00:00:00",
+        "endTime": "2021-11-11T23:59:59.99"
       },
       "geometry": {
         "type": "Point",
@@ -2815,8 +2835,8 @@
         "sensor": "Guralp CMG-6T 60s (BB)",
         "sampleRate": 100.0,
         "elevation": -4435.0,
-        "startTime": "2020-10-29T14:08:03",
-        "endTime": "2021-02-22T17:46:50.99"
+        "startTime": "2020-10-29T14:08:04",
+        "endTime": "2021-02-22T17:46:49.99"
       },
       "geometry": {
         "type": "Point",
@@ -2835,8 +2855,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -2386.0,
-        "startTime": "2020-10-22T06:19:59",
-        "endTime": "2021-11-16T03:30:02.24"
+        "startTime": "2020-10-22T06:20:00",
+        "endTime": "2021-11-16T03:30:01.24"
       },
       "geometry": {
         "type": "Point",
@@ -2855,8 +2875,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -3966.0,
-        "startTime": "2020-10-30T05:22:59",
-        "endTime": "2021-02-27T15:16:03.72"
+        "startTime": "2020-10-30T05:23:00",
+        "endTime": "2021-02-27T15:16:02.72"
       },
       "geometry": {
         "type": "Point",
@@ -2875,8 +2895,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -975.0,
-        "startTime": "2020-10-18T01:52:58.98",
-        "endTime": "2021-11-16T23:38:00.64"
+        "startTime": "2020-10-18T01:52:59.98",
+        "endTime": "2021-11-16T23:37:59.64"
       },
       "geometry": {
         "type": "Point",
@@ -2895,8 +2915,8 @@
         "sensor": "IGG CAS G-type 60s Broadband OBS",
         "sampleRate": 50.0,
         "elevation": -884.0,
-        "startTime": "2020-10-18T04:41:59",
-        "endTime": "2021-11-17T01:58:01"
+        "startTime": "2020-10-18T04:42:00",
+        "endTime": "2021-11-17T01:58:00"
       },
       "geometry": {
         "type": "Point",
@@ -2915,8 +2935,8 @@
         "sensor": "Guralp CMG-6T 60s (BB)",
         "sampleRate": 100.0,
         "elevation": -5517.0,
-        "startTime": "2020-10-23T17:28:39",
-        "endTime": "2021-10-17T23:21:04.99"
+        "startTime": "2020-10-23T17:28:40",
+        "endTime": "2021-10-17T23:21:03.99"
       },
       "geometry": {
         "type": "Point",
@@ -20569,46 +20589,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "AU33",
-        "network": "M8",
-        "channel": "HHZ",
-        "sensor": "Trillium Compact 120s (BB)",
-        "sampleRate": 100.0,
-        "elevation": 560.0,
-        "startTime": "2025-05-06T05:00:00",
-        "endTime": null
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          120.9807,
-          -24.0077
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "AU37",
-        "network": "M8",
-        "channel": "HHZ",
-        "sensor": "Trillium Compact 120s (BB)",
-        "sampleRate": 100.0,
-        "elevation": 530.0,
-        "startTime": "2025-05-09T09:00:00",
-        "endTime": null
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          120.9943,
-          -26.006
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "AU41",
         "network": "M8",
         "channel": "HHZ",
@@ -20749,26 +20729,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "BC37",
-        "network": "M8",
-        "channel": "HHZ",
-        "sensor": "Trillium Compact 120s (BB)",
-        "sampleRate": 100.0,
-        "elevation": 422.0,
-        "startTime": "2026-07-24T00:00:00",
-        "endTime": null
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          125.3947,
-          -26.0405
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "BG31",
         "network": "M8",
         "channel": "HHZ",
@@ -20823,26 +20783,6 @@
         "coordinates": [
           127.0172,
           -31.903
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "BK42",
-        "network": "M8",
-        "channel": "HHZ",
-        "sensor": "Trillium Compact 120s (BB)",
-        "sampleRate": 100.0,
-        "elevation": 99.0,
-        "startTime": "2024-10-29T00:00:00",
-        "endTime": null
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          128.97,
-          -28.5146
         ]
       }
     },
