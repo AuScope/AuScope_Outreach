@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-08-17T08:38:35Z"
+    "fetched": "2026-08-24T08:43:17Z"
   },
   "features": [
     {
@@ -1570,8 +1570,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.25591682,
-          -21.38352928
+          122.2559072,
+          -21.3826645
         ]
       }
     },
@@ -8822,8 +8822,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.21111103,
-          -26.2114869
+          116.212534,
+          -26.21024212
         ]
       }
     },
@@ -10642,8 +10642,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.05764844,
-          -33.36185879
+          122.102441,
+          -31.555796
         ]
       }
     },
@@ -13414,8 +13414,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.43200218,
-          -31.08090341
+          121.40369949,
+          -30.83901816
         ]
       }
     },
@@ -14142,8 +14142,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.49781888,
-          -30.76742163
+          121.505748,
+          -30.78510716
         ]
       }
     },
@@ -14842,8 +14842,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.97390161,
-          -28.79108032
+          116.94354,
+          -28.776306
         ]
       }
     },
@@ -15738,8 +15738,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          118.21003976,
-          -22.19171132
+          118.20300243,
+          -22.1839535
         ]
       }
     },
@@ -18808,9 +18808,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2010-07-01",
-        "datasetCreated": null,
+        "datasetCreated": "2024-02-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 99.0,
         "project": "Ernest Giles",
         "owner": "GSWA",
         "state": "WA"
@@ -19546,8 +19546,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.92831978,
-          -21.96859968
+          121.926389,
+          -21.96746204
         ]
       }
     },
@@ -21394,8 +21394,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.6172098,
-          -30.94228601
+          121.6079064,
+          -30.94219968
         ]
       }
     },
@@ -24268,9 +24268,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2011-01-19",
-        "datasetCreated": null,
+        "datasetCreated": "2024-02-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 206.0,
         "project": "Eucla",
         "owner": "GSWA",
         "state": "WA"
@@ -24810,8 +24810,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          117.27637811,
-          -23.1386237
+          117.276626,
+          -23.138842
         ]
       }
     },
@@ -28338,8 +28338,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.50424815,
-          -31.41247629
+          121.07191,
+          -31.101091
         ]
       }
     },
@@ -29178,8 +29178,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.38037263,
-          -31.9057063
+          115.721523,
+          -24.538056
         ]
       }
     },
@@ -29206,8 +29206,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          120.40903319,
-          -31.93542188
+          115.7334042,
+          -24.52962273
         ]
       }
     },
@@ -29486,8 +29486,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.3147832,
-          -27.65236413
+          122.3147637,
+          -27.6519153
         ]
       }
     },
@@ -29542,8 +29542,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.31492921,
-          -27.65325913
+          122.315061,
+          -27.6528422
         ]
       }
     },
@@ -29570,8 +29570,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.27641324,
-          -27.63198712
+          122.2795729,
+          -27.61353627
         ]
       }
     },
@@ -29598,8 +29598,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.31670519,
-          -27.61389912
+          122.3081316,
+          -27.61050734
         ]
       }
     },
@@ -30550,8 +30550,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          126.10673221,
-          -18.34079604
+          126.0989765,
+          -18.30191143
         ]
       }
     },
@@ -30578,8 +30578,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.48042202,
-          -30.74421264
+          121.47800228,
+          -30.74180608
         ]
       }
     },
@@ -33676,9 +33676,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2020-04-30",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 131.69,
         "project": null,
         "owner": null,
         "state": "WA"
@@ -35664,9 +35664,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2010-11-29",
-        "datasetCreated": null,
+        "datasetCreated": "2024-02-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 150.0,
         "project": "Eucla",
         "owner": "GSWA",
         "state": "WA"
@@ -41358,8 +41358,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.19162688,
-          -27.11521726
+          122.1917291,
+          -27.1150956
         ]
       }
     },
@@ -41414,8 +41414,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          122.18895331,
-          -27.12221655
+          122.1890517,
+          -27.12208238
         ]
       }
     },
@@ -43934,8 +43934,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.51776939,
-          -30.8283622
+          121.518251,
+          -30.82804
         ]
       }
     },
@@ -44102,8 +44102,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          121.28800996,
-          -27.89788616
+          121.2879083,
+          -27.89775059
         ]
       }
     },
@@ -45044,9 +45044,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2023-03-03",
-        "datasetCreated": null,
+        "datasetCreated": "2023-12-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 185.0,
         "project": "Snake Rock ",
         "owner": "GSWA",
         "state": "WA"
@@ -45072,9 +45072,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2023-03-04",
-        "datasetCreated": null,
+        "datasetCreated": "2023-12-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 199.0,
         "project": "Snake Rock",
         "owner": "GSWA",
         "state": "WA"
@@ -45100,9 +45100,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2022-03-05",
-        "datasetCreated": null,
+        "datasetCreated": "2023-12-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 179.0,
         "project": "Snake Rock",
         "owner": "GSWA",
         "state": "WA"
@@ -45128,9 +45128,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2023-03-06",
-        "datasetCreated": null,
+        "datasetCreated": "2023-12-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 155.0,
         "project": "Snake Rock",
         "owner": "GSWA",
         "state": "WA"
@@ -45156,9 +45156,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": "2023-03-06",
-        "datasetCreated": null,
+        "datasetCreated": "2023-12-13",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 132.0,
         "project": "Snake Rock",
         "owner": "GSWA",
         "state": "WA"
@@ -47592,9 +47592,9 @@
         "purpose": "",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2023-10-08",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 195.0,
         "project": null,
         "owner": null,
         "state": "WA"
@@ -49198,8 +49198,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.3993164,
-          -23.88887554
+          114.501361,
+          -23.948719
         ]
       }
     },

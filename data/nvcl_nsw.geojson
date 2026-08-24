@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-08-17T08:38:35Z"
+    "fetched": "2026-08-24T08:43:17Z"
   },
   "features": [
     {
@@ -22830,34 +22830,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Endeavour 22 - Northparkes Mines: E22D248",
-        "boreholeId": "MIN_068815",
-        "boreholeLength": 759.5,
-        "elevation": 10280.6,
-        "custodian": "Geological Survey of NSW",
-        "drillingMethod": "",
-        "drillEndDate": "2005",
-        "purpose": "",
-        "instrument": "HyLogger 3-4",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 639.48,
-        "project": null,
-        "owner": null,
-        "state": "NSW"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.037,
-          -32.9078
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Central Area - Cobar: DD04CH0034",
         "boreholeId": "MIN_069096",
         "boreholeLength": 738.4,
@@ -29192,7 +29164,7 @@
         "elevation": null,
         "custodian": "",
         "drillingMethod": "",
-        "drillEndDate": "",
+        "drillEndDate": "2012",
         "purpose": "",
         "instrument": "HyLogger 3-4",
         "drillDate": null,

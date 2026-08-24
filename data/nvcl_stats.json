@@ -1,25 +1,31 @@
 {
-  "generated": "2026-08-17T08:38:35Z",
+  "generated": "2026-08-24T08:43:17Z",
   "summary": {
-    "totalBoreholes": 5822,
-    "totalBoreholeLengthMetres": 2285775.67,
-    "totalBoreholeLengthKm": 2285.78,
-    "totalScannedMetres": 831184.68,
-    "totalScannedKm": 831.18,
-    "boreholesWithInstrumentData": 5080
+    "totalBoreholes": 5826,
+    "totalBoreholeLengthMetres": 2285262.83,
+    "totalBoreholeLengthKm": 2285.26,
+    "totalScannedMetres": 845547.23,
+    "totalScannedKm": 845.55,
+    "boreholesWithInstrumentData": 5081
   },
   "byState": {
+    "CSIRO": {
+      "boreholes": 5,
+      "boreholeLengthMetres": 246.66,
+      "scannedMetres": 220.41,
+      "withInstrumentData": 0
+    },
     "NSW": {
-      "boreholes": 1251,
-      "boreholeLengthMetres": 347135.91,
-      "scannedMetres": 290634.36,
-      "withInstrumentData": 989
+      "boreholes": 1250,
+      "boreholeLengthMetres": 346376.41,
+      "scannedMetres": 289994.88,
+      "withInstrumentData": 988
     },
     "QLD": {
       "boreholes": 587,
       "boreholeLengthMetres": 406477.29,
-      "scannedMetres": 111612.02,
-      "withInstrumentData": 396
+      "scannedMetres": 124761.95,
+      "withInstrumentData": 398
     },
     "SA": {
       "boreholes": 2058,
@@ -36,7 +42,7 @@
     "WA": {
       "boreholes": 1897,
       "boreholeLengthMetres": 565050.84,
-      "scannedMetres": 0.0,
+      "scannedMetres": 1631.69,
       "withInstrumentData": 1876
     }
   },
@@ -86,12 +92,12 @@
       "scannedMetres": 346516.29
     },
     "HyLogger 3-4": {
-      "boreholes": 884,
-      "scannedMetres": 203411.06
+      "boreholes": 883,
+      "scannedMetres": 202771.58
     },
     "HyLogger 3-5": {
-      "boreholes": 372,
-      "scannedMetres": 89495.24
+      "boreholes": 374,
+      "scannedMetres": 90312.56
     },
     "HyLogger 4-2301": {
       "boreholes": 14,
@@ -110,8 +116,8 @@
       "scannedMetres": 679.06
     },
     "Unknown": {
-      "boreholes": 742,
-      "scannedMetres": 69323.1
+      "boreholes": 745,
+      "scannedMetres": 83507.81
     }
   },
   "monthly": [
@@ -151,6 +157,20 @@
       "scannedMetres": 713.9
     },
     {
+      "month": "2014-04",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 4,
+      "scannedMetres": 298.05
+    },
+    {
+      "month": "2014-05",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 269.64
+    },
+    {
       "month": "2014-06",
       "state": "NSW",
       "instrument": "Unknown",
@@ -165,11 +185,25 @@
       "scannedMetres": 734.8
     },
     {
+      "month": "2014-07",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 284.33
+    },
+    {
       "month": "2014-08",
       "state": "NSW",
       "instrument": "Unknown",
       "boreholes": 13,
       "scannedMetres": 5591.51
+    },
+    {
+      "month": "2014-08",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 484.94
     },
     {
       "month": "2014-09",
@@ -186,11 +220,25 @@
       "scannedMetres": 2931.07
     },
     {
+      "month": "2014-10",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 557.3
+    },
+    {
       "month": "2014-11",
       "state": "NSW",
       "instrument": "Unknown",
       "boreholes": 2,
       "scannedMetres": 681.86
+    },
+    {
+      "month": "2014-11",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 4,
+      "scannedMetres": 737.31
     },
     {
       "month": "2014-12",
@@ -249,6 +297,13 @@
       "scannedMetres": 4594.61
     },
     {
+      "month": "2015-05",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 14.06
+    },
+    {
       "month": "2015-06",
       "state": "NSW",
       "instrument": "Unknown",
@@ -277,11 +332,25 @@
       "scannedMetres": 3808.22
     },
     {
+      "month": "2015-09",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 309.19
+    },
+    {
       "month": "2015-10",
       "state": "NSW",
       "instrument": "Unknown",
       "boreholes": 9,
       "scannedMetres": 2509.56
+    },
+    {
+      "month": "2015-10",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 5,
+      "scannedMetres": 4086.5
     },
     {
       "month": "2015-11",
@@ -312,6 +381,20 @@
       "scannedMetres": 1074.97
     },
     {
+      "month": "2016-03",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 5,
+      "scannedMetres": 1096.47
+    },
+    {
+      "month": "2016-04",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 261.88
+    },
+    {
       "month": "2016-05",
       "state": "NSW",
       "instrument": "Unknown",
@@ -324,6 +407,13 @@
       "instrument": "Unknown",
       "boreholes": 2,
       "scannedMetres": 440.09
+    },
+    {
+      "month": "2016-07",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 3,
+      "scannedMetres": 33.11
     },
     {
       "month": "2016-09",
@@ -347,6 +437,13 @@
       "scannedMetres": 661.78
     },
     {
+      "month": "2016-11",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 44.68
+    },
+    {
       "month": "2016-12",
       "state": "NSW",
       "instrument": "Unknown",
@@ -359,6 +456,13 @@
       "instrument": "Unknown",
       "boreholes": 7,
       "scannedMetres": 3968.66
+    },
+    {
+      "month": "2017-02",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 3,
+      "scannedMetres": 712.66
     },
     {
       "month": "2017-03",
@@ -382,6 +486,13 @@
       "scannedMetres": 339.25
     },
     {
+      "month": "2017-06",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 245.58
+    },
+    {
       "month": "2017-07",
       "state": "NSW",
       "instrument": "Unknown",
@@ -394,6 +505,13 @@
       "instrument": "HyLogger 2-5",
       "boreholes": 1,
       "scannedMetres": 1192.94
+    },
+    {
+      "month": "2017-07",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 171.5
     },
     {
       "month": "2017-09",
@@ -415,6 +533,13 @@
       "instrument": "HyLogger 3-5",
       "boreholes": 4,
       "scannedMetres": 2780.98
+    },
+    {
+      "month": "2017-11",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 425.82
     },
     {
       "month": "2018-02",
@@ -508,11 +633,25 @@
       "scannedMetres": 1210.22
     },
     {
+      "month": "2020-04",
+      "state": "WA",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 131.69
+    },
+    {
       "month": "2020-11",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
       "boreholes": 1,
       "scannedMetres": 416.0
+    },
+    {
+      "month": "2021-03",
+      "state": "QLD",
+      "instrument": "HyLogger 3-5",
+      "boreholes": 1,
+      "scannedMetres": 431.2
     },
     {
       "month": "2021-05",
@@ -536,11 +675,32 @@
       "scannedMetres": 406.4
     },
     {
+      "month": "2023-10",
+      "state": "WA",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 195.0
+    },
+    {
+      "month": "2023-12",
+      "state": "WA",
+      "instrument": "Unknown",
+      "boreholes": 5,
+      "scannedMetres": 850.0
+    },
+    {
       "month": "2024-01",
       "state": "SA",
       "instrument": "Unknown",
       "boreholes": 1,
       "scannedMetres": 0.45
+    },
+    {
+      "month": "2024-02",
+      "state": "WA",
+      "instrument": "Unknown",
+      "boreholes": 3,
+      "scannedMetres": 455.0
     },
     {
       "month": "2024-06",
@@ -564,11 +724,25 @@
       "scannedMetres": 1656.85
     },
     {
+      "month": "2024-12",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 1,
+      "scannedMetres": 64.76
+    },
+    {
       "month": "2025-01",
       "state": "QLD",
       "instrument": "HyLogger 2-5",
       "boreholes": 2,
       "scannedMetres": 2140.93
+    },
+    {
+      "month": "2025-01",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 2,
+      "scannedMetres": 1880.41
     },
     {
       "month": "2025-02",
@@ -684,6 +858,13 @@
     },
     {
       "month": "2026-08",
+      "state": "CSIRO",
+      "instrument": "Unknown",
+      "boreholes": 5,
+      "scannedMetres": 220.41
+    },
+    {
+      "month": "2026-08",
       "state": "NSW",
       "instrument": "HyLogger 3-4",
       "boreholes": 3,
@@ -714,8 +895,8 @@
       "month": "2026-08",
       "state": "QLD",
       "instrument": "HyLogger 3-5",
-      "boreholes": 1,
-      "scannedMetres": 179.53
+      "boreholes": 2,
+      "scannedMetres": 565.65
     },
     {
       "month": "2026-08",
@@ -723,6 +904,13 @@
       "instrument": "HyLogger-2",
       "boreholes": 1,
       "scannedMetres": 78.38
+    },
+    {
+      "month": "2026-08",
+      "state": "QLD",
+      "instrument": "Unknown",
+      "boreholes": 3,
+      "scannedMetres": 354.42
     },
     {
       "month": "unknown",
@@ -742,8 +930,8 @@
       "month": "unknown",
       "state": "NSW",
       "instrument": "HyLogger 3-4",
-      "boreholes": 864,
-      "scannedMetres": 200343.07
+      "boreholes": 863,
+      "scannedMetres": 199703.59
     },
     {
       "month": "unknown",
@@ -791,7 +979,7 @@
       "month": "unknown",
       "state": "QLD",
       "instrument": "Unknown",
-      "boreholes": 191,
+      "boreholes": 142,
       "scannedMetres": 0.0
     },
     {
@@ -861,7 +1049,7 @@
       "month": "unknown",
       "state": "WA",
       "instrument": "Unknown",
-      "boreholes": 21,
+      "boreholes": 11,
       "scannedMetres": 0.0
     }
   ]
