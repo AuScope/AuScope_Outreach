@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "nodal_shortperiod",
-    "fetched": "2026-08-24T07:49:28Z"
+    "fetched": "2026-08-31T14:32:45Z"
   },
   "features": [
     {
@@ -20783,6 +20783,1846 @@
         "coordinates": [
           175.5451,
           -37.1329
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AD001",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 321.0,
+        "startTime": "2025-10-09T22:55:06",
+        "endTime": "2025-11-11T21:16:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42927,
+          -38.09946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AD014",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 301.0,
+        "startTime": "2025-10-10T20:39:18",
+        "endTime": "2025-11-14T19:28:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50087,
+          -38.1827
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AD016",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 901.0,
+        "startTime": "2025-10-14T23:24:46",
+        "endTime": "2025-11-11T23:39:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46939,
+          -38.13468
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AD017",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 811.0,
+        "startTime": "2025-10-14T21:14:46",
+        "endTime": "2025-11-12T01:57:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.45486,
+          -38.12865
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AD018",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 776.0,
+        "startTime": "2025-10-14T21:55:14",
+        "endTime": "2025-11-12T01:11:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.4491,
+          -38.12248
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM005",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 232.0,
+        "startTime": "2025-10-10T21:48:50",
+        "endTime": "2025-11-14T22:26:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52664,
+          -38.13752
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM006",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 289.0,
+        "startTime": "2025-10-10T22:09:10",
+        "endTime": "2025-11-14T23:13:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51828,
+          -38.14499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM007",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 383.0,
+        "startTime": "2025-10-10T23:12:46",
+        "endTime": "2025-11-14T21:43:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51609,
+          -38.13138
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM008",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 502.0,
+        "startTime": "2025-10-11T19:18:14",
+        "endTime": "2025-11-14T21:04:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50419,
+          -38.1342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM009",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 673.0,
+        "startTime": "2025-10-11T19:52:22",
+        "endTime": "2025-11-14T20:25:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.49027,
+          -38.13041
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM010",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 430.0,
+        "startTime": "2025-10-11T00:06:42",
+        "endTime": "2025-11-15T02:26:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51599,
+          -38.11325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM011",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 395.0,
+        "startTime": "2025-10-11T01:11:18",
+        "endTime": "2025-11-15T01:57:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52516,
+          -38.10106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM012",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 309.0,
+        "startTime": "2025-10-11T00:56:14",
+        "endTime": "2025-11-15T02:54:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.53097,
+          -38.11382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM013",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 352.0,
+        "startTime": "2025-10-11T00:36:46",
+        "endTime": "2025-11-15T03:06:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52391,
+          -38.12075
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM016",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 172.0,
+        "startTime": "2025-10-10T21:31:18",
+        "endTime": "2025-11-15T01:29:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.54135,
+          -38.13609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM018",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 131.0,
+        "startTime": "2025-10-10T21:12:02",
+        "endTime": "2025-11-15T01:19:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.55781,
+          -38.13418
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AM024",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 373.0,
+        "startTime": "2025-10-11T00:23:06",
+        "endTime": "2025-11-15T02:42:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51058,
+          -38.12463
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR006",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 597.0,
+        "startTime": "2025-10-12T20:06:02",
+        "endTime": "2025-11-12T00:23:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48354,
+          -38.07392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR007",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 611.0,
+        "startTime": "2025-10-12T22:19:26",
+        "endTime": "2025-11-12T21:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50057,
+          -38.07737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR010",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 553.0,
+        "startTime": "2025-10-12T21:21:18",
+        "endTime": "2025-11-12T23:27:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.54506,
+          -38.09034
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR011",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 692.0,
+        "startTime": "2025-10-12T23:03:26",
+        "endTime": "2025-11-12T21:03:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.5161,
+          -38.09214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR012",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 757.0,
+        "startTime": "2025-10-12T23:42:46",
+        "endTime": "2025-11-12T20:10:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50366,
+          -38.09803
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR015",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 595.0,
+        "startTime": "2025-10-11T01:32:10",
+        "endTime": "2025-11-15T19:09:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.49048,
+          -38.07701
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR019",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 603.0,
+        "startTime": "2025-10-10T01:06:42",
+        "endTime": "2025-11-11T04:49:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.45381,
+          -38.08921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR020",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 653.0,
+        "startTime": "2025-10-10T01:33:14",
+        "endTime": "2025-11-11T04:30:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.44617,
+          -38.09389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR021",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 610.0,
+        "startTime": "2025-10-10T01:53:46",
+        "endTime": "2025-11-11T04:04:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46323,
+          -38.09471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR023",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 550.0,
+        "startTime": "2025-10-10T04:00:14",
+        "endTime": "2025-11-11T01:20:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.43891,
+          -38.10657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR024",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 598.0,
+        "startTime": "2025-10-10T03:30:18",
+        "endTime": "2025-11-11T01:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.44677,
+          -38.10958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR025",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 631.0,
+        "startTime": "2025-10-10T03:06:14",
+        "endTime": "2025-11-11T02:32:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.45289,
+          -38.11529
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR026",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 723.0,
+        "startTime": "2025-10-13T03:30:14",
+        "endTime": "2025-11-11T22:31:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.45779,
+          -38.10512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR027",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 659.0,
+        "startTime": "2025-10-10T02:09:46",
+        "endTime": "2025-11-11T03:44:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47219,
+          -38.10243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR029",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 664.0,
+        "startTime": "2025-10-10T02:46:14",
+        "endTime": "2025-11-11T02:58:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46533,
+          -38.11511
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR030",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 653.0,
+        "startTime": "2025-10-13T01:31:54",
+        "endTime": "2025-11-11T20:44:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.4896,
+          -38.11161
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR031",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 643.0,
+        "startTime": "2025-10-13T02:21:42",
+        "endTime": "2025-11-11T20:06:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.5004,
+          -38.11512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR033",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 682.0,
+        "startTime": "2025-10-10T02:27:46",
+        "endTime": "2025-11-11T03:24:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47589,
+          -38.10927
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AR038",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 632.0,
+        "startTime": "2025-10-13T01:56:50",
+        "endTime": "2025-11-11T19:41:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.49562,
+          -38.11925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AS001",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 98.0,
+        "startTime": "2025-10-09T04:11:18",
+        "endTime": "2025-11-10T23:14:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.63012,
+          -38.13116
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AS002",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 308.0,
+        "startTime": "2025-10-09T03:35:42",
+        "endTime": "2025-11-10T22:35:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.73126,
+          -38.16
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AS003",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 408.0,
+        "startTime": "2025-10-09T03:10:18",
+        "endTime": "2025-11-10T22:04:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.70201,
+          -38.19873
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "AS004",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 424.0,
+        "startTime": "2025-10-09T02:44:10",
+        "endTime": "2025-11-10T21:08:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.66129,
+          -38.25014
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD002",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 329.0,
+        "startTime": "2025-10-13T04:31:58",
+        "endTime": "2025-11-11T20:29:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.43004,
+          -38.10678
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD003",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 316.0,
+        "startTime": "2025-10-13T04:03:18",
+        "endTime": "2025-11-11T20:06:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42965,
+          -38.11752
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD004",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 325.0,
+        "startTime": "2025-12-12T02:59:34",
+        "endTime": "2026-01-12T21:04:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42158,
+          -38.12226
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD006",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 321.0,
+        "startTime": "2025-10-13T03:02:22",
+        "endTime": "2025-11-11T19:35:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42304,
+          -38.13743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD007",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 311.0,
+        "startTime": "2025-10-13T02:30:10",
+        "endTime": "2025-11-11T19:12:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42797,
+          -38.14382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD008",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 311.0,
+        "startTime": "2025-10-13T02:00:46",
+        "endTime": "2025-11-11T18:43:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.43154,
+          -38.15608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD009",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 303.0,
+        "startTime": "2025-10-12T20:54:46",
+        "endTime": "2025-11-12T18:35:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.42949,
+          -38.16577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD010",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 306.0,
+        "startTime": "2025-10-12T21:22:10",
+        "endTime": "2025-11-12T19:02:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.44226,
+          -38.16762
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD011",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 299.0,
+        "startTime": "2025-10-12T21:53:14",
+        "endTime": "2025-11-12T19:26:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.45369,
+          -38.17747
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD012",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 301.0,
+        "startTime": "2025-10-12T22:27:46",
+        "endTime": "2025-11-12T19:55:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47613,
+          -38.18066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD013",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 300.0,
+        "startTime": "2025-10-12T23:00:34",
+        "endTime": "2025-11-12T20:16:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48776,
+          -38.1852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD015",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 869.0,
+        "startTime": "2025-10-12T03:13:14",
+        "endTime": "2025-11-12T00:30:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46557,
+          -38.12967
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD019",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 855.0,
+        "startTime": "2025-10-14T20:59:22",
+        "endTime": "2025-11-14T02:45:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.4586,
+          -38.13925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD020",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 842.0,
+        "startTime": "2025-10-14T21:38:34",
+        "endTime": "2025-11-14T02:18:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46346,
+          -38.14437
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD021",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 733.0,
+        "startTime": "2025-10-14T22:21:34",
+        "endTime": "2025-11-14T01:18:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46026,
+          -38.15313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD022",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 705.0,
+        "startTime": "2025-10-14T22:57:14",
+        "endTime": "2025-11-14T00:42:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46925,
+          -38.15999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD023",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 611.0,
+        "startTime": "2025-10-14T23:40:10",
+        "endTime": "2025-11-13T23:29:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47533,
+          -38.1676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD024",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 482.0,
+        "startTime": "2025-10-15T01:01:14",
+        "endTime": "2025-11-13T21:52:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48731,
+          -38.17526
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD025",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 512.0,
+        "startTime": "2025-10-15T01:32:46",
+        "endTime": "2025-11-13T21:20:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.49363,
+          -38.16744
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD026",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 309.0,
+        "startTime": "2025-12-11T19:53:02",
+        "endTime": "2026-01-13T01:37:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46064,
+          -38.17994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BD027",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 566.0,
+        "startTime": "2025-12-14T21:17:46",
+        "endTime": "2026-01-11T23:54:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47148,
+          -38.17302
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM001",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 219.0,
+        "startTime": "2025-10-10T23:47:42",
+        "endTime": "2025-11-14T22:18:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.54924,
+          -38.149
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM002",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 279.0,
+        "startTime": "2025-10-10T23:22:46",
+        "endTime": "2025-11-14T21:57:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.53911,
+          -38.15802
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM003",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 333.0,
+        "startTime": "2025-10-10T22:25:38",
+        "endTime": "2025-11-14T20:44:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52449,
+          -38.16693
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM004",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 153.0,
+        "startTime": "2025-10-11T01:53:34",
+        "endTime": "2025-11-15T00:57:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.53704,
+          -38.14674
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM014",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 243.0,
+        "startTime": "2025-10-11T04:12:26",
+        "endTime": "2025-11-15T02:09:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.54261,
+          -38.1192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM015",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 271.0,
+        "startTime": "2025-10-11T03:17:02",
+        "endTime": "2025-11-15T02:36:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.53225,
+          -38.12641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM017",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 224.0,
+        "startTime": "2025-10-11T02:57:02",
+        "endTime": "2025-11-15T01:50:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.5532,
+          -38.12206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM019",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 333.0,
+        "startTime": "2025-10-10T21:53:30",
+        "endTime": "2026-02-07T21:37:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.53274,
+          -38.1805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM020",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 331.0,
+        "startTime": "2025-10-10T22:47:10",
+        "endTime": "2025-11-14T20:30:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52214,
+          -38.17408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM021",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 347.0,
+        "startTime": "2025-10-10T21:31:42",
+        "endTime": "2025-11-14T20:06:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51142,
+          -38.17745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM022",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 353.0,
+        "startTime": "2025-10-10T21:01:58",
+        "endTime": "2025-11-14T19:48:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51078,
+          -38.18607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BM023",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 180.0,
+        "startTime": "2025-10-11T01:31:46",
+        "endTime": "2025-11-15T00:56:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52407,
+          -38.15358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR001",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 442.0,
+        "startTime": "2025-10-10T03:10:42",
+        "endTime": "2025-11-15T20:42:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.4445,
+          -38.06356
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR002",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 574.0,
+        "startTime": "2025-10-10T04:03:38",
+        "endTime": "2025-11-15T20:23:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.44634,
+          -38.08155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR003",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 515.0,
+        "startTime": "2025-10-10T04:32:02",
+        "endTime": "2025-11-15T19:53:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46275,
+          -38.07621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR004",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 552.0,
+        "startTime": "2025-10-11T21:52:54",
+        "endTime": "2025-11-12T00:58:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47942,
+          -38.06579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR005",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 559.0,
+        "startTime": "2025-10-11T21:25:14",
+        "endTime": "2025-11-13T02:15:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.49246,
+          -38.06727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR008",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 610.0,
+        "startTime": "2025-10-11T21:04:10",
+        "endTime": "2025-11-13T00:59:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50678,
+          -38.07313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR009",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 631.0,
+        "startTime": "2025-10-11T20:44:38",
+        "endTime": "2025-11-13T01:23:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.51616,
+          -38.07997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR013",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 674.0,
+        "startTime": "2025-10-11T19:05:58",
+        "endTime": "2025-11-12T01:42:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.50288,
+          -38.08576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR014",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 583.0,
+        "startTime": "2025-10-11T22:52:22",
+        "endTime": "2025-11-11T03:12:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48582,
+          -38.0818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR016",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 485.0,
+        "startTime": "2025-10-12T01:37:14",
+        "endTime": "2025-11-15T18:50:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.5065,
+          -38.10964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR017",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 596.0,
+        "startTime": "2025-10-10T05:15:22",
+        "endTime": "2025-11-15T19:24:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.4785,
+          -38.0966
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR018",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 595.0,
+        "startTime": "2025-10-10T05:03:14",
+        "endTime": "2025-11-15T19:35:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47361,
+          -38.09057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR028",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 760.0,
+        "startTime": "2025-10-12T02:22:10",
+        "endTime": "2025-11-12T03:01:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47917,
+          -38.11783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR032",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 838.0,
+        "startTime": "2025-10-12T02:49:14",
+        "endTime": "2025-11-12T02:40:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48002,
+          -38.12807
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR034",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 620.0,
+        "startTime": "2025-10-11T20:23:38",
+        "endTime": "2025-11-13T00:17:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.52953,
+          -38.09002
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR035",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 557.0,
+        "startTime": "2025-10-11T22:26:42",
+        "endTime": "2025-11-11T03:46:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.47328,
+          -38.07182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR036",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 562.0,
+        "startTime": "2025-10-10T04:48:14",
+        "endTime": "2025-11-15T20:08:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.46398,
+          -38.08372
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BR037",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 512.0,
+        "startTime": "2025-10-15T19:23:10",
+        "endTime": "2025-11-13T00:02:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.43751,
+          -38.07182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BS005",
+        "network": "Y7",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 297.0,
+        "startTime": "2025-10-10T01:43:14",
+        "endTime": "2025-11-12T22:19:59.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.48463,
+          -38.04816
         ]
       }
     },
