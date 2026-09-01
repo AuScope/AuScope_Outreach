@@ -3,7 +3,7 @@
   "metadata": {
     "source": "Geoscience Australia CORS Sites API",
     "network": "AUSCOPE (ID 101)",
-    "fetched": "2026-08-25T07:48:45Z"
+    "fetched": "2026-09-01T12:27:37Z"
   },
   "features": [
     {
@@ -1653,7 +1653,7 @@
         "code": "STHG",
         "domesNumber": "59932M001",
         "dateInstalled": "2011-11-18",
-        "elevation": 195.8,
+        "elevation": 195.7,
         "monument": "PILLAR",
         "foundation": "STEEL RODS ENGAGED IN ROCK",
         "siteStatus": "PUBLIC"
@@ -1661,8 +1661,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          143.285287964,
-          -24.350242711
+          143.285287956,
+          -24.350242722
         ]
       }
     },
