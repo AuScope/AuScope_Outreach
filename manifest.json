@@ -1,0 +1,3507 @@
+{
+  "generated": "2026-09-07T05:10:40Z",
+  "selection": {
+    "min_age_hours": 6,
+    "max_age_days": 30,
+    "local": {
+      "min_mag": 3.0,
+      "window_min": [
+        -5,
+        15
+      ],
+      "max_dist_km": 1500,
+      "filter": "1 Hz high-pass"
+    },
+    "tele": {
+      "min_mag": 6.5,
+      "window_min": [
+        -5,
+        60
+      ],
+      "max_dist_km": null,
+      "filter": "0.02-0.1 Hz band-pass"
+    }
+  },
+  "events": [
+    {
+      "event_id": "ga2026rravjf",
+      "origin": "2026-09-06T12:41:40Z",
+      "mag": 3.6,
+      "place": "Offshore, Near Wadeye, NT, Australia",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -13.714,
+      "lon": 129.399,
+      "waves": true,
+      "n_recorded": 8,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDAR",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUMAG",
+        "AUNHS"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 210,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 322,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 818,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 1205,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 1427,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rpekap",
+      "origin": "2026-09-05T12:29:15Z",
+      "mag": 3.4,
+      "place": "16 km N of Casterton, VIC",
+      "mode": "local",
+      "v": 14,
+      "depth": 7.4,
+      "lat": -37.442,
+      "lon": 141.451,
+      "waves": true,
+      "n_recorded": 19,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUBSH",
+        "AUCAS",
+        "AUDAR",
+        "AUDCS",
+        "AUGRF",
+        "AUHPC",
+        "AUJCS",
+        "AUKAT",
+        "AUKSC",
+        "AUKUL",
+        "AUMAG",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUHPC",
+          "dist_km": 106,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 215,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 322,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 329,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 331,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 369,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 537,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 544,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 625,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 646,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 715,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 721,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 730,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 873,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 874,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 1101,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rfpkup",
+      "origin": "2026-08-31T08:03:32Z",
+      "mag": 5.3,
+      "place": "Coastal Indonesia, 45 km N of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 36.9,
+      "lat": -8.219,
+      "lon": 120.58,
+      "waves": true,
+      "n_recorded": 13,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUCAS",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1216,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1452,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qzrmds",
+      "origin": "2026-08-28T03:07:12Z",
+      "mag": 3.4,
+      "place": "9 km NW of Appin, NSW",
+      "mode": "local",
+      "v": 14,
+      "depth": 2.3,
+      "lat": -34.146,
+      "lon": 150.716,
+      "waves": true,
+      "n_recorded": 25,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUANU",
+        "AUAPY",
+        "AUCAR",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAT",
+        "AUKHS",
+        "AULHS",
+        "AULRC",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUTKS",
+          "dist_km": 49,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 98,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 137,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 190,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 194,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 201,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 204,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 288,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 317,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 339,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 428,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 585,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 726,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 848,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 918,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 1051,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 1124,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 1357,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qykimd",
+      "origin": "2026-08-27T10:33:26Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 20.1,
+      "lat": -8.13,
+      "lon": 120.129,
+      "waves": true,
+      "n_recorded": 14,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDAR",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AULRC",
+        "AUMAZ",
+        "AURMK",
+        "AUTKS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1265,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1448,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1500,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qwvsni",
+      "origin": "2026-08-26T14:15:32Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -8.416,
+      "lon": 121.561,
+      "waves": true,
+      "n_recorded": 14,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDAR",
+        "AUDHS",
+        "AUHAR",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1108,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1348,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1463,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qvltuq",
+      "origin": "2026-08-25T20:17:30Z",
+      "mag": 3.1,
+      "place": "Offshore, 45 km NE of Innisfail, QLD",
+      "mode": "local",
+      "v": 14,
+      "depth": 2.8,
+      "lat": -17.317,
+      "lon": 146.404,
+      "waves": true,
+      "n_recorded": 8,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUCSH",
+        "AUGRF",
+        "AUJCS",
+        "AUKUL",
+        "AUMAG",
+        "AUSMG",
+        "AUTOO"
+      ],
+      "stations": [
+        {
+          "code": "AUCSH",
+          "dist_km": 81,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 1272,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 1483,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qvbdny",
+      "origin": "2026-08-25T14:58:57Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 19.9,
+      "lat": -8.005,
+      "lon": 120.886,
+      "waves": true,
+      "n_recorded": 17,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAG",
+        "AUMBR",
+        "AUNHS",
+        "AUOKV",
+        "AURMK",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1195,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1435,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qrvvbv",
+      "origin": "2026-08-23T21:20:20Z",
+      "mag": 5.3,
+      "place": "Coastal Indonesia, Near Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 33.5,
+      "lat": -8.343,
+      "lon": 120.664,
+      "waves": true,
+      "n_recorded": 14,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1202,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1437,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qomdik",
+      "origin": "2026-08-22T01:31:03Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 39.0,
+      "lat": -8.144,
+      "lon": 120.703,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUKAT",
+        "AUKUL",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1207,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1444,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qmdwpr",
+      "origin": "2026-08-20T19:24:05Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 21.7,
+      "lat": -8.333,
+      "lon": 121.344,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDHS",
+        "AUKAT",
+        "AUNHS",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUSSC",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1134,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1373,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qmbmxg",
+      "origin": "2026-08-20T18:12:53Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 12.0,
+      "lat": -8.359,
+      "lon": 121.42,
+      "waves": true,
+      "n_recorded": 19,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1125,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1364,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qmbbxd",
+      "origin": "2026-08-20T18:00:15Z",
+      "mag": 6.7,
+      "place": "Peru, 132 km SW of Abancay",
+      "mode": "tele",
+      "v": 14,
+      "depth": 68.9,
+      "lat": -14.637,
+      "lon": -73.545,
+      "waves": true,
+      "n_recorded": 47,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUPKL",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUTAR",
+          "dist_km": 12376,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 12521,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUPKL",
+          "dist_km": 12609,
+          "channel": "BHZ",
+          "site": "Parklands High School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 12615,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 12778,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 12783,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 12820,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 12854,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 12856,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 12869,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 12874,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 12874,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 12879,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 12909,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 13014,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 13060,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUHPC",
+          "dist_km": 13060,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 13086,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 13138,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 13151,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 13155,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUBSH",
+          "dist_km": 13197,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 13228,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 13393,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 13487,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 13488,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 13588,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 13695,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 13758,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 14026,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 14138,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 14215,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 14365,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 14454,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 14468,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 14562,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 14610,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 14614,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 14684,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 14717,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 14729,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 14814,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 15537,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 15551,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 15709,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 15981,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 15999,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qlkchr",
+      "origin": "2026-08-20T09:30:53Z",
+      "mag": 5.2,
+      "place": "Coastal Indonesia, 33 km NE of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 9.5,
+      "lat": -8.337,
+      "lon": 120.593,
+      "waves": true,
+      "n_recorded": 12,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUCAS",
+        "AUDHS",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1209,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1444,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qkwqeh",
+      "origin": "2026-08-20T02:47:02Z",
+      "mag": 5.6,
+      "place": "Coastal Indonesia, 38 km NE of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 26.7,
+      "lat": -8.295,
+      "lon": 120.613,
+      "waves": true,
+      "n_recorded": 21,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUBSH",
+        "AUCAS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAL",
+        "AUKAT",
+        "AUKHS",
+        "AUMAZ",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1089,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1445,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qkooob",
+      "origin": "2026-08-19T22:45:22Z",
+      "mag": 5.8,
+      "place": "Coastal Indonesia, 36 km N of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 35.9,
+      "lat": -8.294,
+      "lon": 120.558,
+      "waves": true,
+      "n_recorded": 25,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBSH",
+        "AUCAR",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AUMAZ",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1090,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1214,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1450,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qknzrb",
+      "origin": "2026-08-19T22:28:11Z",
+      "mag": 5.2,
+      "place": "Coastal Indonesia, Near Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 20.5,
+      "lat": -8.302,
+      "lon": 120.597,
+      "waves": true,
+      "n_recorded": 18,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUJCS",
+        "AUKAT",
+        "AUKHS",
+        "AUKUL",
+        "AULHS",
+        "AUMBR",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUUHS",
+        "AUWSH"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1210,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1446,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qkbqkz",
+      "origin": "2026-08-19T16:17:43Z",
+      "mag": 5.6,
+      "place": "Coastal Indonesia, 41 km N of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 37.4,
+      "lat": -8.244,
+      "lon": 120.543,
+      "waves": true,
+      "n_recorded": 24,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBSH",
+        "AUCAS",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAT",
+        "AUKUL",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1095,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1218,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1454,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qjbmlz",
+      "origin": "2026-08-19T03:13:27Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 8.4,
+      "lat": -8.314,
+      "lon": 121.498,
+      "waves": true,
+      "n_recorded": 18,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDHS",
+        "AUHPC",
+        "AUKAL",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AUMBR",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1119,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1359,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qilclb",
+      "origin": "2026-08-18T19:03:11Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 26.6,
+      "lat": -8.318,
+      "lon": 121.349,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDHS",
+        "AUKAT",
+        "AUMAG",
+        "AUMTC",
+        "AUNHS",
+        "AUOKV",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1134,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1373,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfylzo",
+      "origin": "2026-08-17T10:44:54Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 39.5,
+      "lat": -8.01,
+      "lon": 120.578,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUKAT",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUTOO",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1225,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1464,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfvntv",
+      "origin": "2026-08-17T09:16:07Z",
+      "mag": 5.2,
+      "place": "Coastal Indonesia, Near Maumere",
+      "mode": "local",
+      "v": 14,
+      "depth": 11.1,
+      "lat": -8.491,
+      "lon": 121.527,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUMBR",
+        "AUNHS",
+        "AUSMG",
+        "AUTKS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1108,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1347,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfrrnt",
+      "origin": "2026-08-17T07:20:30Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 18.6,
+      "lat": -8.27,
+      "lon": 121.366,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUJCS",
+        "AUKAT",
+        "AUKUL",
+        "AULHS",
+        "AUMAG",
+        "AUOKV",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1134,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1374,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfkpii",
+      "origin": "2026-08-17T03:48:05Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 19.2,
+      "lat": -8.286,
+      "lon": 121.35,
+      "waves": true,
+      "n_recorded": 18,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AULRC",
+        "AUMTC",
+        "AUNHS",
+        "AUNRC",
+        "AUPKL",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1135,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1375,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfkflt",
+      "origin": "2026-08-17T03:36:41Z",
+      "mag": 5.3,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 25.1,
+      "lat": -8.3,
+      "lon": 121.33,
+      "waves": true,
+      "n_recorded": 16,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUAPY",
+        "AUBSH",
+        "AUDHS",
+        "AUGRF",
+        "AUKAT",
+        "AUKHS",
+        "AULHS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1137,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1376,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qfeodr",
+      "origin": "2026-08-17T00:46:41Z",
+      "mag": 5.6,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 8.9,
+      "lat": -8.416,
+      "lon": 121.489,
+      "waves": true,
+      "n_recorded": 18,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUDHS",
+        "AUHAR",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AULHS",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1064,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1115,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1354,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1461,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qebvom",
+      "origin": "2026-08-16T10:31:36Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 7.1,
+      "lat": -8.054,
+      "lon": 120.682,
+      "waves": true,
+      "n_recorded": 9,
+      "n_with_data": 42,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDAR",
+        "AUKAR",
+        "AUKAT",
+        "AUOKV",
+        "AURMK",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAT",
+          "dist_km": 1451,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1472,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qdokjh",
+      "origin": "2026-08-16T03:42:58Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 7.0,
+      "lat": -8.41,
+      "lon": 121.538,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 45,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUKAR",
+        "AUKAT",
+        "AUROX",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1111,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1350,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1463,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qcjllt",
+      "origin": "2026-08-15T12:14:42Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 18.7,
+      "lat": -8.286,
+      "lon": 121.376,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 44,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDHS",
+        "AUKAR",
+        "AUKAT",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1133,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1372,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1470,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qcgufn",
+      "origin": "2026-08-15T10:54:52Z",
+      "mag": 6.8,
+      "place": "Indonesia, 78 km SE of Medan",
+      "mode": "tele",
+      "v": 14,
+      "depth": 169.3,
+      "lat": 3.002,
+      "lon": 99.06,
+      "waves": true,
+      "n_recorded": 48,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AURSC",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAR",
+          "dist_km": 3275,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 3447,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 3478,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 3907,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 4144,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 4286,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 4386,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 4422,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 4444,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 4447,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 4497,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 4661,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 4797,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 4821,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 4935,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 5168,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 5479,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 5584,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 5644,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 5783,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 5846,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 5960,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 6006,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 6292,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AUNRC",
+          "dist_km": 6295,
+          "channel": "BHZ",
+          "site": "North Rockhampton State High School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 6329,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 6424,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 6428,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 6455,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 6524,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 6571,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AURSC",
+          "dist_km": 6575,
+          "channel": "BHZ",
+          "site": "Rosebud Secondary College"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 6599,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 6662,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUBSH",
+          "dist_km": 6662,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 6691,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 6714,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 6721,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 6722,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 6722,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 6724,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 6743,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 6801,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 6810,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 6816,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 6835,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 6917,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUTAR",
+          "dist_km": 7029,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qcebfh",
+      "origin": "2026-08-15T09:32:53Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 3.9,
+      "lat": -8.33,
+      "lon": 121.463,
+      "waves": true,
+      "n_recorded": 15,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUAYR",
+        "AUDHS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1122,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1362,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1469,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qcahao",
+      "origin": "2026-08-15T07:39:41Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 25.8,
+      "lat": -8.122,
+      "lon": 120.866,
+      "waves": true,
+      "n_recorded": 12,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDHS",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AUOKV",
+        "AUPHS",
+        "AUSMG",
+        "AUTOO",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1191,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1430,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1470,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbxxqd",
+      "origin": "2026-08-15T06:28:51Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -8.36,
+      "lon": 121.484,
+      "waves": true,
+      "n_recorded": 9,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1118,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1358,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbwlsi",
+      "origin": "2026-08-15T05:45:07Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 2.1,
+      "lat": -8.404,
+      "lon": 121.366,
+      "waves": true,
+      "n_recorded": 12,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDCS",
+        "AUDHS",
+        "AUKAT",
+        "AUKUL",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1128,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1367,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbstpc",
+      "origin": "2026-08-15T03:54:14Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.6,
+      "lat": -8.336,
+      "lon": 121.448,
+      "waves": true,
+      "n_recorded": 8,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUMHS",
+        "AUNHS",
+        "AUSMG"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1123,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1363,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbnnnz",
+      "origin": "2026-08-15T01:17:24Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 37.8,
+      "lat": -8.055,
+      "lon": 120.811,
+      "waves": true,
+      "n_recorded": 20,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUHAR",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKUL",
+        "AULRC",
+        "AUMBR",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1200,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1439,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1476,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbmhkm",
+      "origin": "2026-08-15T00:40:18Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -8.364,
+      "lon": 121.349,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUNHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1132,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1371,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1461,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbktvi",
+      "origin": "2026-08-14T23:54:10Z",
+      "mag": 5.0,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 52.8,
+      "lat": -8.039,
+      "lon": 120.764,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUCAS",
+        "AUDHS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AUOKV",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1205,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1444,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1476,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbjnea",
+      "origin": "2026-08-14T23:17:08Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 21.0,
+      "lat": -8.453,
+      "lon": 121.504,
+      "waves": true,
+      "n_recorded": 10,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMHS",
+        "AUNHS"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1112,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1351,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1457,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbjjhy",
+      "origin": "2026-08-14T23:12:35Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 33.4,
+      "lat": -8.097,
+      "lon": 120.715,
+      "waves": true,
+      "n_recorded": 7,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AULRC"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1208,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1446,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1468,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbisoe",
+      "origin": "2026-08-14T22:53:17Z",
+      "mag": 5.4,
+      "place": "Coastal Indonesia, 45 km NW of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 46.5,
+      "lat": -8.278,
+      "lon": 120.215,
+      "waves": true,
+      "n_recorded": 11,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AULRC",
+        "AUNHS",
+        "AUOKV",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1250,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1434,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1484,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbhxgn",
+      "origin": "2026-08-14T22:28:39Z",
+      "mag": 6.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 19.4,
+      "lat": -8.426,
+      "lon": 121.504,
+      "waves": true,
+      "n_recorded": 29,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1063,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1113,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1352,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1460,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbhzub",
+      "origin": "2026-08-14T22:27:07Z",
+      "mag": 5.4,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 52.1,
+      "lat": -8.102,
+      "lon": 120.625,
+      "waves": true,
+      "n_recorded": 29,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1109,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1216,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1454,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1465,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbhkmt",
+      "origin": "2026-08-14T22:13:55Z",
+      "mag": 6.1,
+      "place": "Coastal Indonesia, 49 km NW of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 46.2,
+      "lat": -8.222,
+      "lon": 120.238,
+      "waves": true,
+      "n_recorded": 2,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUKAR",
+        "AUKAT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAR",
+          "dist_km": 1441,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1485,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qbgwzx",
+      "origin": "2026-08-14T21:58:25Z",
+      "mag": 7.7,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 34.0,
+      "lat": -8.367,
+      "lon": 121.331,
+      "waves": true,
+      "n_recorded": 44,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AURSC",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBRM",
+          "dist_km": 1071,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 1133,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1372,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1460,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026pvlfpq",
+      "origin": "2026-08-11T18:10:25Z",
+      "mag": 4.7,
+      "place": "62 km NE of Cocklebiddy, WA",
+      "mode": "local",
+      "v": 14,
+      "depth": 26.3,
+      "lat": -31.547,
+      "lon": 126.416,
+      "waves": true,
+      "n_recorded": 28,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUAPY",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKSC",
+        "AUKUL",
+        "AULRC",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTS",
+        "AUOKV",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAL",
+          "dist_km": 478,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 478,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 515,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 788,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 807,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 879,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 919,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 982,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 1003,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 1004,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 1059,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 1141,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 1159,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 1259,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 1368,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 1451,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026ptdzvl",
+      "origin": "2026-08-10T12:34:28Z",
+      "mag": 7.6,
+      "place": "Colombia, 161 km N of Cali",
+      "mode": "tele",
+      "v": 14,
+      "depth": 105.9,
+      "lat": 4.862,
+      "lon": -76.186,
+      "waves": true,
+      "n_recorded": 50,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AUPKL",
+        "AURMK",
+        "AUROX",
+        "AURSC",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUTAR",
+          "dist_km": 14000,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 14109,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 14162,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 14168,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 14185,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUPKL",
+          "dist_km": 14212,
+          "channel": "BHZ",
+          "site": "Parklands High School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 14217,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 14242,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 14263,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUBSH",
+          "dist_km": 14267,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 14275,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 14276,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 14277,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 14285,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 14295,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 14307,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 14338,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AURSC",
+          "dist_km": 14445,
+          "channel": "BHZ",
+          "site": "Rosebud Secondary College"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 14448,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 14458,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 14565,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 14576,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 14584,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUNRC",
+          "dist_km": 14606,
+          "channel": "BHZ",
+          "site": "North Rockhampton State High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 14624,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 14635,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUHPC",
+          "dist_km": 14650,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 15007,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 15022,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 15059,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 15231,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 15255,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 15380,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 15527,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 15856,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 16084,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 16174,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 16177,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 16303,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 16364,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 16583,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 16593,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 16597,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 16635,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 16722,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 16739,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 16931,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 17539,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 17553,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 17758,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    }
+  ]
+}
