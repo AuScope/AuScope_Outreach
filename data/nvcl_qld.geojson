@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "qld",
     "stateLabel": "Queensland",
-    "fetched": "2026-09-07T13:56:12Z"
+    "fetched": "2026-09-14T14:41:43Z"
   },
   "features": [
     {
@@ -2734,13 +2734,13 @@
         "drillingMethod": "http://linked.data.gov.au/def/borehole-drilling-method/diamond-core",
         "drillEndDate": "",
         "purpose": "unknown",
-        "instrument": null,
-        "drillDate": null,
-        "datasetCreated": null,
+        "instrument": "HyLogger 2-5",
+        "drillDate": "1984-06-07",
+        "datasetCreated": "2024-12-12",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
-        "project": null,
-        "owner": null,
+        "scannedMetres": 732.85,
+        "project": "AuScope NVCL HyLogging",
+        "owner": "Geological urvey of Queenland",
         "state": "QLD"
       },
       "geometry": {
@@ -3492,9 +3492,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2014-07-03",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 176.57,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -4500,9 +4500,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2014-11-26",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 229.83,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7272,9 +7272,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-11-25",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 202.98,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7300,9 +7300,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-11-25",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 272.9,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7496,9 +7496,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-04-19",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 459.0,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -8056,9 +8056,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-03-31",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 802.08,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -10352,9 +10352,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2017-02-10",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 425.5,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"

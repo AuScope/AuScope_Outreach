@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "sa",
     "stateLabel": "South Australia",
-    "fetched": "2026-09-07T13:56:12Z"
+    "fetched": "2026-09-14T14:41:43Z"
   },
   "features": [
     {
@@ -54422,13 +54422,13 @@
         "drillingMethod": "diamond core",
         "drillEndDate": "1963-10-18",
         "purpose": "mineral borehole",
-        "instrument": null,
+        "instrument": "HyLogger 3-3",
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2026-09-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 174.58,
         "project": null,
-        "owner": null,
+        "owner": "Primary Industries and Resources South Australia",
         "state": "SA"
       },
       "geometry": {
@@ -54450,11 +54450,11 @@
         "drillingMethod": "diamond core",
         "drillEndDate": "1963-07-18",
         "purpose": "mineral borehole",
-        "instrument": null,
+        "instrument": "HyLogger 3-3",
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2026-09-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 228.89,
         "project": null,
         "owner": null,
         "state": "SA"

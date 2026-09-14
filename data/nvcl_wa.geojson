@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-09-07T13:56:12Z"
+    "fetched": "2026-09-14T14:41:43Z"
   },
   "features": [
     {
@@ -13562,9 +13562,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Centella 1",
+        "name": "Centella 1_cuttings",
         "boreholeId": "Centella 1",
-        "boreholeLength": 27.88000000000011,
+        "boreholeLength": 111,
         "elevation": 49.35,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
@@ -32966,9 +32966,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Mondarra 8",
+        "name": "Mondarra 8_cuttings",
         "boreholeId": "Mondarra 8",
-        "boreholeLength": 28.559999999999945,
+        "boreholeLength": 92,
         "elevation": 79.16,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
@@ -36102,9 +36102,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "North Erregulla 1",
+        "name": "North Erregulla 1_cuttings",
         "boreholeId": "North Erregulla 1",
-        "boreholeLength": 426.1700000000001,
+        "boreholeLength": 274.2999999999997,
         "elevation": 162.46,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
@@ -45314,9 +45314,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Sugarloaf 1",
+        "name": "Sugarloaf 1_cuttings",
         "boreholeId": "Sugarloaf 1",
-        "boreholeLength": 678.6399999999999,
+        "boreholeLength": 121.89999999999998,
         "elevation": null,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
@@ -48590,8 +48590,8 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "VNTRCD001",
-        "boreholeId": "VNTRCD001",
+        "name": "VNTRCD0001",
+        "boreholeId": "VNTRCD0001",
         "boreholeLength": 414.6,
         "elevation": null,
         "custodian": "gswa",
@@ -48600,9 +48600,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2020-10-18",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2024-02-11",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 414.2,
         "project": "Marymia",
         "owner": "GSWA",
         "state": "WA"
@@ -48610,16 +48610,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.65150999,
-          -25.15278628
+          119.6515,
+          -25.1528
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "VNTRCD002",
-        "boreholeId": "VNTRCD002",
+        "name": "VNTRCD0002",
+        "boreholeId": "VNTRCD0002",
         "boreholeLength": 205.7,
         "elevation": null,
         "custodian": "gswa",
@@ -48628,9 +48628,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2020-09-22",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2024-02-11",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 205.69,
         "project": "Marymia",
         "owner": "GSWA",
         "state": "WA"
@@ -48638,16 +48638,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.64941,
-          -25.15748628
+          119.6494,
+          -25.1575
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "VNTRCD003",
-        "boreholeId": "VNTRCD003",
+        "name": "VNTRCD0003",
+        "boreholeId": "VNTRCD0003",
         "boreholeLength": 381.59999999999997,
         "elevation": null,
         "custodian": "gswa",
@@ -48656,9 +48656,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2020-10-11",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2024-02-11",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 381.59,
         "project": "Marymia",
         "owner": "GSWA",
         "state": "WA"
@@ -48666,8 +48666,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          119.64680999,
-          -25.15338628
+          119.6468,
+          -25.1534
         ]
       }
     },
@@ -50606,8 +50606,8 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "WPD01",
-        "boreholeId": "WPD01",
+        "name": "WPD-001",
+        "boreholeId": "WPD-001",
         "boreholeLength": 183.6,
         "elevation": null,
         "custodian": "gswa",
@@ -50616,9 +50616,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2003-02-15",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2024-02-11",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 183.6,
         "project": "Wheatley",
         "owner": "GSWA",
         "state": "WA"
@@ -50626,16 +50626,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.98401134,
-          -34.16348658
+          115.984,
+          -34.1635
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "WPD02",
-        "boreholeId": "WPD02",
+        "name": "WPD-002",
+        "boreholeId": "WPD-002",
         "boreholeLength": 198.3,
         "elevation": null,
         "custodian": "gswa",
@@ -50644,9 +50644,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2002-01-01",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2016-09-19",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 198.27,
         "project": "Wheatley",
         "owner": "GSWA",
         "state": "WA"
@@ -50654,16 +50654,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.99804006,
-          -34.15795143
+          115.998,
+          -34.158
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "WPD03",
-        "boreholeId": "WPD03",
+        "name": "WPD-003",
+        "boreholeId": "WPD-003",
         "boreholeLength": 141,
         "elevation": null,
         "custodian": "gswa",
@@ -50672,9 +50672,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2002-01-01",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2016-09-19",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 140.98,
         "project": "Wheatley",
         "owner": "GSWA",
         "state": "WA"
@@ -50682,72 +50682,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.99034106,
-          -34.13489193
+          115.9903,
+          -34.1349
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "WPD04",
-        "boreholeId": "WPD04",
-        "boreholeLength": 192.6,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": "",
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          115.98611721,
-          -34.16164566
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "WPD07",
-        "boreholeId": "WPD07",
-        "boreholeLength": 187.7,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": "",
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          115.99958773,
-          -34.15641743
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "WPD13",
-        "boreholeId": "WPD13",
+        "name": "WPD013",
+        "boreholeId": "WPD013",
         "boreholeLength": 128.8,
         "elevation": null,
         "custodian": "gswa",
@@ -50756,9 +50700,9 @@
         "purpose": "",
         "instrument": "HyLogger 3-2",
         "drillDate": "2006-01-01",
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "datasetCreated": "2016-09-20",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 128.79,
         "project": "Wheatley",
         "owner": "GSWA",
         "state": "WA"
@@ -50766,8 +50710,64 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          116.00198368,
-          -34.15469643
+          116.002,
+          -34.1547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WPD-04",
+        "boreholeId": "WPD-04",
+        "boreholeLength": 192.6,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-28",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 192.58,
+        "project": null,
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.9861,
+          -34.1616
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WPD-07",
+        "boreholeId": "WPD-07",
+        "boreholeLength": 187.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": "",
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-28",
+        "firstSeen": "2026-09-14",
+        "scannedMetres": 187.67,
+        "project": null,
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.9996,
+          -34.1564
         ]
       }
     },
@@ -51362,9 +51362,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "WSXP1786_wedge",
+        "name": "WSXP1786",
         "boreholeId": "WSXP1786",
-        "boreholeLength": 794.58,
+        "boreholeLength": 722.72,
         "elevation": null,
         "custodian": "gswa",
         "drillingMethod": "Diamond Core",
