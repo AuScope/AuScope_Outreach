@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-09-14T13:27:30Z"
+    "fetched": "2026-09-21T13:26:55Z"
   },
   "features": [
     {
@@ -8663,6 +8663,46 @@
         "coordinates": [
           137.6209,
           -33.9659
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSNB1",
+        "network": "4E",
+        "channel": "DPZ",
+        "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
+        "sampleRate": 250.0,
+        "elevation": 682.0,
+        "startTime": "2026-08-10T03:30:00",
+        "endTime": "2028-12-31T00:00:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99567,
+          -35.3187
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSNB2",
+        "network": "4E",
+        "channel": "DPZ",
+        "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
+        "sampleRate": 250.0,
+        "elevation": 664.0,
+        "startTime": "2026-08-10T03:20:00",
+        "endTime": "2028-12-31T00:00:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99688,
+          -35.31823
         ]
       }
     },
@@ -22409,6 +22449,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AUADL",
+        "network": "S1",
+        "channel": "HHZ",
+        "sensor": "Guralp CMG-6TD 30s-100Hz (BB)",
+        "sampleRate": 100.0,
+        "elevation": 17.0,
+        "startTime": "2026-09-22T03:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.5748,
+          -35.0189
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "AUALB",
         "network": "S1",
         "channel": "HHZ",
@@ -22976,7 +23036,7 @@
         "sampleRate": 100.0,
         "elevation": 153.0,
         "startTime": "2013-08-26T00:00:00",
-        "endTime": null
+        "endTime": "2026-09-22T00:00:00"
       },
       "geometry": {
         "type": "Point",
@@ -23136,7 +23196,7 @@
         "sampleRate": 100.0,
         "elevation": 20.0,
         "startTime": "2013-08-28T00:00:00",
-        "endTime": null
+        "endTime": "2026-09-15T01:00:00"
       },
       "geometry": {
         "type": "Point",
