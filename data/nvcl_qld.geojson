@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices",
     "state": "qld",
     "stateLabel": "Queensland",
-    "fetched": "2026-09-14T14:41:43Z"
+    "fetched": "2026-09-21T14:48:32Z"
   },
   "features": [
     {
@@ -3352,9 +3352,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2014-11-21",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 194.94,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -3548,9 +3548,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2015-03-19",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 186.18,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7272,9 +7272,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2016-11-25",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 202.98,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7328,9 +7328,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2016-11-25",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 258.0,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -7804,9 +7804,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": "2015-09-02",
+        "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 409.53,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "QLD"
@@ -9876,9 +9876,9 @@
         "purpose": "unknown",
         "instrument": null,
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2015-10-14",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 879.7,
         "project": null,
         "owner": null,
         "state": "QLD"
