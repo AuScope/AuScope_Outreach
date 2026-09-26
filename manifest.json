@@ -1,0 +1,553 @@
+{
+  "generated": "2026-09-26T19:38:25Z",
+  "window_minutes": 60,
+  "source": "EARTHSCOPE",
+  "filters": {
+    "raw": "none",
+    "local": "1 Hz high-pass",
+    "distant": "0.02-0.1 Hz band-pass",
+    "spectrogram": "spectrogram to 20 Hz"
+  },
+  "stations": {
+    "AUANU": {
+      "channel": "S1.AUANU..HHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 9.898
+    },
+    "AUAPY": {
+      "channel": "S1.AUAPY..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 22.849
+    },
+    "AUAYR": {
+      "channel": "S1.AUAYR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.706
+    },
+    "AUBRM": {
+      "channel": "S1.AUBRM..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.713
+    },
+    "AUBRN": {
+      "channel": "S1.AUBRN..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 33.869
+    },
+    "AUBSH": {
+      "channel": "S1.AUBSH..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.975
+    },
+    "AUBUS": {
+      "channel": "S1.AUBUS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 9.031
+    },
+    "AUCAR": {
+      "channel": "S1.AUCAR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.651
+    },
+    "AUCAS": {
+      "channel": "S1.AUCAS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 4.124
+    },
+    "AUCSH": {
+      "channel": "S1.AUCSH..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 4.367
+    },
+    "AUDAR": {
+      "channel": "S1.AUDAR..HHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 0.901
+    },
+    "AUDCS": {
+      "channel": "S1.AUDCS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 9.36
+    },
+    "AUDHS": {
+      "channel": "S1.AUDHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 4.266
+    },
+    "AUGRF": {
+      "channel": "S1.AUGRF..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 52.602
+    },
+    "AUHAR": {
+      "channel": "S1.AUHAR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.412
+    },
+    "AUHPC": {
+      "channel": "S1.AUHPC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 15.779
+    },
+    "AUJCS": {
+      "channel": "S1.AUJCS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 15.604
+    },
+    "AUKAL": {
+      "channel": "S1.AUKAL..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 15.104
+    },
+    "AUKAR": {
+      "channel": "S1.AUKAR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 2.446
+    },
+    "AUKHS": {
+      "channel": "S1.AUKHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 36.473
+    },
+    "AUKSC": {
+      "channel": "S1.AUKSC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 9.764
+    },
+    "AUKUL": {
+      "channel": "S1.AUKUL..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 15.066
+    },
+    "AULHS": {
+      "channel": "S1.AULHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 19.188
+    },
+    "AULRC": {
+      "channel": "S1.AULRC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 10.044
+    },
+    "AUMAG": {
+      "channel": "S1.AUMAG..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 9.388
+    },
+    "AUMAZ": {
+      "channel": "S1.AUMAZ..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.165
+    },
+    "AUMBR": {
+      "channel": "S1.AUMBR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 3.657
+    },
+    "AUMHS": {
+      "channel": "S1.AUMHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 10.72
+    },
+    "AUMOU": {
+      "channel": "S1.AUMOU..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 14.306
+    },
+    "AUMTC": {
+      "channel": "S1.AUMTC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 5.377
+    },
+    "AUMTS": {
+      "channel": "S1.AUMTS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 13.463
+    },
+    "AUNHS": {
+      "channel": "S1.AUNHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 0.139
+    },
+    "AUNRC": {
+      "channel": "S1.AUNRC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 6.012
+    },
+    "AUOKV": {
+      "channel": "S1.AUOKV..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 3.429
+    },
+    "AUPHS": {
+      "channel": "S1.AUPHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 15.215
+    },
+    "AUPKL": {
+      "channel": "S1.AUPKL..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 22.445
+    },
+    "AUROX": {
+      "channel": "S1.AUROX..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 4.741
+    },
+    "AUSMG": {
+      "channel": "S1.AUSMG..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 4.276
+    },
+    "AUSSC": {
+      "channel": "S1.AUSSC..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 8.922
+    },
+    "AUTAR": {
+      "channel": "S1.AUTAR..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 41.063
+    },
+    "AUTKS": {
+      "channel": "S1.AUTKS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 6.901
+    },
+    "AUTOO": {
+      "channel": "S1.AUTOO..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 7.699
+    },
+    "AUUHS": {
+      "channel": "S1.AUUHS..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 23.525
+    },
+    "AUWSH": {
+      "channel": "S1.AUWSH..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 2.251
+    },
+    "AUYLT": {
+      "channel": "S1.AUYLT..BHZ",
+      "variants": [
+        "raw",
+        "local",
+        "distant",
+        "spectrogram"
+      ],
+      "start": "2026-09-26T18:38:20Z",
+      "end": "2026-09-26T19:38:20Z",
+      "peak_um_s": 1.83
+    }
+  }
+}
