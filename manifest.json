@@ -1,0 +1,1903 @@
+{
+  "generated": "2026-09-26T21:31:06Z",
+  "selection": {
+    "min_age_hours": 6,
+    "max_age_days": 30,
+    "local": {
+      "min_mag": 3.0,
+      "window_min": [
+        -5,
+        15
+      ],
+      "max_dist_km": 1500,
+      "filter": "1 Hz high-pass"
+    },
+    "tele": {
+      "min_mag": 6.5,
+      "window_min": [
+        -5,
+        60
+      ],
+      "max_dist_km": null,
+      "filter": "0.02-0.1 Hz band-pass"
+    }
+  },
+  "events": [
+    {
+      "event_id": "ga2026tbwnmj",
+      "origin": "2026-09-26T11:19:31Z",
+      "mag": 3.9,
+      "place": "Near Ensay, VIC",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -37.243,
+      "lon": 147.948,
+      "waves": true,
+      "n_recorded": 21,
+      "n_with_data": 45,
+      "recorded_codes": [
+        "AUANU",
+        "AUBRN",
+        "AUDAR",
+        "AUDCS",
+        "AUGRF",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AUMAG",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AUPHS",
+        "AUPKL",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUUHS"
+      ],
+      "stations": [
+        {
+          "code": "AUSMG",
+          "dist_km": 109,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 122,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 233,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 234,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 242,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 246,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 259,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 308,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 312,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 362,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 370,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 450,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 459,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUPKL",
+          "dist_km": 462,
+          "channel": "BHZ",
+          "site": "Parklands High School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 475,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 523,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 560,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUTAR",
+          "dist_km": 636,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 735,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 812,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026tauqgn",
+      "origin": "2026-09-25T21:23:05Z",
+      "mag": 6.8,
+      "place": "Loyalty Islands",
+      "mode": "tele",
+      "v": 14,
+      "depth": 16.4,
+      "lat": -21.231,
+      "lon": 168.609,
+      "waves": true,
+      "n_recorded": 46,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUALB",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AUPKL",
+        "AUROX",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUBSH",
+          "dist_km": 1707,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 1719,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 1824,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AUNRC",
+          "dist_km": 1873,
+          "channel": "BHZ",
+          "site": "North Rockhampton State High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 1942,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 2076,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 2173,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 2215,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 2220,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 2260,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 2325,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 2363,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 2445,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 2455,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 2459,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 2466,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 2470,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 2568,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 2642,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 2787,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 2842,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 2918,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 2993,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 2998,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 3069,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUPKL",
+          "dist_km": 3070,
+          "channel": "BHZ",
+          "site": "Parklands High School"
+        },
+        {
+          "code": "AUTAR",
+          "dist_km": 3118,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        },
+        {
+          "code": "AUHPC",
+          "dist_km": 3139,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 3236,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 3245,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 3324,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 3525,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 3528,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 3742,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 3816,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 3895,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 4127,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 4793,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 4855,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 5112,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 5145,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 5310,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 5323,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 5352,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 5371,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 5600,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026srxdpi",
+      "origin": "2026-09-21T01:41:36Z",
+      "mag": 5.5,
+      "place": "Coastal Indonesia, Near Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 11.1,
+      "lat": -8.27,
+      "lon": 120.575,
+      "waves": true,
+      "n_recorded": 18,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUCAR",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAL",
+        "AUKAT",
+        "AULHS",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AUROX",
+        "AUSMG",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1214,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1450,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026slweyc",
+      "origin": "2026-09-17T19:15:18Z",
+      "mag": 3.0,
+      "place": "Coastal, 24 km W of Nhulunbuy, NT",
+      "mode": "local",
+      "v": 14,
+      "depth": 30.4,
+      "lat": -12.215,
+      "lon": 136.557,
+      "waves": true,
+      "n_recorded": 9,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUAYR",
+        "AUDCS",
+        "AUDHS",
+        "AUKAT",
+        "AUKUL",
+        "AUMAG",
+        "AUNHS",
+        "AUSSC",
+        "AUTOO"
+      ],
+      "stations": [
+        {
+          "code": "AUNHS",
+          "dist_km": 25,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 526,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 622,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 1419,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026slmiue",
+      "origin": "2026-09-17T14:19:53Z",
+      "mag": 6.5,
+      "place": "Aleutian Islands",
+      "mode": "tele",
+      "v": 14,
+      "depth": 106.4,
+      "lat": 52.849,
+      "lon": -171.427,
+      "waves": true,
+      "n_recorded": 46,
+      "n_with_data": 46,
+      "recorded_codes": [
+        "AUALC",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUNHS",
+          "dist_km": 8745,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 8777,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 8975,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 9093,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 9206,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUNRC",
+          "dist_km": 9237,
+          "channel": "BHZ",
+          "site": "North Rockhampton State High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 9384,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AUBSH",
+          "dist_km": 9511,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 9564,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 9617,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 9958,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 10011,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 10023,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 10104,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 10221,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 10251,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 10296,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 10349,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 10477,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 10512,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 10516,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 10525,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 10525,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 10536,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 10650,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 10682,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 10717,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 10719,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 10724,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 10759,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 10862,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 10875,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 10880,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 10932,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 10943,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 10950,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUHPC",
+          "dist_km": 11053,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 11191,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 11216,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 11244,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 11328,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUTAR",
+          "dist_km": 11358,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 11682,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 11741,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 11846,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 11925,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026sesygn",
+      "origin": "2026-09-13T22:40:07Z",
+      "mag": 5.2,
+      "place": "Coastal Indonesia, 46 km NW of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 40.0,
+      "lat": -8.236,
+      "lon": 120.265,
+      "waves": true,
+      "n_recorded": 19,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUDHS",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AUNRC",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1247,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1440,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1481,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026sayjax",
+      "origin": "2026-09-11T21:23:56Z",
+      "mag": 6.5,
+      "place": "Java Sea",
+      "mode": "tele",
+      "v": 14,
+      "depth": 368.9,
+      "lat": -5.066,
+      "lon": 106.892,
+      "waves": true,
+      "n_recorded": 47,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALB",
+        "AUALC",
+        "AUANU",
+        "AUAPY",
+        "AUAYR",
+        "AUBRM",
+        "AUBRN",
+        "AUBSH",
+        "AUBUS",
+        "AUCAR",
+        "AUCAS",
+        "AUCSH",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUHPC",
+        "AUJCS",
+        "AUKAL",
+        "AUKAR",
+        "AUKAT",
+        "AUKHS",
+        "AUKSC",
+        "AUKUL",
+        "AULHS",
+        "AULRC",
+        "AUMAG",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMOU",
+        "AUMTC",
+        "AUMTS",
+        "AUNHS",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUSSC",
+        "AUTAR",
+        "AUTKS",
+        "AUTOO",
+        "AUUHS",
+        "AUWSH",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAR",
+          "dist_km": 2047,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 2199,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        },
+        {
+          "code": "AUCAR",
+          "dist_km": 2319,
+          "channel": "BHZ",
+          "site": "St Mary Star of the Sea"
+        },
+        {
+          "code": "AUDHS",
+          "dist_km": 2754,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 2968,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUMAZ",
+          "dist_km": 3143,
+          "channel": "BHZ",
+          "site": "Mazenod Senior College"
+        },
+        {
+          "code": "AUKAL",
+          "dist_km": 3239,
+          "channel": "BHZ",
+          "site": "John Paul College"
+        },
+        {
+          "code": "AUHAR",
+          "dist_km": 3253,
+          "channel": "BHZ",
+          "site": "St Anne's School"
+        },
+        {
+          "code": "AUKUL",
+          "dist_km": 3284,
+          "channel": "BHZ",
+          "site": "Kulin District High School"
+        },
+        {
+          "code": "AUBUS",
+          "dist_km": 3298,
+          "channel": "BHZ",
+          "site": "Georgiana Molloy Anglican School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 3377,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUALB",
+          "dist_km": 3515,
+          "channel": "BHZ",
+          "site": "St Joseph's College"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 3555,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 3572,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        },
+        {
+          "code": "AUOKV",
+          "dist_km": 3688,
+          "channel": "BHZ",
+          "site": "Oak Valley Aborignal School"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 3923,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 4229,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 4399,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUCSH",
+          "dist_km": 4432,
+          "channel": "BHZ",
+          "site": "Cairns State High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 4533,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUAYR",
+          "dist_km": 4671,
+          "channel": "BHZ",
+          "site": "Ayr State High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 4713,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 4756,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMOU",
+          "dist_km": 5083,
+          "channel": "BHZ",
+          "site": "Moura State High School"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 5092,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUHPC",
+          "dist_km": 5128,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 5175,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 5178,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 5207,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 5279,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 5322,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AUTOO",
+          "dist_km": 5377,
+          "channel": "BHZ",
+          "site": "Toowoomba State High School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 5422,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUBSH",
+          "dist_km": 5445,
+          "channel": "BHZ",
+          "site": "Beerwah State High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 5465,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUWSH",
+          "dist_km": 5471,
+          "channel": "BHZ",
+          "site": "Wavell State High School"
+        },
+        {
+          "code": "AUSSC",
+          "dist_km": 5472,
+          "channel": "BHZ",
+          "site": "Sale College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 5473,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 5473,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 5475,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 5493,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUTKS",
+          "dist_km": 5555,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUBRN",
+          "dist_km": 5566,
+          "channel": "BHZ",
+          "site": "Burnie High School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 5571,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 5586,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 5672,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AUTAR",
+          "dist_km": 5788,
+          "channel": "BHZ",
+          "site": "Taroona High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026ryxaml",
+      "origin": "2026-09-10T18:44:45Z",
+      "mag": 5.2,
+      "place": "Offshore Timor-Leste",
+      "mode": "local",
+      "v": 14,
+      "depth": 41.1,
+      "lat": -8.53,
+      "lon": 127.705,
+      "waves": true,
+      "n_recorded": 22,
+      "n_with_data": 44,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBRM",
+        "AUCAR",
+        "AUCAS",
+        "AUDAR",
+        "AUDHS",
+        "AUGRF",
+        "AUHAR",
+        "AUJCS",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAG",
+        "AUMBR",
+        "AUNHS",
+        "AUOKV",
+        "AURMK",
+        "AUROX",
+        "AUTOO",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 553,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 827,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 1073,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUBRM",
+          "dist_km": 1204,
+          "channel": "BHZ",
+          "site": "Broome Senior High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026ruysfg",
+      "origin": "2026-09-08T15:36:38Z",
+      "mag": 5.1,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 24.1,
+      "lat": -8.075,
+      "lon": 120.585,
+      "waves": true,
+      "n_recorded": 14,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUBSH",
+        "AUCSH",
+        "AUHAR",
+        "AUKAR",
+        "AUKAT",
+        "AUKUL",
+        "AULRC",
+        "AUMAG",
+        "AUMTC",
+        "AURMK",
+        "AUTOO",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUKAT",
+          "dist_km": 1459,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUKAR",
+          "dist_km": 1467,
+          "channel": "BHZ",
+          "site": "St Luke's College"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rucviq",
+      "origin": "2026-09-08T04:40:31Z",
+      "mag": 5.2,
+      "place": "Flores Sea",
+      "mode": "local",
+      "v": 14,
+      "depth": 25.2,
+      "lat": -8.17,
+      "lon": 120.613,
+      "waves": true,
+      "n_recorded": 15,
+      "n_with_data": 49,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDHS",
+        "AUJCS",
+        "AUKAL",
+        "AUKAT",
+        "AUKUL",
+        "AUNHS",
+        "AUNRC",
+        "AUOKV",
+        "AUPHS",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1214,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1451,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rravjf",
+      "origin": "2026-09-06T12:41:40Z",
+      "mag": 3.6,
+      "place": "Offshore, Near Wadeye, NT, Australia",
+      "mode": "local",
+      "v": 14,
+      "depth": 10.0,
+      "lat": -13.714,
+      "lon": 129.399,
+      "waves": true,
+      "n_recorded": 8,
+      "n_with_data": 47,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUDAR",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUMAG",
+        "AUNHS"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 210,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 322,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        },
+        {
+          "code": "AUNHS",
+          "dist_km": 818,
+          "channel": "BHZ",
+          "site": "Nhulunbuy High School"
+        },
+        {
+          "code": "AUALC",
+          "dist_km": 1205,
+          "channel": "BHZ",
+          "site": "St Philip's College"
+        },
+        {
+          "code": "AUAPY",
+          "dist_km": 1427,
+          "channel": "BHZ",
+          "site": "Ernabella Anangu School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rpekap",
+      "origin": "2026-09-05T12:29:15Z",
+      "mag": 3.4,
+      "place": "16 km N of Casterton, VIC",
+      "mode": "local",
+      "v": 14,
+      "depth": 7.4,
+      "lat": -37.442,
+      "lon": 141.451,
+      "waves": true,
+      "n_recorded": 19,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUBSH",
+        "AUCAS",
+        "AUDAR",
+        "AUDCS",
+        "AUGRF",
+        "AUHPC",
+        "AUJCS",
+        "AUKAT",
+        "AUKSC",
+        "AUKUL",
+        "AUMAG",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUHPC",
+          "dist_km": 106,
+          "channel": "BHZ",
+          "site": "Hawkesdale P12 School"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 215,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 322,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUMAG",
+          "dist_km": 329,
+          "channel": "BHZ",
+          "site": "Moama Anglican Grammar"
+        },
+        {
+          "code": "AUKSC",
+          "dist_km": 331,
+          "channel": "BHZ",
+          "site": "Keysborough Secondary College"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 369,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 537,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 544,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AUCAS",
+          "dist_km": 625,
+          "channel": "BHZ",
+          "site": "Cummins Area School"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 646,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 715,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 721,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 730,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 873,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 874,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUYLT",
+          "dist_km": 1101,
+          "channel": "BHZ",
+          "site": "Yalata Anangu School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026rfpkup",
+      "origin": "2026-08-31T08:03:32Z",
+      "mag": 5.3,
+      "place": "Coastal Indonesia, 45 km N of Ruteng",
+      "mode": "local",
+      "v": 14,
+      "depth": 36.9,
+      "lat": -8.219,
+      "lon": 120.58,
+      "waves": true,
+      "n_recorded": 13,
+      "n_with_data": 48,
+      "recorded_codes": [
+        "AUALC",
+        "AUAPY",
+        "AUCAS",
+        "AUDHS",
+        "AUHAR",
+        "AUKAT",
+        "AUKUL",
+        "AUMAZ",
+        "AUNHS",
+        "AUOKV",
+        "AUROX",
+        "AUSMG",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUDHS",
+          "dist_km": 1216,
+          "channel": "BHZ",
+          "site": "Darwin High School"
+        },
+        {
+          "code": "AUKAT",
+          "dist_km": 1452,
+          "channel": "BHZ",
+          "site": "Katherine High School"
+        }
+      ]
+    },
+    {
+      "event_id": "ga2026qzrmds",
+      "origin": "2026-08-28T03:07:12Z",
+      "mag": 3.4,
+      "place": "9 km NW of Appin, NSW",
+      "mode": "local",
+      "v": 14,
+      "depth": 2.3,
+      "lat": -34.146,
+      "lon": 150.716,
+      "waves": true,
+      "n_recorded": 25,
+      "n_with_data": 50,
+      "recorded_codes": [
+        "AUANU",
+        "AUAPY",
+        "AUCAR",
+        "AUDAR",
+        "AUDCS",
+        "AUDHS",
+        "AUGRF",
+        "AUJCS",
+        "AUKAT",
+        "AUKHS",
+        "AULHS",
+        "AULRC",
+        "AUMAZ",
+        "AUMBR",
+        "AUMHS",
+        "AUMTC",
+        "AUMTS",
+        "AUOKV",
+        "AUPHS",
+        "AURMK",
+        "AUROX",
+        "AUSMG",
+        "AUTKS",
+        "AUUHS",
+        "AUYLT"
+      ],
+      "stations": [
+        {
+          "code": "AUTKS",
+          "dist_km": 49,
+          "channel": "BHZ",
+          "site": "The King's School"
+        },
+        {
+          "code": "AUKHS",
+          "dist_km": 98,
+          "channel": "BHZ",
+          "site": "Kincumber High School"
+        },
+        {
+          "code": "AUUHS",
+          "dist_km": 137,
+          "channel": "BHZ",
+          "site": "Ulladulla High School"
+        },
+        {
+          "code": "AUDAR",
+          "dist_km": 190,
+          "channel": "HHZ",
+          "site": "Daramalan College"
+        },
+        {
+          "code": "AUANU",
+          "dist_km": 194,
+          "channel": "HHZ",
+          "site": "Australian National University"
+        },
+        {
+          "code": "AUMHS",
+          "dist_km": 201,
+          "channel": "BHZ",
+          "site": "Melrose High School"
+        },
+        {
+          "code": "AUMTS",
+          "dist_km": 204,
+          "channel": "BHZ",
+          "site": "Mt Stromlo"
+        },
+        {
+          "code": "AUDCS",
+          "dist_km": 288,
+          "channel": "BHZ",
+          "site": "Dubbo College Senior Campus"
+        },
+        {
+          "code": "AUSMG",
+          "dist_km": 317,
+          "channel": "BHZ",
+          "site": "Snowy Mountains Grammar School"
+        },
+        {
+          "code": "AUPHS",
+          "dist_km": 339,
+          "channel": "BHZ",
+          "site": "Peel High School"
+        },
+        {
+          "code": "AUGRF",
+          "dist_km": 428,
+          "channel": "BHZ",
+          "site": "Marian Catholic College"
+        },
+        {
+          "code": "AULRC",
+          "dist_km": 585,
+          "channel": "BHZ",
+          "site": "Lightning Ridge Central School"
+        },
+        {
+          "code": "AUMTC",
+          "dist_km": 726,
+          "channel": "BHZ",
+          "site": "Mt Clear College/Earth Ed"
+        },
+        {
+          "code": "AULHS",
+          "dist_km": 848,
+          "channel": "BHZ",
+          "site": "Lilydale High School"
+        },
+        {
+          "code": "AURMK",
+          "dist_km": 918,
+          "channel": "BHZ",
+          "site": "Renmark High School"
+        },
+        {
+          "code": "AUMBR",
+          "dist_km": 1051,
+          "channel": "BHZ",
+          "site": "Murray Bridge High School"
+        },
+        {
+          "code": "AUJCS",
+          "dist_km": 1124,
+          "channel": "BHZ",
+          "site": "Jamestown Community School"
+        },
+        {
+          "code": "AUROX",
+          "dist_km": 1357,
+          "channel": "BHZ",
+          "site": "Roxby Downs Area School"
+        }
+      ]
+    }
+  ]
+}
