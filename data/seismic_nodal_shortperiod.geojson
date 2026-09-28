@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "nodal_shortperiod",
-    "fetched": "2026-09-21T13:26:55Z"
+    "fetched": "2026-09-28T14:40:28Z"
   },
   "features": [
     {
@@ -8829,26 +8829,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "C3C11",
-        "network": "3X",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (SP)",
-        "sampleRate": 250.0,
-        "elevation": 69.033,
-        "startTime": "2022-06-20T01:14:34",
-        "endTime": "2022-07-23T00:14:34"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          140.6178023,
-          -30.11932062
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "C3D02",
         "network": "3X",
         "channel": "DPZ",
@@ -11143,266 +11123,6 @@
         "coordinates": [
           139.7692268,
           -32.4976723
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN01",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 667.0,
-        "startTime": "2026-08-10T03:10:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99675,
-          -35.31874
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN02",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 669.0,
-        "startTime": "2026-08-10T03:05:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99681,
-          -35.31866
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN03",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 673.0,
-        "startTime": "2026-08-10T03:16:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99648,
-          -35.31928
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN04",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 679.0,
-        "startTime": "2026-08-10T03:22:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99565,
-          -35.31877
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN05",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 664.0,
-        "startTime": "2026-08-10T03:35:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99688,
-          -35.31823
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN06",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 668.0,
-        "startTime": "2026-08-10T03:46:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.9969,
-          -35.31923
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN07",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 682.0,
-        "startTime": "2026-08-10T03:55:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99576,
-          -35.31933
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN08",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 685.0,
-        "startTime": "2026-08-10T03:27:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99564,
-          -35.3183
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN09",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 675.0,
-        "startTime": "2026-08-10T03:19:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99616,
-          -35.31908
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN10",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 675.0,
-        "startTime": "2026-08-10T03:30:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99616,
-          -35.31855
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN11",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 672.0,
-        "startTime": "2026-08-10T04:03:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99627,
-          -35.31891
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN12",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
-        "sampleRate": 250.0,
-        "elevation": 664.0,
-        "startTime": "2026-08-10T03:41:00",
-        "endTime": "2026-09-18T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99694,
-          -35.31862
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "MSN5S",
-        "network": "4E",
-        "channel": "DPZ",
-        "sensor": "DT-SOLO BD3C-5 0.2 Hz node (SP)",
-        "sampleRate": 250.0,
-        "elevation": 681.0,
-        "startTime": "2026-08-10T03:00:00",
-        "endTime": "2028-12-31T00:00:00"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          148.99579,
-          -35.31929
         ]
       }
     },
@@ -14963,6 +14683,246 @@
         "coordinates": [
           145.041321,
           -37.854366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN01",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 667.0,
+        "startTime": "2026-08-07T06:11:14",
+        "endTime": "2026-09-05T07:29:53.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99675,
+          -35.31874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN02",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 669.0,
+        "startTime": "2026-08-07T05:10:58",
+        "endTime": "2026-09-05T01:09:45.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99681,
+          -35.31866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN03",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 673.0,
+        "startTime": "2026-08-07T05:29:26",
+        "endTime": "2026-09-05T21:28:05.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99648,
+          -35.31928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN04",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 679.0,
+        "startTime": "2026-08-07T05:51:58",
+        "endTime": "2026-09-05T06:40:01.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99565,
+          -35.31877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN05",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 664.0,
+        "startTime": "2026-08-07T06:02:46",
+        "endTime": "2026-09-04T17:42:25.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99688,
+          -35.31823
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN06",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 668.0,
+        "startTime": "2026-08-07T05:19:50",
+        "endTime": "2026-09-05T16:01:09.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.9969,
+          -35.31923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN07",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 682.0,
+        "startTime": "2026-08-07T05:46:30",
+        "endTime": "2026-09-05T04:34:09.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99576,
+          -35.31933
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN08",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 685.0,
+        "startTime": "2026-08-07T05:57:34",
+        "endTime": "2026-09-05T09:51:05.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99564,
+          -35.3183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN09",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 675.0,
+        "startTime": "2026-08-07T06:15:58",
+        "endTime": "2026-09-05T13:48:41.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99616,
+          -35.31908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN10",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 675.0,
+        "startTime": "2026-08-07T06:00:38",
+        "endTime": "2026-09-05T03:58:05.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99616,
+          -35.31855
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN11",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 672.0,
+        "startTime": "2026-08-07T06:14:22",
+        "endTime": "2026-09-04T21:15:05.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99627,
+          -35.31891
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MSN12",
+        "network": "5E",
+        "channel": "DPZ",
+        "sensor": "DT-SOLO 16HR-3C 5Hz node (GP)",
+        "sampleRate": 250.0,
+        "elevation": 664.0,
+        "startTime": "2026-08-07T06:06:10",
+        "endTime": "2026-09-04T21:45:37.996"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.99694,
+          -35.31862
         ]
       }
     },
