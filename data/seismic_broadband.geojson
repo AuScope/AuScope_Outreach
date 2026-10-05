@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-09-28T14:40:28Z"
+    "fetched": "2026-10-05T15:22:39Z"
   },
   "features": [
     {
@@ -15769,6 +15769,146 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "WV01",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-04T16:07:07.84",
+        "endTime": "2001-07-12T05:48:47.92"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.7,
+          -28.4159
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV02",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-03T05:12:42.72",
+        "endTime": "2001-07-04T04:46:42.68"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.4557,
+          -28.6642
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV03",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-03T03:27:47.32",
+        "endTime": "2001-07-04T04:46:47.28"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.9649,
+          -28.6891
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV04",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-02T09:04:20",
+        "endTime": "2001-07-04T04:46:49.92"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.495,
+          -28.6564
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV05",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-02T09:04:22.84",
+        "endTime": "2001-05-21T17:43:14.72"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.0287,
+          -28.6825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV06",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-01T06:00:11.12",
+        "endTime": "2001-07-10T14:26:01.12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.9495,
+          -28.4328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WV07",
+        "network": "7G",
+        "channel": "BHZ",
+        "sensor": "BB",
+        "sampleRate": 25.0,
+        "elevation": 400.0,
+        "startTime": "2001-05-01T18:22:22.84",
+        "endTime": "2001-07-10T14:26:02.8"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.6451,
+          -28.1963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "WX01",
         "network": "7G",
         "channel": "BHZ",
@@ -20689,6 +20829,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "AY26",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 274.0,
+        "startTime": "2026-10-11T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.8601,
+          -20.6743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "AY37",
         "network": "M8",
         "channel": "HHZ",
@@ -20749,6 +20909,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "BC25",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 173.0,
+        "startTime": "2026-09-29T05:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.1179,
+          -19.8727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "BC33",
         "network": "M8",
         "channel": "HHZ",
@@ -20763,6 +20943,26 @@
         "coordinates": [
           124.8249,
           -24.1915
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BG25",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 302.0,
+        "startTime": "2026-09-30T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9881,
+          -20.1954
         ]
       }
     },
@@ -20935,7 +21135,7 @@
         "sensor": "Guralp Certis 120s (BB)",
         "sampleRate": 250.0,
         "elevation": 15.0,
-        "startTime": "2025-10-08T00:00:00",
+        "startTime": "2026-10-01T00:00:00",
         "endTime": null
       },
       "geometry": {
