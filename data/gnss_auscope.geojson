@@ -3,7 +3,7 @@
   "metadata": {
     "source": "Geoscience Australia CORS Sites API",
     "network": "AUSCOPE (ID 101)",
-    "fetched": "2026-09-29T13:53:15Z"
+    "fetched": "2026-10-06T14:02:30Z"
   },
   "features": [
     {
@@ -853,7 +853,7 @@
         "code": "KGIS",
         "domesNumber": "59910M001",
         "dateInstalled": "2013-11-28",
-        "elevation": 6.1,
+        "elevation": 6.2,
         "monument": "PILLAR",
         "foundation": "CONCRETE BLOCK",
         "siteStatus": "PUBLIC"
@@ -861,8 +861,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          143.847075183,
-          -39.941845069
+          143.847075175,
+          -39.941845039
         ]
       }
     },
