@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-10-05T15:22:39Z"
+    "fetched": "2026-10-12T16:14:48Z"
   },
   "features": [
     {
@@ -10595,7 +10595,7 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 250.0,
         "elevation": 682.0,
-        "startTime": "2026-08-13T03:33:00",
+        "startTime": "2026-08-06T02:49:00",
         "endTime": "2026-09-17T23:25:16.712"
       },
       "geometry": {
@@ -10615,7 +10615,7 @@
         "sensor": "Nanometrics Trillium Compact PostHole 120s (BB)",
         "sampleRate": 250.0,
         "elevation": 664.0,
-        "startTime": "2026-08-13T03:29:00",
+        "startTime": "2026-08-06T02:00:00",
         "endTime": "2026-09-17T23:20:44.276"
       },
       "geometry": {
