@@ -4,37 +4,9 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-10-13T03:26:47Z"
+    "fetched": "2026-10-13T04:55:15Z"
   },
   "features": [
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "E044-0051",
-        "boreholeId": "0051",
-        "boreholeLength": 395.9,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": null,
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 395.89,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          116.52881115,
-          -23.42558672
-        ]
-      }
-    },
     {
       "type": "Feature",
       "properties": {
@@ -3230,34 +3202,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "GSWA Empress 1A",
-        "boreholeId": "1A",
-        "boreholeLength": 1414.1,
-        "elevation": 461,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": null,
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 1414.09,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          125.15814009,
-          -27.05231125
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "20ALDD0001",
         "boreholeId": "20ALDD0001",
         "boreholeLength": 391.4,
@@ -5638,6 +5582,62 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "79-9D1",
+        "boreholeId": "79/9D1",
+        "boreholeLength": 154.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": "1979-01-01",
+        "datasetCreated": "2018-08-31",
+        "firstSeen": "2026-08-20",
+        "scannedMetres": 177.99,
+        "project": "Ellendale Project",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.85420913,
+          -17.56268639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "79-9D2",
+        "boreholeId": "79/9D2",
+        "boreholeLength": 178,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": "1979-01-01",
+        "datasetCreated": "2018-08-31",
+        "firstSeen": "2026-08-20",
+        "scannedMetres": 154.7,
+        "project": "Ellendale",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.85430913,
+          -17.56268639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "85IRCH1",
         "boreholeId": "85IRCH1",
         "boreholeLength": 151.5,
@@ -5660,34 +5660,6 @@
         "coordinates": [
           115.59678338,
           -29.05370341
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "LONDDH9-94",
-        "boreholeId": "94",
-        "boreholeLength": 22.8,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": null,
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 22.78,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          121.07843016,
-          -31.11134628
         ]
       }
     },
@@ -5800,62 +5772,6 @@
         "coordinates": [
           117.57034022,
           -26.96572291
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "79-9D1",
-        "boreholeId": "9D1",
-        "boreholeLength": 154.7,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": null,
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 177.99,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          124.85420913,
-          -17.56268639
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "79-9D2",
-        "boreholeId": "9D2",
-        "boreholeLength": 178,
-        "elevation": null,
-        "custodian": "gswa",
-        "drillingMethod": "Diamond Core",
-        "drillEndDate": "unknown",
-        "purpose": null,
-        "instrument": "HyLogger 3-2",
-        "drillDate": null,
-        "datasetCreated": null,
-        "firstSeen": "2026-03-26",
-        "scannedMetres": 154.7,
-        "project": null,
-        "owner": null,
-        "state": "WA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          124.85430913,
-          -17.56268639
         ]
       }
     },
@@ -18070,6 +17986,34 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "E044-0051",
+        "boreholeId": "E044/0051",
+        "boreholeLength": 395.9,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": "1982-07-15",
+        "datasetCreated": "2023-10-07",
+        "firstSeen": "2026-08-20",
+        "scannedMetres": 395.89,
+        "project": "Irregully Creek",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.52881115,
+          -23.42558672
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "E4DD0803",
         "boreholeId": "E4DD0803",
         "boreholeLength": 169.6,
@@ -22936,6 +22880,34 @@
         "coordinates": [
           114.3347004,
           -23.83120857
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GSWA Empress 1A",
+        "boreholeId": "GSWA Empress 1/1A",
+        "boreholeLength": 1414.1,
+        "elevation": 461,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2015-06-12",
+        "firstSeen": "2026-08-20",
+        "scannedMetres": 1414.09,
+        "project": null,
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.15814009,
+          -27.05231125
         ]
       }
     },
@@ -28788,6 +28760,202 @@
         "coordinates": [
           121.69118376,
           -31.20832825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH1-94",
+        "boreholeId": "LONDDH1/94",
+        "boreholeLength": 18,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 17.99,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07915417,
+          -31.11153928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH10-94",
+        "boreholeId": "LONDDH10/94",
+        "boreholeLength": 29,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 28.98,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07831216,
+          -31.11145428
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH3-94",
+        "boreholeId": "LONDDH3/94",
+        "boreholeLength": 21,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-03",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 20.99,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07884916,
+          -31.11179328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH4-94",
+        "boreholeId": "LONDDH4/94",
+        "boreholeLength": 21.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-03",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 21.7,
+        "project": null,
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07873416,
+          -31.11188828
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH7-94",
+        "boreholeId": "LONDDH7/94",
+        "boreholeLength": 27,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-03",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 26.98,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07902917,
+          -31.11138228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH8-94",
+        "boreholeId": "LONDDH8/94",
+        "boreholeLength": 21.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-03",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 21.78,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07877017,
+          -31.11131928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LONDDH9-94",
+        "boreholeId": "LONDDH9/94",
+        "boreholeLength": 22.8,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": null,
+        "datasetCreated": "2020-04-03",
+        "firstSeen": "2026-08-20",
+        "scannedMetres": 22.78,
+        "project": "Londonderry",
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.07843016,
+          -31.11134628
         ]
       }
     },

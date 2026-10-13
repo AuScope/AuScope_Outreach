@@ -22,13 +22,35 @@
 > reconciliation*, *Mirror-only measurement* and *Carry-forward* apply to
 > `data/nvcl_stats.json` as written. Not ported: the *Bulk-upload detector*
 > (a doi_tracker page badge) and the *Seeding* of the borehole cache from
-> `docs/nvcl-data.json` (the seeded Tasmanian rows already in
-> `data/nvcl/boreholes.jsonl` remain until the TAS service answers). The
+> `docs/nvcl-data.json`. The 482 seeded Tasmanian rows the cache arrived
+> with were replaced by the live TAS answer on 2026-10-13, the first time
+> this repo's harvest reached the TAS service. The
 > *Estimation tier* and *Mirror-only* figures stay in the snapshot but are
 > never drawn on the maps: a map borehole shows measured metres or none.
 > *TSG collar coordinates* are parsed and cached but not used. How the map
 > picks each borehole's month, instrument and metres is set out in
 > `scripts/nvcl/README.md`.
+>
+> **Changes in this port** (each is set out, with the evidence for it, in
+> `scripts/nvcl/README.md` under *What was ported, changed and left
+> behind*; where they differ, the code and README describe this repo and
+> the text below describes merged-v1.2 as doi_tracker ran it):
+>
+> - a `local-name` TSG match tier, lowest precedence, for Victoria's
+>   `LOCAL-<hole>` names;
+> - a quieter retry pass over dataset queries that failed under load, and a
+>   40-minute per-node budget on the main dataset pass;
+> - HyChips instruments labelled with their recorded name, never converted
+>   to a HyLogger generation;
+> - the borehole id is the WFS identifier after the node's `/borehole/`
+>   base, keeping any `/` in the hole name, not its last `/` segment;
+> - each TSG archive goes to at most one hole: never again at a weaker tier
+>   once matched, and to neither hole when two claim it at the same tier;
+>   the suffix tiers also refuse an archive filed under another hole's
+>   feature number, and a generic suffix (`DDH1`, `BD2`) must be the hole's
+>   whole name;
+> - the map writer carries a state's previous rows forward when its fresh
+>   rows fall below 90% of them, and fails when more than two states do.
 
 Counting rules for every NVCL figure published by this repository
 (`data/nvcl-stats.json`, `docs/nvcl-data.json`, the dashboard and the NVCL

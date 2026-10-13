@@ -1,9 +1,9 @@
 {
-  "generated": "2026-10-13T04:27:41Z",
+  "generated": "2026-10-13T05:55:23Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
   "harvest_as_of": "2026-10-13",
-  "total_boreholes": 6489,
-  "total_km": 1863.1,
+  "total_boreholes": 6499,
+  "total_km": 1867.2,
   "undated": 0,
   "by_state": [
     {
@@ -22,8 +22,8 @@
     },
     {
       "state": "NT",
-      "boreholes": 465,
-      "km": 141.2,
+      "boreholes": 471,
+      "km": 145.2,
       "status": "participating",
       "fetched": "2026-10-13"
     },
@@ -36,8 +36,8 @@
     },
     {
       "state": "SA",
-      "boreholes": 1834,
-      "km": 429.6,
+      "boreholes": 1832,
+      "km": 429.5,
       "status": "participating",
       "fetched": "2026-10-13"
     },
@@ -57,8 +57,8 @@
     },
     {
       "state": "WA",
-      "boreholes": 1891,
-      "km": 677.2,
+      "boreholes": 1897,
+      "km": 677.3,
       "status": "participating",
       "fetched": "2026-10-13"
     }
@@ -68,8 +68,8 @@
     "latest": "2026-10"
   },
   "month_sources": {
-    "tsg": 4676,
-    "api": 1813,
+    "tsg": 4683,
+    "api": 1816,
     "none": 0,
     "carried": 0
   },

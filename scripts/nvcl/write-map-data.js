@@ -27,14 +27,16 @@
  *           harvest; null when no interval was recorded. Never drilled length.
  *
  * Carry-forward: a state whose node was unreachable or degraded this run
- * keeps its previous map rows and its previous geojson file, and is listed
- * in map_summary.json stale_states.
+ * keeps its previous map rows and its previous geojson file. So does a state
+ * whose fresh rows fall below 90% of its rows on the live map (status
+ * 'carried'). Both are listed in map_summary.json stale_states.
  *
- * Guards (exit 1, nothing written): a state on the current map missing from
- * the new one; total boreholes below 95% of the current map; any negative
- * depth; any month out of range; fewer than 6 states; a duplicate
- * (state, id); a row without coordinates; detail and snapshot from
- * different runs.
+ * Guards (exit 1, nothing written): more than two states carried by the 90%
+ * rule; a negative scanned length on a freshly harvested borehole (carried
+ * rows are the only ones sanitised); a state on the current map missing from
+ * the new one; total boreholes below 95% of the current map; any month out
+ * of range; fewer than 6 states; a duplicate (state, id); a row without
+ * coordinates; detail and snapshot from different runs.
  *
  * Env:
  *   NVCL_OUT_DIR=/tmp/x   read the snapshot + detail from, and write every
@@ -74,6 +76,8 @@ const STATES = [
 const MIN_MONTH = '2002-01';           // no HyLogger scanned core before 2002
 const MIN_STATES = 6;
 const MIN_PREV_FRACTION = 0.95;
+const MIN_STATE_FRACTION = 0.9;        // per state, against the live map
+const MAX_CARRIED_STATES = 2;          // more carried than this fails the run
 const STALE = new Set(['cached', 'degraded', 'unreachable']);
 const METHODOLOGY = 'merged, TSG-first; see scripts/nvcl/METHODOLOGY.md';
 const GEOJSON_SOURCE = 'NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)';
@@ -110,12 +114,19 @@ function main() {
   if (stale.length) console.log('Carried forward (node stale this run): ' + stale.join(', '));
 
   // -- Map rows --
-  const rows = [];
+  const errors = [];
+  const freshByState = {};
   const tierCounts = { tsg_scan: 0, api: 0, tsg_created: 0, none: 0, out_of_range_skipped: 0 };
   detail.forEach(function(d) {
     if (stale.indexOf(d.state) !== -1) return;
     if (!d.has_data || d.seeded) return;
     if (!isFinite(d.lat) || !isFinite(d.lng)) return;
+    // A negative scanned length in a fresh harvest is a bug upstream, not a
+    // value to tidy away: it fails the run. Only carried rows are sanitised.
+    if (d.unique_scanned_m != null && d.unique_scanned_m < 0) {
+      errors.push('negative unique_scanned_m ' + d.unique_scanned_m + ' at ' + d.state + '/' + d.id
+        + ' in the fresh harvest');
+    }
     const when = pickMonth(d, maxMonth);
     tierCounts[when.tier]++;
     tierCounts.out_of_range_skipped += when.skipped;
@@ -133,13 +144,50 @@ function main() {
       n_datasets: (d.datasets && d.datasets.length) || (d.tsg && d.tsg.length) || 0,
     };
     if (inst.label) row.instrument_label = inst.label;
-    rows.push(row);
+    (freshByState[d.state] || (freshByState[d.state] = [])).push(row);
+  });
+
+  // Per-state guard: a state whose fresh rows fall below 90% of what the
+  // live map shows for it keeps its live rows instead, marked 'carried'. A
+  // node can answer well enough to pass the harvest's own guards and still
+  // lose a large share of one state (a dataset service failing a third of
+  // its queries, a TSG match rule gone wrong), and one state's collapse is
+  // a measurement fault, not a national event worth failing for. More than
+  // two such states in one run is, and stops it.
+  const carried = [];
+  Object.keys(freshByState).sort().forEach(function(code) {
+    const before = (prevByState[code] || []).length;
+    const now = freshByState[code].length;
+    if (before && now < before * MIN_STATE_FRACTION) {
+      carried.push(code);
+      console.log('Carried forward (fell below ' + Math.round(MIN_STATE_FRACTION * 100) + '% of the live map): '
+        + code + ' ' + now + ' rows against ' + before);
+    }
+  });
+  // A live state the fresh harvest produced no rows for at all is the same
+  // event at 100%.
+  Object.keys(prevByState).sort().forEach(function(code) {
+    if (stale.indexOf(code) === -1 && !freshByState[code] && carried.indexOf(code) === -1) {
+      carried.push(code);
+      console.log('Carried forward (no fresh rows): ' + code + ' against ' + prevByState[code].length + ' on the live map');
+    }
+  });
+  if (carried.length > MAX_CARRIED_STATES) {
+    errors.push(carried.length + ' states fell below ' + Math.round(MIN_STATE_FRACTION * 100)
+      + '% of their live map rows (' + carried.join(', ') + '; at most ' + MAX_CARRIED_STATES + ' may be carried)');
+  }
+  const held = stale.concat(carried);     // every state whose live rows stand
+
+  const rows = [];
+  Object.keys(freshByState).forEach(function(code) {
+    if (carried.indexOf(code) === -1) freshByState[code].forEach(function(r) { rows.push(r); });
   });
   // Carried rows obey the same rules as fresh ones: the hand-built May 2026
   // map holds a 1993 month (WA/VHD10) and a negative depth (WA/YGD4), and a
-  // stale node must not smuggle those back in.
+  // stale node must not smuggle those back in. These are the only rows that
+  // are ever sanitised rather than failed on.
   let sanitised = 0;
-  stale.forEach(function(code) {
+  held.forEach(function(code) {
     (prevByState[code] || []).forEach(function(r) {
       const row = Object.assign({}, r);
       if (row.month && !(row.month >= MIN_MONTH && row.month <= maxMonth)) { delete row.month; sanitised++; }
@@ -154,7 +202,6 @@ function main() {
   });
 
   // -- Guards --
-  const errors = [];
   const newStates = new Set(rows.map(function(r) { return r.state; }));
   Object.keys(prevByState).forEach(function(st) {
     if (!newStates.has(st)) errors.push('state ' + st + ' is on the current map but missing from the new one');
@@ -168,6 +215,8 @@ function main() {
     const key = r.state + '/' + r.id;
     if (seen.has(key)) errors.push('duplicate borehole ' + key);
     seen.add(key);
+    // Backstop only: fresh rows failed above on a negative length and
+    // carried rows were sanitised, so nothing should reach this.
     if (r.depth_m != null && !(r.depth_m >= 0)) errors.push('negative depth ' + r.depth_m + ' at ' + key);
     if (r.month && !(r.month >= MIN_MONTH && r.month <= maxMonth)) errors.push('month ' + r.month + ' out of range at ' + key);
     if (!isFinite(r.lat) || !isFinite(r.lng)) errors.push('no coordinates at ' + key);
@@ -208,19 +257,19 @@ function main() {
   const prevGenerated = prevSummary.generated ? String(prevSummary.generated).substring(0, 10) : null;
   const byState = STATES.map(function(s) {
     const mine = rows.filter(function(r) { return r.state === s.code; });
-    const isStale = stale.indexOf(s.code) !== -1;
+    const isHeld = held.indexOf(s.code) !== -1;
     return {
       state: s.code,
       boreholes: mine.length,
       km: round(sum(mine, 'depth_m') / 1000, 1),
-      status: statusOf[s.code] || 'not_harvested',
-      fetched: isStale ? (prevFetched[s.code] || prevGenerated) : snapshot.as_of,
+      status: carried.indexOf(s.code) !== -1 ? 'carried' : (statusOf[s.code] || 'not_harvested'),
+      fetched: isHeld ? (prevFetched[s.code] || prevGenerated) : snapshot.as_of,
     };
   }).filter(function(s) { return s.boreholes > 0 || statusOf[s.state]; });
   const months = rows.map(function(r) { return r.month; }).filter(Boolean).sort();
   const sources = { tsg: 0, api: 0, none: 0, carried: 0 };
   rows.forEach(function(r) {
-    if (stale.indexOf(r.state) !== -1) sources.carried++;
+    if (held.indexOf(r.state) !== -1) sources.carried++;
     else if (r.month_source === 'tsg') sources.tsg++;
     else if (r.month_source === 'api') sources.api++;
     else sources.none++;
@@ -235,14 +284,16 @@ function main() {
     by_state: byState,
     date_range: { earliest: months[0] || null, latest: months[months.length - 1] || null },
     month_sources: sources,
-    stale_states: stale.filter(function(code) { return (prevByState[code] || []).length; }),
+    stale_states: held.filter(function(code) { return (prevByState[code] || []).length; }).sort(),
   };
 
   // -- GeoJSON for index.html: every registered borehole, fresh states only.
+  // A state carried by the per-state guard keeps its previous file too: its
+  // harvest is the thing in doubt.
   const detailByState = groupBy(detail, function(d) { return d.state; });
   const geo = [];
   STATES.forEach(function(s) {
-    if (stale.indexOf(s.code) !== -1) return;     // previous file stays
+    if (held.indexOf(s.code) !== -1) return;      // previous file stays
     const prevGeo = readJson(path.join(DATA_DIR, 'nvcl_' + s.file + '.geojson'));
     geo.push({ state: s, collection: buildGeojson(s, detailByState[s.code] || [], prevGeo,
       cacheFirstSeen, snapshot), prevCount: prevGeo ? (prevGeo.features || []).length : null });

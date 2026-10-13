@@ -47,7 +47,9 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
 ## How the map chooses what it shows (`write-map-data.js`)
 
 - **Which boreholes:** coordinates plus evidence (an API dataset or a
-  matched TSG archive). Key `(state, id)`, sorted by state then id.
+  matched TSG archive). Key `(state, id)`, sorted by state then id. The id
+  is the WFS identifier after the node's `.../borehole/` base, so it can
+  hold a `/` (NT `1654228_82/1`, WA `LONDDH1/94`); see *Changed* below.
 - **month** (first scan): TSG header scan date (confidence `high`/`good`),
   else the TSG `Created :` date, else the node's date (ScanDate, else
   createdDate, which is an ingest date). Every TSG tier outranks the API,
@@ -67,10 +69,21 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   the dots.
 - **Stale nodes** (unreachable or degraded this run) keep their previous map
   rows and geojson file and are listed in `map_summary.json` `stale_states`.
-- **Guards** (exit 1, nothing written): a state on the live map missing from
-  the new one, fewer than 95% of the live map's boreholes, a negative depth, a
-  month out of range, fewer than 6 states, a duplicate key, a row without
-  coordinates, or a detail file from a different run than the snapshot.
+- **Per-state carry-forward:** a state whose fresh rows come to fewer than
+  90% of its rows on the live map keeps its live rows and geojson file
+  instead, with `by_state[].status` `carried`, and is listed in
+  `stale_states`. One state collapsing is treated as a measurement fault
+  (a dataset service failing a share of its queries, a matching rule gone
+  wrong) rather than published. More than two states carried in one run
+  fails it.
+- **Guards** (exit 1, nothing written): more than two states carried by the
+  90% rule, a negative scanned length on a freshly harvested borehole, a
+  state on the live map missing from the new one, fewer than 95% of the live
+  map's boreholes, a month out of range, fewer than 6 states, a duplicate
+  key, a row without coordinates, or a detail file from a different run than
+  the snapshot. Rows carried forward (from a stale node or by the 90% rule)
+  are the only ones sanitised rather than failed on: an out-of-range month
+  is dropped and a negative depth becomes `null`.
 
 ## Running locally
 
@@ -116,6 +129,41 @@ Changed:
   per node). On 2026-10-13 QLD failed 160 of 587 queries that all answered
   in ~3 s one at a time; without the pass ~60 QLD boreholes would drop off
   the map in a different combination every week.
+- Dataset pass budget: the main `getDatasetCollection` pass gets 40 minutes
+  per node. A node that runs out is logged (`DATASET PASS BUDGET SPENT`),
+  its unqueried holes count as failed queries, it gets no retry pass, and
+  it is marked degraded (figures carried forward, coordinates fresh), so a
+  service that hangs without failing cannot run the job into its
+  300-minute timeout.
+- Borehole id rule: the id is the WFS identifier with the node's
+  `.../resource/feature/<ns>/borehole/` base removed, not its last `/`
+  segment. doi_tracker cut at the last `/`, so NT holes named `82/1`,
+  `NTGS00/1`, `NTGS99/1` all became id `1`, seven WA `LONDDH<n>/94` holes
+  became `94`, each overwrote the last, and 14 holes with data vanished from
+  the map. The full id is also what `getDatasetCollection` answers to
+  (`LONDDH1/94` returns datasets, `94` returns none). Ids without a `/` are
+  unchanged. Cached rows under a truncated id are dropped the first time the
+  node answers with the full one (their `firstSeen` passes to the row of the
+  same name). TSG matching was already separator-blind (`82/1` meets
+  `1654228_82_1.zip`, `LONDDH1/94` meets `LONDDH1-94.zip`).
+- TSG matching assigns each archive to at most one borehole. The tiers run
+  in order across the whole node: an archive matched at one tier is never
+  matched again at a weaker one, and one that two holes claim at the same
+  tier goes to neither (it counts as mirror-only). The suffix tiers
+  (`name-suffix`, `id-suffix`) also refuse an archive whose leading number
+  is another hole's feature number, or is not the hole's own when it has
+  one, and a generic suffix (under 5 characters, or letters-then-digits
+  like `DDH1`, `BD2`, `BDH3`) matches only a hole whose whole normalised
+  name it is. doi_tracker matched hole by hole, so NT's two `DDH1` holes
+  each took six other holes' `NN_DDH1.zip` archives and SA 139115 `DDH 1`
+  took `72812_DDH1.zip` from SA 72812: ten archives counted twice, with
+  their metres, and the wrong first-scan month on the borrowing hole.
+- A `data/nvcl_stats.json` that exists but does not parse stops the harvest
+  before it starts (exit 1), instead of being treated as a first run with
+  the 80% check skipped.
+- HyChips instruments are labelled with the name their TSG file records
+  (`instrument_label`, e.g. `HyChips 6-3`), never converted to a HyLogger
+  generation by the v6-to-3 typo fix, which applies to HyLogger strings only.
 - `harvest.js` also keeps the descriptive WFS fields (elevation, drilling
   method, drill end date, purpose) and TSG meta (drill date, project, owner)
   that `index.html` popups show, and writes `boreholes-detail.jsonl`.

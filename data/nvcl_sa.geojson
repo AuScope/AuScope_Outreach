@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "sa",
     "stateLabel": "South Australia",
-    "fetched": "2026-10-13T03:26:47Z"
+    "fetched": "2026-10-13T04:55:15Z"
   },
   "features": [
     {
@@ -9258,7 +9258,7 @@
         "drillingMethod": "diamond core",
         "drillEndDate": "1973-04-27",
         "purpose": "mineral borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
@@ -36502,11 +36502,11 @@
         "drillingMethod": "unknown",
         "drillEndDate": "1981-09-28",
         "purpose": "mineral borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 72.51,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -55010,7 +55010,7 @@
         "drillingMethod": "diamond core",
         "drillEndDate": "1981-02-12",
         "purpose": "mineral borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": "HyLogger 2-3",
         "drillDate": null,
         "datasetCreated": "2019-01-10",
         "firstSeen": "2026-03-26",

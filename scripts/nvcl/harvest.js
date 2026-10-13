@@ -91,6 +91,13 @@ const CONCURRENCY = 8;             // dataset fetches in flight per node
 const RETRY_PASS_CONCURRENCY = 2;  // second, quieter pass over failed fetches
 const RETRY_PASS_TIMEOUT_MS = 30000;
 const RETRY_PASS_BUDGET_MS = 15 * 60 * 1000;   // per node
+// Main dataset pass, per node (added 2026-10-13). On 2026-10-13 the slowest
+// was QLD at about 27 minutes (154 of 587 queries timing out three times
+// each under load before the retry pass recovered all of them); the rest
+// took under 9. A service slow enough to hang without ever failing would
+// otherwise run the job into its 300-minute timeout and lose the week's
+// enrichment with it. Tripping it marks the node degraded.
+const DATASET_PASS_BUDGET_MS = 40 * 60 * 1000;
 const WFS_PAGE = 1000;
 const WFS_SINGLE_MAX = 20000;
 
@@ -141,6 +148,19 @@ async function run() {
     : NODES;
   if (!nodes.length) throw new Error('NVCL_ONLY matched no nodes');
 
+  // The previous snapshot, read before an hour of harvesting rather than
+  // after it. A file that exists but does not parse is a corrupted commit,
+  // not a first run: skipping the 80% check over it would let any harvest,
+  // however blind, replace the national snapshot. So it stops the run.
+  let prev = null;
+  if (fs.existsSync(STATS_FILE)) {
+    try { prev = JSON.parse(fs.readFileSync(STATS_FILE, 'utf8')); }
+    catch (e) {
+      throw new Error(STATS_FILE + ' exists but does not parse (' + e.message + '); '
+        + 'restore it from git before harvesting');
+    }
+  }
+
   // TSG enrichment cache (optional - the harvest is fully functional without
   // it, just less measured and on ingest dates).
   const tsgIndex = loadTsgIndex(TSG_CACHE);
@@ -168,7 +188,6 @@ async function run() {
   // forward inside aggregate(), and the health guard below. A snapshot in
   // the retired Python scraper's schema has no per-state figures and no
   // total_boreholes_with_data, so it can serve neither; it is ignored.
-  let prev = readJson(STATS_FILE, null);
   if (prev && !(prev.summary && typeof prev.summary.total_boreholes_with_data === 'number')) {
     console.log('\nPrevious snapshot ' + STATS_FILE + ' is not in the harvest schema'
       + ' (first run of this harvester?): no carry-forward figures, 80% check skipped.');
@@ -263,8 +282,11 @@ async function harvestNode(node, bhCache, today) {
     console.log('  WFS: ' + result.wfsCount + ' NVCL boreholes registered');
     if (bhCache) {
       const dropped = purgeSeeded(bhCache, node.code);
-      const added = mergeBoreholeCache(bhCache, node.code, result.boreholes, today);
+      const legacy = purgeTruncatedIds(bhCache, node.code, result.boreholes);
+      const added = mergeBoreholeCache(bhCache, node.code, result.boreholes, today, legacy.firstSeenByName);
       if (dropped) console.log('  Cache: replaced ' + dropped + ' seeded placeholder(s) with real rows');
+      if (legacy.n) console.log('  Cache: dropped ' + legacy.n + ' row(s) under a truncated pre-fix id ('
+        + legacy.ids.join(', ') + ')');
       if (added) console.log('  Cache: +' + added + ' borehole(s) not seen before');
     }
   } catch (e) {
@@ -290,11 +312,29 @@ async function harvestNode(node, bhCache, today) {
     return result;
   }
 
-  // 2. Dataset collections, CONCURRENCY at a time
+  // 2. Dataset collections, CONCURRENCY at a time, inside a time budget.
+  // Holes still queued when it runs out count as failed queries, and the
+  // node is marked degraded below whatever share that comes to.
   let done = 0, withData = 0;
   const queue = result.boreholes.slice();
+  const passStart = Date.now();
+  let budgetTripped = false;
   async function worker() {
     for (;;) {
+      if (Date.now() - passStart > DATASET_PASS_BUDGET_MS) {
+        if (!budgetTripped && queue.length) {
+          budgetTripped = true;
+          console.warn('  DATASET PASS BUDGET SPENT: ' + Math.round(DATASET_PASS_BUDGET_MS / 60000)
+            + ' min with ' + queue.length + ' of ' + result.boreholes.length + ' boreholes not yet queried'
+            + ' - the node will be marked degraded');
+        }
+        queue.splice(0).forEach(function(bh) {
+          bh.datasets = [];
+          bh.fetchFailed = true;
+          result.fetchFailures++;
+        });
+        return;
+      }
       const bh = queue.shift();
       if (!bh) return;
       try {
@@ -321,7 +361,9 @@ async function harvestNode(node, bhCache, today) {
   // get one quieter pass (2 in flight, 30 s timeout) inside a fixed time
   // budget. A node whose service is genuinely down fails every query and is
   // not retried; the budget stops a slow node from eating the job's time.
-  if (result.fetchFailures && result.fetchFailures < result.boreholes.length) {
+  // A node that spent its whole budget gets no retry pass: it is slow, not
+  // overloaded, and another 15 minutes of it would not change the verdict.
+  if (result.fetchFailures && result.fetchFailures < result.boreholes.length && !budgetTripped) {
     const failed = result.boreholes.filter(function(bh) { return bh.fetchFailed; });
     const retryStart = Date.now();
     let recovered = 0, attempted = 0;
@@ -352,7 +394,8 @@ async function harvestNode(node, bhCache, today) {
   // though its WFS answered - count it as reached (WFS worked) but flag it.
   result.dsOk = result.fetchFailures < result.boreholes.length || result.boreholes.length === 0;
   console.log('  Datasets: ' + withData + '/' + result.boreholes.length + ' boreholes have data'
-    + (result.fetchFailures ? ' (' + result.fetchFailures + ' fetch failures)' : ''));
+    + (result.fetchFailures ? ' (' + result.fetchFailures + ' fetch failures)' : '')
+    + ' in ' + Math.round((Date.now() - passStart) / 1000) + 's');
   if (!result.dsOk) console.warn('  DATASET SERVICE UNREACHABLE (all ' + result.fetchFailures + ' queries failed)');
 
   // A half-answering node is the harder case, and the one that actually bit:
@@ -364,11 +407,12 @@ async function harvestNode(node, bhCache, today) {
   // carry the figures forward rather than publish a collapse as a measurement.
   const failedFrac = result.boreholes.length
     ? result.fetchFailures / result.boreholes.length : 0;
-  if (failedFrac > DEGRADED_FRACTION) {
+  if (failedFrac > DEGRADED_FRACTION || budgetTripped) {
     result.degraded = true;
     result.fromCache = true;          // carry stats forward, same as an outage
     result.coordsAsOf = today;        // coordinates ARE fresh; the figures are not
-    console.warn('  DEGRADED: ' + Math.round(failedFrac * 100) + '% of dataset queries failed'
+    console.warn('  DEGRADED: ' + (budgetTripped ? 'dataset pass ran out of time, ' : '')
+      + Math.round(failedFrac * 100) + '% of dataset queries failed'
       + ' - figures will be carried forward, coordinates kept fresh');
   }
   return result;
@@ -452,10 +496,26 @@ async function fetchWfsUnfiltered(node) {
   return Array.from(out.values());
 }
 
+// The borehole id is the WFS identifier with the node's borehole-URL base
+// removed: everything after the first '/borehole/' in
+// 'https://<host>/resource/feature/<ns>/borehole/<id>', which is the form
+// all eight nodes use. It is NOT the last '/' segment. Hole names can hold a
+// '/' (NT '82/1', 'NTGS96/1'; WA 'LONDDH1/94'), and cutting at the last one
+// gave NT's 82/1, NTGS00/1 and NTGS99/1 the same id '1' and seven WA LONDDH
+// holes the id '94', so each overwrote the one before it in the map below
+// and real holes vanished (fixed 2026-10-13). The full id is also what each
+// node's getDatasetCollection expects: holeidentifier=LONDDH1/94 answers, 94
+// does not. An identifier without '/borehole/' keeps the old last-segment
+// rule, so an id with no '/' in it is exactly what it always was.
+function boreholeIdFrom(identifier) {
+  const s = String(identifier || '').replace(/\/+$/, '');
+  const m = s.match(/\/borehole\/(.+)$/);
+  return m ? m[1] : s.split('/').pop();
+}
+
 function addFeature(map, f) {
   const p = f.properties || {};
-  const identifier = p.identifier || '';
-  const id = identifier ? identifier.replace(/\/+$/, '').split('/').pop() : '';
+  const id = boreholeIdFrom(p.identifier);
   if (!id) return;
   const coords = (f.geometry && f.geometry.coordinates) || [];
   const lng = num(coords[0]), lat = num(coords[1]);
@@ -467,10 +527,17 @@ function addFeature(map, f) {
   // mirror archives `<featureNumber>_<HOLE>.zip`, so without this the match
   // is impossible and VIC reported 0 of its 39 archives.
   const featureNum = (String(f.id || '').match(/(\d+)\s*$/) || [])[1] || '';
+  // The leading number a node files this hole's archives under, when it has
+  // one: VIC 'gsml.borehole.877270', NT 'gsml.borehole.8445355_DDH1', SA
+  // 'gsml.borehole.72812'. It says whose archive '<number>_<HOLE>.zip' is, so
+  // a suffix match cannot hand one hole's archive to another (attachTsg).
+  const ownNum = (String(f.id || '').replace(/^[^.]*\.borehole\./i, '').match(/^(\d+)(?=_|$)/) || [])[1]
+    || (id.match(/^(\d+)(?=_|$)/) || [])[1] || '';
 
   map.set(id, {
     id: id,
     featureNum: featureNum,
+    ownNum: ownNum,
     name: p.name || id,
     lat: lat, lng: lng,
     lengthM: num(p.boreholeLength_m),
@@ -709,7 +776,7 @@ function loadBoreholeCache(file) {
 // Fold a live WFS answer back into the cache. Coordinates are overwritten from
 // the service (it is authoritative when it answers); firstSeen is preserved so
 // the cache also records how long we have known about a hole.
-function mergeBoreholeCache(cache, state, boreholes, today) {
+function mergeBoreholeCache(cache, state, boreholes, today, legacyFirstSeen) {
   const m = cache.byState[state] || (cache.byState[state] = new Map());
   let added = 0;
   boreholes.forEach(function(bh) {
@@ -718,7 +785,7 @@ function mergeBoreholeCache(cache, state, boreholes, today) {
       state: state, id: bh.id, name: bh.name,
       lat: bh.lat, lng: bh.lng,
       lengthM: bh.lengthM, custodian: bh.custodian || '',
-      firstSeen: (prev && prev.firstSeen) || today,
+      firstSeen: (prev && prev.firstSeen) || (legacyFirstSeen && legacyFirstSeen[bh.name]) || today,
       lastSeen: today,
     });
     if (!prev) added++;
@@ -739,6 +806,33 @@ function boreholesFromCache(cache, state) {
       seeded: !!r.seeded,
     };
   });
+}
+
+// Drop rows cached under a truncated pre-fix id (see boreholeIdFrom): '1'
+// where the node now says '1654228_82/1', '94' where it says 'LONDDH1/94'.
+// Left in place they would be drawn twice whenever the node is down. A row
+// goes only when its id has no '/', is not a live id, and is the last
+// segment of a live id that has one. Its firstSeen passes to the live row of
+// the same name: the cache knew that hole, under the wrong key.
+function purgeTruncatedIds(cache, state, boreholes) {
+  const out = { n: 0, ids: [], firstSeenByName: {} };
+  const m = cache.byState[state];
+  if (!m) return out;
+  const live = new Set(), tails = new Set();
+  boreholes.forEach(function(bh) {
+    live.add(bh.id);
+    if (bh.id.indexOf('/') !== -1) tails.add(bh.id.split('/').pop());
+  });
+  if (!tails.size) return out;
+  Array.from(m.keys()).forEach(function(k) {
+    if (live.has(k) || k.indexOf('/') !== -1 || !tails.has(k)) return;
+    const r = m.get(k);
+    if (r && r.name && r.firstSeen) out.firstSeenByName[r.name] = r.firstSeen;
+    m.delete(k);
+    out.n++;
+    out.ids.push(k);
+  });
+  return out;
 }
 
 // Drop seeded placeholders for a state once its service answers for real.
@@ -796,8 +890,9 @@ function attachTsg(result, idx) {
     return;
   }
 
-  result.boreholes.forEach(function(bh) {
-    const hit = matchTsgRows(st, bh);
+  const resolved = resolveTsgMatches(st, result.boreholes);
+  result.boreholes.forEach(function(bh, i) {
+    const hit = resolved.hits[i];
     if (!hit) return;
     bh.tsg = hit.rows;
     bh.tsgTier = hit.tier;
@@ -806,6 +901,14 @@ function attachTsg(result, idx) {
     hit.rows.forEach(function(r) { used.add(r._key); idx.matchedRows.add(r._key); });
   });
   result.tsg.matchedRows = used.size;
+  result.tsg.rejected = resolved.rejected;
+  const rj = resolved.rejected;
+  if (rj.claimed || rj.owner || rj.generic || rj.ambiguous) {
+    console.log('  TSG: weaker-tier hits refused - ' + rj.claimed + ' already matched to another hole, '
+      + rj.owner + ' filed under another hole\'s feature number, ' + rj.generic
+      + ' generic suffix not the hole\'s whole name, ' + rj.ambiguous + ' ambiguous'
+      + (rj.examples.length ? ' (e.g. ' + rj.examples.slice(0, 4).join('; ') + ')' : ''));
+  }
 
   // MIRROR-ONLY MEASUREMENT. A cache row that matched no borehole is not
   // noise: the instrument file records core it actually scanned, for a hole
@@ -841,11 +944,118 @@ function attachTsg(result, idx) {
   }
 }
 
-// Precedence: an exact archive-name hit on the WFS id or name beats a
-// suffix hit. Whole-name and prefix hits are unioned at the same tier so a
-// hole and its daughter wedges (12CADD001.zip + 12CADD001_wedge.zip) are
-// counted together - the interval union then absorbs their overlap.
-function matchTsgRows(st, bh) {
+// Tier order, strongest first. The suffix tiers key on the part of an
+// archive name after its first underscore, which is how NT, SA and VIC file
+// a hole ('<featureNumber>_<HOLE>.zip') - and also where generic hole names
+// like DDH1 or BD2 live, so those two tiers carry extra conditions.
+const TSG_TIERS = ['id', 'num', 'name', 'name-suffix', 'id-suffix', 'local-name'];
+const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
+
+// Assign each archive to at most one borehole (added 2026-10-13). Matching
+// hole by hole, each taking the first tier that hit anything, let one
+// archive land on several holes: NT 8445355 and 8446742 are both named DDH1,
+// so each took the NN_DDH1.zip archives of six other holes that had already
+// matched them by id; SA 139115 'DDH 1' took 72812_DDH1.zip from SA 72812.
+// Ten archives were counted twice, their metres too, and gave the wrong
+// month to the hole that borrowed them. Now the tiers run in order across
+// the whole node, and:
+//   - an archive matched at one tier is never matched again at a weaker one;
+//   - an archive two holes claim at the same tier goes to neither (it is
+//     counted as mirror-only rather than guessed);
+//   - a suffix hit is refused when the archive's leading number is another
+//     hole's feature number - 72812_DDH1.zip is filed under SA 72812;
+//   - a generic suffix (shorter than 5 characters, or letters-then-digits
+//     like DDH1, BD2, BDH3) matches only a hole whose whole normalised name
+//     it is.
+// A hole whose candidates at one tier are all refused falls through to the
+// next tier, exactly as a hole with no candidates there does.
+function resolveTsgMatches(st, boreholes) {
+  const cands = boreholes.map(function(bh) { return tsgCandidates(st, bh); });
+  const numOwners = new Map();
+  boreholes.forEach(function(bh, i) {
+    if (!bh.ownNum) return;
+    (numOwners.get(bh.ownNum) || numOwners.set(bh.ownNum, []).get(bh.ownNum)).push(i);
+  });
+  const hits = boreholes.map(function() { return null; });
+  const claimed = new Map();               // archive key -> borehole index
+  const rejected = { claimed: 0, owner: 0, generic: 0, ambiguous: 0, examples: [] };
+  TSG_TIERS.forEach(function(tier, t) {
+    const tentative = new Map();           // borehole index -> rows
+    const claimants = new Map();           // archive key -> borehole indexes
+    boreholes.forEach(function(bh, i) {
+      if (hits[i] || !cands[i] || !cands[i][t] || !cands[i][t].length) return;
+      const rows = cands[i][t].filter(function(r) {
+        if (claimed.has(r._key)) {
+          refuse('claimed', r, bh, boreholes[claimed.get(r._key)]);
+          return false;
+        }
+        if (!SUFFIX_TIERS[tier]) return true;
+        const base = String(r.zipName).replace(/\.zip$/i, '');
+        const lead = (base.match(/^(\d+)_/) || [])[1];
+        const owners = lead ? numOwners.get(lead) : null;
+        if (owners && owners.some(function(o) { return o !== i; })) {
+          refuse('owner', r, bh, boreholes[owners.filter(function(o) { return o !== i; })[0]]);
+          return false;
+        }
+        // A hole that has its own feature number cannot own an archive filed
+        // under a different one, even when that other hole is not on the
+        // node's NVCL list: NT 8445359 'DDH3' was taking 8708941_DDH3.zip
+        // and 8750821_DDH3.zip, two holes scanned 20 months apart.
+        if (lead && bh.ownNum && lead !== bh.ownNum) {
+          refuse('owner', r, bh, null);
+          return false;
+        }
+        const token = normKey(base.slice(base.indexOf('_') + 1));
+        if (isGenericToken(token) && normKey(bh.name) !== token) {
+          refuse('generic', r, bh, null);
+          return false;
+        }
+        return true;
+      });
+      if (!rows.length) return;
+      tentative.set(i, rows);
+      rows.forEach(function(r) {
+        (claimants.get(r._key) || claimants.set(r._key, []).get(r._key)).push(i);
+      });
+    });
+    tentative.forEach(function(rows, i) {
+      const kept = rows.filter(function(r) {
+        if (claimants.get(r._key).length === 1) return true;
+        if (claimants.get(r._key)[0] === i) {
+          rejected.ambiguous++;
+          example(r.zipName + ' claimed at ' + tier + ' by ' + claimants.get(r._key).map(function(k) {
+            return boreholes[k].id;
+          }).join(' and '));
+        }
+        return false;
+      });
+      if (!kept.length) return;
+      hits[i] = { tier: tier, rows: kept };
+      kept.forEach(function(r) { claimed.set(r._key, i); });
+    });
+  });
+  return { hits: hits, rejected: rejected };
+
+  function refuse(kind, r, bh, other) {
+    rejected[kind]++;
+    example(r.zipName + ' not ' + bh.id + (other ? ' (' + other.id + ')' : ''));
+  }
+  function example(s) { if (rejected.examples.length < 12) rejected.examples.push(s); }
+}
+
+// DDH1, BD2, BDH3, 'DDH 1': a hole name that many unrelated holes share.
+function isGenericToken(token) {
+  return token.length < 5 || /^[A-Z]{1,4} ?\d{1,3}$/.test(token);
+}
+
+// Every tier's candidate archives for one borehole, in TSG_TIERS order
+// (null for a seeded placeholder). Whole-name and prefix hits are unioned at
+// the same tier so a hole and its daughter wedges (12CADD001.zip +
+// 12CADD001_wedge.zip) are counted together - the interval union then
+// absorbs their overlap. normKey drops every separator, so an id written
+// '82/1' meets its archive 1654228_82_1.zip and 'LONDDH1/94' meets
+// LONDDH1-94.zip.
+function tsgCandidates(st, bh) {
   // Seeded placeholders carry synthetic ids and no names: matching them
   // against archive names could only ever produce a false hit.
   if (bh.seeded) return null;
@@ -875,18 +1085,15 @@ function matchTsgRows(st, bh) {
   localKeys.forEach(function(k) {
     localHit = union(localHit, union(st.full.get(k), st.prefix.get(k)));
   });
-  const tiers = [
-    ['id', union(st.full.get(idKey), st.prefix.get(idKey))],
-    ['num', numKey ? union(st.full.get(numKey), st.prefix.get(numKey)) : null],
-    ['name', union(st.full.get(nameKey), st.prefix.get(nameKey))],
-    ['name-suffix', st.suffix.get(nameKey)],
-    ['id-suffix', st.suffix.get(idKey)],
-    ['local-name', localHit],
+  // Same order as TSG_TIERS.
+  return [
+    union(st.full.get(idKey), st.prefix.get(idKey)),
+    numKey ? union(st.full.get(numKey), st.prefix.get(numKey)) : null,
+    union(st.full.get(nameKey), st.prefix.get(nameKey)),
+    st.suffix.get(nameKey) || null,
+    st.suffix.get(idKey) || null,
+    localHit,
   ];
-  for (let i = 0; i < tiers.length; i++) {
-    if (tiers[i][1] && tiers[i][1].length) return { tier: tiers[i][0], rows: tiers[i][1] };
-  }
-  return null;
 
   function union(a, b) {
     if (!a) return b || null;
@@ -1578,8 +1785,17 @@ function sleep(ms) {
   return new Promise(function(resolve) { setTimeout(resolve, ms); });
 }
 
-run().catch(function(err) {
-  console.error('Harvest failed: ' + err.message);
-  if (process.env.NVCL_TRACE) console.error(err.stack);
-  process.exit(1);
-});
+if (require.main === module) {
+  run().catch(function(err) {
+    console.error('Harvest failed: ' + err.message);
+    if (process.env.NVCL_TRACE) console.error(err.stack);
+    process.exit(1);
+  });
+} else {
+  // Required rather than run: expose the pure parts (id rule, TSG matching)
+  // so they can be checked offline without touching any node.
+  module.exports = {
+    boreholeIdFrom: boreholeIdFrom, addFeature: addFeature, loadTsgIndex: loadTsgIndex,
+    attachTsg: attachTsg, resolveTsgMatches: resolveTsgMatches, normKey: normKey,
+  };
+}

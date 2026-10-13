@@ -1260,14 +1260,13 @@
 {"state":"NSW","id":"PET_000622","name":"Nulla Nulla: Nulla Nulla 1","lat":-33.6259,"lng":141.0246,"lengthM":1119.27,"custodian":"Geological Survey of NSW","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NSW","id":"PET_000708","name":"RSDP Munmorah: RSDP Munmorah 1","lat":-33.2125,"lng":151.5425,"lengthM":2227.42,"custodian":"Geological Survey of NSW","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NSW","id":"PET_000840","name":"Wilkurra: Wilkurra 1","lat":-33.0723,"lng":142.9082,"lengthM":618.2,"custodian":"Geological Survey of NSW","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"01","name":"ALF006/01","lat":-21.30497139,"lng":137.82179826,"lengthM":93,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"1","name":"NTGS96/1","lat":-18.41263416,"lng":134.25579502,"lengthM":269.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1108848_DD95RC128","name":"DD95RC128","lat":-16.73529,"lng":137.79909,"lengthM":288.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1113632_DD85GL5","name":"DD85GL5","lat":-16.77007,"lng":136.35439,"lengthM":129.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1113636_DD85GL6","name":"DD85GL6","lat":-16.77122,"lng":136.3505,"lengthM":96,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1113660_ECD10","name":"ECD10","lat":-22.38035,"lng":131.33538,"lengthM":94.17,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1113664_ECD11","name":"ECD11","lat":-22.33272,"lng":131.45412,"lengthM":103.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1113668_ECD12","name":"ECD12","lat":-22.37914,"lng":131.33847,"lengthM":175.8,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"115904_ALF006/01","name":"ALF006/01","lat":-21.30497139,"lng":137.82179826,"lengthM":93,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1176904_BB2","name":"BB2","lat":-15.79124,"lng":135.96868,"lengthM":442,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1176916_BB5","name":"BB5","lat":-15.78841,"lng":136.03373,"lengthM":370,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1176920_BB6","name":"BB6","lat":-15.76534,"lng":136.07469,"lengthM":222.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1295,6 +1294,14 @@
 {"state":"NT","id":"1607325_DDHMN2","name":"DDHMN2","lat":-17.11867,"lng":135.85123,"lengthM":183,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1607668_DDH11","name":"DDH11","lat":-16.42857,"lng":135.19003,"lengthM":405.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1617030_McA6","name":"McA6","lat":-16.01714,"lng":135.54457,"lengthM":400,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1654216_82/2","name":"82/2","lat":-15.99157,"lng":135.33116,"lengthM":494,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1654220_82/3","name":"82/3","lat":-15.73221,"lng":135.26726,"lengthM":592,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1654224_82/4","name":"82/4","lat":-15.49547,"lng":135.12244,"lengthM":542,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1654228_82/1","name":"82/1","lat":-16.15886,"lng":135.3015,"lengthM":569,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1672984_82/5","name":"82/5","lat":-16.22104,"lng":135.9715,"lengthM":455,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1672988_82/6","name":"82/6","lat":-16.71223,"lng":136.23844,"lengthM":301,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1672992_82/7","name":"82/7","lat":-16.7786,"lng":135.99962,"lengthM":494,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"1672996_82/8","name":"82/8","lat":-16.69079,"lng":135.8266,"lengthM":221,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1692475_LY1","name":"LY1","lat":-16.61243,"lng":135.86822,"lengthM":527,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1702071_LMDH1","name":"LMDH1","lat":-17.52009472,"lng":129.86806169,"lengthM":167.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1702958_LMDH2","name":"LMDH2","lat":-17.51992,"lng":129.84622,"lengthM":72.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1313,10 +1320,12 @@
 {"state":"NT","id":"1908662_DD94MG02","name":"DD94MG02","lat":-21.69608333,"lng":133.79659996,"lengthM":175,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1923288_DDHMA1","name":"DDHMA1","lat":-16.89863,"lng":136.48743,"lengthM":224.6,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"1923292_DDHMA2","name":"DDHMA2","lat":-16.88895,"lng":136.45433,"lengthM":124,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"2","name":"MANT79/2","lat":-16.28185564,"lng":136.05487911,"lengthM":617,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2027313_DDH6","name":"DDH6","lat":-13.64757004,"lng":132.11906689,"lengthM":137.16,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2033508_JIM_D34","name":"JIM_D34","lat":-13.25183,"lng":132.58489,"lengthM":220.45,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2033512_JIM_D35","name":"JIM_D35","lat":-13.25323493,"lng":132.58995896,"lengthM":184,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"2202833_NTGS02/1","name":"NTGS02/1","lat":-18.78723947,"lng":135.75482963,"lengthM":371.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"NT","id":"2232704_NTGS00/1","name":"NTGS00/1","lat":-19.86021224,"lng":136.82702868,"lengthM":672.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"NT","id":"2232798_NTGS01/1","name":"NTGS01/1","lat":-19.85783978,"lng":137.61874071,"lengthM":464.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2232986_AY06DD01","name":"AY06DD01","lat":-19.83585008,"lng":136.30152525,"lengthM":276.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2317386_ND1","name":"ND1","lat":-17.87201711,"lng":137.92166382,"lengthM":101.07,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2317390_ND2","name":"ND2","lat":-17.88166599,"lng":137.9224818,"lengthM":143.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1346,8 +1355,6 @@
 {"state":"NT","id":"2952939_SR12RD","name":"SR12RD","lat":-22.6324,"lng":131.80511,"lengthM":186,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2952943_SR13RD","name":"SR13RD","lat":-22.59204,"lng":131.90977,"lengthM":189,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"2957204_DD93SP1","name":"DD93SP1","lat":-17.11474,"lng":137.94682,"lengthM":150,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"2A","name":"NTGS83/2A","lat":-13.90775871,"lng":131.16229364,"lengthM":552,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"3","name":"82/3","lat":-15.73221,"lng":135.26726,"lengthM":592,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"3093696_DD93RC33","name":"DD93RC33","lat":-16.72816817,"lng":137.75362533,"lengthM":26,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"3093700_DD93RC33A","name":"DD93RC33A","lat":-16.72815,"lng":137.75368,"lengthM":149.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"3110661_DD83SC1","name":"DD83SC1","lat":-17.27647,"lng":135.83387,"lengthM":123,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1381,7 +1388,6 @@
 {"state":"NT","id":"3997374_Y200RD","name":"Y200RD","lat":-22.6658,"lng":132.39628,"lengthM":273.9,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"3997378_Y201RD","name":"Y201RD","lat":-22.66607,"lng":132.39629,"lengthM":153,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"3997390_Y205RD","name":"Y205RD","lat":-22.6118,"lng":132.01749,"lengthM":214.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"4","name":"NTGS83/4","lat":-13.95303559,"lng":131.24452194,"lengthM":203,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4014195_YRD52","name":"YRD52","lat":-22.71344,"lng":131.9168,"lengthM":158,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4036862_Y206RD","name":"Y206RD","lat":-22.61092,"lng":131.98149,"lengthM":226.45,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4036866_Y207RD","name":"Y207RD","lat":-22.60459,"lng":131.99608,"lengthM":248.6,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1390,17 +1396,13 @@
 {"state":"NT","id":"4076918_Y315RD","name":"Y315RD","lat":-22.66746,"lng":132.40855,"lengthM":540,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4143995_LKN20","name":"LKN20","lat":-12.82062207,"lng":130.52730624,"lengthM":420.1,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4143999_POP12","name":"POP12","lat":-12.8270863,"lng":130.4886614,"lengthM":535.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"42","name":"NTGS82/42","lat":-13.33085702,"lng":130.6249807,"lengthM":237.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4311771_Y135RD","name":"Y135RD","lat":-22.66509,"lng":132.39747,"lengthM":196.8,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4311779_Y139RD","name":"Y139RD","lat":-22.66716,"lng":132.39601,"lengthM":150.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4441789_Y162RD","name":"Y162RD","lat":-22.66647,"lng":132.39862,"lengthM":238,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4441841_Y175RD","name":"Y175RD","lat":-22.66648,"lng":132.39628,"lengthM":229.1,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"4441885_Y188RD","name":"Y188RD","lat":-22.66597,"lng":132.39629,"lengthM":241,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"5","name":"82/5","lat":-16.22104,"lng":135.9715,"lengthM":455,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"6","name":"82/6","lat":-16.71223,"lng":136.23844,"lengthM":301,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"61589_GSD3","name":"GSD3","lat":-17.25106844,"lng":136.3656531,"lengthM":483.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"61605_GSD7","name":"GSD7","lat":-17.23560159,"lng":136.17845941,"lengthM":702.9,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"7","name":"82/7","lat":-16.7786,"lng":135.99962,"lengthM":494,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"721128_BDH1","name":"BDH1","lat":-17.78242,"lng":137.0393,"lengthM":52.45,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"721132_BDH3","name":"BDH3","lat":-17.78281,"lng":137.03925,"lengthM":89.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"721136_BDH4","name":"BDH4","lat":-17.78231,"lng":137.0395,"lengthM":89.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1439,8 +1441,6 @@
 {"state":"NT","id":"7963454_CHDDH100","name":"CHDDH100","lat":-13.58662,"lng":132.61096,"lengthM":698.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"7963458_CHDDH56","name":"CHDDH56","lat":-13.58587056,"lng":132.60813072,"lengthM":221.8,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"7967803_CHDDH77","name":"CHDDH77","lat":-13.58698233,"lng":132.60911712,"lengthM":263.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"7DDH16","name":"6/7DDH16","lat":-13.60275152,"lng":131.85756342,"lengthM":249,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"8","name":"82/8","lat":-16.69079,"lng":135.8266,"lengthM":221,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"810729_BCD001","name":"BCD001","lat":-15.86075,"lng":136.08462,"lengthM":468,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"810757_McA10","name":"McA10","lat":-16.50941,"lng":135.9659,"lengthM":365,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"810761_McA11","name":"McA11","lat":-16.50943,"lng":135.98024,"lengthM":221,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1460,9 +1460,11 @@
 {"state":"NT","id":"830842_McA4","name":"McA4","lat":-15.83135,"lng":136.10725,"lengthM":181.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"830846_McA5","name":"McA5","lat":-15.86424939,"lng":136.106079,"lengthM":495.99,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8363379_12BH003","name":"12BH003","lat":-20.11101997,"lng":133.97566365,"lengthM":471,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8363380_T3/2","name":"T3/2","lat":-19.99528961,"lng":133.96482431,"lengthM":285.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
 {"state":"NT","id":"837183_CFD32","name":"CFD32","lat":-22.38218,"lng":131.26832,"lengthM":94.25,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"837191_CFD34","name":"CFD34","lat":-22.38213,"lng":131.26881,"lengthM":92.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8418293_DD84GI3","name":"DD84GI3","lat":-19.58769151,"lng":134.40047621,"lengthM":240,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8418299_6/7DDH16","name":"6/7DDH16","lat":-13.60275152,"lng":131.85756342,"lengthM":249,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8418305_LV09001","name":"LV09001","lat":-16.82220675,"lng":136.30761048,"lengthM":606,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8418310_PLD001","name":"PLD001","lat":-12.73509817,"lng":133.48337539,"lengthM":674,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8418353_KRVH1","name":"KRVH1","lat":-14.69823264,"lng":132.06865416,"lengthM":422.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1508,6 +1510,7 @@
 {"state":"NT","id":"8423187_BKRCD340","name":"BKRCD340","lat":-13.47454062,"lng":131.42548882,"lengthM":137.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8423191_BKRCD125","name":"BKRCD125","lat":-13.47431198,"lng":131.42484027,"lengthM":139.9,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8423197_IDD19","name":"IDD19","lat":-13.81346692,"lng":131.82052834,"lengthM":103,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8423204_AL/D1","name":"AL/D1","lat":-12.8318983,"lng":135.551166,"lengthM":166,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8423209_MRB1","name":"MRB1","lat":-12.9043731,"lng":131.6365225,"lengthM":377,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8423214_SAH1","name":"SAH1","lat":-12.6331746,"lng":132.60317081,"lengthM":501.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8423219_BR05DD01","name":"BR05DD01","lat":-24.45568783,"lng":130.38251,"lengthM":1224.98,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1582,6 +1585,7 @@
 {"state":"NT","id":"8440912_57W","name":"57W","lat":-13.17238543,"lng":130.60411442,"lengthM":109,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8440917_58W","name":"58W","lat":-13.18900145,"lng":130.59371502,"lengthM":301,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8440921_67A","name":"67A","lat":-13.20052651,"lng":130.55850991,"lengthM":302,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8440925_NTGS99/1","name":"NTGS99/1","lat":-22.820437,"lng":137.406481,"lengthM":608.6,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445234_GRNT-79-9","name":"GRNT-79-9","lat":-16.96125363,"lng":136.3198939,"lengthM":534,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445238_Owen 2","name":"Owen 2","lat":-22.367267,"lng":137.941189,"lengthM":1158.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445272_GRNT-79-8","name":"GRNT-79-8","lat":-16.99064893,"lng":136.33160474,"lengthM":613,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1601,6 +1605,8 @@
 {"state":"NT","id":"8445367_DDH5","name":"DDH5","lat":-17.76525913,"lng":133.43421761,"lengthM":15,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445371_DDH2A","name":"DDH2A","lat":-17.8156288,"lng":133.29542672,"lengthM":15,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445376_Scarborough 1","name":"Scarborough 1","lat":-15.181621,"lng":134.799526,"lengthM":691,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8445392_MANT79/2","name":"MANT79/2","lat":-16.28185564,"lng":136.05487911,"lengthM":617,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8445424_NTGS96/1","name":"NTGS96/1","lat":-18.41263416,"lng":134.25579502,"lengthM":269.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445457_MSFDD001","name":"MSFDD001","lat":-17.047838,"lng":130.44279233,"lengthM":504.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445461_MSFDD002","name":"MSFDD002","lat":-17.09556639,"lng":130.46996872,"lengthM":501.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8445465_MBXDD001","name":"MBXDD001","lat":-16.9839432,"lng":135.99604747,"lengthM":402.3,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1704,6 +1710,9 @@
 {"state":"NT","id":"8447012_Bathurst Island  2","name":"Bathurst Island  2","lat":-11.75693,"lng":130.367882,"lengthM":312,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8447013_WP1-S1","name":"WP1-S1","lat":-12.34429085,"lng":131.3987373,"lengthM":295.7,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8447014_CCVH1","name":"CCVH1","lat":-14.56037588,"lng":132.1678477,"lengthM":527,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8447015_NTGS83/2A","name":"NTGS83/2A","lat":-13.90775871,"lng":131.16229364,"lengthM":552,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8447016_NTGS83/4","name":"NTGS83/4","lat":-13.95303559,"lng":131.24452194,"lengthM":203,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"NT","id":"8447017_NTGS82/42","name":"NTGS82/42","lat":-13.33085702,"lng":130.6249807,"lengthM":237.2,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8447018_Kulshill 1","name":"Kulshill 1","lat":-14.36165359,"lng":129.54373358,"lengthM":4394,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8447019_Tinganoo Bay 1","name":"Tinganoo Bay 1","lat":-11.393593,"lng":131.485093,"lengthM":583.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8447021_LMDH12","name":"LMDH12","lat":-17.55806037,"lng":129.80470725,"lengthM":206.8,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -1800,7 +1809,6 @@
 {"state":"NT","id":"8601469_WD018-001","name":"WD018-001","lat":-13.94253991,"lng":132.13319783,"lengthM":279.5,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8601470_WD018-002","name":"WD018-002","lat":-13.94362958,"lng":132.13369298,"lengthM":291.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"NT","id":"8601863_DDH003","name":"DDH003","lat":-19.84233061,"lng":136.25196436,"lengthM":270.4,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"NT","id":"D1","name":"AL/D1","lat":-12.8318983,"lng":135.551166,"lengthM":166,"custodian":"Northern Territory Geological Survey","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"QLD","id":"bh000018","name":"UOD CHERWONDAH 1","lat":-26.2631427,"lng":149.92082317,"lengthM":1640.7,"custodian":"Geological Survey of Queensland","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"QLD","id":"bh000031","name":"EOC JENAVALE 1","lat":-26.26842318,"lng":149.09194826,"lengthM":967.7,"custodian":"unknown","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"QLD","id":"bh000040","name":"EOC MUGGLETON 1","lat":-26.4039732,"lng":149.30694266,"lengthM":2423.8,"custodian":"unknown","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -4960,7 +4968,6 @@
 {"state":"VIC","id":"LOCAL-STAVELY 9","name":"LOCAL-STAVELY 9","lat":-36.79967704,"lng":142.1592,"lengthM":165.5,"custodian":" Geological Survey of Victoria","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"VIC","id":"LOCAL-WWD025","name":"LOCAL-WWD025","lat":-36.86033604,"lng":142.659194,"lengthM":313,"custodian":" Geological Survey of Victoria","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"VIC","id":"PROSP-KINGSTON; LOCAL-KIND168","name":"PROSP-KINGSTON; LOCAL-KIND168","lat":-36.84752704,"lng":142.998868,"lengthM":169.7,"custodian":" Geological Survey of Victoria","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"WA","id":"0051","name":"E044-0051","lat":-23.42558672,"lng":116.52881115,"lengthM":395.9,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"05GJD001","name":"05GJD001","lat":-33.72188606,"lng":118.96361011,"lengthM":166,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"05KCD001","name":"05KCD001","lat":-33.72358607,"lng":118.96961011,"lengthM":142,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"07THD002","name":"07THD002","lat":-23.56987364,"lng":121.46011927,"lengthM":405.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -5075,7 +5082,6 @@
 {"state":"WA","id":"19MODD022","name":"19MODD022","lat":-27.67060686,"lng":117.84272352,"lengthM":65.5,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"19MODD023","name":"19MODD023","lat":-27.67058666,"lng":117.84271012,"lengthM":287.9,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"19MODD024","name":"19MODD024","lat":-27.67308667,"lng":117.84271011,"lengthM":513.1,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"WA","id":"1A","name":"GSWA Empress 1A","lat":-27.05231125,"lng":125.15814009,"lengthM":1414.1,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"20ALDD0001","name":"20ALDD0001","lat":-21.91295127,"lng":122.0352976,"lengthM":391.4,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"20ALDD0002","name":"20ALDD0002","lat":-21.91963434,"lng":122.04271015,"lengthM":298.15000000000003,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"20ALDD0003","name":"20ALDD0003","lat":-21.93374481,"lng":122.05281834,"lengthM":503.4,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -5161,14 +5167,13 @@
 {"state":"WA","id":"24PMD0001","name":"24PMD0001","lat":-21.2693,"lng":122.5679,"lengthM":356.2,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"24PMD0002","name":"24PMD0002","lat":-21.3097,"lng":122.5844,"lengthM":397.50000000000006,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"24WBDD001 ","name":"24WBDD001 ","lat":-22.6951,"lng":127.8474,"lengthM":653.3000000000001,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"WA","id":"79/9D1","name":"79-9D1","lat":-17.56268639,"lng":124.85420913,"lengthM":154.7,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"WA","id":"79/9D2","name":"79-9D2","lat":-17.56268639,"lng":124.85430913,"lengthM":178,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"85IRCH1","name":"85IRCH1","lat":-29.05370341,"lng":115.59678338,"lengthM":151.5,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"WA","id":"94","name":"LONDDH9-94","lat":-31.11134628,"lng":121.07843016,"lengthM":22.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"95WGD002","name":"95WGD002","lat":-26.97015688,"lng":117.55416935,"lengthM":233,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"95WGD004","name":"95WGD004","lat":-26.96808889,"lng":117.56126329,"lengthM":357.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"95WGD006","name":"95WGD006","lat":-26.97031887,"lng":117.55201437,"lengthM":229.7,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"96GVD1001","name":"96GVD1001","lat":-26.96572291,"lng":117.57034022,"lengthM":262,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"WA","id":"9D1","name":"79-9D1","lat":-17.56268639,"lng":124.85420913,"lengthM":154.7,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
-{"state":"WA","id":"9D2","name":"79-9D2","lat":-17.56268639,"lng":124.85430913,"lengthM":178,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"A688","name":"A688","lat":-21.67434425,"lng":115.87727336,"lengthM":60.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"AB62","name":"AB62","lat":-24.638327,"lng":118.60211608,"lengthM":600.9,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"ABDP1","name":"ABDP1","lat":-21.20440532,"lng":119.72723457,"lengthM":264,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -5605,6 +5610,7 @@
 {"state":"WA","id":"Dorado 3","name":"Dorado 3","lat":-19.0303864,"lng":118.7261096,"lengthM":469.89999999999964,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"Drakea 1","name":"Drakea 1_cuttings","lat":-29.40300104,"lng":115.06094983,"lengthM":605,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"Drover 1","name":"Drover 1","lat":-30.07742569,"lng":115.14659443,"lengthM":22,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"WA","id":"E044/0051","name":"E044-0051","lat":-23.42558672,"lng":116.52881115,"lengthM":395.9,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"E4DD0803","name":"E4DD0803","lat":-17.67114024,"lng":124.92570867,"lengthM":169.6,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"E9GT25","name":"E9GT25","lat":-17.56427339,"lng":124.85787312,"lengthM":103.29999999999998,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"EAL001","name":"EAL001","lat":-22.17932259,"lng":128.27241995,"lengthM":157.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -5779,6 +5785,7 @@
 {"state":"WA","id":"GRRCD006","name":"GRRCD006","lat":-30.91143133,"lng":121.71074068,"lengthM":88.4,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"GRRCD007","name":"GRRCD007","lat":-30.91312416,"lng":121.71040406,"lengthM":248,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"GSWA Barrabiddy 1A","name":"GSWA Barrabiddy 1A","lat":-23.83120857,"lng":114.3347004,"lengthM":629.5999999999999,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"WA","id":"GSWA Empress 1/1A","name":"GSWA Empress 1A","lat":-27.05231125,"lng":125.15814009,"lengthM":1414.1,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"GSWA Gneudna 1","name":"GSWA Gneudna 1","lat":-23.97147877,"lng":115.2180358,"lengthM":88.1,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"GSWA Harvey 1","name":"GSWA Harvey 1_cuttings","lat":-32.99188643,"lng":115.77451107,"lengthM":1550,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"GSWA Lancer 1","name":"GSWA Lancer 1","lat":-25.0456803,"lng":123.7555925,"lengthM":1397.23,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
@@ -5988,6 +5995,13 @@
 {"state":"WA","id":"LNSD-063","name":"LNSD-063","lat":-31.20832825,"lng":121.69118376,"lengthM":888.3,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"LNSD-063-W1","name":"LNSD-063-W1","lat":-31.20832825,"lng":121.69118376,"lengthM":48.5,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"LNSD-063-W2","name":"LNSD-063-W2","lat":-31.20832825,"lng":121.69118376,"lengthM":163.80000000000007,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH1/94","name":"LONDDH1-94","lat":-31.11153928,"lng":121.07915417,"lengthM":18,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH10/94","name":"LONDDH10-94","lat":-31.11145428,"lng":121.07831216,"lengthM":29,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH3/94","name":"LONDDH3-94","lat":-31.11179328,"lng":121.07884916,"lengthM":21,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH4/94","name":"LONDDH4-94","lat":-31.11188828,"lng":121.07873416,"lengthM":21.7,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH7/94","name":"LONDDH7-94","lat":-31.11138228,"lng":121.07902917,"lengthM":27,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH8/94","name":"LONDDH8-94","lat":-31.11131928,"lng":121.07877017,"lengthM":21.7,"custodian":"gswa","firstSeen":"2026-10-13","lastSeen":"2026-10-13"}
+{"state":"WA","id":"LONDDH9/94","name":"LONDDH9-94","lat":-31.11134628,"lng":121.07843016,"lengthM":22.8,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"LPDD001","name":"LPDD001","lat":-31.95270987,"lng":120.42769178,"lengthM":257.9,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"LPDD002","name":"LPDD002","lat":-24.538056,"lng":115.721523,"lengthM":301.5,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
 {"state":"WA","id":"LPDD003","name":"LPDD003","lat":-24.52962273,"lng":115.7334042,"lengthM":250,"custodian":"gswa","firstSeen":"2026-08-20","lastSeen":"2026-10-13"}
