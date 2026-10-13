@@ -91,7 +91,7 @@ const WFS_FALLBACK_TIMEOUT_MS = 240000;
 const DS_TIMEOUT_MS = 15000;
 const RETRIES = 2;
 const RETRY_DELAY_MS = 3000;
-const CONCURRENCY = 8;             // dataset fetches in flight per node
+const CONCURRENCY = 8;             // dataset fetches in flight per node (node.concurrency overrides)
 const RETRY_PASS_CONCURRENCY = 2;  // second, quieter pass over failed fetches
 const RETRY_PASS_TIMEOUT_MS = 30000;
 const RETRY_PASS_BUDGET_MS = 15 * 60 * 1000;   // per node
@@ -127,12 +127,17 @@ const TSG_SOURCE = 'NCI THREDDS TSG (10.25914/bztg-rg43)';
 // The 8 public NVCL nodes. cqlBroken: GeoServer ignores CQL on nvclCollection
 // (returns 0 rows) so we page ALL boreholes and filter locally. wfsOnly: VIC
 // has no HyLogger node and no NVCLDataServices (confirmed 404) - its WFS is
-// still queried so the registered-borehole count stays honest.
+// still queried so the registered-borehole count stays honest. concurrency:
+// dataset fetches in flight for that node instead of CONCURRENCY. QLD's
+// service failed 154 of 587 queries three times each at 8 in flight on
+// 2026-10-13 (all answered on the quieter retry pass) and its main pass took
+// about 27 minutes of its 40-minute budget. At 4, later the same day, 18
+// failed (all recovered) and the whole node took under 18 minutes.
 const NODES = [
   { code: 'CSIRO', name: 'CSIRO',              wfs: 'https://nvclwebservices.csiro.au/geoserver/ows',       nvcl: 'https://nvclwebservices.csiro.au/NVCLDataServices' },
   { code: 'NSW',   name: 'New South Wales',    wfs: 'https://gs.geoscience.nsw.gov.au/geoserver/ows',       nvcl: 'https://nvcl.geoscience.nsw.gov.au/NVCLDataServices' },
   { code: 'NT',    name: 'Northern Territory', wfs: 'https://geology.data.nt.gov.au/geoserver/ows',         nvcl: 'https://geology.data.nt.gov.au/NVCLDataServices', cqlBroken: true },
-  { code: 'QLD',   name: 'Queensland',         wfs: 'https://geology.information.qld.gov.au/geoserver/ows', nvcl: 'https://geology.information.qld.gov.au/NVCLDataServices' },
+  { code: 'QLD',   name: 'Queensland',         wfs: 'https://geology.information.qld.gov.au/geoserver/ows', nvcl: 'https://geology.information.qld.gov.au/NVCLDataServices', concurrency: 4 },
   { code: 'SA',    name: 'South Australia',    wfs: 'https://sarigdata.pir.sa.gov.au/geoserver/ows',        nvcl: 'https://sarigdata.pir.sa.gov.au/nvcl/NVCLDataServices' },
   { code: 'TAS',   name: 'Tasmania',           wfs: 'https://www.mrt.tas.gov.au/web-services/ows',          nvcl: 'https://www.mrt.tas.gov.au/NVCLDataServices' },
   { code: 'VIC',   name: 'Victoria',           wfs: 'https://geology.data.vic.gov.au/nvcl/ows',             nvcl: 'https://geology.data.vic.gov.au/NVCLDataServices', wfsOnly: true,
@@ -338,7 +343,8 @@ async function harvestNode(node, bhCache, today) {
     return result;
   }
 
-  // 2. Dataset collections, CONCURRENCY at a time, inside a time budget.
+  // 2. Dataset collections, CONCURRENCY (or the node's own concurrency) at
+  // a time, inside a time budget.
   // Holes still queued when it runs out count as failed queries, and the
   // node is marked degraded below whatever share that comes to.
   let done = 0, withData = 0;
@@ -376,7 +382,8 @@ async function harvestNode(node, bhCache, today) {
     }
   }
   const workers = [];
-  for (let i = 0; i < CONCURRENCY; i++) workers.push(worker());
+  const inFlight = node.concurrency || CONCURRENCY;
+  for (let i = 0; i < inFlight; i++) workers.push(worker());
   await Promise.all(workers);
 
   // Retry pass (added in the AuScope_Outreach port, 2026-10-13). On the first

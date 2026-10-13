@@ -11,6 +11,8 @@ name: Weekly NVCL harvest
 # boreholes-with-data drop below 80% of the last snapshot; the map writer
 # refuses when a state vanishes or the map shrinks below 95%. Either way the
 # committed files stay as they were, the run goes red and an issue is filed.
+# A run that passes but carries a state forward (node down or degraded, or
+# a state held by the writer's 90% rule) stays green and warns on the issue.
 
 on:
   schedule:
@@ -71,6 +73,28 @@ jobs:
       - name: Write map data
         run: node scripts/nvcl/write-map-data.js
 
+      # A run can pass every guard and still publish a state's figures from
+      # an earlier week: a node down or degraded (the harvest carries its
+      # figures forward), or a state the map writer held at its live rows
+      # (the 90% rule). Both are by design, and both would otherwise hide
+      # behind a green tick. Read them back here for the warning step below.
+      - name: Check for carried-forward states
+        id: carried
+        if: always()
+        continue-on-error: true
+        run: |
+          node -e '
+            const fs = require("fs");
+            function read(f) { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch (e) { return {}; } }
+            const summary = read("data/map_summary.json");
+            const stats = read("data/nvcl_stats.json");
+            const stale = (summary.stale_states || []).join(" ");
+            const degraded = (stats.states || []).filter(function(s) { return s.status === "degraded"; })
+              .map(function(s) { return s.state; }).join(" ");
+            console.log("stale_states: " + (stale || "none") + "; degraded nodes: " + (degraded || "none"));
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, "stale=" + stale + "\ndegraded=" + degraded + "\n");
+          '
+
       # Commit by explicit path. The caches are committed too: they are what
       # keeps a down node on the map and the next enrichment run cheap.
       - name: Commit and push
@@ -118,23 +142,27 @@ jobs:
       # harvest works without them), but a catalogue or enrichment that
       # fails every week would hide behind a green tick. With
       # continue-on-error their conclusion is always success, so this keys on
-      # their outcome, warns on the same issue, and never fails the job.
-      - name: Warn on a failed optional step
-        if: always() && (steps.catalog.outcome == 'failure' || steps.enrich.outcome == 'failure')
+      # their outcome, warns on the same issue, and never fails the job. It
+      # also warns when any state was carried forward or any node degraded
+      # (the step above), so a state stuck on old figures is seen within a week.
+      - name: Warn on a failed optional step or a carried-forward state
+        if: always() && (steps.catalog.outcome == 'failure' || steps.enrich.outcome == 'failure' || steps.carried.outputs.stale != '' || steps.carried.outputs.degraded != '')
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           CATALOG: ${{ steps.catalog.outcome }}
           ENRICH: ${{ steps.enrich.outcome }}
+          STALE: ${{ steps.carried.outputs.stale }}
+          DEGRADED: ${{ steps.carried.outputs.degraded }}
         run: |
           title="Pipeline failure: ${{ github.workflow }}"
           existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
-          body="Warning at $(date -u +%FT%TZ): THREDDS catalogue step $CATALOG, TSG enrichment step $ENRICH. The harvest ran without them, so the map may be on an older catalogue or missing this week's newly mirrored archives. $RUN_URL"
+          body="Warning at $(date -u +%FT%TZ): THREDDS catalogue step $CATALOG, TSG enrichment step $ENRICH. States carried forward on the map (stale_states): ${STALE:-none}. Nodes degraded this run: ${DEGRADED:-none}. A failed optional step means the map may be on an older catalogue or missing this week's newly mirrored archives; a carried or degraded state shows figures from its last good run. $RUN_URL"
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body" || true
           else
             gh issue create --title "$title" --body "$body
 
-          Auto-filed by the workflow's warning step. The run itself stayed green. Close once the catalogue and enrichment steps pass again." || true
+          Auto-filed by the workflow's warning step. The run itself stayed green. Close once the catalogue and enrichment steps pass and no state is carried forward." || true
           fi

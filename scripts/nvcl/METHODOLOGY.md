@@ -50,7 +50,9 @@
 >   feature number, and a generic suffix (`DDH1`, `BD2`) must be the hole's
 >   whole name;
 > - the map writer carries a state's previous rows forward when its fresh
->   rows fall below 90% of them, and fails when more than two states do;
+>   rows fall below 90% of them by at least 10 rows (`NVCL_REBASELINE=1`
+>   accepts a drop deliberately), and fails when more than two states do;
+>   the workflow warns whenever a state is carried or a node degraded;
 > - NT's unfiltered borehole list is paged in a stable order (sorted on the
 >   identifier) until an empty page, and reconciled against the node's
 >   `resultType=hits` count; below 98% the node is marked degraded. The
@@ -67,6 +69,21 @@
 >   rows whose archive the mirror no longer lists are stamped `gone` and are
 >   neither matched, counted (mirror-only included) nor linked, and rows
 >   sharing a TSG UUID and a scan interval count as one dataset.
+>
+> **Mirror-only double counted (corrected 2026-10-13).** The *Mirror-only
+> measurement* figure below counted every archive the harvest could not
+> attach to a hole, and most of those archives belonged to holes already on
+> the map, measured from their node's API interval. Of the 248.77 km (743
+> archives) the 2026-10-13 harvest reported as mirror-only, 184.52 km (522
+> archives; 160.25 km of it Queensland) was such a double count, 16.07 km
+> (62 archives) came from archives no longer on the mirror, and 38.34 km
+> (125 archives) belonged to NT holes beyond the old paging horizon. After
+> the UUID join, the NT paging fix and the catalogue reconciliation the
+> same day, mirror-only is 9.85 km (37 archives, 43 holes) and
+> `national_measured_km` moved from 2,115.96 km to 1,921.33 km (-194.63
+> km), while per-borehole `unique_scanned_km` rose from 1,867.19 to
+> 1,911.48 km (+44.29 km, the NT holes the paging now reaches). The tables
+> below are merged-v1.3's figures and are kept as they were published.
 >
 > **Corrections to the text below.** Two block names were wrong in
 > merged-v1.2 and are corrected in place: the `Depth (m)` and `TIDL Depth

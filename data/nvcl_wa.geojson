@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-10-13T04:55:15Z"
+    "fetched": "2026-10-13T08:05:19Z"
   },
   "features": [
     {
@@ -5594,7 +5594,7 @@
         "drillDate": "1979-01-01",
         "datasetCreated": "2018-08-31",
         "firstSeen": "2026-08-20",
-        "scannedMetres": 177.99,
+        "scannedMetres": 154.7,
         "project": "Ellendale Project",
         "owner": "GSWA",
         "state": "WA"
@@ -5622,7 +5622,7 @@
         "drillDate": "1979-01-01",
         "datasetCreated": "2018-08-31",
         "firstSeen": "2026-08-20",
-        "scannedMetres": 154.7,
+        "scannedMetres": 177.99,
         "project": "Ellendale",
         "owner": "GSWA",
         "state": "WA"
@@ -17490,7 +17490,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-07-23",
         "firstSeen": "2026-03-26",
@@ -20350,7 +20350,7 @@
         "drillDate": "2020-04-04",
         "datasetCreated": "2023-10-07",
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 116.19,
         "project": "Telfer West",
         "owner": "GSWA",
         "state": "WA"
@@ -21806,7 +21806,7 @@
         "drillDate": "2012-06-29",
         "datasetCreated": "2021-07-19",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 329.9,
+        "scannedMetres": 366,
         "project": "Glenburgh Gold",
         "owner": "Gascoyne Resources",
         "state": "WA"
@@ -22870,7 +22870,7 @@
         "drillDate": "1996-11-08",
         "datasetCreated": "2021-11-26",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 629.6,
+        "scannedMetres": 735.2,
         "project": "Barrabiddy",
         "owner": "GSWA",
         "state": "WA"

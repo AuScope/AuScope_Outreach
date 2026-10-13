@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nt",
     "stateLabel": "Northern Territory",
-    "fetched": "2026-10-13T04:55:15Z"
+    "fetched": "2026-10-13T08:05:19Z"
   },
   "features": [
     {
@@ -4386,7 +4386,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2013-05-17",
         "firstSeen": "2026-03-26",
@@ -4470,11 +4470,11 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": "HyLogger 2-7",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 205.9,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "NT"
@@ -5954,11 +5954,11 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": "HyLogger 2-7",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 88.82,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "NT"
@@ -6794,7 +6794,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": "HyLogger 3-7",
+        "instrument": "HyLogger 2-7",
         "drillDate": null,
         "datasetCreated": "2017-06-30",
         "firstSeen": "2026-03-26",
@@ -6826,7 +6826,7 @@
         "drillDate": "1981-01-04",
         "datasetCreated": "2019-04-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 18.49,
+        "scannedMetres": 41.48,
         "project": "National Virtual Core Library - Ngalia Basin Project",
         "owner": "Northern Territory Geological Survey",
         "state": "NT"
@@ -7270,7 +7270,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2013-05-20",
         "firstSeen": "2026-03-26",
@@ -8558,7 +8558,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2014-07-24",
         "firstSeen": "2026-03-26",
@@ -8894,7 +8894,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-09-24",
         "firstSeen": "2026-03-26",
@@ -9454,7 +9454,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2014-10-21",
         "firstSeen": "2026-03-26",
@@ -9650,7 +9650,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2014-07-24",
         "firstSeen": "2026-03-26",
@@ -10630,7 +10630,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-04-21",
         "firstSeen": "2026-03-26",
@@ -10658,7 +10658,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-04-20",
         "firstSeen": "2026-03-26",
@@ -10686,7 +10686,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-04-08",
         "firstSeen": "2026-03-26",
@@ -10714,7 +10714,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-02-24",
         "firstSeen": "2026-03-26",
@@ -10742,7 +10742,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-02-03",
         "firstSeen": "2026-03-26",
@@ -10770,7 +10770,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2015-04-08",
         "firstSeen": "2026-03-26",
@@ -15348,6 +15348,4766 @@
         "coordinates": [
           136.25196436,
           -19.84233061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P35/55",
+        "boreholeId": "8618165_P35/55",
+        "boreholeLength": 737,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 99.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.10840024,
+          -16.42137425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "R27/05",
+        "boreholeId": "8618166_R27/05",
+        "boreholeLength": 509,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 265.59,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.10978984,
+          -16.42860684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Y21/00 P1",
+        "boreholeId": "8618167_Y21/00 P1",
+        "boreholeLength": 300.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 180,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.11638871,
+          -16.43452828
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "POP10",
+        "boreholeId": "8618168_POP10",
+        "boreholeLength": 347,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 267.32,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.46393988,
+          -12.74278581
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "POP14",
+        "boreholeId": "8618169_POP14",
+        "boreholeLength": 377.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 309.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.43191965,
+          -12.69306534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "82/68",
+        "boreholeId": "8618170_82/68",
+        "boreholeLength": 509,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2022-07-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 504.75,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.91549423,
+          -13.7600324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Keep River 1",
+        "boreholeId": "8618171_Keep River 1",
+        "boreholeLength": 4763,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 4273.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.090686,
+          -15.166652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RVDD0001",
+        "boreholeId": "8618172_RVDD0001",
+        "boreholeLength": 492.4,
+        "elevation": 300,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2020-05-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 406.23,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.73541066,
+          -20.03699203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RVDD0002",
+        "boreholeId": "8618173_RVDD0002",
+        "boreholeLength": 545.6,
+        "elevation": 299,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2020-05-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 443.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.74573814,
+          -20.00051898
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDHTP11",
+        "boreholeId": "8618174_DDHTP11",
+        "boreholeLength": 121,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 114.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.17222222,
+          -12.21638889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "19NBDD002",
+        "boreholeId": "8618176_19NBDD002",
+        "boreholeLength": 549.2,
+        "elevation": 74,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2019-06-12",
+        "datasetCreated": "2020-05-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 549.2,
+        "project": "National Virtual Core Library - GDC Round 12 Nabarlek drilling",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.32588249,
+          -12.30959876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "19U4DD002",
+        "boreholeId": "8618192_19U4DD002",
+        "boreholeLength": 549.5,
+        "elevation": 73.7,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2020-05-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 549.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.40905735,
+          -12.25261932
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8618198_DDH1",
+        "boreholeLength": 413.9,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 413.61,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.40998656,
+          -14.18732854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS83/1",
+        "boreholeId": "8618200_NTGS83/1",
+        "boreholeLength": 400,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 390,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.91561288,
+          -14.39201162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD95MO003",
+        "boreholeId": "8618201_DD95MO003",
+        "boreholeLength": 174.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.42956068,
+          -14.19423611
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8618202_DDH1",
+        "boreholeLength": 202,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 180.45,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.55724161,
+          -12.8772294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS83/5",
+        "boreholeId": "8618203_NTGS83/5",
+        "boreholeLength": 213.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 210.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.04174935,
+          -13.50045694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EUR0018",
+        "boreholeId": "8618232_EUR0018",
+        "boreholeLength": 600.5,
+        "elevation": 337,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2020-09-25",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 600.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.95719193,
+          -20.32458068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "EUR0032",
+        "boreholeId": "8621856_EUR0032",
+        "boreholeLength": 616.9,
+        "elevation": 343,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2020-11-30",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 616.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.29069231,
+          -20.08771496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RNRCD028",
+        "boreholeId": "8635602_RNRCD028",
+        "boreholeLength": 240,
+        "elevation": 78,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2019-08-31",
+        "datasetCreated": "2021-02-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 149.85,
+        "project": "National Virtual Core Library - NTG Drilling Collaborations",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.49591321,
+          -12.85520644
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RNRCD029",
+        "boreholeId": "8635603_RNRCD029",
+        "boreholeLength": 244.4,
+        "elevation": 72,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2019-09-19",
+        "datasetCreated": "2021-02-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 167.4,
+        "project": "National Virtual Core Lirbrary - NTG Drilling Collaborations",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.49561829,
+          -12.85611275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RNRCD030",
+        "boreholeId": "8635604_RNRCD030",
+        "boreholeLength": 138.4,
+        "elevation": 64,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 61.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.49541473,
+          -12.85694591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RNRCD030A",
+        "boreholeId": "8635605_RNRCD030A",
+        "boreholeLength": 260.6,
+        "elevation": 63,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 129,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.49537772,
+          -12.85692819
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ARDD0001",
+        "boreholeId": "8636108_ARDD0001",
+        "boreholeLength": 258.5,
+        "elevation": 78.56,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2019-07-28",
+        "datasetCreated": "2021-06-16",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 258.2,
+        "project": "National Virtual Core Library - GDC Drilling Collaborations Round 12",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.12739808,
+          -11.88688035
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ARDD0002",
+        "boreholeId": "8636109_ARDD0002",
+        "boreholeLength": 275.1,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2019-07-29",
+        "datasetCreated": "2023-05-22",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 274.4,
+        "project": "National Virtual Core Library - GDC Drilling Collaborations Round 12",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.13014383,
+          -11.88638441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "HYDD100054",
+        "boreholeId": "8636110_HYDD100054",
+        "boreholeLength": 369.8,
+        "elevation": 412.374,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-05-31",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 369.8,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.08691767,
+          -19.56737147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "12BH002",
+        "boreholeId": "8636378_12BH002",
+        "boreholeLength": 351,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 351,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.97564462,
+          -20.11247457
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "RNN001/01",
+        "boreholeId": "8636379_RNN001/01",
+        "boreholeLength": 116.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 65.8,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.76624672,
+          -20.03526954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TCD01",
+        "boreholeId": "8636380_TCD01",
+        "boreholeLength": 330,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 272.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.82266167,
+          -19.79013814
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8637228_DDH1",
+        "boreholeLength": 96,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 91.69,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.0302797,
+          -12.25118499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD79 AL1",
+        "boreholeId": "8667544_DD79 AL1",
+        "boreholeLength": 183,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 170.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.53326522,
+          -19.69963367
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK01",
+        "boreholeId": "8667932_NDIBK01",
+        "boreholeLength": 351.8,
+        "elevation": 222,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-25",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 219.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.12555594,
+          -19.57187838
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK02",
+        "boreholeId": "8670697_NDIBK02",
+        "boreholeLength": 347.04,
+        "elevation": 224,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-25",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 246.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.01073129,
+          -19.5396941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK03",
+        "boreholeId": "8674201_NDIBK03",
+        "boreholeLength": 350.7,
+        "elevation": 226,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-25",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 218.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.94626684,
+          -19.55690474
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK04",
+        "boreholeId": "8676822_NDIBK04",
+        "boreholeLength": 416.3,
+        "elevation": 240,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-25",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 296.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.29036062,
+          -19.5341999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK05",
+        "boreholeId": "8677649_NDIBK05",
+        "boreholeLength": 293.8,
+        "elevation": 239,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2020-10-27",
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 142.5,
+        "project": "MinEx CRC NDI Campaign 1: East Tennant",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.79493717,
+          -19.84834167
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDI Carrara1",
+        "boreholeId": "8679213_NDI Carrara1",
+        "boreholeLength": 1750.82,
+        "elevation": 262.44,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-05-24",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 1466.97,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.78497659,
+          -18.9732396
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK06",
+        "boreholeId": "8685551_NDIBK06",
+        "boreholeLength": 504.7,
+        "elevation": 223,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 319.16,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.97965622,
+          -19.16438887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "65/1",
+        "boreholeId": "8685552_65/1",
+        "boreholeLength": 151.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 138.53,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.11735385,
+          -13.02392479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS83/3",
+        "boreholeId": "8685553_NTGS83/3",
+        "boreholeLength": 185,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 185,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.36618635,
+          -13.82163957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS83/2",
+        "boreholeId": "8685554_NTGS83/2",
+        "boreholeLength": 121,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 121,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.16229364,
+          -13.90775871
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH13",
+        "boreholeId": "8685555_DDH13",
+        "boreholeLength": 460,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 457.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.7128875,
+          -13.5061975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8685556_DDH1",
+        "boreholeLength": 152,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 152,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.89903411,
+          -12.43152316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH51",
+        "boreholeId": "8685557_DDH51",
+        "boreholeLength": 333,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 333.65,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.2406268,
+          -13.7651143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK07",
+        "boreholeId": "8688232_NDIBK07",
+        "boreholeLength": 275.5,
+        "elevation": 226,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 156,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.34611176,
+          -19.1944609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK08",
+        "boreholeId": "8688233_NDIBK08",
+        "boreholeLength": 347.8,
+        "elevation": 225,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 216.52,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.21563655,
+          -19.32976203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK09",
+        "boreholeId": "8688234_NDIBK09",
+        "boreholeLength": 315.45,
+        "elevation": 255,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 201.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.03231961,
+          -19.49920812
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NDIBK10",
+        "boreholeId": "8688235_NDIBK10",
+        "boreholeLength": 765.67,
+        "elevation": 229,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2020-12-15",
+        "datasetCreated": "2021-02-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 606.97,
+        "project": "MinEx CRC NDI Campaign 1: East Tennant",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.89567251,
+          -19.77567539
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CB29RD",
+        "boreholeId": "868922_CB29RD",
+        "boreholeLength": 179.8,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 2-7",
+        "drillDate": "1979-08-29",
+        "datasetCreated": "2013-05-15",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 56.78,
+        "project": "National Virtual Core Library",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.95102,
+          -22.54535
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LKN28",
+        "boreholeId": "8708938_LKN28",
+        "boreholeLength": 336,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.52179871,
+          -12.82102958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LKN 14",
+        "boreholeId": "8708939_LKN 14",
+        "boreholeLength": 401.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 342.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.51312614,
+          -12.797205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "OC/S1",
+        "boreholeId": "8708940_OC/S1",
+        "boreholeLength": 48,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 48.16,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.41816152,
+          -12.67078239
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH3",
+        "boreholeId": "8708941_DDH3",
+        "boreholeLength": 140,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 134.11,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.8116543,
+          -14.5327811
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "70/R54",
+        "boreholeId": "8708942_70/R54",
+        "boreholeLength": 240.8,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 205.74,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.08903569,
+          -13.0245432
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ARU DDH0",
+        "boreholeId": "8708943_ARU DDH0",
+        "boreholeLength": 183,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 144.47,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.10717777,
+          -13.27218442
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8708944_DDH1",
+        "boreholeLength": 194.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 191.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.533613,
+          -13.568244
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SCDD2001",
+        "boreholeId": "8709318_SCDD2001",
+        "boreholeLength": 400.75,
+        "elevation": 676,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2023-01-31",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 399.35,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.80112,
+          -22.14261
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TC8/5",
+        "boreholeId": "8710598_TC8/5",
+        "boreholeLength": 152.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 121.77,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1478829,
+          -19.6496706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TC8/12A",
+        "boreholeId": "8710599_TC8/12A",
+        "boreholeLength": 269.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 118.87,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1479322,
+          -19.6493636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TC8/19",
+        "boreholeId": "8710600_TC8/19",
+        "boreholeLength": 315.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 239.57,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1485249,
+          -19.6491224
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TC8/19A",
+        "boreholeId": "8710601_TC8/19A",
+        "boreholeLength": 314.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 132.8,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1485249,
+          -19.6491224
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBM93 2",
+        "boreholeId": "8713207_CBM93 2",
+        "boreholeLength": 1044,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 518.76,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.4348056,
+          -25.3544722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBM93 3",
+        "boreholeId": "8713208_CBM93 3",
+        "boreholeLength": 894,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 351,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.3073408,
+          -25.0163547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBM93 4",
+        "boreholeId": "8713209_CBM93 4",
+        "boreholeLength": 978,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-09",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 476.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.84989568,
+          -24.86970227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBM107 1",
+        "boreholeId": "8713210_CBM107 1",
+        "boreholeLength": 1250,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 554.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.6934472,
+          -25.2058833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBM107 2",
+        "boreholeId": "8713211_CBM107 2",
+        "boreholeLength": 604.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 321.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.48700044,
+          -24.97599575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21LMDD001",
+        "boreholeId": "8716498_21LMDD001",
+        "boreholeLength": 552.9,
+        "elevation": 544,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2021-04-18",
+        "datasetCreated": "2023-06-22",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 552.98,
+        "project": "National Virtual Core Library - NTGS Drilling Collaborations",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.738001,
+          -22.95433579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21LMDD002",
+        "boreholeId": "8716499_21LMDD002",
+        "boreholeLength": 400.6,
+        "elevation": 538,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2023-06-26",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 395,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.71208158,
+          -22.99226652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PC04DD01",
+        "boreholeId": "8719081_PC04DD01",
+        "boreholeLength": 60,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 54.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.28046748,
+          -13.6873304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PC04DD02",
+        "boreholeId": "8719082_PC04DD02",
+        "boreholeLength": 51.6,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 27,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.0259621,
+          -13.15752532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PC04DD03",
+        "boreholeId": "8719083_PC04DD03",
+        "boreholeLength": 15.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 10.4,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.28018103,
+          -13.68733303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "East Mereenie 5",
+        "boreholeId": "8719085_East Mereenie 5",
+        "boreholeLength": 1530,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 239.57,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.61768,
+          -24.021361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD00WON033",
+        "boreholeId": "8719087_DD00WON033",
+        "boreholeLength": 58.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 24.8,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.50168902,
+          -19.97418404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD00WON024",
+        "boreholeId": "8719088_DD00WON024",
+        "boreholeLength": 64,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-06",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 29,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.47829964,
+          -20.03079111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD00WON001",
+        "boreholeId": "8719089_DD00WON001",
+        "boreholeLength": 66,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 56,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.50160901,
+          -19.96068744
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD00WON022",
+        "boreholeId": "8719091_DD00WON022",
+        "boreholeLength": 63.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 27.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.5016061,
+          -19.9785483
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "01CX1",
+        "boreholeId": "8719092_01CX1",
+        "boreholeLength": 23.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 1.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.04329571,
+          -14.97597794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "D7",
+        "boreholeId": "8719093_D7",
+        "boreholeLength": 153.9,
+        "elevation": 160,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 148.13,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.76429347,
+          -14.14785454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "D8",
+        "boreholeId": "8719094_D8",
+        "boreholeLength": 160.3,
+        "elevation": 150,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 132.34,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.78608779,
+          -14.11327935
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH1",
+        "boreholeId": "8719095_DDH1",
+        "boreholeLength": 442,
+        "elevation": 90,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 441.96,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.34897658,
+          -14.49930519
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WD2",
+        "boreholeId": "8719096_WD2",
+        "boreholeLength": 81.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 24.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.50058844,
+          -12.34372741
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "78WORD10",
+        "boreholeId": "8719097_78WORD10",
+        "boreholeLength": 67,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.4700535,
+          -12.3637033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LBD3",
+        "boreholeId": "8719098_LBD3",
+        "boreholeLength": 466.6,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 463.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.13970728,
+          -17.49158779
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LBD4",
+        "boreholeId": "8719099_LBD4",
+        "boreholeLength": 504,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 504,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.14115997,
+          -17.49044975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KFDH12",
+        "boreholeId": "8719164_KFDH12",
+        "boreholeLength": 219,
+        "elevation": 1000,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 117,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.68104988,
+          -13.68913332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "VB21-012",
+        "boreholeId": "8719219_VB21-012",
+        "boreholeLength": 901.16,
+        "elevation": 155,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.11439315,
+          -14.1261596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BKDD001",
+        "boreholeId": "8719220_BKDD001",
+        "boreholeLength": 690.4,
+        "elevation": 228,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.18937479,
+          -19.47063087
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PHDDD2101",
+        "boreholeId": "8719318_PHDDD2101",
+        "boreholeLength": 240.7,
+        "elevation": 428,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 240.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.97558208,
+          -19.33752102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FEDD001",
+        "boreholeId": "8720708_FEDD001",
+        "boreholeLength": 229.5,
+        "elevation": 33,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 227.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.81345009,
+          -12.70574416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FEDD002",
+        "boreholeId": "8720709_FEDD002",
+        "boreholeLength": 288.6,
+        "elevation": 38,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 280.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.81443094,
+          -12.69995262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FEDD003",
+        "boreholeId": "8720710_FEDD003",
+        "boreholeLength": 204.6,
+        "elevation": 39,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 192.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.81534709,
+          -12.69542696
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21STRAT 01",
+        "boreholeId": "8723569_21STRAT 01",
+        "boreholeLength": 700.05,
+        "elevation": 187.377,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.76290936,
+          -17.17461776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH2",
+        "boreholeId": "8724181_DDH2",
+        "boreholeLength": 109.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 100.58,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.55123455,
+          -13.54068149
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BBD001",
+        "boreholeId": "8729270_BBD001",
+        "boreholeLength": 299.11,
+        "elevation": 116,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 272.61,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.42961714,
+          -13.47378694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21MHDD001",
+        "boreholeId": "8729457_21MHDD001",
+        "boreholeLength": 324.5,
+        "elevation": 409,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2024-03-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 324.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.75204046,
+          -22.7607112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21MHDD002",
+        "boreholeId": "8729458_21MHDD002",
+        "boreholeLength": 329.6,
+        "elevation": 409,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-12",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 329.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.75216703,
+          -22.76070157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "21MHDD003",
+        "boreholeId": "8729459_21MHDD003",
+        "boreholeLength": 336.7,
+        "elevation": 412,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 336.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.75069601,
+          -22.76065429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BBD007",
+        "boreholeId": "8731270_BBD007",
+        "boreholeLength": 374.02,
+        "elevation": 98.06,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 373.93,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.41172895,
+          -13.47001498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BBD010",
+        "boreholeId": "8731271_BBD010",
+        "boreholeLength": 324.57,
+        "elevation": 99.4,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 324.57,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.4140851,
+          -13.47064794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BBD011",
+        "boreholeId": "8731272_BBD011",
+        "boreholeLength": 299,
+        "elevation": 109.7,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-04",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 282.92,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.42834656,
+          -13.47321195
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BBD012",
+        "boreholeId": "8731273_BBD012",
+        "boreholeLength": 356.23,
+        "elevation": 124.5,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 356.23,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.43122919,
+          -13.45149986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FH1",
+        "boreholeId": "8750031_FH1",
+        "boreholeLength": 210,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 199.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.50118628,
+          -13.49858365
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P14/1B",
+        "boreholeId": "8750263_P14/1B",
+        "boreholeLength": 80,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 4.72,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.49499858,
+          -12.35220861
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WP1-S2",
+        "boreholeId": "8750337_WP1-S2",
+        "boreholeLength": 156.26,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 106.39,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.39771985,
+          -12.34458896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "WP2-S1",
+        "boreholeId": "8750340_WP2-S1",
+        "boreholeLength": 306,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 240.81,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.40274565,
+          -12.35952618
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDH3",
+        "boreholeId": "8750821_DDH3",
+        "boreholeLength": 152,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 131.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.29284906,
+          -13.5347007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC5",
+        "boreholeId": "8751425_NTGS BC5",
+        "boreholeLength": 339.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 321.35,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1891757,
+          -21.0092453
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC4",
+        "boreholeId": "8751426_NTGS BC4",
+        "boreholeLength": 50.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.17563516,
+          -21.20486928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC3A",
+        "boreholeId": "8751427_NTGS BC3A",
+        "boreholeLength": 385.1,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 203.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.2379137,
+          -21.18397503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC3",
+        "boreholeId": "8751428_NTGS BC3",
+        "boreholeLength": 192,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 174.05,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.2379137,
+          -21.18397503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC2",
+        "boreholeId": "8751429_NTGS BC2",
+        "boreholeLength": 79.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 76.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.46538509,
+          -21.11452654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS BC1",
+        "boreholeId": "8751430_NTGS BC1",
+        "boreholeLength": 322.9,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 304.64,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.3122449,
+          -21.1599964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Q154-S/2",
+        "boreholeId": "8751524_Q154-S/2",
+        "boreholeLength": 257.6,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 221.6,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.30842196,
+          -13.33818198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TWDDH001",
+        "boreholeId": "8751745_TWDDH001",
+        "boreholeLength": 236,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 229.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.02712172,
+          -13.57722359
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SMRD001",
+        "boreholeId": "8752073_SMRD001",
+        "boreholeLength": 457,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2024-07-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 457.05,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.78242402,
+          -12.86855506
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PCGDD0027",
+        "boreholeId": "8752119_PCGDD0027",
+        "boreholeLength": 449.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-12",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 449.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.82727224,
+          -13.82698294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PCGDD0028",
+        "boreholeId": "8752120_PCGDD0028",
+        "boreholeLength": 486,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 486,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.82725397,
+          -13.82700121
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PCGDD0029",
+        "boreholeId": "8752121_PCGDD0029",
+        "boreholeLength": 687,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 687.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.82724484,
+          -13.82701035
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "22HK008C",
+        "boreholeId": "8758706_22HK008C",
+        "boreholeLength": 958.18,
+        "elevation": 150.002,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "2022-08-14",
+        "datasetCreated": "2024-09-27",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 958.18,
+        "project": "National Virtual Core Library NTGS Node; GDC Round 15",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.71626621,
+          -13.61254287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GFDD058",
+        "boreholeId": "8765360_GFDD058",
+        "boreholeLength": 160.2,
+        "elevation": 352.22,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 160.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.3193704,
+          -19.68394419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GFDD063",
+        "boreholeId": "8765361_GFDD063",
+        "boreholeLength": 180.7,
+        "elevation": 353.13,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 180.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.31938001,
+          -19.68415378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KNXLE001RDD",
+        "boreholeId": "8765363_KNXLE001RDD",
+        "boreholeLength": 699.8,
+        "elevation": 231,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 553.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.82620854,
+          -19.83269355
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TNDDH008",
+        "boreholeId": "8765364_TNDDH008",
+        "boreholeLength": 258.7,
+        "elevation": 356.46,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 196,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.29063418,
+          -19.71387991
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TNDDH007",
+        "boreholeId": "8765365_TNDDH007",
+        "boreholeLength": 270.7,
+        "elevation": 361.56,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 207.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.29444772,
+          -19.7146269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TNDDH004",
+        "boreholeId": "8765366_TNDDH004",
+        "boreholeLength": 309.5,
+        "elevation": 356.59,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 238.05,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.29167221,
+          -19.71434487
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TNDDH001",
+        "boreholeId": "8765367_TNDDH001",
+        "boreholeLength": 315.8,
+        "elevation": 356.1,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 223.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.29202546,
+          -19.71430108
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CWDD001",
+        "boreholeId": "8765377_CWDD001",
+        "boreholeLength": 808.62,
+        "elevation": 266.69,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.92716646,
+          -19.77798175
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CWDD004",
+        "boreholeId": "8765378_CWDD004",
+        "boreholeLength": 811,
+        "elevation": 267.14,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 690.1,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.91680731,
+          -19.76923406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "23BNM002",
+        "boreholeId": "8771503_23BNM002",
+        "boreholeLength": 552.8,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.81824153,
+          -17.95401492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "23BNM003",
+        "boreholeId": "8771504_23BNM003",
+        "boreholeLength": 1006.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.11387336,
+          -18.19032038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "23BNM001",
+        "boreholeId": "8771505_23BNM001",
+        "boreholeLength": 442.9,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-07",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 442.9,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.81582475,
+          -17.95769671
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "TGRD2301",
+        "boreholeId": "8771548_TGRD2301",
+        "boreholeLength": 350.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.08392687,
+          -19.34261969
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ESA001",
+        "boreholeId": "8772999_ESA001",
+        "boreholeLength": 668.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.57772682,
+          -21.81783241
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BVDD0002",
+        "boreholeId": "8773000_BVDD0002",
+        "boreholeLength": 610,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.40605594,
+          -19.96916132
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GRRCL002",
+        "boreholeId": "8773001_GRRCL002",
+        "boreholeLength": 881.94,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.99489156,
+          -19.72577309
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GRRCL003",
+        "boreholeId": "8773002_GRRCL003",
+        "boreholeLength": 708.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.99851923,
+          -19.7250317
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GRRCL004",
+        "boreholeId": "8773003_GRRCL004",
+        "boreholeLength": 522.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.00211771,
+          -19.72352976
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD90VRB1",
+        "boreholeId": "877554_DD90VRB1",
+        "boreholeLength": 432.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2013-08-13",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 383.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.38461,
+          -17.09299
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MCCDD0003",
+        "boreholeId": "8778586_MCCDD0003",
+        "boreholeLength": 437.8,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.45730512,
+          -14.45829709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LEDD_04",
+        "boreholeId": "8778596_LEDD_04",
+        "boreholeLength": 362.56,
+        "elevation": 147.812887,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.9773951,
+          -13.54979697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LEDD_05",
+        "boreholeId": "8778597_LEDD_05",
+        "boreholeLength": 266.42,
+        "elevation": 160.504442,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.97698488,
+          -13.55017382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "THDD003",
+        "boreholeId": "8778730_THDD003",
+        "boreholeLength": 174.56,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 174.56,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.10323144,
+          -12.99972068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "THDD004",
+        "boreholeId": "8778731_THDD004",
+        "boreholeLength": 114.54,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-06-11",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 111.68,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.10382332,
+          -13.00401037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "THDD005",
+        "boreholeId": "8778732_THDD005",
+        "boreholeLength": 162.26,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 162.26,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.10470675,
+          -13.00308954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FW230011b",
+        "boreholeId": "8779270_FW230011b",
+        "boreholeLength": 699.6,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.20668281,
+          -19.79492327
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "24GPDD002",
+        "boreholeId": "8782842_24GPDD002",
+        "boreholeLength": 584.21,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.13930704,
+          -19.78432496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NBDD015",
+        "boreholeId": "8784778_NBDD015",
+        "boreholeLength": 392.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.41021861,
+          -12.2544522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SC24DD002",
+        "boreholeId": "8784818_SC24DD002",
+        "boreholeLength": 201.9,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.9762692,
+          -17.53703183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LMRD008",
+        "boreholeId": "8784821_LMRD008",
+        "boreholeLength": 261.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.18418204,
+          -22.11579256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NMRD099",
+        "boreholeId": "8784826_NMRD099",
+        "boreholeLength": 907.5,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.79003671,
+          -12.68539842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD90VRB2",
+        "boreholeId": "879511_DD90VRB2",
+        "boreholeLength": 351.28,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2015-12-03",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 331.28,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.53601,
+          -17.24717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BRKDD001",
+        "boreholeId": "8801292_BRKDD001",
+        "boreholeLength": 1443.41,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.54914382,
+          -19.77380527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BRKDD004",
+        "boreholeId": "8810294_BRKDD004",
+        "boreholeLength": 1125.8,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.07291979,
+          -20.02970187
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "GFDD0002",
+        "boreholeId": "8815115_GFDD0002",
+        "boreholeLength": 468.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.58155639,
+          -20.16758706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "25P38D001",
+        "boreholeId": "8815116_25P38D001",
+        "boreholeLength": 616.05,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 515.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.43620083,
+          -20.01666768
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "FMD006",
+        "boreholeId": "8815560_FMD006",
+        "boreholeLength": 566.9,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.32453957,
+          -13.84000034
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boom 1",
+        "boreholeId": "883155_Boom 1",
+        "boreholeLength": 254,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2014-01-14",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 185.7,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.40007,
+          -17.01124
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "HSD001",
+        "boreholeId": "890095_HSD001",
+        "boreholeLength": 149,
+        "elevation": 279.513,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 56,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.12011711,
+          -18.67243411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "HSD002",
+        "boreholeId": "890651_HSD002",
+        "boreholeLength": 225.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 162.4,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.0557,
+          -18.6621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DDHCH1",
+        "boreholeId": "902906_DDHCH1",
+        "boreholeLength": 105.46,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 103.62,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.34963,
+          -17.21759
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MANT79/3",
+        "boreholeId": "903260_MANT79/3",
+        "boreholeLength": 485.35,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-10-12",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 481.85,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.07190934,
+          -16.28836839
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD82CA1",
+        "boreholeId": "906191_DD82CA1",
+        "boreholeLength": 1000.3,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2013-05-10",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 763.46,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.07331679,
+          -16.28903916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD84CA4",
+        "boreholeId": "906203_DD84CA4",
+        "boreholeLength": 615,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2016-04-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 421,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.07292,
+          -16.29146
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DAD0006",
+        "boreholeId": "972010_DAD0006",
+        "boreholeLength": 1436.6,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": "1999-10-03",
+        "datasetCreated": "2018-05-29",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 1244.4,
+        "project": "National Virtual Core Library",
+        "owner": "Northern Territory Geological Survey",
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.37735,
+          -13.54615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DAD0008",
+        "boreholeId": "972018_DAD0008",
+        "boreholeLength": 1128.4,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 2-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 1116.5,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.08998,
+          -13.40184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MBD02",
+        "boreholeId": "972230_MBD02",
+        "boreholeLength": 252.1,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": "2016-04-01",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 147.4,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.14396,
+          -15.48653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MBD03",
+        "boreholeId": "972234_MBD03",
+        "boreholeLength": 121.2,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 55.2,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.17147,
+          -15.48536
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MBD05",
+        "boreholeId": "972238_MBD05",
+        "boreholeLength": 126.1,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2026-05-05",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 60.4,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.14487,
+          -15.5534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "NTGS86/1",
+        "boreholeId": "982059_NTGS86/1",
+        "boreholeLength": 773.7,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-10-13",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.39841763,
+          -14.16246859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "DD91CCK1",
+        "boreholeId": "986054_DD91CCK1",
+        "boreholeLength": 220,
+        "elevation": null,
+        "custodian": "Northern Territory Geological Survey",
+        "drillingMethod": "Diamond Drill",
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-7",
+        "drillDate": null,
+        "datasetCreated": "2018-10-18",
+        "firstSeen": "2026-10-13",
+        "scannedMetres": 219.3,
+        "project": null,
+        "owner": null,
+        "state": "NT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.86485,
+          -16.83667
         ]
       }
     }

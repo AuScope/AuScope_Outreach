@@ -30,7 +30,11 @@ When step 1 or 2 fails, a last step (`if: always()`, keyed on those steps'
 `outcome`, since `continue-on-error` makes their conclusion a success)
 comments a warning on the same issue, or opens it, and the run stays green.
 The harvest works without either step, but a catalogue or enrichment that
-fails every week would otherwise go unnoticed behind the green tick.
+fails every week would otherwise go unnoticed behind the green tick. The
+same warning fires when `map_summary.json` `stale_states` is not empty or
+any node in `nvcl_stats.json` is `degraded` (a step after step 4 reads both
+back): a state on carried-forward figures is by design, but it must not
+stay that way unseen for weeks.
 
 ## Inputs and outputs
 
@@ -85,11 +89,14 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
 - **Stale nodes** (unreachable or degraded this run) keep their previous map
   rows and geojson file and are listed in `map_summary.json` `stale_states`.
 - **Per-state carry-forward:** a state whose fresh rows come to fewer than
-  90% of its rows on the live map keeps its live rows and geojson file
-  instead, with `by_state[].status` `carried`, and is listed in
-  `stale_states`. One state collapsing is treated as a measurement fault
-  (a dataset service failing a share of its queries, a matching rule gone
-  wrong) rather than published. More than two states carried in one run
+  90% of its rows on the live map, and at least 10 rows fewer, keeps its
+  live rows and geojson file instead, with `by_state[].status` `carried`,
+  and is listed in `stale_states` (VIC's 29 holes losing 3 is 10%, but not
+  a collapse). To accept a drop deliberately, run the writer with
+  `NVCL_REBASELINE=1`: no state is carried by this rule and the 95%
+  national check is skipped, both logged. One state collapsing is treated
+  as a measurement fault (a dataset service failing a share of its
+  queries, a matching rule gone wrong) rather than published. More than two states carried in one run
   fails it. `NVCL_Map.html` names every state in `stale_states` in its
   footer with the date it was last refreshed (`by_state[].fetched`).
 - **Guards** (exit 1, nothing written): more than two states carried by the
@@ -119,6 +126,7 @@ directory works. Then serve the repo (`python3 -m http.server`) and open
 | `NVCL_ONLY=TAS,CSIRO` | harvest | harvest only these nodes (others are carried forward by the map writer) |
 | `NVCL_OUT_DIR=/tmp/x` | harvest, write-map-data | write everything there instead of `data/` (the live map stays the guard baseline) |
 | `NVCL_FORCE=1` | harvest | bypass the health guard (deliberate rebaseline only) |
+| `NVCL_REBASELINE=1` | write-map-data | accept a drop: no 90% per-state carry-forward, no 95% national check (logged) |
 | `NVCL_TRACE=1` | harvest | stack trace on a fatal error |
 | `NVCL_TSG_STATES`, `NVCL_TSG_MAX_NEW`, `NVCL_TSG_CACHE` | tsg-enrich | states, budget, cache path |
 
@@ -145,6 +153,11 @@ Changed:
   per node). On 2026-10-13 QLD failed 160 of 587 queries that all answered
   in ~3 s one at a time; without the pass ~60 QLD boreholes would drop off
   the map in a different combination every week.
+- Per-node dataset concurrency: QLD runs 4 queries in flight instead of 8
+  (`concurrency` on its node entry). At 8 its service failed 154 of 587
+  queries three times each on 2026-10-13 (all answered on the retry pass)
+  and the main pass took about 27 of its 40 minutes. At 4, later the same
+  day, 18 failed (all recovered) and the whole node took under 18 minutes.
 - Dataset pass budget: the main `getDatasetCollection` pass gets 40 minutes
   per node. A node that runs out is logged (`DATASET PASS BUDGET SPENT`),
   its unqueried holes count as failed queries, it gets no retry pass, and
@@ -174,6 +187,14 @@ Changed:
   each took six other holes' `NN_DDH1.zip` archives and SA 139115 `DDH 1`
   took `72812_DDH1.zip` from SA 72812: ten archives counted twice, with
   their metres, and the wrong first-scan month on the borrowing hole.
+- Mirror-only no longer double counts. It counted every archive the
+  harvest could not attach to a hole, and most belonged to holes already
+  on the map, measured from their API interval: of 248.77 km (743
+  archives) on 2026-10-13, 184.52 km was that double count (160.25 km in
+  QLD), 16.07 km was archives gone from the mirror and 38.34 km was NT
+  holes past the old paging horizon. With the UUID join, the paging fix
+  and the catalogue reconciliation it is 9.85 km (37 archives, 43 holes),
+  and `national_measured_km` went from 2,115.96 to 1,921.33 km.
 - NT's borehole list is paged in a stable order and checked against the
   node's own count. NT ignores the `nvclCollection` filter, so all of its
   ~329,000 BoreholeView features are paged unfiltered. doi_tracker paged
@@ -203,9 +224,14 @@ Changed:
   than the archive's name does, the node wins: SA lists `131277_INL06.zip`
   and `131278_INL07.zip` under hole 131276 (`INL 5`, 7.7 m drilled), whose
   own archive they continue (6.2-6.7, 6.7-7.2, 7.2-7.7 m) and which `INL 6`
-  (5.5 m drilled) could not hold. Four SA holes lost their only archive
-  this way on 2026-10-13 (131277, 131278, 131281, 134154). `nvcl_stats.json` records per state `tsg_match_tiers`
-  (archives per tier, holes by first tier). Also in matching: within a name
+  (5.5 m drilled) could not hold. On 2026-10-13 the node won seven such
+  conflicts: SA 131277, 131278, 131281 and 134154 lost their only archive
+  to a neighbouring hole the node lists it under, WA `79/9D1` and `79/9D2`
+  swapped archives (each lists the other's dataset), and TAS 13978 took
+  `13968_BB-BH1_Bell_Bay.zip`, filed under a feature number that is not on
+  TAS's NVCL list.
+  `nvcl_stats.json` records per state `tsg_match_tiers` (archives per
+  tier, holes by first tier). Also in matching: within a name
   tier, when exactly one claimant reaches an archive by its whole name and
   the rest only by a prefix, the whole-name claimant takes it instead of
   the archive being declared ambiguous.
@@ -232,8 +258,14 @@ Changed:
   record of a scan, but `harvest.js` neither matches nor counts it and the
   map links none. On 2026-10-13 that was 115 of 5,610 rows (88 renamed, with
   a successor), 62 of them among the rows previously counted as
-  mirror-only. Rows sharing a TSG UUID
-  and a scan interval are one dataset: matched, claimed and counted once,
+  mirror-only. A gone row with no successor takes its scan off its hole:
+  12 holes lost their only archive that way on 2026-10-13, and NT
+  `7963228_MURD013` and `8418381_BND1`, with no node datasets either, left
+  the map. One of them will return: the mirror re-listed
+  `7963233_Murd011.zip` as `7963233_MURD011.zip`, which the enrichment
+  reads as a new archive (ahead of any re-read) on its next run. Rows
+  sharing a TSG UUID and a scan interval are one dataset: matched, claimed
+  and counted once,
   through a representative that lists the others as `twins` in
   `boreholes-detail.jsonl`. The cache held 96 groups of rows sharing a UUID
   (98 surplus rows). In the 93 that record an interval it is the same in
@@ -243,10 +275,11 @@ Changed:
   other 3 have no interval and are one header copied into several holes'
   archives (NT `8440883_Baldwin1`, `8440896_MacIntyre1`, `8445494_Ross_1`):
   they are never grouped, and their shared UUID joins nothing in the `uuid`
-  tier, so each still goes to its own hole by name. `tsg-enrich.js` re-queues a row whose
-  archive's catalogue `modified` date is later than its `fetchedAt` (1,192
-  rows on 2026-10-13, 1,112 of them WA), at the lowest priority: only
-  `--max-new` budget left after every new archive goes to them.
+  tier, so each still goes to its own hole by name.
+  `tsg-enrich.js` re-queues a row whose archive's catalogue `modified` date
+  is later than its `fetchedAt` (1,192 rows on 2026-10-13, 1,112 of them
+  WA), at the lowest priority: only `--max-new` budget left after every new
+  archive goes to them.
   `nvcl_stats.json` records `tsg_cache.gone_rows`, `tsg_cache.uuid_twin_rows`
   and per state `tsg_cache_rows_gone`.
 - A `data/nvcl_stats.json` that exists but does not parse stops the harvest

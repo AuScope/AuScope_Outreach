@@ -39,8 +39,10 @@
  *
  * Carry-forward: a state whose node was unreachable or degraded this run
  * keeps its previous map rows and its previous geojson file. So does a state
- * whose fresh rows fall below 90% of its rows on the live map (status
- * 'carried'). Both are listed in map_summary.json stale_states.
+ * whose fresh rows fall below 90% of its rows on the live map, by at least
+ * 10 rows (status 'carried'). Both are listed in map_summary.json
+ * stale_states, and the workflow warns on the run's issue whenever that list
+ * is not empty.
  *
  * Guards (exit 1, nothing written): more than two states carried by the 90%
  * rule; a negative scanned length on a freshly harvested borehole (carried
@@ -53,6 +55,9 @@
  *   NVCL_OUT_DIR=/tmp/x   read the snapshot + detail from, and write every
  *                         output to, this directory (testing); the current
  *                         map in data/ is still the guard baseline
+ *   NVCL_REBASELINE=1     accept a drop deliberately: no state is carried by
+ *                         the 90% rule and the 95% national check is skipped
+ *                         (both are logged); every other guard still applies
  *
  * Usage: node scripts/nvcl/write-map-data.js   (any working directory)
  */
@@ -93,6 +98,10 @@ const MIN_MONTH = '2002-01';           // no HyLogger scanned core before 2002
 const MIN_STATES = 6;
 const MIN_PREV_FRACTION = 0.95;
 const MIN_STATE_FRACTION = 0.9;        // per state, against the live map
+// ...and only when the drop is at least this many rows: a state of 29 holes
+// losing 3 is a 10% drop, but not the collapse the rule exists to catch.
+const MIN_STATE_DROP = 10;
+const REBASELINE = process.env.NVCL_REBASELINE === '1';
 const MAX_CARRIED_STATES = 2;          // more carried than this fails the run
 const STALE = new Set(['cached', 'degraded', 'unreachable']);
 const METHODOLOGY = 'merged, TSG-first; see scripts/nvcl/METHODOLOGY.md';
@@ -181,10 +190,15 @@ function main() {
   // a measurement fault, not a national event worth failing for. More than
   // two such states in one run is, and stops it.
   const carried = [];
+  if (REBASELINE) console.log('NVCL_REBASELINE=1: drops are accepted, not carried forward');
   Object.keys(freshByState).sort().forEach(function(code) {
     const before = (prevByState[code] || []).length;
     const now = freshByState[code].length;
-    if (before && now < before * MIN_STATE_FRACTION) {
+    if (before && now < before * MIN_STATE_FRACTION && before - now >= MIN_STATE_DROP) {
+      if (REBASELINE) {
+        console.log('Drop accepted (NVCL_REBASELINE=1): ' + code + ' ' + now + ' rows against ' + before);
+        return;
+      }
       carried.push(code);
       console.log('Carried forward (fell below ' + Math.round(MIN_STATE_FRACTION * 100) + '% of the live map): '
         + code + ' ' + now + ' rows against ' + before);
@@ -233,7 +247,9 @@ function main() {
     if (!newStates.has(st)) errors.push('state ' + st + ' is on the current map but missing from the new one');
   });
   if (prevRows.length && rows.length < prevRows.length * MIN_PREV_FRACTION) {
-    errors.push('boreholes ' + rows.length + ' < 95% of the current map (' + prevRows.length + ')');
+    if (REBASELINE) console.log('Drop accepted (NVCL_REBASELINE=1): boreholes ' + rows.length
+      + ' < 95% of the current map (' + prevRows.length + ')');
+    else errors.push('boreholes ' + rows.length + ' < 95% of the current map (' + prevRows.length + ')');
   }
   if (newStates.size < MIN_STATES) errors.push('only ' + newStates.size + ' states (need >= ' + MIN_STATES + ')');
   const seen = new Set();

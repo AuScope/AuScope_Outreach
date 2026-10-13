@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "sa",
     "stateLabel": "South Australia",
-    "fetched": "2026-10-13T04:55:15Z"
+    "fetched": "2026-10-13T08:05:19Z"
   },
   "features": [
     {
@@ -3606,7 +3606,7 @@
         "drillDate": null,
         "datasetCreated": "2023-05-03",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.45,
+        "scannedMetres": 1.45,
         "project": null,
         "owner": "Department for Energy and Mining, South Australia",
         "state": "SA"
@@ -3630,11 +3630,11 @@
         "drillingMethod": "diamond core, rotary air blast drilling",
         "drillEndDate": "1981-02-07",
         "purpose": "stratigraphic borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.54,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -3658,11 +3658,11 @@
         "drillingMethod": "diamond core, rotary air blast drilling",
         "drillEndDate": "1981-02-07",
         "purpose": "stratigraphic borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.46,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -3718,7 +3718,7 @@
         "drillDate": null,
         "datasetCreated": "2023-12-14",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.91,
+        "scannedMetres": 1.36,
         "project": null,
         "owner": "Department for Energy and Mining, South Australia",
         "state": "SA"
@@ -3746,7 +3746,7 @@
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 0.45,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -5790,7 +5790,7 @@
         "drillDate": null,
         "datasetCreated": "2022-12-05",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 1.5,
+        "scannedMetres": 2.99,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -5842,11 +5842,11 @@
         "drillingMethod": "diamond core, reverse circulation drilling",
         "drillEndDate": "1981-06-01",
         "purpose": "mineral borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": null,
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": 1.49,
+        "scannedMetres": null,
         "project": null,
         "owner": null,
         "state": "SA"
@@ -20374,11 +20374,11 @@
         "drillingMethod": "diamond core",
         "drillEndDate": "1998-02-11",
         "purpose": "mineral borehole",
-        "instrument": "HyLogger 3-3",
+        "instrument": "HyLogger 1",
         "drillDate": null,
         "datasetCreated": "2019-07-12",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 174.79,
+        "scannedMetres": 174.8,
         "project": "Weednanna 98WDDH2",
         "owner": null,
         "state": "SA"

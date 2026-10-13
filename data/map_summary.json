@@ -1,9 +1,10 @@
 {
-  "generated": "2026-10-13T05:56:30Z",
+  "generated": "2026-10-13T08:48:38Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
   "harvest_as_of": "2026-10-13",
-  "total_boreholes": 6499,
-  "total_km": 1867.2,
+  "total_boreholes": 6634,
+  "total_km": 1911.5,
+  "spectra_measured": 257547130,
   "undated": 0,
   "by_state": [
     {
@@ -11,56 +12,64 @@
       "boreholes": 5,
       "km": 0.2,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 27089
     },
     {
       "state": "NSW",
       "boreholes": 1257,
       "km": 284.1,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 37053190
     },
     {
       "state": "NT",
-      "boreholes": 471,
-      "km": 145.2,
+      "boreholes": 610,
+      "km": 189.2,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 24965580
     },
     {
       "state": "QLD",
       "boreholes": 526,
       "km": 187.1,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 22357641
     },
     {
       "state": "SA",
-      "boreholes": 1832,
+      "boreholes": 1828,
       "km": 429.5,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 56585897
     },
     {
       "state": "TAS",
       "boreholes": 482,
       "km": 137.9,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 27176335
     },
     {
       "state": "VIC",
       "boreholes": 29,
       "km": 6,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 0
     },
     {
       "state": "WA",
       "boreholes": 1897,
-      "km": 677.3,
+      "km": 677.6,
       "status": "participating",
-      "fetched": "2026-10-13"
+      "fetched": "2026-10-13",
+      "spectra_measured": 89381398
     }
   ],
   "date_range": {
@@ -68,8 +77,8 @@
     "latest": "2026-10"
   },
   "month_sources": {
-    "tsg": 4683,
-    "api": 1816,
+    "tsg": 5296,
+    "api": 1338,
     "none": 0,
     "carried": 0
   },
