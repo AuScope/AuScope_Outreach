@@ -47,9 +47,14 @@
 
       --fg:          var(--black);
       --fg-muted:    #5a575e;
-      --fg-faint:    #8e8b92;
+      --fg-faint:    #8d8a91;
       --bg:          var(--white);
       --bg-soft:     #faf9f8;
+      /* Background of the main content area on auscope.org.au where this map
+         is embedded (measured 13 Oct 2026). The chrome around the map uses it
+         so the iframe blends into the page. --fg-faint above is one step
+         darker than #8e8b92 so it reaches 3:1 on this grey. */
+      --host-bg:     #f2f2f1;
       --border:      rgba(35,31,32,0.10);
       --border-strong: rgba(35,31,32,0.22);
 
@@ -73,7 +78,7 @@
       font-family: 'Calibre', Arial, system-ui, sans-serif;
       font-size: 15px; line-height: 1.55;
       color: var(--fg);
-      background: var(--bg);
+      background: var(--host-bg);
       -webkit-font-smoothing: antialiased;
     }
 
@@ -135,7 +140,7 @@
     /* When the page container is in fullscreen, fill the screen and let
        the map expand to take all available height. */
     .page:fullscreen {
-      background: var(--bg);
+      background: var(--host-bg);
       width: 100vw;
       height: 100vh;
       display: flex;
@@ -178,7 +183,7 @@
     /* WebKit prefixed copy - Safari + older Chromium needs this since
        :fullscreen and :-webkit-full-screen can't be combined in one selector */
     .page:-webkit-full-screen {
-      background: var(--bg);
+      background: var(--host-bg);
       width: 100vw;
       height: 100vh;
       display: flex;
@@ -221,15 +226,14 @@
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--navy);
-      border-bottom: 1px solid var(--border);
+      background: var(--host-bg);
       margin: 0 0 8px;
     }
 
     .stat {
       padding: 8px 10px;
       border-right: 1px solid var(--border);
-      background: var(--bg);
+      background: transparent;
     }
     .stat:last-child { border-right: none; }
 
@@ -278,7 +282,6 @@
       width: 100%;
       background: var(--sea);
       border: 1px solid var(--border);
-      border-bottom: none;
     }
 
     .callouts {
@@ -358,7 +361,7 @@
       font-size: 11px;
       color: var(--fg-muted);
       padding: 5px 12px;
-      border-bottom: 1px solid var(--border);
+      background: var(--host-bg);
       margin-bottom: 0;
     }
     .legend-title {
@@ -388,8 +391,7 @@
       align-items: center;
       gap: 12px;
       padding: 8px 12px;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
+      background: var(--host-bg);
       margin-bottom: 0;
     }
     .play-btn {
@@ -484,7 +486,7 @@
 
     .footer {
       padding: 8px 12px;
-      border-top: 1px solid var(--border);
+      background: var(--host-bg);
       font-size: 11px;
       color: var(--fg-muted);
       line-height: 1.5;
@@ -500,7 +502,7 @@
     .footer code {
       font-family: 'SF Mono', Consolas, 'Courier New', monospace;
       font-size: 10px;
-      background: var(--grey-pale);
+      background: var(--white);
       padding: 1px 4px;
       border-radius: 2px;
       color: var(--navy);
