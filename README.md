@@ -11,7 +11,8 @@ Hosted on GitHub Pages and embedded via iframe on the AuScope website.
 assets/              Images + vendor/ (pinned, self-hosted JS: seisplotjs, qrcode-generator;
                      nothing is loaded from a CDN at runtime)
 data/                Committed data products - written by GitHub Actions, never hand-edited
-scripts/             Pipeline Python - run by the scheduled workflows only
+scripts/             Pipeline scripts (Python; the NVCL harvest is Node, in scripts/nvcl/) -
+                     run by the scheduled workflows only
 widgets/             Static, embeddable, URL-parameterised pages (see below)
 .github/workflows/   Scheduled jobs; every one auto-files an issue on failure
 ```
@@ -50,6 +51,17 @@ iframes (AuScope website, Google Sites) or used standalone.
 - [AuScope CoastRI Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_CoastRI.html) - Coastal monitoring sites
 
 `NVCL_Map.html` needs `data/au_basemap.json` (built by `scripts/build_basemap.py` from ABS boundaries) and must be promoted with it.
+
+### NVCL data (`NVCL_Map.html`, NVCL layers of `index.html`)
+
+Refreshed weekly by `.github/workflows/nvcl-harvest.yml`: a live harvest of the eight
+NVCL node services plus the TSG headers on the AuScope NCI THREDDS mirror
+(doi:10.25914/bztg-rg43), counted TSG-first. It writes `data/map_boreholes.json`,
+`data/map_timeline.json`, `data/map_summary.json` and `data/nvcl_<state>.geojson`, and
+refuses to write (red run + issue) when nodes are down or the numbers collapse. Ported
+from `bvkay/AuScope_doi_tracker` and self-contained. Details, local runs and what was
+ported: [`scripts/nvcl/README.md`](scripts/nvcl/README.md); method:
+[`scripts/nvcl/METHODOLOGY.md`](scripts/nvcl/METHODOLOGY.md).
 
 ---
 

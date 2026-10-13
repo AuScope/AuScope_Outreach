@@ -618,11 +618,10 @@
   </div>
 
   <footer class="footer">
-    Locations from State and Territory NVCL WFS endpoints. Scan dates from TSG metadata
-    at <a href="https://thredds.nci.org.au">NCI THREDDS</a>,
-    <a href="https://www.dmirs.wa.gov.au">GSWA</a>'s <em>Hylogger Drillholes</em> shapefile (WA),
-    <a href="https://geoscience.nt.gov.au">NTGS</a>'s GEMIS register (NT), and NVCL <code>createdDate</code>
-    otherwise.
+    Boreholes harvested weekly from the eight NVCL node services. Scan dates and scanned
+    lengths from TSG metadata on <a href="https://thredds.nci.org.au">NCI THREDDS</a>
+    (<a href="https://doi.org/10.25914/bztg-rg43">doi:10.25914/bztg-rg43</a>) where available,
+    otherwise from the NVCL dataset record.
     <span id="generated"></span>
   </footer>
 
@@ -699,7 +698,7 @@
   }).catch(err => {
     document.getElementById('map').innerHTML =
       '<div style="padding:24px; color: var(--fg-muted);">Could not load data files. ' +
-      'Run <code>prep_my_data.py</code> first.</div>';
+      'Run <code>scripts/nvcl/write-map-data.js</code> first.</div>';
     console.error(err);
   });
 
@@ -969,7 +968,7 @@
     const upToMonth = t.month;
     // Defensive: HyLogger didn't exist before 2002, so reject anything earlier
     // even if upstream date-processing has a bug. Belt-and-braces with
-    // prepare_map_data.py's own filter.
+    // scripts/nvcl/write-map-data.js's own filter.
     const visible = boreholes.filter(b => b.month && b.month >= '2002' && b.month <= upToMonth);
 
     markerLayer.clearLayers();
