@@ -26,8 +26,10 @@
  *   depth_m unique scanned metres (union of intervals, TSG first) from the
  *           harvest; null when no interval was recorded. Never drilled length.
  *   z, mb   the TSG archive behind the first scan (name without '.zip') and
- *           its size in whole MB, for the popup's NCI THREDDS link. Only
- *           archives the mirror still lists; absent when there is none.
+ *           its size in whole MB, for the popup's NCI THREDDS link: the
+ *           catalogue's dataSize when it has one, else the TSG cache's
+ *           zipBytes. Only archives the mirror lists right now; none at all
+ *           for a state whose catalogue listing is missing.
  *
  * spectra_measured (map_summary.json, nationally and per state): the sum,
  *           over every dataset of the boreholes on the map, of the sample
@@ -68,9 +70,9 @@ const DEST = OUT_DIR || DATA_DIR;
 const SNAPSHOT_FILE = path.join(IN_DIR, 'nvcl_stats.json');
 const DETAIL_FILE = path.join(IN_DIR, 'nvcl', 'boreholes-detail.jsonl');
 const CACHE_FILE = path.join(IN_DIR, 'nvcl', 'boreholes.jsonl');
-// Archive sizes (zipBytes) and the mirror's current listing, for the popup's
-// link to each hole's TSG archive. Both live in data/ even under
-// NVCL_OUT_DIR: the harvest never writes them.
+// Archive sizes (the catalogue's dataSize, else the cache's zipBytes) and the
+// mirror's current listing, for the popup's link to each hole's TSG archive.
+// Both live in data/ even under NVCL_OUT_DIR: the harvest never writes them.
 const TSG_CACHE_FILE = path.join(DATA_DIR, 'nvcl', 'tsg-cache.jsonl');
 const CATALOG_FILE = path.join(DATA_DIR, 'nvcl', 'thredds-catalog.json');
 
@@ -404,9 +406,12 @@ function pickMonth(d, maxMonth) {
 
 // -- TSG archive link ------------------------------------------------
 
-// Sizes from the TSG cache and, per state, the archive names the mirror
-// lists right now. A state whose listing is missing (its catalogue failed
-// and never succeeded) gets no listing, and its archives are not checked.
+// Sizes and, per state, the archive names the mirror lists right now. The
+// size is the catalogue's dataSize when it has one (the mirror's current
+// file, to four figures), else the TSG cache's zipBytes (exact, but as of
+// the read, and the file may have been rewritten since). A state whose
+// listing is missing (its catalogue failed and never succeeded) gets no
+// listing, and pickArchive() links none of its archives.
 function loadArchives(cacheFile, catalogFile) {
   const bytes = {};
   // Line by line and forgiving, as harvest.js reads this file: a size is a
@@ -424,20 +429,26 @@ function loadArchives(cacheFile, catalogFile) {
   Object.keys((cat && cat.states) || {}).forEach(function(code) {
     const names = cat.states[code].names || [];
     if (names.length) listed[code] = new Set(names);
+    const arc = cat.states[code].archives || {};
+    Object.keys(arc).forEach(function(n) {
+      if (arc[n] && arc[n].bytes > 0) bytes[code + '/' + n] = arc[n].bytes;
+    });
   });
   return { bytes: bytes, listed: listed };
 }
 
 // The archive behind a borehole's first scan: the earliest scan date among
 // its matched archives, ties (and undated archives, which sort last) by
-// name. Only archives the mirror still lists are linked, so the popup never
-// points at a file that has gone. z is the name without '.zip' (the popup
-// rebuilds the URL); mb is the size in whole megabytes (10^6 bytes, at
-// least 1), omitted when the cache has no size.
+// name. Only archives the mirror lists are linked, so the popup never
+// points at a file that has gone, and a state with no listing gets no link
+// at all (until 2026-10-13 it got a link to every archive, unchecked). z is
+// the name without '.zip' (the popup rebuilds the URL); mb is the size in
+// whole megabytes (10^6 bytes, at least 1), omitted when no size is known.
 function pickArchive(d, archives) {
   const listed = archives.listed[d.state];
+  if (!listed) return null;
   const tsg = (d.tsg || []).filter(function(t) {
-    return t.zip && (!listed || listed.has(t.zip));
+    return t.zip && listed.has(t.zip);
   }).sort(function(a, b) {
     return cmp(a.scanDate || '9999', b.scanDate || '9999') || cmp(a.zip, b.zip);
   });

@@ -26,7 +26,9 @@
  *
  * TSG enrichment (merged-v1.2), from data/nvcl/tsg-cache.jsonl, built by
  * scripts/nvcl/tsg-enrich.js out of the AuScope TSG mirror on NCI THREDDS
- * (collection DOI 10.25914/bztg-rg43):
+ * (collection DOI 10.25914/bztg-rg43). Rows thredds-catalog.js has stamped
+ * `gone` (no longer on the mirror) are neither matched nor counted, and
+ * rows sharing a TSG UUID count once (see loadTsgIndex):
  *   - DEPTH precedence:  TSG-measured interval > API-published interval >
  *     drilled-length estimate. A TSG interval counts as MEASURED and is
  *     tracked separately as tsg_measured_km.
@@ -724,7 +726,7 @@ function canonicalInstrument(raw) {
 // borehole is matched against them in a fixed precedence order.
 function loadTsgIndex(file) {
   const idx = {
-    loaded: false, path: file, rows: 0, byState: {},
+    loaded: false, path: file, rows: 0, goneRows: 0, twinRows: 0, byState: {},
     matchedRows: new Set(), states: [],
   };
   if (!fs.existsSync(file)) {
@@ -737,11 +739,40 @@ function loadTsgIndex(file) {
     let r;
     try { r = JSON.parse(line); } catch (e) { return; }
     if (!r || !r.state || !r.zipName) return;
-    idx.rows++;
     const st = idx.byState[r.state] || (idx.byState[r.state] = {
       rows: [], full: new Map(), prefix: new Map(), suffix: new Map(), uuid: new Map(),
+      groups: new Map(), gone: 0,
     });
     r._key = r.state + '/' + r.zipName;
+    // Gone from the mirror (added 2026-10-13; thredds-catalog.js stamps it).
+    // The row stays in the cache as the record of a scan, but there is no
+    // archive to link and, when the file was renamed, its successor carries
+    // the same scan: matching or counting it would count that scan twice or
+    // point at a missing file. So it is neither.
+    if (r.gone) { st.gone++; idx.goneRows++; return; }
+    idx.rows++;
+    // Rows sharing a TSG UUID AND a scan interval are ONE dataset under two
+    // archive names (added 2026-10-13): NT 7882528_TDD01.zip and
+    // 7882528_TDD01_Old.zip, DD91DC1.zip and 1311112_DD91DC1.zip. The cache
+    // held 96 groups of rows sharing a UUID on 2026-10-13 (98 surplus rows),
+    // and each counted once per archive, in a hole's datasets and metres or
+    // in mirror-only. In all 93 groups whose rows record an interval it is
+    // the same interval. Most are an old name the mirror has since replaced,
+    // which the gone stamp above removes; for the rest the group is
+    // matched, claimed and counted as one dataset, carried by one
+    // representative. A UUID alone is not enough: the other three groups
+    // have no interval, and are one header copied into several holes'
+    // archives (NT 8440883_Baldwin1.zip, 8440896_MacIntyre1.zip and
+    // 8445494_Ross_1.zip: one UUID, one 'Created' date, files of 2.5, 1.4
+    // and 2.1 GB; QLD EloiseDeeps_ED126, MountFortConstantine_EHMT001 and
+    // Trekelano_QMD13; QLD WolframCamp_DRD01 and _DRD06). Grouping those
+    // made three holes rival claimants of one 'dataset', and all three lost
+    // their own archive, so rows without an interval are never grouped.
+    const u = uuidKey(r.tsgUuid);
+    const iv = r.depthFromM != null && r.depthToM != null ? r.depthFromM + '-' + r.depthToM : '';
+    r._group = u && iv ? r.state + '#' + u + '#' + iv : r._key;
+    const g = st.groups.get(r._group);
+    if (g) { g.push(r); idx.twinRows++; } else st.groups.set(r._group, [r]);
     st.rows.push(r);
     const base = String(r.zipName).replace(/\.zip$/i, '');
     const cut = base.indexOf('_');
@@ -752,10 +783,33 @@ function loadTsgIndex(file) {
       push(st.suffix, normKey(base.slice(cut + 1)), r);
     }
   });
+  // One representative per UUID group, the row the hole's figures and the
+  // map's link are taken from: one with an interval, then one with a scan
+  // date, then not an '_Old' copy, then the shorter name. The others are
+  // listed on it as twins.
+  Object.keys(idx.byState).forEach(function(code) {
+    const st = idx.byState[code];
+    st.rep = new Map();
+    st.groups.forEach(function(members, key) {
+      const ranked = members.slice().sort(function(a, b) {
+        return rank(a) - rank(b) || a.zipName.length - b.zipName.length
+          || (a.zipName < b.zipName ? -1 : (a.zipName > b.zipName ? 1 : 0));
+      });
+      ranked[0]._twins = ranked.slice(1).map(function(r) { return r.zipName; });
+      st.rep.set(key, ranked[0]);
+    });
+  });
   idx.loaded = true;
   idx.states = Object.keys(idx.byState).sort();
-  console.log('\nTSG cache: ' + idx.rows + ' rows across ' + idx.states.join(', '));
+  console.log('\nTSG cache: ' + idx.rows + ' rows across ' + idx.states.join(', ')
+    + ' (' + idx.goneRows + ' more gone from the mirror, never matched or counted; '
+    + idx.twinRows + ' share a TSG UUID and scan interval with another row and count with it)');
   return idx;
+
+  function rank(r) {
+    return (r.depthFromM != null && r.depthToM != null ? 0 : 4)
+      + (r.scanDate ? 0 : 2) + (/old/i.test(r.zipName) ? 1 : 0);
+  }
 
   function push(map, k, v) {
     if (!k) return;
@@ -800,7 +854,9 @@ function mirrorOnly(st, used) {
   // boreholes into 10. If a state ever does mirror true sections, add the
   // rule back behind a non-overlap test rather than on the name alone.
   const holes = {};
-  st.rows.forEach(function(r) {
+  // Per dataset, not per archive name: a UUID group counts once, through its
+  // representative (see loadTsgIndex). Gone rows are not in st at all.
+  st.rep.forEach(function(r) {
     if (used.has(r._key)) return;
     // Archives sharing a leading feature number are one borehole scanned in
     // sections, not several holes. VIC/976431 is STAVELY04 twice - 0-54.5 m
@@ -955,7 +1011,8 @@ function saveBoreholeCache(cache, file) {
 // nothing are counted and logged - never silently dropped.
 function attachTsg(result, idx) {
   const st = idx.byState[result.node.code];
-  result.tsg = { rows: st ? st.rows.length : 0, matchedRows: 0, matchedBoreholes: 0, tiers: {}, tierRows: {} };
+  result.tsg = { rows: st ? st.rows.length : 0, gone: st ? st.gone : 0, matchedRows: 0, matchedBoreholes: 0,
+    tiers: {}, tierRows: {} };
   if (!st) return;
 
   // A node that returned NO boreholes - unreachable, or not participating -
@@ -991,7 +1048,10 @@ function attachTsg(result, idx) {
     bh.tsgTier = hit.tiers.join('+');
     result.tsg.matchedBoreholes++;
     result.tsg.tiers[hit.tier] = (result.tsg.tiers[hit.tier] || 0) + 1;
-    hit.rows.forEach(function(r) { used.add(r._key); idx.matchedRows.add(r._key); });
+    // A matched representative takes its UUID twins with it.
+    hit.rows.forEach(function(r) {
+      st.groups.get(r._group).forEach(function(m) { used.add(m._key); idx.matchedRows.add(m._key); });
+    });
     Object.keys(hit.rowTiers).forEach(function(t) {
       result.tsg.tierRows[t] = (result.tsg.tierRows[t] || 0) + hit.rowTiers[t];
     });
@@ -1097,7 +1157,8 @@ function resolveTsgMatches(st, boreholes) {
     (numOwners.get(bh.ownNum) || numOwners.set(bh.ownNum, []).get(bh.ownNum)).push(i);
   });
   const hits = boreholes.map(function() { return null; });
-  const claimed = new Map();               // archive key -> borehole index
+  const claimed = new Map();               // dataset (UUID group) -> borehole index
+  const ambiguousSeen = new Set();
   const rejected = { claimed: 0, owner: 0, generic: 0, ambiguous: 0, prefix: 0, examples: [] };
   TSG_TIERS.forEach(function(tier, t) {
     const tentative = new Map();           // borehole index -> rows
@@ -1106,9 +1167,9 @@ function resolveTsgMatches(st, boreholes) {
       // A name-tier hit ends a hole's matching; a uuid hit does not.
       if ((hits[i] && hits[i].named) || !cands[i] || !cands[i][t] || !cands[i][t].length) return;
       const rows = cands[i][t].filter(function(r) {
-        if (claimed.has(r._key)) {
+        if (claimed.has(r._group)) {
           // Already this hole's (by uuid) is not a refusal.
-          if (claimed.get(r._key) !== i) refuse('claimed', r, bh, boreholes[claimed.get(r._key)]);
+          if (claimed.get(r._group) !== i) refuse('claimed', r, bh, boreholes[claimed.get(r._group)]);
           return false;
         }
         if (!SUFFIX_TIERS[tier]) return true;
@@ -1137,23 +1198,29 @@ function resolveTsgMatches(st, boreholes) {
       });
       if (!rows.length) return;
       tentative.set(i, rows);
+      // Claims are on the dataset (a UUID group), not the archive name: two
+      // holes reaching different names of one dataset are rival claimants.
+      const mine = new Set();
       rows.forEach(function(r) {
-        (claimants.get(r._key) || claimants.set(r._key, []).get(r._key)).push(i);
+        if (mine.has(r._group)) return;
+        mine.add(r._group);
+        (claimants.get(r._group) || claimants.set(r._group, []).get(r._group)).push(i);
       });
     });
     tentative.forEach(function(rows, i) {
       const kept = rows.filter(function(r) {
-        const who = claimants.get(r._key);
+        const who = claimants.get(r._group);
         if (who.length === 1) return true;
         // (e) one whole-name claimant beats prefix claimants.
-        const whole = who.filter(function(k) { return cands[k].whole[t].has(r._key); });
+        const whole = who.filter(function(k) { return cands[k].whole[t].has(r._group); });
         if (whole.length === 1) {
           if (whole[0] === i) return true;
           rejected.prefix++;
           example(r.zipName + ' not ' + boreholes[i].id + ' (whole name of ' + boreholes[whole[0]].id + ')');
           return false;
         }
-        if (who[0] === i) {
+        if (who[0] === i && !ambiguousSeen.has(r._group)) {
+          ambiguousSeen.add(r._group);
           rejected.ambiguous++;
           example(r.zipName + ' claimed at ' + tier + ' by ' + who.map(function(k) {
             return boreholes[k].id;
@@ -1163,11 +1230,19 @@ function resolveTsgMatches(st, boreholes) {
       });
       if (!kept.length) return;
       const h = hits[i] || (hits[i] = { tier: tier, tiers: [], rows: [], rowTiers: {}, named: false });
+      // One representative per dataset; rowTiers counts every archive name
+      // the tier brought in, twins included, so the tiers sum to the rows
+      // matched.
+      const groups = [];
+      kept.forEach(function(r) {
+        if (claimed.has(r._group)) return;
+        claimed.set(r._group, i);
+        groups.push(r._group);
+      });
       h.tiers.push(tier);
-      h.rowTiers[tier] = kept.length;
-      h.rows = h.rows.concat(kept);
+      h.rowTiers[tier] = groups.reduce(function(n, g) { return n + st.groups.get(g).length; }, 0);
+      h.rows = h.rows.concat(groups.map(function(g) { return st.rep.get(g); }));
       if (tier !== 'uuid') h.named = true;
-      kept.forEach(function(r) { claimed.set(r._key, i); });
     });
   });
   return { hits: hits, rejected: rejected };
@@ -1225,11 +1300,17 @@ function tsgCandidates(st, bh) {
     localHit = union(localHit, union(st.full.get(k), st.prefix.get(k)));
     localWhole = union(localWhole, st.full.get(k));
   });
-  // The archives whose UUID is one of this hole's DatasetIDs.
+  // The archives whose UUID is one of this hole's DatasetIDs. A UUID that
+  // several archives carry without being one dataset (a copied header; see
+  // loadTsgIndex) identifies none of them and joins nothing here; their
+  // names still can, at the tiers below.
   let uuidHit = null;
   (bh.datasets || []).forEach(function(ds) {
     const k = uuidKey(ds.id);
-    if (k) uuidHit = union(uuidHit, st.uuid.get(k));
+    const rows = k ? st.uuid.get(k) : null;
+    if (rows && rows.every(function(r) { return r._group === rows[0]._group; })) {
+      uuidHit = union(uuidHit, rows);
+    }
   });
   // Same order as TSG_TIERS.
   const out = [
@@ -1249,7 +1330,7 @@ function tsgCandidates(st, bh) {
     null,
     null,
     localWhole,
-  ].map(function(rows) { return new Set((rows || []).map(function(r) { return r._key; })); });
+  ].map(function(rows) { return new Set((rows || []).map(function(r) { return r._group; })); });
   return out;
 
   function union(a, b) {
@@ -1637,6 +1718,7 @@ function aggregate(results, asOf, tsgIndex, prev) {
     if (r.fetchFailures) entry.dataset_fetch_failures = r.fetchFailures;
     if (r.tsg && r.tsg.rows) {
       entry.tsg_cache_rows = r.tsg.rows;
+      entry.tsg_cache_rows_gone = r.tsg.gone || 0;
       entry.tsg_only_boreholes = stTsgOnlyBoreholes;
       entry.mirror_only_km = r.tsg.mirrorOnlyKm || 0;
       entry.mirror_only_archives = r.tsg.mirrorOnlyArchives || 0;
@@ -1722,6 +1804,11 @@ function aggregate(results, asOf, tsgIndex, prev) {
         rows: tsgIndex.rows,
         matched_rows: tsgIndex.matchedRows.size,
         unmatched_rows: tsgUnmatched,
+        // Not in rows: stamped gone by thredds-catalog.js (off the mirror).
+        gone_rows: tsgIndex.goneRows || 0,
+        // In rows, but each one the same dataset (TSG UUID and scan
+        // interval) as another row, matched and counted with it.
+        uuid_twin_rows: tsgIndex.twinRows || 0,
         match_rate_pct: tsgIndex.rows
           ? Math.round(tsgIndex.matchedRows.size / tsgIndex.rows * 1000) / 10 : null,
         states_cached: tsgIndex.states,
@@ -1830,6 +1917,8 @@ function buildDetail(results) {
           from: t.depthFromM == null ? null : t.depthFromM,
           to: t.depthToM == null ? null : t.depthToM,
           instrument: t.instrument || null,
+          // Other archive names of the same dataset (same TSG UUID).
+          twins: t._twins && t._twins.length ? t._twins : undefined,
         };
       }).sort(function(a, b) { return a.zip < b.zip ? -1 : (a.zip > b.zip ? 1 : 0); });
       const m = bh.metrics || null;

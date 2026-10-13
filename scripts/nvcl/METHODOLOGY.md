@@ -62,7 +62,11 @@
 >   called ambiguous;
 > - `tsg-enrich.js` also caches the `[dbextra]` identity fields (drillhole
 >   name, hole service, dataset name, collar, tray and sample counts, image
->   log GUIDs) for archives read from 2026-10-13 on.
+>   log GUIDs) for archives read from 2026-10-13 on;
+> - the TSG cache is reconciled against the live NCI catalogue each run:
+>   rows whose archive the mirror no longer lists are stamped `gone` and are
+>   neither matched, counted (mirror-only included) nor linked, and rows
+>   sharing a TSG UUID and a scan interval count as one dataset.
 >
 > **Corrections to the text below.** Two block names were wrong in
 > merged-v1.2 and are corrected in place: the `Depth (m)` and `TIDL Depth

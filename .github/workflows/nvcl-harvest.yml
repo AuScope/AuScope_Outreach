@@ -41,8 +41,10 @@ jobs:
         with:
           node-version: '22'
 
-      # What the NCI mirror holds per state, for the harvest's mirror
-      # reconciliation. Optional: the harvest runs without a fresh copy.
+      # What the NCI mirror holds per state (names, sizes, modified dates),
+      # for the harvest's mirror reconciliation; also stamps TSG cache rows
+      # whose archive the mirror no longer lists as gone. Optional: the
+      # harvest runs without a fresh copy.
       - name: THREDDS catalogue snapshot
         id: catalog
         continue-on-error: true
@@ -50,7 +52,8 @@ jobs:
 
       # Read the TSG header of up to 150 newly mirrored archives by HTTP
       # range requests (~0.1% of each ZIP) into data/nvcl/tsg-cache.jsonl.
-      # Incremental: what is cached is never re-read. Optional: a partial
+      # Incremental: what is cached is not re-read, unless the mirror has
+      # rewritten the file since (queued behind every new archive). Optional: a partial
       # cache is still an improvement and the harvest works without it.
       - name: TSG enrichment (incremental, budgeted)
         id: enrich

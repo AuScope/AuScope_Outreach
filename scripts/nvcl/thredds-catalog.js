@@ -20,7 +20,28 @@
  * page should say so rather than quietly inherit the node's blind spot.
  *
  * Writes data/nvcl/thredds-catalog.json:
- *   { fetched, source, states: { WA: { subpath, count, names: [...] }, ... } }
+ *   { fetched, source, states: { WA: { subpath, count, names: [...],
+ *     archives: { '<name>.zip': { bytes, modified }, ... } }, ... } }
+ * bytes is the catalogue's dataSize in bytes (THREDDS prints it to four
+ * figures in decimal units: '402.7 Mbytes' is 402,700,000 bytes for a file
+ * of 402,744,170) and modified its 'modified' date. Both were discarded
+ * until 2026-10-13; the map now takes each archive's size from here, and
+ * tsg-enrich.js re-reads an archive whose file is newer than its read.
+ *
+ * Then reconciles data/nvcl/tsg-cache.jsonl against the listing (added
+ * 2026-10-13). The cache only ever grew, so an archive the mirror had
+ * dropped or renamed stayed in it and kept counting: on 2026-10-13, 115 of
+ * its 5,610 rows were no longer on the mirror (88 of them renamed, with a
+ * successor listed), 62 of those among the 752 rows the previous harvest
+ * had left unmatched and counted as mirror-only. Now, for every state whose
+ * catalogue was read THIS run, a cache row whose archive is not listed is
+ * stamped `gone: <date first missed>` (the row is kept: it is still the
+ * record of a scan) and, when a listed archive carries the same TSG UUID
+ * and the same scan interval, `successor: <its name>`; a row whose archive
+ * is listed again loses both. (A UUID alone is not enough: a few headers
+ * were copied into several holes' archives; see harvest.js loadTsgIndex.)
+ * harvest.js matches and counts no gone row, and the map links none. A
+ * state whose catalogue failed is left exactly as it was.
  *
  * Cheap (six catalogue XMLs, no archives touched). Run before harvest.js.
  * Exit status: 0 when every catalogue was read; 1 when any failed (failed
@@ -32,6 +53,9 @@
 
 const fs = require('fs');
 const path = require('path');
+// Cache I/O and the UUID join key are tsg-enrich.js's own, so the two
+// scripts can never disagree on the cache's format.
+const tsgEnrich = require('./tsg-enrich.js');
 
 // scripts/nvcl/ -> repo root, so the script runs from any working directory.
 const ROOT = path.join(__dirname, '..', '..');
@@ -54,11 +78,9 @@ async function run() {
     const url = BASE + SUBPATHS[code] + '/catalog.xml';
     try {
       const xml = await fetchText(url);
-      const names = [];
-      const re = /<dataset[^>]*name="([^"]+\.zip)"/g;
-      let m;
-      while ((m = re.exec(xml)) !== null) names.push(m[1]);
-      states[code] = { subpath: SUBPATHS[code], count: names.length, names: names.sort() };
+      const archives = parseCatalog(xml);
+      const names = Object.keys(archives).sort();
+      states[code] = { subpath: SUBPATHS[code], count: names.length, names: names, archives: archives };
       console.log('  ' + code + ': ' + names.length + ' archives');
     } catch (e) {
       failed.push(code);
@@ -81,16 +103,132 @@ async function run() {
     console.error('\nEvery catalogue failed - nothing written; the previous snapshot stays.');
     process.exit(1);
   }
+  const fetched = new Date().toISOString();
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
-  fs.writeFileSync(OUT, JSON.stringify({
-    fetched: new Date().toISOString(),
+  fs.writeFileSync(OUT, serialise({
+    fetched: fetched,
     source: 'NCI THREDDS rs07 - AuScope NVCL TSG mirror (10.25914/bztg-rg43)',
     states: states,
-  }, null, 1));
+  }));
   console.log('\nWrote ' + OUT);
+  const fresh = Object.keys(states).filter(function(code) { return failed.indexOf(code) === -1; });
+  reconcileCache(states, fresh, fetched.substring(0, 10));
   if (failed.length) {
     console.error('Catalogue(s) unreachable: ' + failed.join(', ') + ' (exiting 1)');
     process.exitCode = 1;
+  }
+}
+
+// Every '<name>.zip' dataset in a catalogue with its size and modified date.
+// Names are entity-decoded the way tsg-enrich.js decodes them, so the two
+// agree on every key.
+const UNIT_BYTES = { bytes: 1, kbytes: 1e3, mbytes: 1e6, gbytes: 1e9, tbytes: 1e12 };
+
+function parseCatalog(xml) {
+  const out = {};
+  const re = /<dataset\b[^>]*\bname="([^"]+\.zip)"[^>]*?(\/?)>/g;
+  let m;
+  while ((m = re.exec(xml)) !== null) {
+    const name = decodeXml(m[1]);
+    let body = '';
+    if (!m[2]) {
+      const end = xml.indexOf('</dataset>', re.lastIndex);
+      body = end === -1 ? '' : xml.slice(re.lastIndex, end);
+    }
+    const size = body.match(/<dataSize[^>]*units="([^"]+)"[^>]*>\s*([\d.]+)\s*</);
+    const mod = body.match(/<date[^>]*type="modified"[^>]*>\s*([^<\s]+)\s*</);
+    const mult = size ? UNIT_BYTES[size[1].toLowerCase()] : null;
+    out[name] = {
+      bytes: mult && isFinite(Number(size[2])) ? Math.round(Number(size[2]) * mult) : null,
+      modified: mod ? mod[1] : null,
+    };
+  }
+  return out;
+}
+
+function decodeXml(s) {
+  return String(s).replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
+// One archive per line, so the weekly diff shows exactly which archives
+// changed and the file does not grow four lines per archive.
+function serialise(doc) {
+  const lines = ['{', ' "fetched": ' + JSON.stringify(doc.fetched) + ',',
+    ' "source": ' + JSON.stringify(doc.source) + ',', ' "states": {'];
+  const codes = Object.keys(doc.states);
+  codes.forEach(function(code, i) {
+    const st = doc.states[code];
+    const head = Object.keys(st).filter(function(k) { return k !== 'names' && k !== 'archives'; });
+    lines.push('  ' + JSON.stringify(code) + ': {');
+    head.forEach(function(k) { lines.push('   ' + JSON.stringify(k) + ': ' + JSON.stringify(st[k]) + ','); });
+    const names = st.names || [];
+    lines.push('   "names": [' + (names.length ? '' : '],'));
+    names.forEach(function(n, j) { lines.push('    ' + JSON.stringify(n) + (j < names.length - 1 ? ',' : '')); });
+    if (names.length) lines.push('   ],');
+    const arc = st.archives || {};
+    const keys = Object.keys(arc).sort();
+    lines.push('   "archives": {' + (keys.length ? '' : '}'));
+    keys.forEach(function(n, j) {
+      lines.push('    ' + JSON.stringify(n) + ': ' + JSON.stringify(arc[n]) + (j < keys.length - 1 ? ',' : ''));
+    });
+    if (keys.length) lines.push('   }');
+    lines.push('  }' + (i < codes.length - 1 ? ',' : ''));
+  });
+  lines.push(' }', '}');
+  return lines.join('\n') + '\n';
+}
+
+// Stamp cache rows whose archive the mirror no longer lists (see the header).
+// Only states in `fresh` (catalogue read this run) are touched.
+function reconcileCache(states, fresh, today) {
+  const file = tsgEnrich.CACHE_PATH;
+  if (!fs.existsSync(file)) {
+    console.log('\nTSG cache: none at ' + file + ' (nothing to reconcile)');
+    return;
+  }
+  const cache = tsgEnrich.loadCache(file);
+  const byState = {};
+  cache.forEach(function(r) { (byState[r.state] || (byState[r.state] = [])).push(r); });
+  let changed = 0;
+  console.log('\nTSG cache reconciliation (' + cache.size + ' rows):');
+  fresh.forEach(function(code) {
+    const rows = byState[code] || [];
+    const listed = new Set(states[code].names || []);
+    // Listed archives by TSG UUID and scan interval, for pointing a gone
+    // row at its successor.
+    const datasetKey = function(r) {
+      const u = tsgEnrich.uuidKey(r.tsgUuid);
+      return u && r.depthFromM != null && r.depthToM != null ? u + '#' + r.depthFromM + '-' + r.depthToM : '';
+    };
+    const liveByUuid = new Map();
+    rows.forEach(function(r) {
+      const u = datasetKey(r);
+      if (u && listed.has(r.zipName)) (liveByUuid.get(u) || liveByUuid.set(u, []).get(u)).push(r.zipName);
+    });
+    let gone = 0, newlyGone = 0, back = 0, succ = 0;
+    rows.forEach(function(r) {
+      const before = JSON.stringify([r.gone, r.successor]);
+      if (listed.has(r.zipName)) {
+        if (r.gone) back++;
+        delete r.gone;
+        delete r.successor;
+      } else {
+        if (!r.gone) { r.gone = today; newlyGone++; }
+        gone++;
+        const twins = (liveByUuid.get(datasetKey(r)) || []).sort();
+        if (twins.length) { r.successor = twins[0]; succ++; } else delete r.successor;
+      }
+      if (JSON.stringify([r.gone, r.successor]) !== before) changed++;
+    });
+    console.log('  ' + code + ': ' + rows.length + ' rows, ' + gone + ' gone from the mirror ('
+      + newlyGone + ' newly, ' + succ + ' with a same-UUID successor), ' + back + ' listed again');
+  });
+  if (changed) {
+    tsgEnrich.saveCache(file, cache);
+    console.log('  Wrote ' + file + ' (' + changed + ' row(s) changed)');
+  } else {
+    console.log('  No change');
   }
 }
 

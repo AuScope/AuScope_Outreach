@@ -14,7 +14,7 @@ plus manual dispatch. Node 22, built-ins only (no `npm install`).
 
 | Step | Script | Fails the run? |
 |---|---|---|
-| 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state | no (continue-on-error; warns) |
+| 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state (names, sizes, modified dates) and stamp cache rows the mirror no longer lists | no (continue-on-error; warns) |
 | 2 | `tsg-enrich.js --max-new=150` - read TSG headers of newly mirrored archives | no (continue-on-error; warns) |
 | 3 | `harvest.js` - WFS + `getDatasetCollection` on all 8 nodes, TSG matching, snapshot | **yes** |
 | 4 | `write-map-data.js` - map feeds from the snapshot | **yes** |
@@ -36,8 +36,8 @@ fails every week would otherwise go unnoticed behind the green tick.
 
 | Path | Written by | Role |
 |---|---|---|
-| `data/nvcl/thredds-catalog.json` | step 1 | archive names per state on the mirror (reconciliation) |
-| `data/nvcl/tsg-cache.jsonl` | step 2 | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID (and, for archives read from 2026-10-13, the `[dbextra]` identity fields). Durable; never re-read |
+| `data/nvcl/thredds-catalog.json` | step 1 | archive names per state on the mirror, each with its size and modified date (reconciliation, map link sizes, re-read queue) |
+| `data/nvcl/tsg-cache.jsonl` | step 2 (step 1 stamps `gone`) | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID (and, for archives read from 2026-10-13, the `[dbextra]` identity fields). Durable; re-read only when the mirror's file is newer than the read |
 | `data/nvcl/boreholes.jsonl` | step 3 (always) | every borehole coordinate ever read; a down node is drawn from here |
 | `data/nvcl_stats.json` | step 3 | canonical per-state snapshot (the 80% guard and carry-forward read it) |
 | `data/nvcl/boreholes-detail.jsonl` | step 3 | one line per WFS borehole: its datasets and matched TSG archives (raw evidence) |
@@ -73,9 +73,11 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   drilled length; `null` when no interval was recorded.
 - **z, mb** (popup link): the TSG archive behind the hole's first scan
   (earliest TSG scan date among its matched archives, ties by name), as the
-  file name without `.zip`, and its size in whole MB (10^6 bytes) from
-  `tsg-cache.jsonl` `zipBytes` (omitted when unknown). Only archives the
-  current `thredds-catalog.json` lists are linked. `NVCL_Map.html` builds
+  file name without `.zip`, and its size in whole MB (10^6 bytes): the
+  catalogue's `dataSize` from `thredds-catalog.json` when it has one, else
+  `tsg-cache.jsonl` `zipBytes` (omitted when neither is known). Only
+  archives the current `thredds-catalog.json` lists are linked, and a state
+  with no listing gets no links at all. `NVCL_Map.html` builds
   `https://thredds.nci.org.au/thredds/fileServer/rs07/<Subpath>/<z>.zip`
   with the case-sensitive subpaths `SA`, `Tas`, `WA`, `NT`, `Qld`, `Vic`.
 - **Timeline** is computed from the final rows, so the counters always match
@@ -221,6 +223,32 @@ Changed:
   product of the same measurements, so they are not summed), i.e. the
   sample positions a spectrum was recorded at. Holes known only from a TSG
   archive add nothing; a held state keeps its previous figure.
+- The TSG cache is reconciled against the live NCI catalogue each run.
+  `thredds-catalog.js` now keeps each archive's catalogue `dataSize` (in
+  bytes) and `modified` date, and for every state whose catalogue it read
+  stamps cache rows whose archive is no longer listed `gone: <date>`, with
+  `successor: <name>` when a listed archive carries the same TSG UUID (a
+  rename); a row whose archive returns loses both. The row stays, as the
+  record of a scan, but `harvest.js` neither matches nor counts it and the
+  map links none. On 2026-10-13 that was 115 of 5,610 rows (88 renamed, with
+  a successor), 62 of them among the rows previously counted as
+  mirror-only. Rows sharing a TSG UUID
+  and a scan interval are one dataset: matched, claimed and counted once,
+  through a representative that lists the others as `twins` in
+  `boreholes-detail.jsonl`. The cache held 96 groups of rows sharing a UUID
+  (98 surplus rows). In the 93 that record an interval it is the same in
+  every row, and most were a renamed archive and its old name, so once the
+  old names are gone 2 such groups remain among the live rows
+  (`8471153_CCD09` and `_Old`; `Mundubbera1` and `_Old_Problematic`). The
+  other 3 have no interval and are one header copied into several holes'
+  archives (NT `8440883_Baldwin1`, `8440896_MacIntyre1`, `8445494_Ross_1`):
+  they are never grouped, and their shared UUID joins nothing in the `uuid`
+  tier, so each still goes to its own hole by name. `tsg-enrich.js` re-queues a row whose
+  archive's catalogue `modified` date is later than its `fetchedAt` (1,192
+  rows on 2026-10-13, 1,112 of them WA), at the lowest priority: only
+  `--max-new` budget left after every new archive goes to them.
+  `nvcl_stats.json` records `tsg_cache.gone_rows`, `tsg_cache.uuid_twin_rows`
+  and per state `tsg_cache_rows_gone`.
 - A `data/nvcl_stats.json` that exists but does not parse stops the harvest
   before it starts (exit 1), instead of being treated as a first run with
   the 80% check skipped.

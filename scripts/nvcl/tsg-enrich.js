@@ -37,7 +37,13 @@
  * Cache: data/nvcl/tsg-cache.jsonl - one JSON line per archive, keyed by
  * state + zipName. It is committed to git and is the durable asset: a weekly
  * run lists each catalog, diffs against the cache, and fetches ONLY what is
- * new. Nothing already read is ever re-read (unless --retry-failed).
+ * new. Nothing already read is re-read (unless --retry-failed), with one
+ * exception added 2026-10-13: an archive whose file on the mirror is newer
+ * than our read of it (its 'modified' date in data/nvcl/thredds-catalog.json,
+ * written by thredds-catalog.js, is later than the row's fetchedAt) is
+ * re-queued, at the LOWEST priority - only budget left after every new
+ * archive in every state is spent on it. Rows thredds-catalog.js has stamped
+ * `gone` are never read again; the archive is not on the mirror.
  *
  * Usage:
  *   node scripts/nvcl/tsg-enrich.js                    # default states, 400 new
@@ -60,6 +66,9 @@ const CACHE_PATH = process.env.NVCL_TSG_CACHE
   || path.join(ROOT, 'data', 'nvcl', 'tsg-cache.jsonl');
 
 const THREDDS = 'https://thredds.nci.org.au/thredds';
+// The catalogue snapshot thredds-catalog.js writes: its per-archive
+// 'modified' dates drive the re-read queue (see the header).
+const CATALOG_SNAPSHOT = path.join(ROOT, 'data', 'nvcl', 'thredds-catalog.json');
 const MIRROR_DOI = '10.25914/bztg-rg43';
 const SOURCE_TAG = 'NCI THREDDS TSG (' + MIRROR_DOI + ')';
 
@@ -211,17 +220,42 @@ async function run() {
     saveCache(CACHE_PATH, cache);
   }
 
+  // Lowest priority: archives the mirror has rewritten since we read them.
+  // Only budget the new archives above left unspent reaches this.
+  const modified = loadModified(CATALOG_SNAPSHOT);
+  let requeueAll = 0;
+  for (const state of args.states) {
+    const requeue = staleReads(cache, state, modified[state]);
+    if (!requeue.length) continue;
+    let slice = requeue;
+    if (args.limit) slice = slice.slice(0, args.limit);
+    if (slice.length > budget) slice = slice.slice(0, Math.max(0, budget));
+    requeueAll += requeue.length - slice.length;
+    const p = perState.filter(function(x) { return x.state === state; })[0];
+    if (p) p.requeued = requeue.length;
+    if (args.dryRun || !slice.length) continue;
+    console.log('\n[' + state + '] re-reading ' + slice.length + ' of ' + requeue.length
+      + ' archive(s) the mirror has rewritten since they were read');
+    const got = await harvestState(state, slice, cache);
+    fetched += got;
+    budget -= got;
+    if (p) p.fetched += got;
+    saveCache(CACHE_PATH, cache);
+  }
+
   if (!args.dryRun) saveCache(CACHE_PATH, cache);
 
   const mins = ((Date.now() - t0) / 60000);
   console.log('\n=== TSG ENRICHMENT SUMMARY ===');
   perState.forEach(function(p) {
     console.log('  ' + p.state + ': catalog ' + p.catalog + ', outstanding ' + p.todo
+      + (p.requeued ? ', rewritten since read ' + p.requeued : '')
       + ', fetched this run ' + p.fetched + (p.error ? '  [' + p.error + ']' : ''));
   });
   console.log('  Fetched:   ' + fetched + ' archives in ' + mins.toFixed(1) + ' min'
     + (fetched ? ' (' + (mins * 60 / fetched).toFixed(1) + ' s/archive)' : ''));
-  console.log('  Remaining: ' + remainingAll + ' archives - picked up by the next run');
+  console.log('  Remaining: ' + remainingAll + ' archives - picked up by the next run'
+    + (requeueAll ? '; plus ' + requeueAll + ' rewritten on the mirror since read, queued behind them' : ''));
   console.log('  Cache now: ' + cache.size + ' rows -> ' + CACHE_PATH);
   reportCache(cache);
   if (UPSTREAM_PROBLEMS.length) {
@@ -317,6 +351,35 @@ function mergeRow(prev, next) {
     out.mergedFrom = prev.source;
   }
   return out;
+}
+
+// Per state, archive name -> the catalogue's 'modified' date, from the
+// snapshot thredds-catalog.js wrote. Empty (no re-reads) when it is missing,
+// unreadable, or from before the dates were recorded.
+function loadModified(file) {
+  const out = {};
+  let snap = null;
+  try { snap = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { return out; }
+  Object.keys((snap && snap.states) || {}).forEach(function(code) {
+    const arc = snap.states[code].archives || {};
+    const m = out[code] = {};
+    Object.keys(arc).forEach(function(n) { if (arc[n] && arc[n].modified) m[n] = arc[n].modified; });
+  });
+  return out;
+}
+
+// Rows already read (and settled) whose archive the catalogue says changed
+// after the read. Rows still to be fetched anyway, and gone rows, are not
+// here: diffTodo() covers the first, and the second are not on the mirror.
+function staleReads(cache, state, modified) {
+  if (!modified) return [];
+  const out = [];
+  cache.forEach(function(r) {
+    if (r.state !== state || r.gone || !isDone(r, false)) return;
+    const mod = modified[r.zipName];
+    if (mod && r.fetchedAt && Date.parse(mod) > Date.parse(r.fetchedAt)) out.push(r.zipName);
+  });
+  return out.sort();
 }
 
 function diffTodo(catalog, cache, state, retryFailed) {
@@ -976,4 +1039,15 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseTsgHeader, loadCache, boreholeIdFromZip, CACHE_PATH, SOURCE_TAG, MIRROR_DOI };
+// The TSG UUID as a join key, shared with thredds-catalog.js (harvest.js
+// keeps an identical copy). Most headers carry a 35-character form missing
+// the GUID's last digit, some all 36; both cut to 35 so either meets the
+// other. Anything not GUID-shaped gives no key.
+function uuidKey(s) {
+  const v = String(s || '').trim().toLowerCase();
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11,12}$/.test(v) ? v.slice(0, 35) : '';
+}
+
+module.exports = {
+  parseTsgHeader, loadCache, saveCache, uuidKey, boreholeIdFromZip, CACHE_PATH, SOURCE_TAG, MIRROR_DOI,
+};
