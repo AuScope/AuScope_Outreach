@@ -63,8 +63,10 @@
 >   a name tier a whole-name hit beats a prefix hit before an archive is
 >   called ambiguous;
 > - `tsg-enrich.js` also caches the `[dbextra]` identity fields (drillhole
->   name, hole service, dataset name, collar, tray and sample counts, image
->   log GUIDs) for archives read from 2026-10-13 on;
+>   name, hole service, dataset name, collar, drill date, tray and sample
+>   counts, image log GUIDs) and the raw `lat lon` / `geo datum` for every
+>   archive it reads, and `--backfill-identity` re-reads only that block
+>   (about 97 KB an archive) for rows read before 2026-10-13;
 > - the TSG cache is reconciled against the live NCI catalogue each run:
 >   rows whose archive the mirror no longer lists are stamped `gone` and are
 >   neither matched, counted (mirror-only included) nor linked, and rows

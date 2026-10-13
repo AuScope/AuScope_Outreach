@@ -30,9 +30,12 @@
  *   hylogger name = / HyLogger : instrument
  *   UUID :                       TSG identity (the node's DatasetID)
  *   [dbextra] identity           drillhole name, hole service, dataset name,
- *                                collar, ntrays, nsamples and the four
- *                                image-log GUIDs (added 2026-10-13; read
- *                                for archives fetched from then on only)
+ *                                collar, drill date, ntrays, nsamples and
+ *                                the four image-log GUIDs, plus 'lat lon'
+ *                                and 'geo datum' (added 2026-10-13; every
+ *                                read stamps identityFetchedAt). Archives
+ *                                read before then get them from
+ *                                --backfill-identity (see below)
  *
  * Cache: data/nvcl/tsg-cache.jsonl - one JSON line per archive, keyed by
  * state + zipName. It is committed to git and is the durable asset: a weekly
@@ -51,6 +54,23 @@
  *   node scripts/nvcl/tsg-enrich.js --state=WA --max-new=400
  *   node scripts/nvcl/tsg-enrich.js --retry-failed     # re-attempt cached errors
  *   node scripts/nvcl/tsg-enrich.js --dry-run          # list the diff, fetch none
+ *   node scripts/nvcl/tsg-enrich.js --backfill-identity --max-new=400 [--max-minutes=30]
+ *
+ * --backfill-identity (added 2026-10-13): for cached rows read before the
+ * identity block was parsed (no drillholeName, no identityFetchedAt), re-read
+ * ONLY the identity block: HEAD, the 64 KB tail (EOCD and, when it fits
+ * there, the central directory; ZIP64-aware), then a 32 KB range at the start
+ * of the .tsg entry, inflated with a sync flush so the partial deflate stream
+ * decodes as far as it goes. The [description] block (UUID, Created, Last
+ * modified, Executive Summary) and [dbextra] end within about 2-3.5 KB of the
+ * entry in every header sampled, so 32 KB compressed is ample; a header whose
+ * [dbextra] block is not closed inside it is read again at 4x, up to the
+ * 8 MB cap. Only the identity and position fields are written: scan date,
+ * interval and instrument stay as the full read recorded them. States run
+ * TAS, NT, QLD, SA, WA, VIC (the order the map gains most from a hole's own
+ * id and collar), and within a state the archives the last harvest joined
+ * to no hole come first. --max-minutes stops the run cleanly at a
+ * wall-clock cap, keeping every archive already read.
  *
  * Env: NVCL_TSG_STATES=WA,NT   NVCL_TSG_MAX_NEW=400   NVCL_TSG_CACHE=path
  * Runs from any working directory (paths resolve from this file).
@@ -69,6 +89,9 @@ const THREDDS = 'https://thredds.nci.org.au/thredds';
 // The catalogue snapshot thredds-catalog.js writes: its per-archive
 // 'modified' dates drive the re-read queue (see the header).
 const CATALOG_SNAPSHOT = path.join(ROOT, 'data', 'nvcl', 'thredds-catalog.json');
+// The last harvest's per-hole archives: --backfill-identity reads the
+// archives it joined to no hole first.
+const DETAIL_FILE = path.join(ROOT, 'data', 'nvcl', 'boreholes-detail.jsonl');
 const MIRROR_DOI = '10.25914/bztg-rg43';
 const SOURCE_TAG = 'NCI THREDDS TSG (' + MIRROR_DOI + ')';
 
@@ -88,6 +111,10 @@ const STATE_SUBPATH = {
 //   QLD, VIC last - smallest gain.
 // NSW has no mirror on the rs07 catalog.
 const DEFAULT_STATES = ['WA', 'NT', 'TAS', 'SA', 'QLD', 'VIC'];
+// --backfill-identity order: TAS and NT first (their WFS ids are the
+// header's drillhole name, so an orphan joins its hole on the next run),
+// then QLD, SA, WA, VIC.
+const BACKFILL_STATES = ['TAS', 'NT', 'QLD', 'SA', 'WA', 'VIC'];
 
 const USER_AGENT = 'AuScope-Outreach NVCL harvester (+https://github.com/AuScope/AuScope_Outreach)';
 
@@ -99,6 +126,8 @@ const CONCURRENCY = 3;
 const CATALOG_TIMEOUT_MS = 180000; // WA's catalog.xml is ~420 KB
 const EOCD_TAIL = 65536;
 const MAX_ENTRY_BYTES = 8 * 1024 * 1024;  // cap on one compressed .tsg read
+const IDENTITY_BYTES = 32768;      // --backfill-identity: compressed bytes read
+const LFH_SLACK = 1024;            // room for a local header's name + extra field
 const MAX_INTERVAL_M = 5000;       // sanity clamp on a parsed scan interval
 const CIRCUIT_BREAKER = 8;         // consecutive network failures -> stop
 
@@ -115,7 +144,8 @@ const UPSTREAM_PROBLEMS = [];
 // ── CLI ───────────────────────────────────────────────────────────
 
 function parseArgs(argv) {
-  const a = { states: null, limit: 0, maxNew: 0, retryFailed: false, dryRun: false };
+  const a = { states: null, limit: 0, maxNew: 0, retryFailed: false, dryRun: false,
+    backfillIdentity: false, maxMinutes: 0 };
   argv.slice(2).forEach(function(arg) {
     let m;
     if ((m = arg.match(/^--state=(.+)$/))) {
@@ -128,6 +158,10 @@ function parseArgs(argv) {
       a.retryFailed = true;
     } else if (arg === '--dry-run') {
       a.dryRun = true;
+    } else if (arg === '--backfill-identity') {
+      a.backfillIdentity = true;
+    } else if ((m = arg.match(/^--max-minutes=(\d+(?:\.\d+)?)$/))) {
+      a.maxMinutes = Number(m[1]);
     } else {
       throw new Error('Unknown flag: ' + arg + '\nSee the header of ' + __filename);
     }
@@ -135,7 +169,7 @@ function parseArgs(argv) {
   if (!a.states) {
     const env = (process.env.NVCL_TSG_STATES || '').split(',')
       .map(function(s) { return s.trim().toUpperCase(); }).filter(Boolean);
-    a.states = env.length ? env : DEFAULT_STATES.slice();
+    a.states = env.length ? env : (a.backfillIdentity ? BACKFILL_STATES : DEFAULT_STATES).slice();
   }
   if (!a.maxNew) a.maxNew = Number(process.env.NVCL_TSG_MAX_NEW || 400);
   return a;
@@ -145,6 +179,7 @@ function parseArgs(argv) {
 
 async function run() {
   const args = parseArgs(process.argv);
+  if (args.backfillIdentity) return runBackfill(args);
   console.log('NVCL TSG enrichment - ' + new Date().toISOString().substring(0, 10));
   console.log('=========================================\n');
   console.log('States:      ' + args.states.join(', '));
@@ -323,7 +358,13 @@ const MERGE_KEEP = [
   'depthFromM', 'depthToM', 'depthSource', 'instrument', 'tsgUuid', 'zipBytes',
   'drillholeName', 'holeService', 'datasetName', 'collar', 'ntrays', 'nsamples',
   'traypicsLogId', 'traythumbsLogId', 'mospicLogId', 'imageLogId',
+  'drillDate', 'identityFetchedAt',
 ];
+
+// The header's position fields, written as a group by a read that reached
+// the header (coordStatus is always set then) and kept as a group from the
+// previous read by one that did not.
+const COORD_FIELDS = ['latRaw', 'lonRaw', 'coordStatus', 'lat', 'lng', 'geoDatum'];
 
 function mergeRow(prev, next) {
   if (!prev) return next;
@@ -346,6 +387,9 @@ function mergeRow(prev, next) {
       out.depthFromM = next.depthFromM;
       out.depthToM = next.depthToM;
     }
+  }
+  if (next.coordStatus === undefined && prev.coordStatus !== undefined) {
+    COORD_FIELDS.forEach(function(k) { if (prev[k] !== undefined) out[k] = prev[k]; });
   }
   if (kept && prev.source && prev.source !== out.source) {
     out.mergedFrom = prev.source;
@@ -514,6 +558,283 @@ async function harvestState(state, zipNames, cache) {
   return done;
 }
 
+// ── Identity backfill (--backfill-identity) ───────────────────────
+
+// Rows read before the identity block was parsed: on the mirror, read far
+// enough to know their .tsg entry, and with neither a drillhole name nor an
+// identity read of their own. A row whose header simply has no drillhole
+// name carries identityFetchedAt after one backfill read, so it is not read
+// again. Rows still failing on transport (no entry name yet) are left to
+// the normal enrichment, which now reads the identity block with the rest.
+// Within a state, archives the last harvest joined to no hole come first
+// (`joined`, from its detail file): their drillhole name and position are
+// what can put them on the map; the rest follow, by name.
+function identityTodo(cache, state, joined) {
+  const out = [];
+  cache.forEach(function(r) {
+    if (r.state !== state || r.gone || r.drillholeName || r.identityFetchedAt) return;
+    if (r.source && /^seed:/.test(r.source)) return;
+    if (!r.tsgEntryName) return;
+    out.push(r.zipName);
+  });
+  const j = joined || new Set();
+  return out.sort(function(a, b) {
+    const x = j.has(state + '/' + a) ? 1 : 0, y = j.has(state + '/' + b) ? 1 : 0;
+    return x - y || (a < b ? -1 : (a > b ? 1 : 0));
+  });
+}
+
+// state/zipName of every archive (twins included) the last harvest joined
+// to a WFS hole, from data/nvcl/boreholes-detail.jsonl. Empty when absent.
+function joinedArchives(file) {
+  const out = new Set();
+  let text = '';
+  try { text = fs.readFileSync(file, 'utf8'); } catch (e) { return out; }
+  text.split('\n').forEach(function(line) {
+    let d = null;
+    try { d = line.trim() ? JSON.parse(line) : null; } catch (e) { return; }
+    if (!d || d.provisional || d.source === 'thredds') return;
+    (d.tsg || []).forEach(function(t) {
+      out.add(d.state + '/' + t.zip);
+      (t.twins || []).forEach(function(z) { out.add(d.state + '/' + z); });
+    });
+  });
+  return out;
+}
+
+async function runBackfill(args) {
+  console.log('NVCL TSG identity backfill - ' + new Date().toISOString().substring(0, 10));
+  console.log('=========================================\n');
+  console.log('States:      ' + args.states.join(', '));
+  console.log('Cache:       ' + CACHE_PATH);
+  console.log('Budget:      ' + args.maxNew + ' archives'
+    + (args.maxMinutes ? ', ' + args.maxMinutes + ' min wall clock' : '')
+    + (args.limit ? ' (--limit=' + args.limit + ' per state)' : ''));
+  const unknown = args.states.filter(function(s) { return !STATE_SUBPATH[s]; });
+  if (unknown.length) throw new Error('No THREDDS subpath known for: ' + unknown.join(', '));
+
+  const cache = loadCache(CACHE_PATH);
+  LIVE_CACHE = cache;
+  const joined = joinedArchives(DETAIL_FILE);
+  const t0 = Date.now();
+  const deadline = args.maxMinutes ? t0 + args.maxMinutes * 60000 : Infinity;
+  let budget = args.maxNew;
+  const per = [];
+  for (const state of args.states) {
+    const todo = identityTodo(cache, state, joined);
+    let slice = todo;
+    if (args.limit) slice = slice.slice(0, args.limit);
+    if (slice.length > budget) slice = slice.slice(0, Math.max(0, budget));
+    const p = { state: state, todo: todo.length, read: 0, ok: 0, failed: 0, wider: 0, bytes: 0, secs: 0 };
+    per.push(p);
+    if (args.dryRun || !slice.length || Date.now() >= deadline) {
+      console.log('\n[' + state + '] ' + todo.length + ' row(s) lacking identity'
+        + (args.dryRun ? ' (dry run; would read ' + slice.length + ': ' + slice.slice(0, 5).join(', ')
+          + (slice.length > 5 ? ' ...' : '') + ')' : (slice.length ? ' - wall clock cap reached, not started' : '')));
+      continue;
+    }
+    console.log('\n[' + state + '] ' + todo.length + ' row(s) lacking identity; reading ' + slice.length);
+    const ts = Date.now();
+    await backfillState(state, slice, cache, deadline, p);
+    p.secs = (Date.now() - ts) / 1000;
+    budget -= p.read;
+    saveCache(CACHE_PATH, cache);
+    if (Date.now() >= deadline) console.log('  wall clock cap reached - stopping cleanly; what was read is kept');
+  }
+  saveCache(CACHE_PATH, cache);
+
+  const mins = (Date.now() - t0) / 60000;
+  console.log('\n=== IDENTITY BACKFILL SUMMARY ===');
+  console.log('  state   lacking   read    ok   failed  wider   KB/archive  s/archive');
+  let read = 0, bytes = 0;
+  per.forEach(function(p) {
+    read += p.read; bytes += p.bytes;
+    console.log('  ' + pad(p.state, 8) + pad(p.todo, 10) + pad(p.read, 7) + pad(p.ok, 6) + pad(p.failed, 9)
+      + pad(p.wider, 8) + pad(p.read ? (p.bytes / p.read / 1024).toFixed(1) : '-', 12)
+      + (p.read ? (p.secs / p.read).toFixed(2) : '-'));
+  });
+  console.log('  Read ' + read + ' archives in ' + mins.toFixed(1) + ' min, '
+    + (bytes / 1048576).toFixed(1) + ' MB transferred'
+    + (read ? ' (' + (bytes / read / 1024).toFixed(1) + ' KB and ' + (mins * 60 / read).toFixed(2) + ' s per archive)' : ''));
+  reportIdentity(cache);
+  if (UPSTREAM_PROBLEMS.length) {
+    console.error('\nUpstream problems this run (cache saved; exiting 1):');
+    UPSTREAM_PROBLEMS.forEach(function(x) { console.error('  - ' + x); });
+    process.exitCode = 1;
+  }
+}
+
+// Per state: live rows, and how many now carry a drillhole name, a hole
+// service and a 'lat lon' line, and how many still lack an identity read.
+function reportIdentity(cache) {
+  const by = {};
+  cache.forEach(function(r) {
+    if (r.gone) return;
+    const s = by[r.state] || (by[r.state] = { rows: 0, name: 0, service: 0, latlon: 0, zeroed: 0, absent: 0, todo: 0 });
+    s.rows++;
+    if (r.drillholeName) s.name++;
+    if (r.holeService) s.service++;
+    if (r.coordStatus === 'zeroed') s.zeroed++;
+    else if (r.coordStatus === 'absent') s.absent++;
+    else if (r.latRaw != null) s.latlon++;
+    if (!r.drillholeName && !r.identityFetchedAt && r.tsgEntryName) s.todo++;
+  });
+  console.log('\n  state   live rows   drillholeName   holeService   lat lon   zeroed   absent   still lacking');
+  Object.keys(by).sort().forEach(function(k) {
+    const s = by[k];
+    console.log('  ' + pad(k, 8) + pad(s.rows, 12) + pad(s.name, 16) + pad(s.service, 14) + pad(s.latlon, 10)
+      + pad(s.zeroed, 9) + pad(s.absent, 9) + s.todo);
+  });
+}
+
+async function backfillState(state, zipNames, cache, deadline, p) {
+  const queue = zipNames.slice();
+  const total = queue.length;
+  let consecutiveNetFails = 0;
+  let tripped = false;
+  async function worker() {
+    for (;;) {
+      if (tripped || Date.now() >= deadline) return;
+      const zipName = queue.shift();
+      if (!zipName) return;
+      const t0 = Date.now();
+      const key = cacheKey(state, zipName);
+      const got = await readIdentity(state, cache.get(key));
+      const row = Object.assign({}, cache.get(key));
+      p.read++;
+      p.bytes += got.bytes;
+      if (got.wider) p.wider++;
+      let status;
+      if (got.parsed) {
+        Object.keys(got.parsed.identity).forEach(function(k) { row[k] = got.parsed.identity[k]; });
+        setCoords(row, got.parsed);
+        row.identityFetchedAt = new Date().toISOString();
+        delete row.identityError;
+        p.ok++;
+        status = (row.drillholeName ? 'hole ' + row.drillholeName : 'no drillhole name')
+          + ' · ' + row.coordStatus + (row.latRaw != null && row.coordStatus !== 'zeroed'
+            ? ' ' + row.latRaw + ' ' + row.lonRaw : '');
+      } else {
+        p.failed++;
+        status = 'FAIL ' + got.error;
+        // Settled answers are stamped so the archive is not asked again;
+        // transport failures are left for the next run.
+        if (PERMANENT_ERRORS.has(got.error)) {
+          row.identityError = got.error;
+          row.identityFetchedAt = new Date().toISOString();
+        }
+      }
+      cache.set(key, row);
+      if (p.read % 25 === 0) saveCache(CACHE_PATH, cache);
+      console.log('  [' + String(p.read).padStart(4) + '/' + total + '] ' + pad(zipName.slice(0, 32), 34)
+        + pad(Math.round(got.bytes / 1024) + 'KB', 7) + pad(((Date.now() - t0) / 1000).toFixed(1) + 's', 7)
+        + status.slice(0, 60));
+      if (got.error && /^(http_5|timeout|network|range_)/.test(got.error)) {
+        consecutiveNetFails++;
+        if (consecutiveNetFails >= CIRCUIT_BREAKER) {
+          tripped = true;
+          UPSTREAM_PROBLEMS.push(state + ' circuit breaker tripped (identity backfill)');
+          console.warn('\n  CIRCUIT BREAKER: ' + consecutiveNetFails + ' consecutive network failures; stopping this state.');
+          return;
+        }
+      } else {
+        consecutiveNetFails = 0;
+      }
+      if (queue.length && DELAY_MS > 0) await sleep(DELAY_MS);
+    }
+  }
+  const workers = [];
+  for (let i = 0; i < CONCURRENCY; i++) workers.push(worker());
+  await Promise.all(workers);
+  console.log('  [' + state + '] ' + p.read + ' read · ' + p.ok + ' parsed · ' + p.failed + ' failed · '
+    + (p.bytes / 1048576).toFixed(1) + ' MB');
+}
+
+// HEAD, the 64 KB tail, the central directory (sliced out of the tail when
+// it lies inside it), then the first 32 KB of the .tsg entry. Returns
+// { parsed, bytes, wider, error }.
+async function readIdentity(state, row) {
+  const url = fileUrl(state, row.zipName);
+  const out = { parsed: null, bytes: 0, wider: false, error: null };
+  try {
+    const head = await httpHead(url);
+    if (!/bytes/i.test(head.acceptRanges || '')) { out.error = 'range_unsupported'; return out; }
+    if (!head.size) { out.error = 'empty_file'; return out; }
+    const tailStart = Math.max(0, head.size - EOCD_TAIL);
+    const tail = await httpRange(url, tailStart, head.size - 1);
+    out.bytes += tail.length;
+    let eocd = findEocd(tail);
+    if (!eocd) { out.error = 'eocd_not_found'; return out; }
+    if (eocd.cdOffset === 0xFFFFFFFF || eocd.cdSize === 0xFFFFFFFF || eocd.zip64Locator) {
+      const acc = { bytesFetched: 0 };
+      const z = await readZip64Eocd(url, tail, tailStart, eocd, acc);
+      out.bytes += acc.bytesFetched;
+      if (!z) { out.error = 'zip64_eocd_not_found'; return out; }
+      eocd = z;
+    }
+    let cd;
+    if (eocd.cdOffset >= tailStart && eocd.cdOffset + eocd.cdSize <= tailStart + tail.length) {
+      cd = tail.slice(eocd.cdOffset - tailStart, eocd.cdOffset - tailStart + eocd.cdSize);
+    } else {
+      cd = await httpRange(url, eocd.cdOffset, eocd.cdOffset + eocd.cdSize - 1);
+      out.bytes += cd.length;
+    }
+    const entries = parseCentralDirectory(cd);
+    let entry = entries.filter(function(e) { return e.name === row.tsgEntryName; })[0];
+    if (!entry) {
+      const tsgEntries = entries.filter(function(e) { return /\.tsg$/i.test(e.name); });
+      const base = tsgEntries.filter(function(e) { return !/_tir/i.test(e.name); });
+      entry = (base.length ? base : tsgEntries).sort(function(a, b) { return a.name.length - b.name.length; })[0];
+    }
+    if (!entry) { out.error = 'no_tsg_in_zip'; return out; }
+    let want = IDENTITY_BYTES;
+    for (;;) {
+      const text = await readEntryHead(url, entry, want, out);
+      if (text == null) { out.error = 'decompress_failed'; return out; }
+      // Done once [dbextra] is closed by the next section, once a section
+      // that follows it is reached without one (an older header), or once
+      // the whole entry has been read.
+      if (/^\s*\[dbextra\]\s*$[\s\S]*?^\s*\[[^\]]+\]\s*$/mi.test(text)
+        || /^\s*\[(checklist|dynaimp|band headers)\]\s*$/mi.test(text)
+        || want >= entry.compSize || want >= MAX_ENTRY_BYTES) {
+        out.parsed = parseTsgHeader(text);
+        return out;
+      }
+      want *= 4;
+      out.wider = true;
+    }
+  } catch (e) {
+    out.error = classifyError(e);
+    return out;
+  }
+}
+
+// The local header and the first `want` compressed bytes of an entry in ONE
+// range request (the local name and extra field fit in LFH_SLACK; a second
+// request covers one that does not), inflated with a sync flush.
+async function readEntryHead(url, entry, want, out) {
+  const n = Math.min(want, entry.compSize);
+  if (n <= 0) return null;
+  const nameLen = Buffer.byteLength(entry.name, 'utf8');
+  let buf = await httpRange(url, entry.lfhOffset, entry.lfhOffset + 30 + nameLen + LFH_SLACK + n - 1);
+  out.bytes += buf.length;
+  if (buf.length < 30 || buf.readUInt32LE(0) !== 0x04034b50) return null;
+  const dataAt = 30 + buf.readUInt16LE(26) + buf.readUInt16LE(28);
+  if (buf.length < dataAt + n) {
+    const more = await httpRange(url, entry.lfhOffset + buf.length, entry.lfhOffset + dataAt + n - 1);
+    out.bytes += more.length;
+    buf = Buffer.concat([buf, more]);
+  }
+  const comp = buf.slice(dataAt, dataAt + n);
+  if (entry.method === 0) return comp.toString('latin1');
+  if (entry.method !== 8) return null;
+  try {
+    return zlib.inflateRawSync(comp, { finishFlush: zlib.constants.Z_SYNC_FLUSH }).toString('latin1');
+  } catch (e) {
+    return null;
+  }
+}
+
 // ── One archive ───────────────────────────────────────────────────
 
 async function harvestOne(state, zipName) {
@@ -607,13 +928,8 @@ async function harvestOne(state, zipName) {
   // row read before they were parsed and one whose file lacks them look the
   // same: absent, not null.
   Object.keys(parsed.identity).forEach(function(k) { row[k] = parsed.identity[k]; });
-  if (parsed.coords) {
-    row.latRaw = parsed.coords.rawLat;
-    row.lonRaw = parsed.coords.rawLon;
-    row.coordStatus = parsed.coords.status;
-    if (parsed.coords.lat != null) { row.lat = parsed.coords.lat; row.lng = parsed.coords.lng; }
-    if (parsed.coords.datum) row.geoDatum = parsed.coords.datum;
-  }
+  setCoords(row, parsed);
+  row.identityFetchedAt = row.fetchedAt;
 
   if (parsed.depth) {
     row.depthFromM = parsed.depth.from;
@@ -625,6 +941,19 @@ async function harvestOne(state, zipName) {
     row.error = 'no depth field';
   }
   return row;
+}
+
+// The header's position, as a group (see COORD_FIELDS): coordStatus is
+// 'absent' when the header has no 'lat lon' line, 'zeroed' for 0 0, else
+// classifyLatLon's verdict; the raw pair and the datum are kept verbatim.
+function setCoords(row, parsed) {
+  COORD_FIELDS.forEach(function(k) { delete row[k]; });
+  if (!parsed.coords) { row.coordStatus = 'absent'; return; }
+  row.latRaw = parsed.coords.rawLat;
+  row.lonRaw = parsed.coords.rawLon;
+  row.coordStatus = parsed.coords.status;
+  if (parsed.coords.lat != null) { row.lat = parsed.coords.lat; row.lng = parsed.coords.lng; }
+  if (parsed.coords.datum) row.geoDatum = parsed.coords.datum;
 }
 
 // The .tsg entry, pulled by range and inflated. Deflate (method 8) and store
@@ -796,6 +1125,7 @@ const DBEXTRA_FIELDS = [
   ['hole service', 'holeService', 'text'],
   ['dataset name', 'datasetName', 'text'],
   ['collar', 'collar', 'numbers'],
+  ['drill date', 'drillDate', 'text'],
   ['ntrays', 'ntrays', 'int'],
   ['nsamples', 'nsamples', 'int'],
   ['traypicslog id', 'traypicsLogId', 'text'],
@@ -858,15 +1188,15 @@ function parseTsgHeader(text) {
   if (ll) {
     const rawLat = Number(ll[1]), rawLon = Number(ll[2]);
     const cls = classifyLatLon(rawLat, rawLon);
-    if (cls.status !== 'zeroed') {
-      out.coords = {
-        rawLat: rawLat, rawLon: rawLon,
-        status: cls.status,
-        lat: cls.lat != null ? cls.lat : null,
-        lng: cls.lng != null ? cls.lng : null,
-        datum: (text.match(GEO_DATUM_RE) || [, ''])[1],
-      };
-    }
+    // A zeroed pair is recorded as such (status 'zeroed', no lat/lng), so
+    // a header that says 0 0 and one with no 'lat lon' line stay apart.
+    out.coords = {
+      rawLat: rawLat, rawLon: rawLon,
+      status: cls.status,
+      lat: cls.lat != null ? cls.lat : null,
+      lng: cls.lng != null ? cls.lng : null,
+      datum: (text.match(GEO_DATUM_RE) || [, ''])[1],
+    };
   }
 
   let inst = text.match(INSTRUMENT_EQ_RE);
@@ -962,6 +1292,15 @@ async function httpHead(url) {
 
 async function httpRange(url, start, end) {
   const resp = await fetchWithRetry(url, { headers: { Range: 'bytes=' + start + '-' + end } });
+  // A server that ignores Range answers 200 with the whole file. Never
+  // read that body unless it is no longer than what was asked for.
+  if (resp.status === 200) {
+    const len = Number(resp.headers.get('content-length') || 0);
+    if (!len || len > end - start + 1) {
+      try { await resp.body.cancel(); } catch (e) { /* already closed */ }
+      throw new Error('range_ignored');
+    }
+  }
   const ab = await resp.arrayBuffer();
   return Buffer.from(ab);
 }

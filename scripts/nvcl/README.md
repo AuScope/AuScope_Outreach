@@ -16,6 +16,7 @@ plus manual dispatch. Node 22, built-ins only (no `npm install`).
 |---|---|---|
 | 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state (names, sizes, modified dates) and stamp cache rows the mirror no longer lists | no (continue-on-error; warns) |
 | 2 | `tsg-enrich.js --max-new=150` - read TSG headers of newly mirrored archives | no (continue-on-error; warns) |
+| 2b | `tsg-enrich.js --backfill-identity --max-new=400 --max-minutes=60` - read the identity block of archives read before it was parsed | no (continue-on-error; warns) |
 | 3 | `harvest.js` - WFS + `getDatasetCollection` on all 8 nodes, TSG matching, snapshot | **yes** |
 | 4 | `write-map-data.js` - map feeds from the snapshot | **yes** |
 | 5 | commit by explicit path, `git pull --rebase`, push (3 tries) | **yes** |
@@ -26,7 +27,7 @@ issue. **Why the rebase:** the hourly earthquake and status bots push to
 always moved since checkout and a plain push would be rejected. The files
 never overlap, so rebasing onto the new `main` is always clean.
 
-When step 1 or 2 fails, a last step (`if: always()`, keyed on those steps'
+When step 1, 2 or 2b fails, a last step (`if: always()`, keyed on those steps'
 `outcome`, since `continue-on-error` makes their conclusion a success)
 comments a warning on the same issue, or opens it, and the run stays green.
 The harvest works without either step, but a catalogue or enrichment that
@@ -41,7 +42,7 @@ stay that way unseen for weeks.
 | Path | Written by | Role |
 |---|---|---|
 | `data/nvcl/thredds-catalog.json` | step 1 | archive names per state on the mirror, each with its size and modified date (reconciliation, map link sizes, re-read queue) |
-| `data/nvcl/tsg-cache.jsonl` | step 2 (step 1 stamps `gone`) | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID (and, for archives read from 2026-10-13, the `[dbextra]` identity fields). Durable; re-read only when the mirror's file is newer than the read |
+| `data/nvcl/tsg-cache.jsonl` | steps 2 and 2b (step 1 stamps `gone`) | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID, and the `[dbextra]` identity and position fields (`identityFetchedAt` says when those were read; older rows get them from step 2b). Durable; re-read only when the mirror's file is newer than the read |
 | `data/nvcl/boreholes.jsonl` | step 3 (always) | every borehole coordinate ever read; a down node is drawn from here |
 | `data/nvcl_stats.json` | step 3 | canonical per-state snapshot (the 80% guard and carry-forward read it) |
 | `data/nvcl/boreholes-detail.jsonl` | step 3 | one line per WFS borehole: its datasets and matched TSG archives (raw evidence) |
@@ -113,6 +114,7 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
 ```bash
 node scripts/nvcl/thredds-catalog.js          # ~10 s
 node scripts/nvcl/tsg-enrich.js --max-new=10  # a few minutes; --dry-run lists only
+node scripts/nvcl/tsg-enrich.js --backfill-identity --max-new=50 --max-minutes=10
 node scripts/nvcl/harvest.js                  # 20-60 min, all 8 nodes
 node scripts/nvcl/write-map-data.js           # seconds
 ```
@@ -236,13 +238,31 @@ Changed:
   the rest only by a prefix, the whole-name claimant takes it instead of
   the archive being declared ambiguous.
 - `tsg-enrich.js` also parses the `[dbextra]` identity fields
-  (`drillholeName`, `holeService`, `datasetName`, `collar`, `ntrays`,
-  `nsamples`, `traypicsLogId`, `traythumbsLogId`, `mospicLogId`,
-  `imageLogId`) into the cache row, for archives read from 2026-10-13 on.
-  There is no backfill: the UUID join already ties existing rows to their
-  datasets. Two comments were also corrected: the `Depth (m)` lines sit in
-  `[band headers]` and `lat lon =` in `[dbextra]` (there is no `[borehole]`
-  block).
+  (`drillholeName`, `holeService`, `datasetName`, `collar`, `drillDate`,
+  `ntrays`, `nsamples`, `traypicsLogId`, `traythumbsLogId`, `mospicLogId`,
+  `imageLogId`) and the header's position (`lat lon`, `geo datum`: raw
+  `latRaw`/`lonRaw`/`geoDatum`, with `coordStatus` `zeroed` or `absent`
+  when there is nothing to read) into the cache row, and stamps
+  `identityFetchedAt`. Rows read before 2026-10-13 get them from
+  `--backfill-identity`, which re-reads ONLY the identity block: a HEAD,
+  the 64 KB tail (EOCD, and the central directory when it lies inside the
+  tail; ZIP64-aware) and the first 32 KB of the `.tsg` entry, inflated
+  with a sync flush so the cut deflate stream decodes as far as it goes.
+  `[description]` and `[dbextra]` end 2-3.5 KB into the entry in every
+  header sampled; a header whose `[dbextra]` is not closed within 32 KB is
+  read again at four times the length. About 97 KB per archive. Order
+  TAS, NT, QLD, SA, WA, VIC; `--max-minutes` stops it cleanly at a wall
+  clock cap, keeping what it read. A row whose header has no drillhole
+  name is not asked twice (`identityFetchedAt`), and within a state the
+  archives the last harvest joined to no hole go first. NCI answered at
+  7.7 s an archive at three in flight on 2026-10-13 (each request 4-6 s on
+  its own), not the 1.5-3 s expected, so the first 75-minute run read 584
+  archives (all 504 of TAS, 80 of NT; 55 MB) and the weekly step is capped
+  at 60 minutes. Two comments
+  were also corrected: the `Depth (m)` lines sit in `[band headers]` and
+  `lat lon =` in `[dbextra]` (there is no `[borehole]` block). A range
+  request answered with the whole file (a server ignoring `Range`) is
+  refused before its body is read.
 - `map_summary.json` carries `spectra_measured`, nationally and per state
   in `by_state`: for every dataset of the boreholes on the map, the largest
   `SpectralLog` `sampleCount` the node reports (each log of a dataset is a
