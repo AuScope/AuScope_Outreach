@@ -17,6 +17,7 @@ plus manual dispatch. Node 22, built-ins only (no `npm install`).
 | 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state (names, sizes, modified dates) and stamp cache rows the mirror no longer lists | no (continue-on-error; warns) |
 | 2 | `tsg-enrich.js --max-new=150` - read TSG headers of newly mirrored archives | no (continue-on-error; warns) |
 | 2b | `tsg-enrich.js --backfill-identity --max-new=400 --max-minutes=60` - read the identity block of archives read before it was parsed | no (continue-on-error; warns) |
+| 2c | `coords.js` - classify each cached header position, validate it against the WFS collars, write `header-positions.json` | no (continue-on-error; warns) |
 | 3 | `harvest.js` - WFS + `getDatasetCollection` on all 8 nodes, TSG matching, snapshot | **yes** |
 | 4 | `write-map-data.js` - map feeds from the snapshot | **yes** |
 | 5 | commit by explicit path, `git pull --rebase`, push (3 tries) | **yes** |
@@ -27,7 +28,7 @@ issue. **Why the rebase:** the hourly earthquake and status bots push to
 always moved since checkout and a plain push would be rejected. The files
 never overlap, so rebasing onto the new `main` is always clean.
 
-When step 1, 2 or 2b fails, a last step (`if: always()`, keyed on those steps'
+When step 1, 2, 2b or 2c fails, a last step (`if: always()`, keyed on those steps'
 `outcome`, since `continue-on-error` makes their conclusion a success)
 comments a warning on the same issue, or opens it, and the run stays green.
 The harvest works without either step, but a catalogue or enrichment that
@@ -43,9 +44,10 @@ stay that way unseen for weeks.
 |---|---|---|
 | `data/nvcl/thredds-catalog.json` | step 1 | archive names per state on the mirror, each with its size and modified date (reconciliation, map link sizes, re-read queue) |
 | `data/nvcl/tsg-cache.jsonl` | steps 2 and 2b (step 1 stamps `gone`) | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID, and the `[dbextra]` identity and position fields (`identityFetchedAt` says when those were read; older rows get them from step 2b). Durable; re-read only when the mirror's file is newer than the read |
+| `data/nvcl/header-positions.json` | step 2c (which also stamps `headerLat`, `headerLng`, `headerPosClass`, `headerPosZone`, `headerPosHow` on cache rows) | header-position classes by state, their validation against WFS collars, and the class/state pairs accepted for placing a hole |
 | `data/nvcl/boreholes.jsonl` | step 3 (always) | every borehole coordinate ever read; a down node is drawn from here |
 | `data/nvcl_stats.json` | step 3 | canonical per-state snapshot (the 80% guard and carry-forward read it) |
-| `data/nvcl/boreholes-detail.jsonl` | step 3 | one line per WFS borehole: its datasets and matched TSG archives (raw evidence) |
+| `data/nvcl/boreholes-detail.jsonl` | step 3 | one line per WFS borehole: its datasets and matched TSG archives (raw evidence); plus one per THREDDS-only hole (`provisional`, `source: "thredds"`) |
 | `data/nvcl_history.jsonl` | step 3 | one line per run |
 | `data/map_boreholes.json`, `map_timeline.json`, `map_summary.json` | step 4 | read by `NVCL_Map.html` |
 | `data/nvcl_<state>.geojson` (8) | step 4 | read by `index.html`; every registered borehole, same property names as before |
@@ -61,6 +63,17 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   matched TSG archive). Key `(state, id)`, sorted by state then id. The id
   is the WFS identifier after the node's `.../borehole/` base, so it can
   hold a `/` (NT `1654228_82/1`, WA `LONDDH1/94`); see *Changed* below.
+  Plus the THREDDS-only holes: archives on the mirror that no node lists,
+  placed from their TSG header (id: the header's drillhole name, else the
+  archive name).
+- **p:** `'t'` on a THREDDS-only hole, whose position comes from its TSG
+  header; absent otherwise. `NVCL_Map.html` adds "(position from TSG
+  header)" to its popup. `map_summary.json` `provisional_holes` counts them
+  by state and reason (`orphan`: the node answered and does not list the
+  hole; `node_unreachable`: the node was down or degraded) and lists per
+  state the holes left unplaced for want of an accepted position. They
+  count in the timeline and km like any other hole, and are left out of the
+  geojson files (those list registered holes).
 - **month** (first scan): TSG header scan date (confidence `high`/`good`),
   else the TSG `Created :` date, else the node's date (ScanDate, else
   createdDate, which is an ingest date). Every TSG tier outranks the API,
@@ -89,6 +102,8 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   the dots.
 - **Stale nodes** (unreachable or degraded this run) keep their previous map
   rows and geojson file and are listed in `map_summary.json` `stale_states`.
+  Their THREDDS-only rows are the exception: this run's replace the
+  previous run's, so an archive mirrored during an outage reaches the map.
 - **Per-state carry-forward:** a state whose fresh rows come to fewer than
   90% of its rows on the live map, and at least 10 rows fewer, keeps its
   live rows and geojson file instead, with `by_state[].status` `carried`,
@@ -115,6 +130,7 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
 node scripts/nvcl/thredds-catalog.js          # ~10 s
 node scripts/nvcl/tsg-enrich.js --max-new=10  # a few minutes; --dry-run lists only
 node scripts/nvcl/tsg-enrich.js --backfill-identity --max-new=50 --max-minutes=10
+node scripts/nvcl/coords.js                   # seconds; header positions + validation
 node scripts/nvcl/harvest.js                  # 20-60 min, all 8 nodes
 node scripts/nvcl/write-map-data.js           # seconds
 ```
@@ -263,6 +279,42 @@ Changed:
   `lat lon =` in `[dbextra]` (there is no `[borehole]` block). A range
   request answered with the whole file (a server ignoring `Range`) is
   refused before its body is read.
+- THREDDS-only holes (added 2026-10-13). State survey services are down
+  often, and a hole belongs on the map if either the survey or the mirror
+  can place it. `coords.js` classifies each cached header's `lat lon` /
+  `geo datum`: `decimal` (lat -45 to -9, lon 111 to 155, inside the
+  state's box), `decimal_swapped` and `decimal_sign` (axes reversed, minus
+  sign dropped), `mga_explicit` (zone named in `geo datum`, e.g.
+  `GDA94_MGA54`; inverse transverse Mercator on GRS80), `mga_inferred`
+  (no zone: every zone the state spans is tried, a single in-state answer
+  is used, several are settled by the median collar of the hole's project
+  neighbours when at least 3 are placed and the nearest answer is within
+  50 km), `swapped` (northing first), `zeroed`, `absent`, `unresolved`
+  (including whole degrees such as `-30 134`, a placeholder). It checks
+  every row whose archive joined a hole against that hole's WFS collar and
+  writes median and p95 distance per class and state to
+  `header-positions.json`; a class/state pair whose p95 exceeds 5 km places
+  nothing (with fewer than 5 rows to judge by, the class's national verdict
+  applies). `harvest.js` groups the archives that joined no hole by the
+  header's drillhole name and emits each group with an accepted position as
+  a provisional hole, reason `orphan` or `node_unreachable`. The MGA
+  northing floor is 5,000,000, not 6,000,000: Tasmania lies at 5.16-5.62
+  million (TAS `GL14_25` reads `5340643 382466`).
+- A `drillhole` TSG match tier (second, after `uuid`, and additive like
+  it): the header's `[dbextra]` drillhole name is the node's own hole id
+  (QLD `bh080912`, TAS `82799`, NT `8618203_NTGS83/5`), so an archive finds
+  its hole without the node's datasets, and a THREDDS-only hole is joined
+  to its WFS record, and leaves the provisional list, the first run the
+  node lists it. Copied headers (one UUID in several datasets) are not in
+  its index, and it obeys the suffix tiers' feature-number rule.
+- A node down or degraded keeps its holes' archives. Its holes come from
+  the coordinate cache with no datasets (or most queries failed), so the
+  `uuid` tier is blind; the previous run's detail file stands in for it
+  (tier `prev`), the other tiers run as usual, and only archives no hole
+  has ever held become THREDDS-only (`node_unreachable`). The coordinate
+  cache now keeps each hole's feature numbers for the same reason. In a
+  simulated TAS outage with the previous attribution removed as well, the
+  `drillhole` tier alone joined the archives of 478 of TAS's 482 holes.
 - `map_summary.json` carries `spectra_measured`, nationally and per state
   in `by_state`: for every dataset of the boreholes on the map, the largest
   `SpectralLog` `sampleCount` the node reports (each log of a dataset is a

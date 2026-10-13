@@ -74,6 +74,18 @@ jobs:
         continue-on-error: true
         run: node scripts/nvcl/tsg-enrich.js --backfill-identity --max-new=400 --max-minutes=60
 
+      # Turn each cached header's 'lat lon' / 'geo datum' into a position
+      # where one can be had (decimal degrees, MGA with or without its zone,
+      # northing first), record it on the cache row and validate each class
+      # against the WFS collars of the last harvest. Writes
+      # data/nvcl/header-positions.json: a class/state with p95 above 5 km
+      # places nothing. The harvest places THREDDS-only holes (on the mirror,
+      # listed by no node) from it. Optional: without it, nothing is placed.
+      - name: Header positions
+        id: coords
+        continue-on-error: true
+        run: node scripts/nvcl/coords.js
+
       # The live harvest of all 8 nodes. Writes data/nvcl_stats.json,
       # data/nvcl/boreholes-detail.jsonl and data/nvcl_history.jsonl only
       # when the health guard passes; otherwise exits 1 and writes nothing.
@@ -113,7 +125,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/nvcl/*.jsonl data/nvcl/thredds-catalog.json \
+          git add data/nvcl/*.jsonl data/nvcl/thredds-catalog.json data/nvcl/header-positions.json \
                   data/nvcl_stats.json data/nvcl_history.jsonl \
                   data/map_*.json data/nvcl_*.geojson
           if git diff --cached --quiet; then
@@ -158,7 +170,7 @@ jobs:
       # also warns when any state was carried forward or any node degraded
       # (the step above), so a state stuck on old figures is seen within a week.
       - name: Warn on a failed optional step or a carried-forward state
-        if: always() && (steps.catalog.outcome == 'failure' || steps.enrich.outcome == 'failure' || steps.backfill.outcome == 'failure' || steps.carried.outputs.stale != '' || steps.carried.outputs.degraded != '')
+        if: always() && (steps.catalog.outcome == 'failure' || steps.enrich.outcome == 'failure' || steps.backfill.outcome == 'failure' || steps.coords.outcome == 'failure' || steps.carried.outputs.stale != '' || steps.carried.outputs.degraded != '')
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -166,12 +178,13 @@ jobs:
           CATALOG: ${{ steps.catalog.outcome }}
           ENRICH: ${{ steps.enrich.outcome }}
           BACKFILL: ${{ steps.backfill.outcome }}
+          COORDS: ${{ steps.coords.outcome }}
           STALE: ${{ steps.carried.outputs.stale }}
           DEGRADED: ${{ steps.carried.outputs.degraded }}
         run: |
           title="Pipeline failure: ${{ github.workflow }}"
           existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
-          body="Warning at $(date -u +%FT%TZ): THREDDS catalogue step $CATALOG, TSG enrichment step $ENRICH, identity backfill step $BACKFILL. States carried forward on the map (stale_states): ${STALE:-none}. Nodes degraded this run: ${DEGRADED:-none}. A failed optional step means the map may be on an older catalogue or missing this week's newly mirrored archives; a carried or degraded state shows figures from its last good run. $RUN_URL"
+          body="Warning at $(date -u +%FT%TZ): THREDDS catalogue step $CATALOG, TSG enrichment step $ENRICH, identity backfill step $BACKFILL, header positions step $COORDS. States carried forward on the map (stale_states): ${STALE:-none}. Nodes degraded this run: ${DEGRADED:-none}. A failed optional step means the map may be on an older catalogue or missing this week's newly mirrored archives; a carried or degraded state shows figures from its last good run. $RUN_URL"
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body" || true
           else

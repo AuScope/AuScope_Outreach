@@ -1,0 +1,140 @@
+{
+ "generated": "2026-10-13T10:53:52Z",
+ "source": "scripts/nvcl/coords.js - TSG header lat lon against the WFS collar of the hole each archive joined",
+ "rule": "a class/state pair is used for placement when the p95 distance to the WFS collar is at most 5000 m over at least 5 validated rows; with fewer, the class's national verdict",
+ "classes_by_state": {
+  "NT": {
+   "zeroed": 73,
+   "decimal": 9,
+   "absent": 2,
+   "unread": 478
+  },
+  "QLD": {
+   "decimal": 19,
+   "unread": 486,
+   "unresolved:3_zones_too_few_neighbours": 17,
+   "mga_explicit": 1,
+   "zeroed": 11,
+   "mga_inferred:neighbour_median": 17
+  },
+  "SA": {
+   "unread": 1811,
+   "decimal": 14,
+   "decimal_sign": 4,
+   "decimal_swapped": 2,
+   "unresolved:whole_degrees": 1,
+   "zeroed": 3
+  },
+  "TAS": {
+   "zeroed": 481,
+   "decimal": 22,
+   "swapped:single_zone": 1
+  },
+  "VIC": {
+   "unread": 39
+  },
+  "WA": {
+   "unread": 1932,
+   "decimal": 70,
+   "absent": 2
+  }
+ },
+ "validation": {
+  "decimal/*": {
+   "n": 123,
+   "median_m": 3,
+   "p95_m": 31,
+   "max_m": 630728
+  },
+  "decimal/NT": {
+   "n": 9,
+   "median_m": 8,
+   "p95_m": 16561,
+   "max_m": 16561
+  },
+  "decimal/QLD": {
+   "n": 9,
+   "median_m": 0,
+   "p95_m": 0,
+   "max_m": 0
+  },
+  "decimal/SA": {
+   "n": 13,
+   "median_m": 3,
+   "p95_m": 3,
+   "max_m": 3
+  },
+  "decimal/TAS": {
+   "n": 22,
+   "median_m": 0,
+   "p95_m": 31,
+   "max_m": 203
+  },
+  "decimal/WA": {
+   "n": 70,
+   "median_m": 4,
+   "p95_m": 9,
+   "max_m": 630728
+  },
+  "decimal_sign/*": {
+   "n": 4,
+   "median_m": 3,
+   "p95_m": 3,
+   "max_m": 3
+  },
+  "decimal_sign/SA": {
+   "n": 4,
+   "median_m": 3,
+   "p95_m": 3,
+   "max_m": 3
+  },
+  "decimal_swapped/*": {
+   "n": 2,
+   "median_m": 3,
+   "p95_m": 3,
+   "max_m": 3
+  },
+  "decimal_swapped/SA": {
+   "n": 2,
+   "median_m": 3,
+   "p95_m": 3,
+   "max_m": 3
+  },
+  "mga_explicit/*": {
+   "n": 1,
+   "median_m": 100,
+   "p95_m": 100,
+   "max_m": 100
+  },
+  "mga_explicit/QLD": {
+   "n": 1,
+   "median_m": 100,
+   "p95_m": 100,
+   "max_m": 100
+  },
+  "mga_inferred/*": {
+   "n": 17,
+   "median_m": 11,
+   "p95_m": 12,
+   "max_m": 12
+  },
+  "mga_inferred/QLD": {
+   "n": 17,
+   "median_m": 11,
+   "p95_m": 12,
+   "max_m": 12
+  }
+ },
+ "accepted": {
+  "decimal/NT": false,
+  "decimal/QLD": true,
+  "decimal/SA": true,
+  "decimal/TAS": true,
+  "decimal/WA": true,
+  "decimal_sign/SA": false,
+  "decimal_swapped/SA": false,
+  "mga_explicit/QLD": false,
+  "mga_inferred/QLD": true,
+  "swapped/TAS": false
+ }
+}

@@ -27,7 +27,11 @@
 > this repo's harvest reached the TAS service. The
 > *Estimation tier* and *Mirror-only* figures stay in the snapshot but are
 > never drawn on the maps: a map borehole shows measured metres or none.
-> *TSG collar coordinates* are parsed and cached but not used. How the map
+> *TSG collar coordinates* place one kind of hole only: an archive on the
+> mirror that no node lists, when its header's position class is validated
+> for its state against WFS collars (p95 within 5 km; `coords.js`). Such a
+> hole is drawn, flagged as positioned from its TSG header, and counts in
+> `nvcl_stats.json` as mirror-only exactly as before. How the map
 > picks each borehole's month, instrument and metres is set out in
 > `scripts/nvcl/README.md`.
 >
@@ -67,6 +71,9 @@
 >   counts, image log GUIDs) and the raw `lat lon` / `geo datum` for every
 >   archive it reads, and `--backfill-identity` re-reads only that block
 >   (about 97 KB an archive) for rows read before 2026-10-13;
+> - a `drillhole` TSG match tier after `uuid` (the header's drillhole name
+>   is the node's hole id), and, while a node is down or degraded, the
+>   previous run's attribution in place of the node's datasets;
 > - the TSG cache is reconciled against the live NCI catalogue each run:
 >   rows whose archive the mirror no longer lists are stamped `gone` and are
 >   neither matched, counted (mirror-only included) nor linked, and rows

@@ -30,6 +30,14 @@
  *           catalogue's dataSize when it has one, else the TSG cache's
  *           zipBytes. Only archives the mirror lists right now; none at all
  *           for a state whose catalogue listing is missing.
+ *   p       't' on a THREDDS-only hole (added 2026-10-13): no node lists it,
+ *           and its position is its TSG header's (harvest.js places it only
+ *           when scripts/nvcl/coords.js accepts that position's class for
+ *           the state). Otherwise absent. Counted in map_summary.json
+ *           provisional_holes by state and reason ('orphan': the node
+ *           answered and does not list the hole; 'node_unreachable': down
+ *           or degraded), and in the timeline and km like any other hole.
+ *           Left out of the geojson files: those list registered holes.
  *
  * spectra_measured (map_summary.json, nationally and per state): the sum,
  *           over every dataset of the boreholes on the map, of the sample
@@ -38,7 +46,9 @@
  *           TSG archive add nothing. A held state keeps its previous figure.
  *
  * Carry-forward: a state whose node was unreachable or degraded this run
- * keeps its previous map rows and its previous geojson file. So does a state
+ * keeps its previous map rows (its previous THREDDS-only rows excepted:
+ * this run's, placed against the mirror as it is now, replace them) and its
+ * previous geojson file. So does a state
  * whose fresh rows fall below 90% of its rows on the live map, by at least
  * 10 rows (status 'carried'). Both are listed in map_summary.json
  * stale_states, and the workflow warns on the run's issue whenever that list
@@ -142,10 +152,11 @@ function main() {
   const errors = [];
   const archives = loadArchives(TSG_CACHE_FILE, CATALOG_FILE);
   const freshByState = {};
+  const heldProvisional = {};       // stale states: this run's THREDDS-only rows
   const spectraByState = {};
   const tierCounts = { tsg_scan: 0, api: 0, tsg_created: 0, none: 0, out_of_range_skipped: 0 };
   detail.forEach(function(d) {
-    if (stale.indexOf(d.state) !== -1) return;
+    if (stale.indexOf(d.state) !== -1 && !d.provisional) return;
     if (!d.has_data || d.seeded) return;
     if (!isFinite(d.lat) || !isFinite(d.lng)) return;
     // A negative scanned length in a fresh harvest is a bug upstream, not a
@@ -178,6 +189,11 @@ function main() {
     if (arc) {
       row.z = arc.z;
       if (arc.mb) row.mb = arc.mb;
+    }
+    if (d.provisional) row.p = 't';
+    if (stale.indexOf(d.state) !== -1) {
+      (heldProvisional[d.state] || (heldProvisional[d.state] = [])).push(row);
+      return;
     }
     (freshByState[d.state] || (freshByState[d.state] = [])).push(row);
   });
@@ -227,12 +243,30 @@ function main() {
   // stale node must not smuggle those back in. These are the only rows that
   // are ever sanitised rather than failed on.
   let sanitised = 0;
+  const carriedRows = new Set();
   held.forEach(function(code) {
+    // A state held because its node was down or degraded drops its previous
+    // THREDDS-only rows for this run's (the mirror as it is now, against
+    // the previous run's attribution); one held by the 90% rule keeps
+    // every row it had, those included.
+    const swap = stale.indexOf(code) !== -1;
+    const ids = new Set();
     (prevByState[code] || []).forEach(function(r) {
+      if (swap && r.p === 't') return;
       const row = Object.assign({}, r);
       if (row.month && !(row.month >= MIN_MONTH && row.month <= maxMonth)) { delete row.month; sanitised++; }
       if (row.depth_m != null && !(row.depth_m >= 0)) { row.depth_m = null; sanitised++; }
       rows.push(row);
+      carriedRows.add(row);
+      ids.add(row.id);
+    });
+    if (!swap) return;
+    (heldProvisional[code] || []).forEach(function(r) {
+      if (ids.has(r.id)) {
+        console.log('THREDDS-only row ' + code + '/' + r.id + ' not added: a carried row has that id');
+        return;
+      }
+      rows.push(r);
     });
   });
   if (sanitised) console.log('Carried rows: ' + sanitised + ' out-of-range month(s) / negative depth(s) dropped');
@@ -317,7 +351,7 @@ function main() {
   const months = rows.map(function(r) { return r.month; }).filter(Boolean).sort();
   const sources = { tsg: 0, api: 0, none: 0, carried: 0 };
   rows.forEach(function(r) {
-    if (held.indexOf(r.state) !== -1) sources.carried++;
+    if (carriedRows.has(r)) sources.carried++;
     else if (r.month_source === 'tsg') sources.tsg++;
     else if (r.month_source === 'api') sources.api++;
     else sources.none++;
@@ -335,6 +369,9 @@ function main() {
     date_range: { earliest: months[0] || null, latest: months[months.length - 1] || null },
     month_sources: sources,
     stale_states: held.filter(function(code) { return (prevByState[code] || []).length; }).sort(),
+    // THREDDS-only holes on the map (p 't'), by state and reason, and the
+    // ones the harvest could not place (no accepted header position).
+    provisional_holes: provisionalSummary(rows, detail, snapshot),
   };
 
   // -- GeoJSON for index.html: every registered borehole, fresh states only.
@@ -476,6 +513,29 @@ function pickArchive(d, archives) {
   };
 }
 
+// map_summary.json provisional_holes: THREDDS-only holes on the map by
+// state and reason, from this run's detail ('carried' for a row a state
+// held by the 90% rule kept from the live map), and per state the holes
+// the harvest left unplaced.
+function provisionalSummary(rows, detail, snapshot) {
+  const reasonOf = {};
+  detail.forEach(function(d) { if (d.provisional) reasonOf[d.state + '/' + d.id] = d.provisionalReason; });
+  const byState = {};
+  let total = 0;
+  rows.forEach(function(r) {
+    if (r.p !== 't') return;
+    const reason = reasonOf[r.state + '/' + r.id] || 'carried';
+    const s = byState[r.state] || (byState[r.state] = {});
+    s[reason] = (s[reason] || 0) + 1;
+    total++;
+  });
+  const unplaced = {};
+  (snapshot.states || []).forEach(function(s) {
+    if (s.provisional_unplaced) unplaced[s.state] = s.provisional_unplaced;
+  });
+  return { total: total, by_state: byState, unplaced: unplaced };
+}
+
 // -- Instrument ----------------------------------------------------
 
 // Port of parse_instrument() and _fix_v6_typo() from the retired pipeline,
@@ -548,7 +608,7 @@ function buildGeojson(s, rows, prevGeo, cacheFirstSeen, snapshot) {
     if (p.boreholeId && p.firstSeen) prevFirstSeen[p.boreholeId] = p.firstSeen;
   });
   const features = rows.filter(function(d) {
-    return !d.seeded && isFinite(d.lat) && isFinite(d.lng);
+    return !d.seeded && !d.provisional && isFinite(d.lat) && isFinite(d.lng);
   }).map(function(d) {
     const ds = (d.datasets || []).slice().sort(function(a, b) {
       return cmp(a.created || '9999', b.created || '9999');

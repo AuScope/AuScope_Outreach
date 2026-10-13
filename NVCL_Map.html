@@ -1010,7 +1010,7 @@
     }
     return `
       <div class="popup-title">${esc(b.name || b.id)}</div>
-      <div class="popup-row"><strong>${esc(b.state)}</strong> &middot; ${esc(fmtMonth(b.month))}${dateSrc}</div>
+      <div class="popup-row"><strong>${esc(b.state)}</strong>${b.p === 't' ? ' <span style="color: var(--fg-muted);">' + esc('(position from TSG header)') + '</span>' : ''} &middot; ${esc(fmtMonth(b.month))}${dateSrc}</div>
       <div class="popup-row">${esc(v)} &middot; ${depth}${scans}</div>
       ${archive}
     `;

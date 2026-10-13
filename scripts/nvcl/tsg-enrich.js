@@ -365,6 +365,7 @@ const MERGE_KEEP = [
 // the header (coordStatus is always set then) and kept as a group from the
 // previous read by one that did not.
 const COORD_FIELDS = ['latRaw', 'lonRaw', 'coordStatus', 'lat', 'lng', 'geoDatum'];
+const HEADER_POS_FIELDS = ['headerLat', 'headerLng', 'headerPosClass', 'headerPosZone', 'headerPosHow'];
 
 function mergeRow(prev, next) {
   if (!prev) return next;
@@ -948,6 +949,9 @@ async function harvestOne(state, zipName) {
 // classifyLatLon's verdict; the raw pair and the datum are kept verbatim.
 function setCoords(row, parsed) {
   COORD_FIELDS.forEach(function(k) { delete row[k]; });
+  // What scripts/nvcl/coords.js made of the previous values no longer
+  // holds; it classifies the new ones on its next run.
+  HEADER_POS_FIELDS.forEach(function(k) { delete row[k]; });
   if (!parsed.coords) { row.coordStatus = 'absent'; return; }
   row.latRaw = parsed.coords.rawLat;
   row.lonRaw = parsed.coords.rawLon;

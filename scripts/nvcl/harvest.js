@@ -37,11 +37,23 @@
  *     one month (TAS 30% in 2020-10, SA 20% in 2019-07) and those clusters
  *     vanish under TSG dates. Every date carries a dateSource.
  *
+ * THREDDS-only holes (added 2026-10-13): an archive that joins no hole is
+ * still core the instrument scanned. When its TSG header gives a position
+ * scripts/nvcl/coords.js accepts for its class and state
+ * (data/nvcl/header-positions.json), it is written to the detail file as a
+ * provisional hole (source 'thredds') and the map draws it; otherwise it
+ * stays mirror-only, counted and not drawn. nvcl_stats.json counts it as
+ * mirror-only exactly as before, with provisional_holes beside it. While a
+ * node is down or degraded, the previous run's detail file says which
+ * archives are its holes' (see attachTsg), so only archives no hole has
+ * ever held are placed.
+ *
  * Outputs (only when the run is healthy - see health guard below):
  *   data/nvcl_stats.json              canonical snapshot (per-state figures)
  *   data/nvcl/boreholes-detail.jsonl  one line per harvested borehole: its
  *                                     WFS record, API datasets and matched
- *                                     TSG archives (input to write-map-data.js)
+ *                                     TSG archives (input to write-map-data.js),
+ *                                     and one per THREDDS-only hole
  *   data/nvcl_history.jsonl           one appended line per run (trend record)
  * Always written (even when the guard fails):
  *   data/nvcl/boreholes.jsonl         carry-forward coordinate cache
@@ -123,6 +135,15 @@ const THREDDS_CATALOG = path.join(DATA_DIR, 'nvcl', 'thredds-catalog.json');
 // Loaded once at module scope: aggregate() needs it and runs outside run().
 const THREDDS_CAT = readJson(THREDDS_CATALOG, null);
 const TSG_SOURCE = 'NCI THREDDS TSG (10.25914/bztg-rg43)';
+// Header-position classes and their validation against WFS collars, from
+// scripts/nvcl/coords.js (added 2026-10-13): what may place a THREDDS-only
+// hole. Without it nothing is placed and those holes stay mirror-only.
+const coords = require('./coords.js');
+const HEADER_POSITIONS = path.join(DATA_DIR, 'nvcl', 'header-positions.json');
+// The previous run's per-state attribution (state -> WFS hole id -> archive
+// names, twins included), from the committed detail file. It stands in for
+// the node while the node is down or degraded (see attachTsg).
+const PREV_ATTRIBUTION = loadPrevAttribution(DETAIL_FILE);
 
 // The 8 public NVCL nodes. cqlBroken: GeoServer ignores CQL on nvclCollection
 // (returns 0 rows) so we page ALL boreholes and filter locally. wfsOnly: VIC
@@ -178,6 +199,12 @@ async function run() {
   // TSG enrichment cache (optional - the harvest is fully functional without
   // it, just less measured and on ingest dates).
   const tsgIndex = loadTsgIndex(TSG_CACHE);
+  const positions = readJson(HEADER_POSITIONS, null);
+  console.log(positions && positions.validation
+    ? 'Header positions: ' + HEADER_POSITIONS + ' (' + Object.keys(positions.accepted || {}).filter(function(k) {
+      return positions.accepted[k];
+    }).length + ' class/state pair(s) accepted for placement)'
+    : 'Header positions: none at ' + HEADER_POSITIONS + ' - no THREDDS-only hole will be placed');
 
   // Coordinates we already hold. A node that cannot be reached now falls back
   // to these instead of dropping its boreholes off the map.
@@ -188,7 +215,7 @@ async function run() {
   const results = [];
   for (let i = 0; i < nodes.length; i++) {
     const r = await harvestNode(nodes[i], bhCache, asOf);
-    attachTsg(r, tsgIndex);
+    attachTsg(r, tsgIndex, positions);
     results.push(r);
   }
 
@@ -794,8 +821,27 @@ function loadTsgIndex(file) {
   // map's link are taken from: one with an interval, then one with a scan
   // date, then not an '_Old' copy, then the shorter name. The others are
   // listed on it as twins.
+  //
+  // Then, per state, the copied-header UUIDs (a UUID carried by more than
+  // one dataset; see above) and the 'drillhole' tier's index: each row's
+  // [dbextra] drillhole name, which the node wrote from its own record of
+  // the hole (added 2026-10-13). A copied header copies the drillhole name
+  // too, so its rows are left out of that index, and never placed as a
+  // hole of their own (see provisionalHoles).
   Object.keys(idx.byState).forEach(function(code) {
     const st = idx.byState[code];
+    const groupsByUuid = new Map();
+    st.rows.forEach(function(r) {
+      const u = uuidKey(r.tsgUuid);
+      if (u) (groupsByUuid.get(u) || groupsByUuid.set(u, new Set()).get(u)).add(r._group);
+    });
+    st.copied = new Set();
+    groupsByUuid.forEach(function(g, u) { if (g.size > 1) st.copied.add(u); });
+    st.drill = new Map();
+    st.rows.forEach(function(r) {
+      if (!r.drillholeName || st.copied.has(uuidKey(r.tsgUuid))) return;
+      drillKeys(r.drillholeName).forEach(function(k) { push(st.drill, k, r); });
+    });
     st.rep = new Map();
     st.groups.forEach(function(members, key) {
       const ranked = members.slice().sort(function(a, b) {
@@ -825,6 +871,27 @@ function loadTsgIndex(file) {
   }
 }
 
+// state -> WFS hole id -> archive names (with twins) from a detail file,
+// THREDDS-only rows excluded. Empty when the file is missing or unreadable:
+// a first run has no previous attribution.
+function loadPrevAttribution(file) {
+  const out = {};
+  if (!fs.existsSync(file)) return out;
+  fs.readFileSync(file, 'utf8').split('\n').forEach(function(line) {
+    if (!line.trim()) return;
+    let d;
+    try { d = JSON.parse(line); } catch (e) { return; }
+    if (!d || !d.state || !d.id || d.provisional || d.source === 'thredds') return;
+    const zips = [];
+    (d.tsg || []).forEach(function(t) {
+      if (t.zip) zips.push(t.zip);
+      (t.twins || []).forEach(function(z) { zips.push(z); });
+    });
+    if (zips.length) (out[d.state] || (out[d.state] = {}))[d.id] = zips;
+  });
+  return out;
+}
+
 // The TSG header's UUID as a join key (added 2026-10-13). It is the same
 // value as the node's getDatasetCollection DatasetID. Most headers and most
 // DatasetIDs carry a 35-character form missing the GUID's last digit
@@ -842,6 +909,15 @@ function uuidKey(s) {
 // a match.
 function normKey(s) {
   return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+// A header's drillhole name as join keys: normalised, and, when it is a
+// bare number, that number without leading zeros under '#' (which normKey
+// can never produce), to meet a hole's own feature number.
+function drillKeys(s) {
+  const k = normKey(s);
+  if (!k) return [];
+  return /^\d+$/.test(k) ? [k, '#' + String(Number(k))] : [k];
 }
 
 // Sum the scan intervals of cache rows that matched no harvested borehole.
@@ -941,6 +1017,10 @@ function mergeBoreholeCache(cache, state, boreholes, today, legacyFirstSeen) {
       state: state, id: bh.id, name: bh.name,
       lat: bh.lat, lng: bh.lng,
       lengthM: bh.lengthM, custodian: bh.custodian || '',
+      // The node's feature numbers (added 2026-10-13), so a hole served
+      // from this cache while its node is down still owns the archives
+      // filed under its number (resolveTsgMatches).
+      featureNum: bh.featureNum || undefined, ownNum: bh.ownNum || undefined,
       firstSeen: (prev && prev.firstSeen) || (legacyFirstSeen && legacyFirstSeen[bh.name]) || today,
       lastSeen: today,
     });
@@ -958,6 +1038,7 @@ function boreholesFromCache(cache, state) {
     return {
       id: r.id, name: r.name, lat: r.lat, lng: r.lng,
       lengthM: r.lengthM, custodian: r.custodian || '',
+      featureNum: r.featureNum || '', ownNum: r.ownNum || '',
       datasets: [], fromCache: true, coordsAsOf: r.lastSeen || null,
       seeded: !!r.seeded,
     };
@@ -1016,10 +1097,13 @@ function saveBoreholeCache(cache, file) {
 
 // Attach cache rows to boreholes and report the match rate. Rows that match
 // nothing are counted and logged - never silently dropped.
-function attachTsg(result, idx) {
-  const st = idx.byState[result.node.code];
+function attachTsg(result, idx, positions) {
+  const code = result.node.code;
+  const st = idx.byState[code];
   result.tsg = { rows: st ? st.rows.length : 0, gone: st ? st.gone : 0, matchedRows: 0, matchedBoreholes: 0,
     tiers: {}, tierRows: {} };
+  result.provisional = [];
+  result.provisionalUnplaced = [];
   if (!st) return;
 
   // A node that returned NO boreholes - unreachable, or not participating -
@@ -1031,23 +1115,18 @@ function attachTsg(result, idx) {
   // `used` stays empty and every cache row falls through to mirror-only.
   const used = new Set();
 
-  // A node serving cached coordinates reports figures carried forward from the
-  // run that last reached it, and those figures already include every one of
-  // its TSG archives. Letting the same archives fall through to mirror-only
-  // would count the same holes twice - 482 cached TAS boreholes PLUS 499
-  // mirror-only TAS archives, for a state that has about 500 holes in total.
-  if (result.fromCache) {
-    st.rows.forEach(function(r) { used.add(r._key); idx.matchedRows.add(r._key); });
-    result.tsg.matchedRows = used.size;
-    result.tsg.mirrorOnlyKm = 0;
-    result.tsg.mirrorOnlyArchives = 0;
-    result.tsg.mirrorOnlyBoreholes = 0;
-    console.log('  TSG: ' + st.rows.length + ' cache row(s) attributed to the '
-      + 'carried-forward figures for this node, not to mirror-only');
-    return;
-  }
-
-  const resolved = resolveTsgMatches(st, result.boreholes);
+  // A node down or degraded this run (added 2026-10-13) cannot say which
+  // hole an archive is: its holes come from the coordinate cache with no
+  // datasets, or its dataset service failed most queries, so the uuid tier
+  // is mostly blind. The previous run's attribution (its detail file, read
+  // at start-up) stands in for it: an archive it gave to a hole this run
+  // still lists goes to that hole first, and one it gave to a hole this run
+  // cannot list is still that hole's, and not a hole of its own. The
+  // remaining archives go through the tiers as usual (the drillhole tier
+  // works without the node), and only what is left is THREDDS-only.
+  const stale = !!result.fromCache || !result.wfsOk;
+  const prior = stale ? priorAttribution(st, code, result.boreholes) : null;
+  const resolved = resolveTsgMatches(st, result.boreholes, prior ? prior.claims : null);
   result.boreholes.forEach(function(bh, i) {
     const hit = resolved.hits[i];
     if (!hit) return;
@@ -1072,6 +1151,46 @@ function attachTsg(result, idx) {
       + ' generic suffix not the hole\'s whole name, ' + rj.prefix
       + ' prefix hit beaten by another hole\'s whole-name hit, ' + rj.ambiguous + ' ambiguous'
       + (rj.examples.length ? ' (e.g. ' + rj.examples.slice(0, 4).join('; ') + ')' : ''));
+  }
+
+  // Archives a hole has, and archives the previous run gave to a hole this
+  // run does not list: neither is a THREDDS-only hole.
+  const attributed = new Set(used);
+  if (prior) {
+    prior.groups.forEach(function(g) {
+      st.groups.get(g).forEach(function(m) { attributed.add(m._key); });
+    });
+  }
+  const cand = [];
+  st.rep.forEach(function(r) {
+    if (attributed.has(r._key) || st.copied.has(uuidKey(r.tsgUuid))) return;
+    cand.push(r);
+  });
+  const ph = provisionalHoles(code, cand, stale ? 'node_unreachable' : 'orphan', result.boreholes, positions);
+  result.provisional = ph.placed;
+  result.provisionalUnplaced = ph.unplaced;
+  if (cand.length) {
+    console.log('  THREDDS-only: ' + cand.length + ' archive(s) joined no hole -> ' + ph.placed.length
+      + ' hole(s) placed from their TSG header (' + (stale ? 'node_unreachable' : 'orphan') + '), '
+      + ph.unplaced.length + ' with no accepted position (mirror-only, unplaced)'
+      + (prior ? '; ' + prior.groups.size + ' archive(s) held by the previous run\'s attribution' : ''));
+  }
+
+  // A node serving cached coordinates reports figures carried forward from the
+  // run that last reached it, and those figures already include every one of
+  // its TSG archives. Letting the same archives fall through to mirror-only
+  // would count the same holes twice - 482 cached TAS boreholes PLUS 499
+  // mirror-only TAS archives, for a state that has about 500 holes in total.
+  if (result.fromCache) {
+    st.rows.forEach(function(r) { idx.matchedRows.add(r._key); });
+    result.tsg.matchedRows = st.rows.length;
+    result.tsg.mirrorOnlyKm = 0;
+    result.tsg.mirrorOnlyArchives = 0;
+    result.tsg.mirrorOnlyBoreholes = 0;
+    console.log('  TSG: ' + st.rows.length + ' cache row(s) attributed to the '
+      + 'carried-forward figures for this node, not to mirror-only ('
+      + used.size + ' joined to its ' + result.boreholes.length + ' listed hole(s))');
+    return;
   }
 
   // MIRROR-ONLY MEASUREMENT. A cache row that matched no borehole is not
@@ -1107,8 +1226,98 @@ function attachTsg(result, idx) {
   }
 }
 
+// The previous run's attribution for one state, from its detail file
+// (PREV_ATTRIBUTION, read at start-up): `claims` maps each dataset group
+// the previous run joined to a hole this run lists to that hole's index,
+// and `groups` holds every group it joined to any WFS hole, listed now or
+// not. THREDDS-only rows of that file are header positions, not joins, and
+// are not in it.
+function priorAttribution(st, code, boreholes) {
+  const byHole = PREV_ATTRIBUTION[code];
+  const out = { claims: new Map(), groups: new Set() };
+  if (!byHole) return out;
+  const byZip = new Map();
+  st.rows.forEach(function(r) { byZip.set(r.zipName, r); });
+  const index = new Map();
+  boreholes.forEach(function(bh, i) { index.set(bh.id, i); });
+  Object.keys(byHole).sort().forEach(function(id) {
+    byHole[id].forEach(function(z) {
+      const r = byZip.get(z);
+      if (!r) return;
+      out.groups.add(r._group);
+      if (index.has(id) && !out.claims.has(r._group)) out.claims.set(r._group, index.get(id));
+    });
+  });
+  return out;
+}
+
+// THREDDS-only holes (added 2026-10-13). Archives that joined no hole are
+// grouped into holes by the [dbextra] drillhole name (else the archive's
+// base name), and a hole is placed when one of its archives has a header
+// position coords.js accepts for its class and state (data/nvcl/
+// header-positions.json; a row read since coords.js last ran is classified
+// here without neighbours). A placed hole is emitted into the detail file
+// as provisional, source 'thredds', with the reason: 'orphan' (the node
+// answered and does not list it) or 'node_unreachable' (the node was down
+// or degraded). One with no accepted position stays mirror-only: counted,
+// not drawn. The node listing the hole later (its drillhole name is the
+// WFS id, or its UUID one of the hole's DatasetIDs) joins the archive to
+// the WFS hole, and the provisional row is gone from that run on.
+function provisionalHoles(state, rows, reason, boreholes, positions) {
+  const taken = new Set(boreholes.map(function(bh) { return bh.id; }));
+  const groups = new Map();
+  rows.forEach(function(r) {
+    const key = r.drillholeName ? 'dh:' + normKey(r.drillholeName)
+      : 'zip:' + normKey(String(r.zipName).replace(/\.zip$/i, ''));
+    (groups.get(key) || groups.set(key, []).get(key)).push(r);
+  });
+  const placed = [], unplaced = [];
+  Array.from(groups.keys()).sort().forEach(function(key) {
+    const members = groups.get(key).sort(function(a, b) { return a.zipName < b.zipName ? -1 : 1; });
+    const base = members[0].zipName.replace(/\.zip$/i, '');
+    const id = members[0].drillholeName || base;
+    const where = headerPosition(members, state, positions);
+    if (!where) { unplaced.push(id); return; }
+    if (taken.has(id)) {
+      console.log('  THREDDS-only: ' + id + ' is a listed hole\'s id but its archive did not join it; not placed');
+      unplaced.push(id);
+      return;
+    }
+    taken.add(id);
+    const bh = {
+      id: id, name: members[0].datasetName || base,
+      lat: where.lat, lng: where.lng, lengthM: null, custodian: '',
+      datasets: [], tsg: members,
+      provisional: true, provisionalReason: reason,
+      headerPosClass: where.cls, headerZip: where.zip,
+    };
+    bh.metrics = boreholeMetrics(bh);
+    placed.push(bh);
+  });
+  return { placed: placed, unplaced: unplaced };
+}
+
+// The best accepted header position among a hole's archives: by class
+// (coords.PLACED_CLASSES order), then archive name.
+function headerPosition(rows, state, positions) {
+  const table = positions && positions.validation;
+  if (!table) return null;
+  const found = [];
+  rows.forEach(function(r) {
+    const res = r.headerPosClass
+      ? { cls: r.headerPosClass, lat: r.headerLat, lng: r.headerLng }
+      : coords.classify(r, state, null);
+    if (res.lat == null || res.lng == null || !isFinite(res.lat) || !isFinite(res.lng)) return;
+    if (!coords.accepted(table, res.cls, state)) return;
+    found.push({ cls: res.cls, lat: Math.round(res.lat * 1e6) / 1e6, lng: Math.round(res.lng * 1e6) / 1e6,
+      zip: r.zipName, rank: coords.PLACED_CLASSES.indexOf(res.cls) });
+  });
+  found.sort(function(a, b) { return a.rank - b.rank || (a.zip < b.zip ? -1 : 1); });
+  return found[0] || null;
+}
+
 function tierList(counts) {
-  return TSG_TIERS.filter(function(t) { return counts[t]; }).map(function(t) {
+  return ['prev'].concat(TSG_TIERS).filter(function(t) { return counts[t]; }).map(function(t) {
     return t + ':' + counts[t];
   }).join(' ');
 }
@@ -1119,9 +1328,19 @@ function tierList(counts) {
 // key on the part of an archive name after its first underscore, which is
 // how NT, SA and VIC file a hole ('<featureNumber>_<HOLE>.zip') - and also
 // where generic hole names like DDH1 or BD2 live, so those two tiers carry
-// extra conditions.
-const TSG_TIERS = ['uuid', 'id', 'num', 'name', 'name-suffix', 'id-suffix', 'local-name'];
+// extra conditions. 'drillhole' (added 2026-10-13) is the TSG header's own
+// word: its [dbextra] drillhole name is the hole's WFS id (QLD bh080912,
+// TAS 82799, NT 8618203_NTGS83/5), so an archive the node does not list
+// as a dataset still finds its hole, also when the node is down and the
+// holes come from the coordinate cache. Like 'uuid' it is additive. It
+// obeys the suffix tiers' feature-number rule, and copied headers are not
+// in its index (see loadTsgIndex). 'prev' is not a tier anyone matches
+// at: it is the previous run's attribution, used only while a node is
+// down or degraded (see attachTsg).
+const TSG_TIERS = ['uuid', 'drillhole', 'id', 'num', 'name', 'name-suffix', 'id-suffix', 'local-name'];
 const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
+const OWNER_TIERS = { 'drillhole': true, 'name-suffix': true, 'id-suffix': true };
+const ADDITIVE_TIERS = { 'uuid': true, 'drillhole': true };
 
 // Assign each archive to at most one borehole (added 2026-10-13). Matching
 // hole by hole, each taking the first tier that hit anything, let one
@@ -1156,7 +1375,12 @@ const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
 // and a hole's unpublished scan (a wedge, an older run) is still matched by
 // name exactly as before. Two holes listing the same DatasetID would make
 // its archive ambiguous like any other tier; none did on 2026-10-13.
-function resolveTsgMatches(st, boreholes) {
+//
+// `prior` (optional; a Map of dataset group -> borehole index) claims
+// archives before any tier runs, under the tier name 'prev'. It is the
+// previous run's attribution, passed only while a node is down or degraded
+// (see attachTsg); the holes it serves still take part in every tier.
+function resolveTsgMatches(st, boreholes, prior) {
   const cands = boreholes.map(function(bh) { return tsgCandidates(st, bh); });
   const numOwners = new Map();
   boreholes.forEach(function(bh, i) {
@@ -1167,6 +1391,17 @@ function resolveTsgMatches(st, boreholes) {
   const claimed = new Map();               // dataset (UUID group) -> borehole index
   const ambiguousSeen = new Set();
   const rejected = { claimed: 0, owner: 0, generic: 0, ambiguous: 0, prefix: 0, examples: [] };
+  if (prior) {
+    Array.from(prior.keys()).sort().forEach(function(g) {
+      const i = prior.get(g);
+      if (claimed.has(g) || !st.rep.has(g)) return;
+      claimed.set(g, i);
+      const h = hits[i] || (hits[i] = { tier: 'prev', tiers: ['prev'], rows: [], rowTiers: { prev: 0 },
+        named: false });
+      h.rows.push(st.rep.get(g));
+      h.rowTiers.prev += st.groups.get(g).length;
+    });
+  }
   TSG_TIERS.forEach(function(tier, t) {
     const tentative = new Map();           // borehole index -> rows
     const claimants = new Map();           // archive key -> borehole indexes
@@ -1179,7 +1414,7 @@ function resolveTsgMatches(st, boreholes) {
           if (claimed.get(r._group) !== i) refuse('claimed', r, bh, boreholes[claimed.get(r._group)]);
           return false;
         }
-        if (!SUFFIX_TIERS[tier]) return true;
+        if (!OWNER_TIERS[tier]) return true;
         const base = String(r.zipName).replace(/\.zip$/i, '');
         const lead = (base.match(/^(\d+)_/) || [])[1];
         const owners = lead ? numOwners.get(lead) : null;
@@ -1196,6 +1431,7 @@ function resolveTsgMatches(st, boreholes) {
           refuse('owner', r, bh, null);
           return false;
         }
+        if (!SUFFIX_TIERS[tier]) return true;
         const token = normKey(base.slice(base.indexOf('_') + 1));
         if (isGenericToken(token) && normKey(bh.name) !== token) {
           refuse('generic', r, bh, null);
@@ -1249,9 +1485,10 @@ function resolveTsgMatches(st, boreholes) {
       h.tiers.push(tier);
       h.rowTiers[tier] = groups.reduce(function(n, g) { return n + st.groups.get(g).length; }, 0);
       h.rows = h.rows.concat(groups.map(function(g) { return st.rep.get(g); }));
-      if (tier !== 'uuid') h.named = true;
+      if (!ADDITIVE_TIERS[tier]) h.named = true;
     });
   });
+
   return { hits: hits, rejected: rejected };
 
   function refuse(kind, r, bh, other) {
@@ -1319,9 +1556,17 @@ function tsgCandidates(st, bh) {
       uuidHit = union(uuidHit, rows);
     }
   });
+  // The archives whose header names this hole: the [dbextra] drillhole name
+  // is the hole's id, or a bare number equal to its own feature number.
+  let drillHit = null;
+  const dk = [idKey];
+  if (bh.ownNum) dk.push('#' + String(Number(bh.ownNum)));
+  if (/^\d+$/.test(idKey)) dk.push('#' + String(Number(idKey)));
+  dk.forEach(function(k) { drillHit = union(drillHit, (st.drill && st.drill.get(k)) || null); });
   // Same order as TSG_TIERS.
   const out = [
     uuidHit,
+    drillHit,
     union(st.full.get(idKey), st.prefix.get(idKey)),
     numKey ? union(st.full.get(numKey), st.prefix.get(numKey)) : null,
     union(st.full.get(nameKey), st.prefix.get(nameKey)),
@@ -1331,6 +1576,7 @@ function tsgCandidates(st, bh) {
   ];
   out.whole = [
     uuidHit,
+    drillHit,
     st.full.get(idKey),
     numKey ? st.full.get(numKey) : null,
     st.full.get(nameKey),
@@ -1491,9 +1737,20 @@ function aggregate(results, asOf, tsgIndex, prev) {
   let rescanBoreholes = 0, maxScans = 0;
   const participating = [], nonParticipating = [];
   let nonPartBoreholes = 0;
+  // THREDDS-only holes (see provisionalHoles): placed on the map from their
+  // TSG header, or held back for want of an accepted position. Counted here
+  // for the record only: their archives count as mirror-only, as before.
+  const provisional = { placed: 0, unplaced: 0, by_state: {} };
 
   results.forEach(function(r) {
     const node = r.node;
+    const prov = provisionalCounts(r);
+    if (prov.provisional_holes || prov.provisional_unplaced) {
+      provisional.placed += prov.provisional_holes;
+      provisional.unplaced += prov.provisional_unplaced;
+      provisional.by_state[node.code] = { placed: prov.provisional_holes, unplaced: prov.provisional_unplaced,
+        reason: prov.provisional_reason };
+    }
     if (!r.wfsOk && !r.boreholes.length) {
       // The node did not answer AND we hold no cached coordinates for it, so
       // there is nothing to place on a map. The mirror may still hold its
@@ -1521,6 +1778,9 @@ function aggregate(results, asOf, tsgIndex, prev) {
         mirror_only_archives: moArchives,
         mirror_only_boreholes: moBoreholes,
         evidenced_boreholes: moBoreholes,
+        provisional_holes: prov.provisional_holes,
+        provisional_reason: prov.provisional_reason,
+        provisional_unplaced: prov.provisional_unplaced,
         note: moArchives
           ? 'Node did not answer during this harvest. Its own figures are absent, '
             + 'not zero; the ' + moArchives + ' archives the mirror holds for it are '
@@ -1549,6 +1809,9 @@ function aggregate(results, asOf, tsgIndex, prev) {
           // to prevent.
           measured_as_of: before.measured_as_of || (prev && prev.as_of) || null,
           wfs_paging: r.wfsPaging ? pagingEntry(r.wfsPaging) : before.wfs_paging,
+          provisional_holes: prov.provisional_holes,
+          provisional_reason: prov.provisional_reason,
+          provisional_unplaced: prov.provisional_unplaced,
           note: r.wfsShort
             ? 'This node\'s borehole list paged short of the count the node reports, '
               + 'so the figures are those last measured on '
@@ -1705,6 +1968,9 @@ function aggregate(results, asOf, tsgIndex, prev) {
       datasets_last_12mo: st12moDatasets,
       km_scanned_last_12mo: km(st12moM),
       measured_as_of: r.fromCache ? null : asOf,
+      provisional_holes: prov.provisional_holes,
+      provisional_reason: prov.provisional_reason,
+      provisional_unplaced: prov.provisional_unplaced,
     };
     if (stTsgM > 0) entry.tsg_source = TSG_SOURCE;
 
@@ -1789,6 +2055,13 @@ function aggregate(results, asOf, tsgIndex, prev) {
       mirror_only_archives: sumMirrorOnlyArchives,
       mirror_only_boreholes: sumMirrorOnlyBoreholes,
       evidenced_boreholes: sumBoreholesWithData + sumMirrorOnlyBoreholes,
+      // Of the mirror-only holes, those placed on the map from their TSG
+      // header (provisional, source 'thredds') and those with no accepted
+      // position. By state, with why: 'orphan' (the node answered and does
+      // not list the hole) or 'node_unreachable' (down or degraded).
+      provisional_holes: provisional.placed,
+      provisional_unplaced: provisional.unplaced,
+      provisional_by_state: provisional.by_state,
       national_measured_km: Math.round((sumUniqueM / 1000 + sumMirrorOnlyKm) * 100) / 100,
       // Estimation tier - DISCLOSED, never blended: boreholes with neither an
       // API interval nor a TSG one, estimated once each at drilled length.
@@ -1849,6 +2122,15 @@ function pagingEntry(pg) {
     features_paged: pg.features,
     features_reported: pg.reported,
     paged_pct: pg.reported ? Math.round(pg.features / pg.reported * 1000) / 10 : null,
+  };
+}
+
+function provisionalCounts(r) {
+  const placed = (r.provisional || []).length;
+  return {
+    provisional_holes: placed,
+    provisional_reason: placed ? r.provisional[0].provisionalReason : null,
+    provisional_unplaced: (r.provisionalUnplaced || []).length,
   };
 }
 
@@ -1916,18 +2198,7 @@ function buildDetail(results) {
         const kb = (b.scanDate || b.created || '') + '|' + b.from + '|' + b.to + '|' + b.instrument;
         return ka < kb ? -1 : (ka > kb ? 1 : 0);
       });
-      const tsg = (bh.tsg || []).map(function(t) {
-        return {
-          zip: t.zipName,
-          scanDate: t.scanDate ? String(t.scanDate).substring(0, 10) : null,
-          confidence: t.dateConfidence || null,
-          from: t.depthFromM == null ? null : t.depthFromM,
-          to: t.depthToM == null ? null : t.depthToM,
-          instrument: t.instrument || null,
-          // Other archive names of the same dataset (same TSG UUID).
-          twins: t._twins && t._twins.length ? t._twins : undefined,
-        };
-      }).sort(function(a, b) { return a.zip < b.zip ? -1 : (a.zip > b.zip ? 1 : 0); });
+      const tsg = detailTsg(bh.tsg);
       const m = bh.metrics || null;
       rows.push({
         state: r.node.code,
@@ -1952,6 +2223,39 @@ function buildDetail(results) {
         tsg: tsg,
       });
     });
+    // THREDDS-only holes: no WFS record, so no drilled length, custodian or
+    // node datasets. Their datasets are their archives (depth, scan date,
+    // instrument, and the TSG UUID the node would list them under).
+    (r.provisional || []).forEach(function(bh) {
+      const m = bh.metrics || null;
+      rows.push({
+        state: r.node.code,
+        id: bh.id,
+        name: bh.name || '',
+        lat: bh.lat,
+        lng: bh.lng,
+        lengthM: null,
+        source: 'thredds',
+        provisional: true,
+        provisionalReason: bh.provisionalReason,
+        header_pos_class: bh.headerPosClass,
+        header_pos_zip: bh.headerZip,
+        has_data: true,
+        unique_scanned_m: m && m.uniqueM > 0 ? Math.round(m.uniqueM * 1000) / 1000 : null,
+        depth_source: m ? m.source : null,
+        datasets: bh.tsg.map(function(t) {
+          return {
+            id: t.tsgUuid || undefined,
+            created: null,
+            scanDate: t.scanDate ? String(t.scanDate).substring(0, 10) : undefined,
+            instrument: t.instrument || 'Unknown',
+            from: t.depthFromM == null ? null : t.depthFromM,
+            to: t.depthToM == null ? null : t.depthToM,
+          };
+        }).sort(function(a, b) { return cmpStr((a.scanDate || '') + a.from, (b.scanDate || '') + b.from); }),
+        tsg: detailTsg(bh.tsg),
+      });
+    });
   });
   rows.sort(function(a, b) {
     if (a.state !== b.state) return a.state < b.state ? -1 : 1;
@@ -1959,6 +2263,24 @@ function buildDetail(results) {
   });
   return rows.map(function(r) { return JSON.stringify(r); });
 }
+
+// A hole's matched archives as the detail file records them.
+function detailTsg(list) {
+  return (list || []).map(function(t) {
+    return {
+      zip: t.zipName,
+      scanDate: t.scanDate ? String(t.scanDate).substring(0, 10) : null,
+      confidence: t.dateConfidence || null,
+      from: t.depthFromM == null ? null : t.depthFromM,
+      to: t.depthToM == null ? null : t.depthToM,
+      instrument: t.instrument || null,
+      // Other archive names of the same dataset (same TSG UUID).
+      twins: t._twins && t._twins.length ? t._twins : undefined,
+    };
+  }).sort(function(a, b) { return a.zip < b.zip ? -1 : (a.zip > b.zip ? 1 : 0); });
+}
+
+function cmpStr(a, b) { return a < b ? -1 : (a > b ? 1 : 0); }
 
 function printSummary(s) {
   const sm = s.summary;
@@ -1971,6 +2293,8 @@ function printSummary(s) {
   console.log('Mirror-only measured: ' + sm.mirror_only_km + ' km across '
     + sm.mirror_only_archives + ' archives = ' + sm.mirror_only_boreholes
     + ' boreholes their node does not surface (no WFS record, so not plottable)');
+  console.log('THREDDS-only holes:   ' + sm.provisional_holes + ' placed from their TSG header (provisional), '
+    + sm.provisional_unplaced + ' with no accepted position ' + JSON.stringify(sm.provisional_by_state));
   console.log('EVIDENCED BOREHOLES:  ' + sm.evidenced_boreholes
     + ' (' + sm.total_boreholes_with_data + ' plottable + ' + sm.mirror_only_boreholes + ' mirror-only)');
   console.log('NATIONAL MEASURED:    ' + sm.national_measured_km + ' km (attributed + mirror-only)');
