@@ -1,9 +1,9 @@
 {
-  "generated": "2026-10-13T08:48:38Z",
+  "generated": "2026-10-13T11:39:37Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
   "harvest_as_of": "2026-10-13",
-  "total_boreholes": 6634,
-  "total_km": 1911.5,
+  "total_boreholes": 6651,
+  "total_km": 1916.4,
   "spectra_measured": 257547130,
   "undated": 0,
   "by_state": [
@@ -25,24 +25,24 @@
     },
     {
       "state": "NT",
-      "boreholes": 610,
-      "km": 189.2,
+      "boreholes": 612,
+      "km": 189.5,
       "status": "participating",
       "fetched": "2026-10-13",
       "spectra_measured": 24965580
     },
     {
       "state": "QLD",
-      "boreholes": 526,
-      "km": 187.1,
+      "boreholes": 536,
+      "km": 190.1,
       "status": "participating",
       "fetched": "2026-10-13",
       "spectra_measured": 22357641
     },
     {
       "state": "SA",
-      "boreholes": 1828,
-      "km": 429.5,
+      "boreholes": 1833,
+      "km": 431.1,
       "status": "participating",
       "fetched": "2026-10-13",
       "spectra_measured": 56585897
@@ -77,10 +77,27 @@
     "latest": "2026-10"
   },
   "month_sources": {
-    "tsg": 5296,
-    "api": 1338,
+    "tsg": 5323,
+    "api": 1328,
     "none": 0,
     "carried": 0
   },
-  "stale_states": []
+  "stale_states": [],
+  "provisional_holes": {
+    "total": 11,
+    "by_state": {
+      "QLD": {
+        "orphan": 10
+      },
+      "SA": {
+        "orphan": 1
+      }
+    },
+    "unplaced": {
+      "NT": 1,
+      "QLD": 6,
+      "SA": 3,
+      "TAS": 17
+    }
+  }
 }

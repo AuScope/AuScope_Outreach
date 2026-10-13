@@ -82,7 +82,10 @@
 >   without one they still measure their hole but are never linked or
 >   counted as mirror-only; rows sharing a TSG UUID and a scan interval
 >   count as one dataset; a state listing under 80% of its previous names
->   is not believed.
+>   is not believed;
+> - a `uuid` hit loses to the archive's feature number when the hole it
+>   is filed under has no archive at all and the listing hole already holds
+>   one of its own by id (SA `134154_COM25.zip` returns to 134154).
 >
 > **Mirror-only double counted (corrected 2026-10-13).** The *Mirror-only
 > measurement* figure below counted every archive the harvest could not

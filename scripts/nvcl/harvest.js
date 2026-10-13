@@ -1206,6 +1206,7 @@ function attachTsg(result, idx, positions) {
   });
   result.tsg.matchedRows = used.size;
   result.tsg.rejected = resolved.rejected;
+  result.tsg.conflicts = resolved.conflicts;
   const rj = resolved.rejected;
   if (rj.claimed || rj.owner || rj.generic || rj.ambiguous || rj.prefix) {
     console.log('  TSG: weaker-tier hits refused - ' + rj.claimed + ' already matched to another hole, '
@@ -1214,6 +1215,7 @@ function attachTsg(result, idx, positions) {
       + ' prefix hit beaten by another hole\'s whole-name hit, ' + rj.ambiguous + ' ambiguous'
       + (rj.examples.length ? ' (e.g. ' + rj.examples.slice(0, 4).join('; ') + ')' : ''));
   }
+  resolved.conflicts.forEach(function(c) { console.log('  TSG conflict: ' + c); });
 
   // Archives a hole has, and archives the previous run gave to a hole this
   // run does not list: neither is a THREDDS-only hole.
@@ -1442,6 +1444,14 @@ const ADDITIVE_TIERS = { 'uuid': true, 'drillhole': true };
 // archives before any tier runs, under the tier name 'prev'. It is the
 // previous run's attribution, passed only while a node is down or degraded
 // (see attachTsg); the holes it serves still take part in every tier.
+//
+// (f) Conflicts (added 2026-10-13). When the node lists an archive's
+// dataset under hole A (a uuid hit) but the archive is filed under the
+// feature number of another harvested hole B, B has no archive at all and
+// A already holds an id-tier archive of its own, the archive is B's: SA
+// lists 134154_COM25.zip's dataset under 134152, which holds
+// 134152_COM23.zip, while 134154 (COM 25) had nothing. Otherwise the node
+// wins. Every conflict is logged.
 function resolveTsgMatches(st, boreholes, prior) {
   const cands = boreholes.map(function(bh) { return tsgCandidates(st, bh); });
   const numOwners = new Map();
@@ -1459,9 +1469,10 @@ function resolveTsgMatches(st, boreholes, prior) {
       if (claimed.has(g) || !st.rep.has(g)) return;
       claimed.set(g, i);
       const h = hits[i] || (hits[i] = { tier: 'prev', tiers: ['prev'], rows: [], rowTiers: { prev: 0 },
-        named: false });
+        named: false, groupTier: new Map() });
       h.rows.push(st.rep.get(g));
       h.rowTiers.prev += st.groups.get(g).length;
+      h.groupTier.set(g, 'prev');
     });
   }
   TSG_TIERS.forEach(function(tier, t) {
@@ -1534,7 +1545,8 @@ function resolveTsgMatches(st, boreholes, prior) {
         return false;
       });
       if (!kept.length) return;
-      const h = hits[i] || (hits[i] = { tier: tier, tiers: [], rows: [], rowTiers: {}, named: false });
+      const h = hits[i] || (hits[i] = { tier: tier, tiers: [], rows: [], rowTiers: {}, named: false,
+        groupTier: new Map() });
       // One representative per dataset; rowTiers counts every archive name
       // the tier brought in, twins included, so the tiers sum to the rows
       // matched.
@@ -1543,6 +1555,7 @@ function resolveTsgMatches(st, boreholes, prior) {
         if (claimed.has(r._group)) return;
         claimed.set(r._group, i);
         groups.push(r._group);
+        h.groupTier.set(r._group, tier);
       });
       h.tiers.push(tier);
       h.rowTiers[tier] = groups.reduce(function(n, g) { return n + st.groups.get(g).length; }, 0);
@@ -1551,7 +1564,45 @@ function resolveTsgMatches(st, boreholes, prior) {
     });
   });
 
-  return { hits: hits, rejected: rejected };
+  // (f) uuid hits filed under another harvested hole's feature number.
+  const conflicts = [];
+  const idT = TSG_TIERS.indexOf('id');
+  hits.forEach(function(h, a) {
+    if (!h) return;
+    h.rows.slice().forEach(function(rep) {
+      if (h.groupTier.get(rep._group) !== 'uuid') return;
+      const lead = (String(rep.zipName).match(/^(\d+)_/) || [])[1];
+      if (!lead || lead === boreholes[a].ownNum) return;
+      const owners = (numOwners.get(lead) || []).filter(function(o) { return o !== a; });
+      if (owners.length !== 1) return;
+      const b = owners[0];
+      const bHasOwn = !!(hits[b] && hits[b].rows.length);
+      const aHasIdTier = h.rows.some(function(r) {
+        return r._group !== rep._group && cands[a] && (cands[a][idT] || []).some(function(x) {
+          return x._group === r._group;
+        });
+      });
+      const move = !bHasOwn && aHasIdTier;
+      conflicts.push(rep.zipName + ' listed under ' + boreholes[a].id + ', filed under ' + boreholes[b].id
+        + (move ? ': given to ' + boreholes[b].id + ' (it had no archive; ' + boreholes[a].id
+          + ' keeps its own)' : ': the node wins (' + (bHasOwn ? boreholes[b].id + ' has its own archive'
+          : boreholes[a].id + ' has no id-tier archive of its own') + ')'));
+      if (!move) return;
+      const n = st.groups.get(rep._group).length;
+      h.rows = h.rows.filter(function(r) { return r !== rep; });
+      h.groupTier.delete(rep._group);
+      h.rowTiers.uuid -= n;
+      if (!h.rowTiers.uuid) {
+        delete h.rowTiers.uuid;
+        h.tiers = h.tiers.filter(function(x) { return x !== 'uuid'; });
+        if (h.tier === 'uuid') h.tier = h.tiers[0];
+      }
+      claimed.set(rep._group, b);
+      hits[b] = { tier: 'id', tiers: ['id'], rows: [rep], rowTiers: { id: n }, named: true,
+        groupTier: new Map([[rep._group, 'id']]) };
+    });
+  });
+  return { hits: hits, rejected: rejected, conflicts: conflicts };
 
   function refuse(kind, r, bh, other) {
     rejected[kind]++;
@@ -2269,6 +2320,7 @@ function buildDetail(results) {
       rows.push({
         state: r.node.code,
         id: bh.id,
+        own_num: bh.ownNum || undefined,
         name: bh.name || '',
         lat: bh.lat,
         lng: bh.lng,

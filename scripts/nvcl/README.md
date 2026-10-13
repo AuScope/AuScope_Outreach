@@ -89,8 +89,13 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   name, e.g. `HyChips 6-3`, rather than becoming a HyLogger 3 dot).
 - **depth_m:** unique scanned metres (union of intervals, TSG first), never
   drilled length; `null` when no interval was recorded.
-- **z, mb** (popup link): the TSG archive behind the hole's first scan
-  (earliest TSG scan date among its matched archives, ties by name), as the
+- **z, mb** (popup link): the hole's TSG archive, preferring, in order, the
+  one filed under the hole's own feature number (`<number>_<HOLE>.zip`),
+  the one that gave the hole its month, the earliest high-confidence scan,
+  then the earliest scan (ties by name); one filed under another feature
+  number is never linked when the hole has its own (TAS 13978 links its
+  own `13978_RG145_Tunbridge_Tier.zip`, no longer `13968_BB-BH1_Bell_Bay.zip`).
+  As the
   file name without `.zip`, and its size in whole MB (10^6 bytes): the
   catalogue's `dataSize` from `thredds-catalog.json` when it has one, else
   `tsg-cache.jsonl` `zipBytes` (omitted when neither is known). Only
@@ -253,7 +258,14 @@ Changed:
   to a neighbouring hole the node lists it under, WA `79/9D1` and `79/9D2`
   swapped archives (each lists the other's dataset), and TAS 13978 took
   `13968_BB-BH1_Bell_Bay.zip`, filed under a feature number that is not on
-  TAS's NVCL list.
+  TAS's NVCL list. Since later that day the evidence settles it instead:
+  when the node lists an archive's dataset under hole A, the archive is
+  filed under the feature number of another harvested hole B, B has no
+  archive at all and A already holds an id-tier archive of its own, the
+  archive goes to B. That returns the four SA archives to 131277, 131278,
+  131281 and 134154 (`COM 25`). The WA archives carry no feature number
+  and TAS 13968 is not a harvested hole, so there the node still wins.
+  Every conflict is logged (`TSG conflict:`).
   `nvcl_stats.json` records per state `tsg_match_tiers` (archives per
   tier, holes by first tier). Also in matching: within a name
   tier, when exactly one claimant reaches an archive by its whole name and
@@ -305,7 +317,14 @@ Changed:
   header's drillhole name and emits each group with an accepted position as
   a provisional hole, reason `orphan` or `node_unreachable`. The MGA
   northing floor is 5,000,000, not 6,000,000: Tasmania lies at 5.16-5.62
-  million (TAS `GL14_25` reads `5340643 382466`).
+  million (TAS `GL14_25` reads `5340643 382466`). First live run
+  (2026-10-13, every node up): 11 holes placed, all `orphan` (QLD 10,
+  among them five Alice River holes and Mungana `MND003`; SA 1,
+  `288241_PN-07-09`), and 27 left unplaced (TAS 17, all zeroed; QLD 6;
+  SA 3; NT 1). Accepted that day: `decimal` in QLD, SA, TAS and WA
+  (p95 0-31 m), `mga_inferred` in QLD (17 rows, p95 12 m); refused:
+  `decimal` in NT (9 rows, one 16.6 km off, so p95 16.6 km) and every
+  class with fewer than 5 rows to judge by, nationally too.
 - A `drillhole` TSG match tier (second, after `uuid`, and additive like
   it): the header's `[dbextra]` drillhole name is the node's own hole id
   (QLD `bh080912`, TAS `82799`, NT `8618203_NTGS83/5`), so an archive finds
@@ -340,12 +359,15 @@ Changed:
   it is never linked, never counted as mirror-only and never placed as a
   hole of its own; `boreholes-detail.jsonl` marks it `gone: true`. Dropping
   those had taken the only archive from 12 holes, and NT `7963228_MURD013`
-  and `8418381_BND1`, with no node datasets either, off the map. Eleven
-  more are an old copy of a hole's live archive under another UUID
-  (`7853531_LBD1 OLD.zip`, WA `BBDD0001_hole2.zip`): the union leaves
-  their hole's metres as they were, but `total_scan_km`, which sums
-  rescans, counts them (+3.9 km of 1,926 offline on 2026-10-13), and an
-  older copy can give its hole an earlier month. On
+  and `8418381_BND1`, with no node datasets either, off the map. Six
+  more join a hole beside its live archive, as another copy of it under a
+  different UUID or interval (NT `8679213_NDI Carrara1.zip`, WA
+  `BBDD0001_hole2.zip`): the union leaves their hole's metres as they
+  were, but `total_scan_km`, which sums rescans, counts them (+1.26 km of
+  1,926 in the live run of 2026-10-13), and an older copy can give its hole
+  an earlier month. (NT's `... OLD.zip` copies join nothing: their names
+  carry no key a tier matches, and as gone rows they are not mirror-only
+  either.) On
   2026-10-13 that was 115 of 5,610 rows (88 renamed, with a successor), 62
   of them among the rows previously counted as mirror-only. Rows
   sharing a TSG UUID and a scan interval are one dataset: matched, claimed

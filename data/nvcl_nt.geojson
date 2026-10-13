@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nt",
     "stateLabel": "Northern Territory",
-    "fetched": "2026-10-13T08:05:19Z"
+    "fetched": "2026-10-13T10:55:18Z"
   },
   "features": [
     {
@@ -4470,11 +4470,11 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 2-7",
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 205.9,
         "project": null,
         "owner": null,
         "state": "NT"
@@ -5954,11 +5954,11 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": null,
+        "instrument": "HyLogger 2-7",
         "drillDate": null,
         "datasetCreated": null,
         "firstSeen": "2026-03-26",
-        "scannedMetres": null,
+        "scannedMetres": 88.82,
         "project": null,
         "owner": null,
         "state": "NT"
@@ -6794,7 +6794,7 @@
         "drillingMethod": "Diamond Drill",
         "drillEndDate": null,
         "purpose": null,
-        "instrument": "HyLogger 2-7",
+        "instrument": "HyLogger 3-7",
         "drillDate": null,
         "datasetCreated": "2017-06-30",
         "firstSeen": "2026-03-26",
@@ -6826,7 +6826,7 @@
         "drillDate": "1981-01-04",
         "datasetCreated": "2019-04-10",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 41.48,
+        "scannedMetres": 18.49,
         "project": "National Virtual Core Library - Ngalia Basin Project",
         "owner": "Northern Territory Geological Survey",
         "state": "NT"

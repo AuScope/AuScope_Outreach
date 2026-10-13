@@ -25,11 +25,15 @@
  *           type is known.
  *   depth_m unique scanned metres (union of intervals, TSG first) from the
  *           harvest; null when no interval was recorded. Never drilled length.
- *   z, mb   the TSG archive behind the first scan (name without '.zip') and
- *           its size in whole MB, for the popup's NCI THREDDS link: the
- *           catalogue's dataSize when it has one, else the TSG cache's
- *           zipBytes. Only archives the mirror lists right now; none at all
- *           for a state whose catalogue listing is missing.
+ *   z, mb   the hole's TSG archive (name without '.zip') and its size in
+ *           whole MB, for the popup's NCI THREDDS link: the catalogue's
+ *           dataSize when it has one, else the TSG cache's zipBytes. Only
+ *           archives the mirror lists right now; none at all for a state
+ *           whose catalogue listing is missing. Which archive (changed
+ *           2026-10-13): the one filed under the hole's own feature number,
+ *           else the one that gave the hole its month, else the earliest
+ *           high-confidence scan, else the earliest; never one filed under
+ *           another feature number when the hole has its own.
  *   p       't' on a THREDDS-only hole (added 2026-10-13): no node lists it,
  *           and its position is its TSG header's (harvest.js places it only
  *           when scripts/nvcl/coords.js accepts that position's class for
@@ -185,7 +189,7 @@ function main() {
     spectraByState[d.state] = (spectraByState[d.state] || 0) + (d.datasets || []).reduce(function(acc, x) {
       return acc + (x.spectra > 0 ? x.spectra : 0);
     }, 0);
-    const arc = pickArchive(d, archives);
+    const arc = pickArchive(d, archives, when);
     if (arc) {
       row.z = arc.z;
       if (arc.mb) row.mb = arc.mb;
@@ -490,25 +494,36 @@ function loadArchives(cacheFile, catalogFile) {
   return { bytes: bytes, listed: listed };
 }
 
-// The archive behind a borehole's first scan: the earliest scan date among
-// its matched archives, ties (and undated archives, which sort last) by
-// name. Only archives the mirror lists are linked, so the popup never
-// points at a file that has gone, and a state with no listing gets no link
-// at all (until 2026-10-13 it got a link to every archive, unchecked). z is
-// the name without '.zip' (the popup rebuilds the URL); mb is the size in
-// whole megabytes (10^6 bytes, at least 1), omitted when no size is known.
-function pickArchive(d, archives) {
+// The archive the popup links for a hole (changed 2026-10-13), in order of
+// preference: the one filed under the hole's own feature number
+// ('<number>_<HOLE>.zip', the number the node files the hole under), then
+// the one that gave the hole its month, then the earliest high-confidence
+// scan, then the earliest scan; ties (and undated archives, which sort
+// last) by name. An archive filed under another feature number is never
+// linked when the hole has one of its own. Only archives the mirror lists
+// are linked, so the popup never points at a file that has gone, and a
+// state with no listing gets no link at all. z is the name without '.zip'
+// (the popup rebuilds the URL); mb is the size in whole megabytes (10^6
+// bytes, at least 1), omitted when no size is known.
+function pickArchive(d, archives, when) {
   const listed = archives.listed[d.state];
   if (!listed) return null;
+  const own = d.own_num || (String(d.id || '').match(/^(\d+)(?=_|$)/) || [])[1] || '';
+  const lead = function(t) { return (t.zip.match(/^(\d+)_/) || [])[1] || ''; };
+  const byDate = function(a, b) { return cmp(a.scanDate || '9999', b.scanDate || '9999') || cmp(a.zip, b.zip); };
   const tsg = (d.tsg || []).filter(function(t) {
-    return t.zip && listed.has(t.zip);
-  }).sort(function(a, b) {
-    return cmp(a.scanDate || '9999', b.scanDate || '9999') || cmp(a.zip, b.zip);
-  });
+    if (!t.zip || !listed.has(t.zip)) return false;
+    return !(own && lead(t) && lead(t) !== own);
+  }).sort(byDate);
   if (!tsg.length) return null;
-  const size = archives.bytes[d.state + '/' + tsg[0].zip];
+  const month = when && when.source === 'tsg' ? when.month : null;
+  const pick = tsg.filter(function(t) { return own && lead(t) === own; })[0]
+    || (month && tsg.filter(function(t) { return String(t.scanDate || '').substring(0, 7) === month; })[0])
+    || tsg.filter(function(t) { return t.confidence === 'high' || t.confidence === 'good'; })[0]
+    || tsg[0];
+  const size = archives.bytes[d.state + '/' + pick.zip];
   return {
-    z: tsg[0].zip.replace(/\.zip$/i, ''),
+    z: pick.zip.replace(/\.zip$/i, ''),
     mb: size ? Math.max(1, Math.round(size / 1e6)) : null,
   };
 }
