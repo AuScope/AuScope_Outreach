@@ -6,17 +6,35 @@
   <title>National Virtual Core Library - AuScope</title>
 
   <!--
-    Font stack: prefer Calibre (sans) and Karmina (serif) if loaded by the
-    parent page; fall back to Arial / Georgia (system fonts, universal).
-    No external font loading - keeps the iframe lightweight and avoids
-    licensing issues with commercial typefaces.
+    Font stack: Calibre (sans) is loaded from AuScope's own Squarespace CDN
+    (see @font-face below); Karmina (serif) has no webfont and is used only
+    if installed. Both fall back to Arial / Georgia (system fonts, universal).
   -->
+
+  <link rel="preconnect" href="https://static1.squarespace.com" crossorigin>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""/>
 
   <style>
+    /* Calibre is served from AuScope's own Squarespace CDN; this is the one
+       deliberate cross-origin fetch in this page and Arial renders if it fails. */
+    @font-face {
+      font-family: 'Calibre';
+      src: url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b76a2b6a28c31c635df2/1531295594953/CalibreWeb-Light.woff') format('woff');
+      font-weight: 300 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Calibre';
+      src: url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b872aa4a99336fbaf2c3/1531295858310/CalibreWeb-Medium.woff') format('woff');
+      font-weight: 500 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --navy:        #282572;
       --navy-deep:   #1a1850;
@@ -41,6 +59,11 @@
       --v4: var(--navy-deep);
       --v6: var(--teal-deep);
       --vUnknown: var(--grey);
+
+      --sea: #e3ecf3;
+      --land: #f7f7f4;
+      --coast: #a9b3bd;
+      --border-line: #b9c2cc;
     }
 
     * { box-sizing: border-box; }
@@ -211,7 +234,8 @@
     .stat:last-child { border-right: none; }
 
     .stat-label {
-      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-family: 'Calibre', Arial, sans-serif;
+      font-weight: 500;
       font-size: 8px;
       letter-spacing: 0.10em;
       text-transform: uppercase;
@@ -245,10 +269,14 @@
       margin-bottom: 0;
       overflow: hidden;
     }
+    /* The sea is the map background; the land is drawn on top from
+       data/au_basemap.json. This ID rule beats Leaflet's own
+       .leaflet-container background (#ddd), and the fullscreen rules only
+       change the height, so the sea colour holds in fullscreen too. */
     #map {
       height: 480px;
       width: 100%;
-      background: var(--bg-soft);
+      background: var(--sea);
       border: 1px solid var(--border);
       border-bottom: none;
     }
@@ -334,7 +362,7 @@
       margin-bottom: 0;
     }
     .legend-title {
-      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-family: 'Calibre', Arial, sans-serif;
       font-size: 9px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -435,7 +463,8 @@
       background: var(--bg);
       padding: 0 9px;
       height: 24px;
-      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-family: 'Calibre', Arial, sans-serif;
+      font-weight: 500;
       font-size: 9px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -642,6 +671,18 @@
   let boreholes = [], timeline = [], summary = {};
   let firstSeenByState = {};
 
+  // Basemap (coastline + state borders), fetched on its own so a missing or
+  // broken file never blocks the markers - the map just shows the sea colour.
+  const basemapReq = fetch('data/au_basemap.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .catch(err => {
+      console.warn('Basemap not loaded (' + err.message + '); showing sea colour only.');
+      return null;
+    });
+
   Promise.all([
     fetch('data/map_boreholes.json').then(r => r.json()),
     fetch('data/map_timeline.json').then(r => r.json()),
@@ -726,13 +767,25 @@
       setTimeout(() => {
         if (!map) return;
         map.invalidateSize();
-        const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
-        map.fitBounds(ausBounds, { padding: [4, 4], animate: false });
+        fitAustralia();
         repositionFacilities();
       }, 100);
     }
     document.addEventListener('fullscreenchange', onFsChange);
     document.addEventListener('webkitfullscreenchange', onFsChange);
+  }
+
+  // Tight Australia bounding box - covers mainland + Tas, no surrounding ocean
+  const AUS_BOUNDS = L.latLngBounds([-44, 112], [-10, 154]);
+
+  // Fit the whole continent, then make that view the furthest the map can
+  // zoom out: the basemap stops at Australia, so anything beyond it is sea.
+  // The floor is reset first because a fit is clamped by the current minimum
+  // (fullscreen fits one level deeper, and leaving it must be able to return).
+  function fitAustralia() {
+    map.setMinZoom(1);
+    map.fitBounds(AUS_BOUNDS, { padding: [4, 4], animate: false });
+    map.setMinZoom(map.getZoom());
   }
 
   function initMap() {
@@ -741,22 +794,42 @@
       attributionControl: true,
       preferCanvas: true,
       worldCopyJump: false,
-      maxZoom: 11,
-      minZoom: 3,
+      maxZoom: 9,
     });
 
-    // Tight Australia bounding box - covers mainland + Tas, no surrounding ocean
-    const ausBounds = L.latLngBounds([-44, 112], [-10, 154]);
-    map.fitBounds(ausBounds, { padding: [4, 4] });
-    map.setMaxBounds(ausBounds.pad(0.5));
+    fitAustralia();
+    map.setMaxBounds(AUS_BOUNDS.pad(0.5));
 
-    // CARTO requires an API key since Sep 2026; this is the keyless Esri equivalent (Esri retires this legacy service in December 2029)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri',
-      maxZoom: 12,
-    }).addTo(map);
+    // Self-drawn basemap from ABS state boundaries (scripts/build_basemap.py),
+    // so the browser makes no third-party request for it. Its own pane sits
+    // above the (unused) tilePane at 200 and below the overlayPane at 400
+    // where the marker canvas lives, so it stays under the markers whether it
+    // arrives before or after them - no bringToBack needed.
+    map.createPane('basemap');
+    map.getPane('basemap').style.zIndex = 250;
+    map.getPane('basemap').style.pointerEvents = 'none';
+    // padding 0.5 draws half a viewport beyond each edge, so the land's
+    // clip edge does not slide into view while dragging.
+    const baseRenderer = L.canvas({ pane: 'basemap', padding: 0.5 });
+    basemapReq
+      .then(gj => { if (gj) addBasemap(gj, baseRenderer); })
+      .catch(err => console.warn('Basemap could not be drawn:', err));
 
     markerLayer = L.layerGroup().addTo(map);
+  }
+
+  function addBasemap(gj, renderer) {
+    const base = { pane: 'basemap', renderer: renderer, interactive: false };
+    L.geoJSON(gj, Object.assign({
+      filter: f => f.properties && f.properties.layer === 'land',
+      style: { fillColor: getCss('--land'), fillOpacity: 1, color: getCss('--coast'), weight: 1 },
+    }, base)).addTo(map);
+    L.geoJSON(gj, Object.assign({
+      filter: f => f.properties && f.properties.layer === 'borders',
+      style: { color: getCss('--border-line'), weight: 1, dashArray: '4 3' },
+    }, base)).addTo(map);
+    map.attributionControl.addAttribution(
+      'Based on <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-3-july-2021-june-2026" target="_blank" rel="noopener">ABS</a> data, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>');
   }
 
   function initFacilityOverlay() {

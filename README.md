@@ -49,6 +49,8 @@ iframes (AuScope website, Google Sites) or used standalone.
 - [AuScope Outreach Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_Outreach.html) - Schools outreach programs
 - [AuScope CoastRI Locations](https://bvkay.github.io/AuScope_Outreach/AuScope_CoastRI.html) - Coastal monitoring sites
 
+`NVCL_Map.html` needs `data/au_basemap.json` (built by `scripts/build_basemap.py` from ABS boundaries) and must be promoted with it.
+
 ---
 
 ## AuScope Interactive Map (`index.html`)
