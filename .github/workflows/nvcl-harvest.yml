@@ -1,0 +1,110 @@
+name: Weekly NVCL harvest
+
+# Rebuilds the NVCL data behind NVCL_Map.html (data/map_*.json) and the NVCL
+# layers of index.html (data/nvcl_<state>.geojson) from the eight public NVCL
+# node services plus the TSG headers on the AuScope NCI THREDDS mirror
+# (10.25914/bztg-rg43). Method: scripts/nvcl/METHODOLOGY.md; what runs and
+# why: scripts/nvcl/README.md. Ported from bvkay/AuScope_doi_tracker, but
+# self-contained: nothing here reads from that repo.
+#
+# FAILS LOUD: the harvest refuses to write when fewer than 5 nodes answer or
+# boreholes-with-data drop below 80% of the last snapshot; the map writer
+# refuses when a state vanishes or the map shrinks below 95%. Either way the
+# committed files stay as they were, the run goes red and an issue is filed.
+
+on:
+  schedule:
+    - cron: '33 20 * * 0'  # Sunday 20:33 UTC = Monday 06:33 AEST (off the :00 slot)
+  workflow_dispatch:       # Allow manual trigger
+
+# A manual run must not overlap the scheduled one: both rewrite the caches.
+concurrency:
+  group: nvcl-harvest
+  cancel-in-progress: false
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    # Enrichment budget (~1 h at worst) + a full 8-node harvest (20-60 min,
+    # NT's unfiltered WFS paging alone can take 15). Generous on purpose: a
+    # killed job loses the week's enrichment reads.
+    timeout-minutes: 300
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node built-ins only (fs, path, zlib, fetch): no npm install step.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # What the NCI mirror holds per state, for the harvest's mirror
+      # reconciliation. Optional: the harvest runs without a fresh copy.
+      - name: THREDDS catalogue snapshot
+        continue-on-error: true
+        run: node scripts/nvcl/thredds-catalog.js
+
+      # Read the TSG header of up to 150 newly mirrored archives by HTTP
+      # range requests (~0.1% of each ZIP) into data/nvcl/tsg-cache.jsonl.
+      # Incremental: what is cached is never re-read. Optional: a partial
+      # cache is still an improvement and the harvest works without it.
+      - name: TSG enrichment (incremental, budgeted)
+        continue-on-error: true
+        run: node scripts/nvcl/tsg-enrich.js --max-new=150
+
+      # The live harvest of all 8 nodes. Writes data/nvcl_stats.json,
+      # data/nvcl/boreholes-detail.jsonl and data/nvcl_history.jsonl only
+      # when the health guard passes; otherwise exits 1 and writes nothing.
+      - name: NVCL harvest
+        run: node scripts/nvcl/harvest.js
+
+      # Turn the snapshot into the map feeds. Exits 1 and writes nothing if
+      # its guards fail (a state missing, the map shrinking, bad values).
+      - name: Write map data
+        run: node scripts/nvcl/write-map-data.js
+
+      # Commit by explicit path. The caches are committed too: they are what
+      # keeps a down node on the map and the next enrichment run cheap.
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/nvcl/*.jsonl data/nvcl/thredds-catalog.json \
+                  data/nvcl_stats.json data/nvcl_history.jsonl \
+                  data/map_*.json data/nvcl_*.geojson
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Weekly NVCL harvest $(date -u +%Y-%m-%d)"
+          # The hourly earthquake and status bots push to main while this
+          # job runs (it can take hours), so main has almost always moved
+          # since checkout. Rebase onto it (the files are disjoint) and
+          # retry in case another bot lands in the seconds before our push.
+          for attempt in 1 2 3; do
+            git pull --rebase -q origin main
+            if git push; then exit 0; fi
+            sleep $((attempt * 15))
+          done
+          echo "Push failed after 3 attempts"
+          exit 1
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Scheduled run failed at $(date -u +%FT%TZ): $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
+          fi
