@@ -832,6 +832,26 @@
     map.setMinZoom(map.getZoom());
   }
 
+  // The frame can change size after load (a rotated tablet, a resized
+  // window, a host page that reflows). Then the locked floor is stale: too
+  // high and the continent is cut off with no way out, too low and the home
+  // view is smaller than it could be. Recompute the floor from the new size;
+  // if the map was sitting at its home view, refit so it still is.
+  let relockTimer = null;
+  function relockOnResize() {
+    clearTimeout(relockTimer);
+    relockTimer = setTimeout(() => {
+      if (!map) return;
+      if (map.getZoom() === map.getMinZoom()) { fitAustralia(); return; }
+      // getBoundsZoom never returns below the current floor, so drop the
+      // floor before asking what fits; this does not move a zoomed-in view.
+      const zoom = map.getZoom();
+      map.setMinZoom(1);
+      const fit = map.getBoundsZoom(AUS_BOUNDS, false, L.point(4, 4));
+      map.setMinZoom(Math.min(fit, zoom));
+    }, 120);
+  }
+
   function initMap() {
     map = L.map('map', {
       zoomControl: true,
@@ -917,6 +937,7 @@
     map.on('zoomstart', () => { zoomInFlight = true; repositionFacilities(); });
     map.on('zoomend', () => { zoomInFlight = false; });
     map.on('move zoom resize zoomend moveend', resize);
+    map.on('resize', relockOnResize);
     window.addEventListener('resize', resize);
   }
 
