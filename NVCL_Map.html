@@ -888,12 +888,10 @@
     // multiplier doubles with each level above the initial home zoom.
     const offsetScale = Math.pow(2, currentZoom - initialHomeZoom);
 
-    // Hide once zoomed more than 2 levels past the initial home zoom -
-    // drill-hole detail wins.
-    const zoomedIn = currentZoom > initialHomeZoom + 2;
-
-    // DIAGNOSTIC - remove once tuning is finished
-    console.log(`zoom=${currentZoom}, initial=${initialHomeZoom}, scale=${offsetScale.toFixed(2)}, hidden=${zoomedIn}`);
+    // Facility logos belong to the national view only. The fitted view is
+    // the map's minimum zoom (set by fitAustralia, in fullscreen too), so any
+    // zoom above it hides the logos and callouts and lets the drill holes win.
+    const zoomedIn = currentZoom > map.getMinZoom();
 
     for (const [state, els] of facilityEls.entries()) {
       const f = els.conf;
