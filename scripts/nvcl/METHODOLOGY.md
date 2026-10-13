@@ -59,8 +59,10 @@
 >   the workflow warns whenever a state is carried or a node degraded;
 > - NT's unfiltered borehole list is paged in a stable order (sorted on the
 >   identifier) until an empty page, and reconciled against the node's
->   `resultType=hits` count; below 98% the node is marked degraded. The
->   unsorted paging stopped at about 210,000 of ~329,000 features;
+>   `resultType=hits` count, and its NVCL holes against the node's own NVCL
+>   count (an OGC XML filter on `nvclCollection`); below 98% of either the
+>   node is marked degraded. The unsorted paging stopped at about 210,000
+>   of ~329,000 features;
 > - a `uuid` TSG match tier above every name tier: an archive joins the
 >   hole whose `getDatasetCollection` lists its TSG UUID as a DatasetID
 >   (additive: the hole still takes its other archives by name), and within
@@ -75,9 +77,12 @@
 >   is the node's hole id), and, while a node is down or degraded, the
 >   previous run's attribution in place of the node's datasets;
 > - the TSG cache is reconciled against the live NCI catalogue each run:
->   rows whose archive the mirror no longer lists are stamped `gone` and are
->   neither matched, counted (mirror-only included) nor linked, and rows
->   sharing a TSG UUID and a scan interval count as one dataset.
+>   rows whose archive the mirror no longer lists are stamped `gone`; with a
+>   successor (a renamed archive) they are neither matched nor counted,
+>   without one they still measure their hole but are never linked or
+>   counted as mirror-only; rows sharing a TSG UUID and a scan interval
+>   count as one dataset; a state listing under 80% of its previous names
+>   is not believed.
 >
 > **Mirror-only double counted (corrected 2026-10-13).** The *Mirror-only
 > measurement* figure below counted every archive the harvest could not

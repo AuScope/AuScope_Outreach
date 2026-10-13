@@ -226,8 +226,14 @@ Changed:
   `sortBy=gsmlp:identifier ASC`, `startIndex` advances by the rows asked
   for, only an empty page ends the loop, and the features paged are
   reconciled against `resultType=hits`: below 98% the node is marked
-  degraded (figures carried forward). The snapshot records the coverage in
-  the state's `wfs_paging`.
+  degraded (figures carried forward). The count comes from page 0's
+  `numberMatched` (the separate unfiltered hits request, about 50 s, is
+  made only when page 0 lacks it). The node's own count of NVCL holes is
+  checked too, by a WFS 1.1.0 `resultType=hits` POST with an OGC XML filter
+  `gsmlp:nvclCollection = 'true'` (NT ignores the CQL form, not this one:
+  718 in 39 s): below 98% of it in NVCL holes paged also degrades the
+  node. The snapshot records the coverage in the state's `wfs_paging`
+  (`nvcl_paged`, `nvcl_reported`).
 - TSG archives join node datasets by UUID first. The TSG header's `UUID`
   (cached as `tsgUuid`) is the same value as the node's
   `getDatasetCollection` `DatasetID`, which the harvest now keeps (`id` on
@@ -327,15 +333,21 @@ Changed:
   stamps cache rows whose archive is no longer listed `gone: <date>`, with
   `successor: <name>` when a listed archive carries the same TSG UUID (a
   rename); a row whose archive returns loses both. The row stays, as the
-  record of a scan, but `harvest.js` neither matches nor counts it and the
-  map links none. On 2026-10-13 that was 115 of 5,610 rows (88 renamed, with
-  a successor), 62 of them among the rows previously counted as
-  mirror-only. A gone row with no successor takes its scan off its hole:
-  12 holes lost their only archive that way on 2026-10-13, and NT
-  `7963228_MURD013` and `8418381_BND1`, with no node datasets either, left
-  the map. One of them will return: the mirror re-listed
-  `7963233_Murd011.zip` as `7963233_MURD011.zip`, which the enrichment
-  reads as a new archive (ahead of any re-read) on its next run. Rows
+  record of a scan, and the map links none. A row with a successor is
+  neither matched nor counted (its successor carries the scan). One with
+  no successor still measures its hole (changed later on 2026-10-13): it
+  is matched, and its date and interval count for the hole it joins, but
+  it is never linked, never counted as mirror-only and never placed as a
+  hole of its own; `boreholes-detail.jsonl` marks it `gone: true`. Dropping
+  those had taken the only archive from 12 holes, and NT `7963228_MURD013`
+  and `8418381_BND1`, with no node datasets either, off the map. Eleven
+  more are an old copy of a hole's live archive under another UUID
+  (`7853531_LBD1 OLD.zip`, WA `BBDD0001_hole2.zip`): the union leaves
+  their hole's metres as they were, but `total_scan_km`, which sums
+  rescans, counts them (+3.9 km of 1,926 offline on 2026-10-13), and an
+  older copy can give its hole an earlier month. On
+  2026-10-13 that was 115 of 5,610 rows (88 renamed, with a successor), 62
+  of them among the rows previously counted as mirror-only. Rows
   sharing a TSG UUID and a scan interval are one dataset: matched, claimed
   and counted once,
   through a representative that lists the others as `twins` in
@@ -354,6 +366,13 @@ Changed:
   archive goes to them.
   `nvcl_stats.json` records `tsg_cache.gone_rows`, `tsg_cache.uuid_twin_rows`
   and per state `tsg_cache_rows_gone`.
+- Catalogue shrink guard: `thredds-catalog.js` does not believe a state's
+  listing with fewer than 80% of the names its previous snapshot held. That
+  state keeps its previous entry, flagged with `error`, its cache rows are
+  not reconciled (a truncated listing would otherwise stamp a share of its
+  archives gone), and the script exits 1 at the end, so the workflow's
+  warning issue fires. A genuine shrink has to be accepted by hand: remove
+  the state's entry from `thredds-catalog.json` and run it again.
 - A `data/nvcl_stats.json` that exists but does not parse stops the harvest
   before it starts (exit 1), instead of being treated as a first run with
   the 80% check skipped.

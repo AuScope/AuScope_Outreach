@@ -27,8 +27,10 @@
  * TSG enrichment (merged-v1.2), from data/nvcl/tsg-cache.jsonl, built by
  * scripts/nvcl/tsg-enrich.js out of the AuScope TSG mirror on NCI THREDDS
  * (collection DOI 10.25914/bztg-rg43). Rows thredds-catalog.js has stamped
- * `gone` (no longer on the mirror) are neither matched nor counted, and
- * rows sharing a TSG UUID count once (see loadTsgIndex):
+ * `gone` (no longer on the mirror) with a successor are neither matched nor
+ * counted; one with no successor still measures its hole, but is never
+ * linked or counted as mirror-only. Rows sharing a TSG UUID count once
+ * (see loadTsgIndex):
  *   - DEPTH precedence:  TSG-measured interval > API-published interval >
  *     drilled-length estimate. A TSG interval counts as MEASURED and is
  *     tracked separately as tsg_measured_km.
@@ -318,7 +320,8 @@ async function harvestNode(node, bhCache, today) {
     if (node.cqlBroken) {
       const paged = await fetchWfsUnfiltered(node);
       result.boreholes = paged.boreholes;
-      result.wfsPaging = { features: paged.features, reported: paged.hits };
+      result.wfsPaging = { features: paged.features, reported: paged.hits,
+        nvclPaged: paged.boreholes.length, nvclReported: paged.nvclHits };
     } else {
       result.boreholes = await fetchWfsFiltered(node);
     }
@@ -336,6 +339,13 @@ async function harvestNode(node, bhCache, today) {
         result.wfsShort = true;
         console.warn('  WFS PAGING SHORT: below ' + Math.round(MIN_PAGED_FRACTION * 100)
           + '% of the reported count - the node will be marked degraded');
+      }
+      console.log('  WFS: ' + pg.nvclPaged + ' NVCL holes paged against ' + (pg.nvclReported === null
+        ? 'no NVCL count' : pg.nvclReported + ' reported by the nvclCollection filter'));
+      if (pg.nvclReported !== null && pg.nvclPaged < pg.nvclReported * MIN_PAGED_FRACTION) {
+        result.wfsShort = true;
+        console.warn('  WFS NVCL HOLES SHORT: below ' + Math.round(MIN_PAGED_FRACTION * 100)
+          + '% of the node\'s NVCL count - the node will be marked degraded');
       }
     }
     if (bhCache) {
@@ -549,15 +559,19 @@ async function fetchWfsFiltered(node) {
 // returned, and only an empty page ends the loop. The node's
 // resultType=hits count is returned with the list; harvestNode() marks the
 // node degraded when the pages fall below MIN_PAGED_FRACTION of it.
+//
+// Changed 2026-10-13: the count is taken from page 0's numberMatched first
+// (NT's pages carry it), and the separate unfiltered hits request, about
+// 50 s on NT, is made only when page 0 lacks it. And the node's own count
+// of NVCL holes is asked for too, by an OGC XML filter on nvclCollection
+// (fetchNvclHits; the CQL form is the one NT ignores): the pages can reach
+// every feature and still not hold every NVCL hole, so harvestNode()
+// degrades the node when the NVCL holes paged fall below
+// MIN_PAGED_FRACTION of that count as well.
 async function fetchWfsUnfiltered(node) {
   const out = new Map();
   const seen = new Set();            // every feature paged, NVCL or not
   let hits = null;
-  try {
-    hits = await fetchWfsHits(node);
-  } catch (e) {
-    console.warn('  WFS hits count failed (' + e.message + '); using the count on the first page');
-  }
   let startIndex = 0;
   for (;;) {
     const body = 'service=WFS&version=2.0.0&request=GetFeature'
@@ -571,6 +585,13 @@ async function fetchWfsUnfiltered(node) {
     const page = JSON.parse(text);
     const features = page.features || [];
     if (hits === null && typeof page.numberMatched === 'number') hits = page.numberMatched;
+    if (hits === null && startIndex === 0) {
+      try {
+        hits = await fetchWfsHits(node);
+      } catch (e) {
+        console.warn('  WFS hits count failed (' + e.message + '); no count to page against');
+      }
+    }
     if (!features.length) break;
     let fresh = 0;
     features.forEach(function(f) {
@@ -588,7 +609,32 @@ async function fetchWfsUnfiltered(node) {
     }
     console.log('  paged ' + startIndex + ' rows, ' + seen.size + ' features, ' + out.size + ' NVCL so far...');
   }
-  return { boreholes: Array.from(out.values()), features: seen.size, hits: hits };
+  let nvclHits = null;
+  try {
+    nvclHits = await fetchNvclHits(node);
+  } catch (e) {
+    console.warn('  WFS NVCL hits count failed (' + e.message + '); the NVCL holes paged go unchecked');
+  }
+  return { boreholes: Array.from(out.values()), features: seen.size, hits: hits, nvclHits: nvclHits };
+}
+
+// The node's own count of NVCL holes: WFS 1.1.0 GetFeature, resultType=hits,
+// POSTed with an OGC XML filter gsmlp:nvclCollection = 'true'. NT answers
+// it (718 in 39 s on 2026-10-13) while ignoring the same filter as CQL.
+async function fetchNvclHits(node) {
+  const body = '<?xml version="1.0"?>'
+    + '<wfs:GetFeature service="WFS" version="1.1.0" resultType="hits"'
+    + ' xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc"'
+    + ' xmlns:gsmlp="http://xmlns.geosciml.org/geosciml-portrayal/4.0">'
+    + '<wfs:Query typeName="gsmlp:BoreholeView"><ogc:Filter><ogc:PropertyIsEqualTo>'
+    + '<ogc:PropertyName>gsmlp:nvclCollection</ogc:PropertyName><ogc:Literal>true</ogc:Literal>'
+    + '</ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>';
+  const text = await fetchText(node.wfs, WFS_FALLBACK_TIMEOUT_MS, {
+    method: 'POST', body: body, headers: { 'Content-Type': 'text/xml' },
+  });
+  const m = text.match(/\bnumberOfFeatures="(\d+)"/) || text.match(/\bnumberMatched="(\d+)"/);
+  if (!m) throw new Error('no numberOfFeatures in the NVCL hits response');
+  return Number(m[1]);
 }
 
 // The node's own count of BoreholeView features (resultType=hits, no
@@ -760,7 +806,7 @@ function canonicalInstrument(raw) {
 // borehole is matched against them in a fixed precedence order.
 function loadTsgIndex(file) {
   const idx = {
-    loaded: false, path: file, rows: 0, goneRows: 0, twinRows: 0, byState: {},
+    loaded: false, path: file, rows: 0, goneRows: 0, goneKept: 0, twinRows: 0, byState: {},
     matchedRows: new Set(), states: [],
   };
   if (!fs.existsSync(file)) {
@@ -775,15 +821,26 @@ function loadTsgIndex(file) {
     if (!r || !r.state || !r.zipName) return;
     const st = idx.byState[r.state] || (idx.byState[r.state] = {
       rows: [], full: new Map(), prefix: new Map(), suffix: new Map(), uuid: new Map(),
-      groups: new Map(), gone: 0,
+      groups: new Map(), gone: 0, goneKept: 0,
     });
     r._key = r.state + '/' + r.zipName;
     // Gone from the mirror (added 2026-10-13; thredds-catalog.js stamps it).
-    // The row stays in the cache as the record of a scan, but there is no
-    // archive to link and, when the file was renamed, its successor carries
-    // the same scan: matching or counting it would count that scan twice or
-    // point at a missing file. So it is neither.
-    if (r.gone) { st.gone++; idx.goneRows++; return; }
+    // The row stays in the cache as the record of a scan. When the file was
+    // renamed, its successor (same TSG UUID and interval) carries the same
+    // scan, and matching or counting the old name would count that scan
+    // twice: so a row with a successor is neither matched nor counted.
+    // One WITHOUT a successor is the only record of its scan, and still
+    // measures its hole (changed 2026-10-13: dropping these took the month
+    // and the metres off 12 holes, NT 7963228_MURD013 and 8418381_BND1
+    // among them). It is matched, and its date and interval count for the
+    // hole it joins; it is never linked (write-map-data.js links only
+    // archives the mirror lists), never counted as mirror-only and never
+    // placed as a hole of its own.
+    if (r.gone) {
+      st.gone++; idx.goneRows++;
+      if (r.successor) return;
+      r._gone = true; st.goneKept++; idx.goneKept++;
+    }
     idx.rows++;
     // Rows sharing a TSG UUID AND a scan interval are ONE dataset under two
     // archive names (added 2026-10-13): NT 7882528_TDD01.zip and
@@ -818,9 +875,9 @@ function loadTsgIndex(file) {
     }
   });
   // One representative per UUID group, the row the hole's figures and the
-  // map's link are taken from: one with an interval, then one with a scan
-  // date, then not an '_Old' copy, then the shorter name. The others are
-  // listed on it as twins.
+  // map's link are taken from: one still on the mirror, then one with an
+  // interval, then one with a scan date, then not an '_Old' copy, then the
+  // shorter name. The others are listed on it as twins.
   //
   // Then, per state, the copied-header UUIDs (a UUID carried by more than
   // one dataset; see above) and the 'drillhole' tier's index: each row's
@@ -855,12 +912,13 @@ function loadTsgIndex(file) {
   idx.loaded = true;
   idx.states = Object.keys(idx.byState).sort();
   console.log('\nTSG cache: ' + idx.rows + ' rows across ' + idx.states.join(', ')
-    + ' (' + idx.goneRows + ' more gone from the mirror, never matched or counted; '
+    + ' (' + (idx.goneRows - idx.goneKept) + ' more gone from the mirror with a successor, never matched or counted; '
+    + idx.goneKept + ' of the rows gone with no successor, still measuring their hole; '
     + idx.twinRows + ' share a TSG UUID and scan interval with another row and count with it)');
   return idx;
 
   function rank(r) {
-    return (r.depthFromM != null && r.depthToM != null ? 0 : 4)
+    return (r._gone ? 8 : 0) + (r.depthFromM != null && r.depthToM != null ? 0 : 4)
       + (r.scanDate ? 0 : 2) + (/old/i.test(r.zipName) ? 1 : 0);
   }
 
@@ -938,9 +996,13 @@ function mirrorOnly(st, used) {
   // rule back behind a non-overlap test rather than on the name alone.
   const holes = {};
   // Per dataset, not per archive name: a UUID group counts once, through its
-  // representative (see loadTsgIndex). Gone rows are not in st at all.
+  // representative (see loadTsgIndex). Gone rows with a successor are not
+  // in st at all; one without a successor is skipped below.
   st.rep.forEach(function(r) {
     if (used.has(r._key)) return;
+    // A gone row with no successor that joined no hole measures nothing
+    // here: the mirror no longer holds it, so it is not mirror evidence.
+    if (r._gone) return;
     // Archives sharing a leading feature number are one borehole scanned in
     // sections, not several holes. VIC/976431 is STAVELY04 twice - 0-54.5 m
     // sonic then 56.4-102.8 m diamond - contiguous, non-overlapping, one hole.
@@ -1163,7 +1225,7 @@ function attachTsg(result, idx, positions) {
   }
   const cand = [];
   st.rep.forEach(function(r) {
-    if (attributed.has(r._key) || st.copied.has(uuidKey(r.tsgUuid))) return;
+    if (attributed.has(r._key) || r._gone || st.copied.has(uuidKey(r.tsgUuid))) return;
     cand.push(r);
   });
   const ph = provisionalHoles(code, cand, stale ? 'node_unreachable' : 'orphan', result.boreholes, positions);
@@ -2116,12 +2178,16 @@ function aggregate(results, asOf, tsgIndex, prev) {
   };
 }
 
-// What an unfiltered (sorted, paged) borehole list covered, for the snapshot.
+// What an unfiltered (sorted, paged) borehole list covered, for the
+// snapshot, and (added 2026-10-13) the node's own count of NVCL holes
+// against the NVCL holes the pages held.
 function pagingEntry(pg) {
   return {
     features_paged: pg.features,
     features_reported: pg.reported,
     paged_pct: pg.reported ? Math.round(pg.features / pg.reported * 1000) / 10 : null,
+    nvcl_paged: pg.nvclPaged == null ? undefined : pg.nvclPaged,
+    nvcl_reported: pg.nvclReported == null ? undefined : pg.nvclReported,
   };
 }
 
@@ -2276,6 +2342,9 @@ function detailTsg(list) {
       instrument: t.instrument || null,
       // Other archive names of the same dataset (same TSG UUID).
       twins: t._twins && t._twins.length ? t._twins : undefined,
+      // No longer on the mirror and no successor: it still measures the
+      // hole, but there is no file to link.
+      gone: t._gone ? true : undefined,
     };
   }).sort(function(a, b) { return a.zip < b.zip ? -1 : (a.zip > b.zip ? 1 : 0); });
 }

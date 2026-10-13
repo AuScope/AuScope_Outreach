@@ -43,10 +43,19 @@
  * harvest.js matches and counts no gone row, and the map links none. A
  * state whose catalogue failed is left exactly as it was.
  *
+ * Shrink guard (added 2026-10-13): a listing with fewer than 80% of the
+ * names the previous snapshot held for that state is not believed. A
+ * truncated catalogue page would otherwise stamp a fifth of a state's
+ * archives gone, and gone rows stop counting. Such a state is treated like
+ * one whose catalogue failed: its previous entry is kept, flagged, its
+ * cache rows are not reconciled, and the run exits 1 at the end (the
+ * workflow step is continue-on-error, so the warning issue fires).
+ *
  * Cheap (six catalogue XMLs, no archives touched). Run before harvest.js.
- * Exit status: 0 when every catalogue was read; 1 when any failed (failed
- * states keep their previous entry, flagged with `error` and `stale_since`);
- * 1 without writing anything when every catalogue failed.
+ * Exit status: 0 when every catalogue was read and believed; 1 when any
+ * failed or shrank (those states keep their previous entry, flagged with
+ * `error` and `stale_since`); 1 without writing anything when every
+ * catalogue failed.
  *
  * Usage: node scripts/nvcl/thredds-catalog.js   (any working directory)
  */
@@ -66,6 +75,9 @@ const UA = 'AuScope-Outreach NVCL harvester (+https://github.com/AuScope/AuScope
 // (Nsw/Wa/Nt all 404). Keys here are our node codes; values are the paths.
 const SUBPATHS = { SA: 'SA', TAS: 'Tas', WA: 'WA', NT: 'NT', QLD: 'Qld', VIC: 'Vic' };
 const BASE = 'https://thredds.nci.org.au/thredds/catalog/rs07/';
+// A listing below this share of the previous snapshot's names is not
+// believed (see the header).
+const MIN_LISTING_FRACTION = 0.8;
 
 async function run() {
   console.log('THREDDS catalogue snapshot');
@@ -80,6 +92,13 @@ async function run() {
       const xml = await fetchText(url);
       const archives = parseCatalog(xml);
       const names = Object.keys(archives).sort();
+      const before = prevStates[code];
+      const prevN = before && Array.isArray(before.names) ? before.names.length : 0;
+      if (prevN && names.length < prevN * MIN_LISTING_FRACTION) {
+        throw new Error('listing shrank to ' + names.length + ' of the ' + prevN
+          + ' names in the previous snapshot (below ' + Math.round(MIN_LISTING_FRACTION * 100)
+          + '%); not believed, not reconciled');
+      }
       states[code] = { subpath: SUBPATHS[code], count: names.length, names: names, archives: archives };
       console.log('  ' + code + ': ' + names.length + ' archives');
     } catch (e) {
@@ -91,10 +110,10 @@ async function run() {
           error: String(e.message),
           stale_since: before.stale_since || (previous && previous.fetched) || null,
         });
-        console.warn('  ' + code + ': catalogue unreachable (' + e.message + ') - previous entry kept ('
+        console.warn('  ' + code + ': catalogue not used (' + e.message + ') - previous entry kept ('
           + before.count + ' archives)');
       } else {
-        console.warn('  ' + code + ': catalogue unreachable (' + e.message + ') - omitted, not zeroed');
+        console.warn('  ' + code + ': catalogue not used (' + e.message + ') - omitted, not zeroed');
         states[code] = { subpath: SUBPATHS[code], count: null, names: [], error: String(e.message) };
       }
     }
@@ -114,7 +133,7 @@ async function run() {
   const fresh = Object.keys(states).filter(function(code) { return failed.indexOf(code) === -1; });
   reconcileCache(states, fresh, fetched.substring(0, 10));
   if (failed.length) {
-    console.error('Catalogue(s) unreachable: ' + failed.join(', ') + ' (exiting 1)');
+    console.error('Catalogue(s) unreachable or not believed: ' + failed.join(', ') + ' (exiting 1)');
     process.exitCode = 1;
   }
 }
