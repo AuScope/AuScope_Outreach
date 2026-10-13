@@ -123,7 +123,7 @@ directory works. Then serve the repo (`python3 -m http.server`) and open
 ## What was ported, changed and left behind
 
 Kept as in doi_tracker: the 8-node WFS harvest (single-request first, NT's
-unfiltered patient paging), per-borehole `getDatasetCollection`, TSG
+unfiltered patient paging, now sorted and reconciled; see below), per-borehole `getDatasetCollection`, TSG
 matching and precedence (TSG interval and TSG date first), the garbage
 clamp, the union rule, the borehole coordinate cache and carry-forward, the
 mirror reconciliation and mirror-only figures, and the health guard (>= 5
@@ -172,6 +172,21 @@ Changed:
   each took six other holes' `NN_DDH1.zip` archives and SA 139115 `DDH 1`
   took `72812_DDH1.zip` from SA 72812: ten archives counted twice, with
   their metres, and the wrong first-scan month on the borrowing hole.
+- NT's borehole list is paged in a stable order and checked against the
+  node's own count. NT ignores the `nvclCollection` filter, so all of its
+  ~329,000 BoreholeView features are paged unfiltered. doi_tracker paged
+  them unsorted and stopped at the first page holding fewer features than
+  it asked for, but NT pages in rows and a hole with several rows is one
+  feature, so a full page can come back short (the page at 200,000 held
+  9,940) and the harvest stopped at about 210,000. Every hole past that was
+  missing: 20 of NT's 41 NVCL holes with a `/` in their name, and the owners
+  of nine mirrored archives (six `NN_DDH1.zip`, `8708941_DDH3`,
+  `8750821_DDH3`, `8724181_DDH2`). Now the pages are WFS 2.0 with
+  `sortBy=gsmlp:identifier ASC`, `startIndex` advances by the rows asked
+  for, only an empty page ends the loop, and the features paged are
+  reconciled against `resultType=hits`: below 98% the node is marked
+  degraded (figures carried forward). The snapshot records the coverage in
+  the state's `wfs_paging`.
 - A `data/nvcl_stats.json` that exists but does not parse stops the harvest
   before it starts (exit 1), instead of being treated as a first run with
   the 80% check skipped.

@@ -50,7 +50,11 @@
 >   feature number, and a generic suffix (`DDH1`, `BD2`) must be the hole's
 >   whole name;
 > - the map writer carries a state's previous rows forward when its fresh
->   rows fall below 90% of them, and fails when more than two states do.
+>   rows fall below 90% of them, and fails when more than two states do;
+> - NT's unfiltered borehole list is paged in a stable order (sorted on the
+>   identifier) until an empty page, and reconciled against the node's
+>   `resultType=hits` count; below 98% the node is marked degraded. The
+>   unsorted paging stopped at about 210,000 of ~329,000 features.
 
 Counting rules for every NVCL figure published by this repository
 (`data/nvcl-stats.json`, `docs/nvcl-data.json`, the dashboard and the NVCL

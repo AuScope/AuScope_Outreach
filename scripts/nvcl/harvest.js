@@ -105,6 +105,11 @@ const WFS_SINGLE_MAX = 20000;
 // this run's figures for it and carry the previous run's forward instead.
 const DEGRADED_FRACTION = 0.5;
 const FALLBACK_PAGE = 10000;       // unfiltered paging (NT: CQL disabled)
+// The stable order unfiltered pages are taken in, and the share of the
+// node's own feature count (resultType=hits) the pages must reach before the
+// borehole list is believed. See fetchWfsUnfiltered().
+const FALLBACK_SORT = 'gsmlp:identifier ASC';
+const MIN_PAGED_FRACTION = 0.98;
 const CLAMP_FACTOR = 1.5;          // interval vs borehole length garbage clamp
 const MIN_NODES_UP = 5;            // health guard
 const MIN_PREV_FRACTION = 0.8;     // health guard
@@ -274,12 +279,29 @@ async function harvestNode(node, bhCache, today) {
 
   // 1. WFS borehole list
   try {
-    result.boreholes = node.cqlBroken
-      ? await fetchWfsUnfiltered(node)
-      : await fetchWfsFiltered(node);
+    if (node.cqlBroken) {
+      const paged = await fetchWfsUnfiltered(node);
+      result.boreholes = paged.boreholes;
+      result.wfsPaging = { features: paged.features, reported: paged.hits };
+    } else {
+      result.boreholes = await fetchWfsFiltered(node);
+    }
     result.wfsOk = true;
     result.wfsCount = result.boreholes.length;
     console.log('  WFS: ' + result.wfsCount + ' NVCL boreholes registered');
+    if (result.wfsPaging) {
+      const pg = result.wfsPaging;
+      const frac = pg.reported ? pg.features / pg.reported : 0;
+      console.log('  WFS: paged ' + pg.features + ' features against ' + (pg.reported === null ? 'no count'
+        : pg.reported + ' reported by resultType=hits') + ' (' + Math.round(frac * 1000) / 10 + '%)');
+      // Short of the node's own count, the borehole list is not the node's
+      // list, and the holes past the shortfall would leave the map silently.
+      if (frac < MIN_PAGED_FRACTION) {
+        result.wfsShort = true;
+        console.warn('  WFS PAGING SHORT: below ' + Math.round(MIN_PAGED_FRACTION * 100)
+          + '% of the reported count - the node will be marked degraded');
+      }
+    }
     if (bhCache) {
       const dropped = purgeSeeded(bhCache, node.code);
       const legacy = purgeTruncatedIds(bhCache, node.code, result.boreholes);
@@ -407,11 +429,12 @@ async function harvestNode(node, bhCache, today) {
   // carry the figures forward rather than publish a collapse as a measurement.
   const failedFrac = result.boreholes.length
     ? result.fetchFailures / result.boreholes.length : 0;
-  if (failedFrac > DEGRADED_FRACTION || budgetTripped) {
+  if (failedFrac > DEGRADED_FRACTION || budgetTripped || result.wfsShort) {
     result.degraded = true;
     result.fromCache = true;          // carry stats forward, same as an outage
     result.coordsAsOf = today;        // coordinates ARE fresh; the figures are not
-    console.warn('  DEGRADED: ' + (budgetTripped ? 'dataset pass ran out of time, ' : '')
+    console.warn('  DEGRADED: ' + (result.wfsShort ? 'WFS paging fell short of the node\'s count, ' : '')
+      + (budgetTripped ? 'dataset pass ran out of time, ' : '')
       + Math.round(failedFrac * 100) + '% of dataset queries failed'
       + ' - figures will be carried forward, coordinates kept fresh');
   }
@@ -470,30 +493,75 @@ async function fetchWfsFiltered(node) {
 }
 
 // Fallback path (NT): CQL on nvclCollection silently matches nothing, so
-// page through ALL boreholes (WFS 1.0.0 POST, the nvcl_kit approach) and
-// filter locally on the nvclCollection property.
+// page through ALL boreholes (POST, the nvcl_kit approach) and filter
+// locally on the nvclCollection property.
+//
+// In a STABLE order, to the node's own count (changed 2026-10-13). The
+// doi_tracker version paged WFS 1.0.0 with no sort order and stopped at the
+// first page holding fewer than FALLBACK_PAGE features. NT's view pages in
+// ROWS, and a hole with several rows is one feature, so a full page can hold
+// fewer features than it asked for: the page at 200,000 held 9,940. That
+// short page ended the loop at about 210,000 of NT's ~329,000 features, and
+// every hole past it was lost: 20 of the 41 NVCL holes with a '/' in their
+// name, and the owners of 8618198_DDH1.zip and eight other mirrored
+// archives. Now the pages are WFS 2.0 sorted on the identifier (verified
+// 2026-10-13: count=10 pages at startIndex 0 and 10, and at 300,000 and
+// 300,010, abut exactly, and pages offset by 5 overlap by exactly 5),
+// startIndex advances by the rows asked for rather than the features
+// returned, and only an empty page ends the loop. The node's
+// resultType=hits count is returned with the list; harvestNode() marks the
+// node degraded when the pages fall below MIN_PAGED_FRACTION of it.
 async function fetchWfsUnfiltered(node) {
   const out = new Map();
+  const seen = new Set();            // every feature paged, NVCL or not
+  let hits = null;
+  try {
+    hits = await fetchWfsHits(node);
+  } catch (e) {
+    console.warn('  WFS hits count failed (' + e.message + '); using the count on the first page');
+  }
   let startIndex = 0;
   for (;;) {
-    const body = 'service=WFS&version=1.0.0&request=GetFeature'
-      + '&typeName=gsmlp:BoreholeView&outputFormat=json'
-      + '&maxFeatures=' + FALLBACK_PAGE + '&startIndex=' + startIndex;
+    const body = 'service=WFS&version=2.0.0&request=GetFeature'
+      + '&typeNames=gsmlp:BoreholeView&outputFormat=application/json'
+      + '&count=' + FALLBACK_PAGE + '&startIndex=' + startIndex
+      + '&sortBy=' + encodeURIComponent(FALLBACK_SORT);
     const text = await fetchText(node.wfs, WFS_FALLBACK_TIMEOUT_MS, {
       method: 'POST', body: body,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
-    const features = (JSON.parse(text).features) || [];
+    const page = JSON.parse(text);
+    const features = page.features || [];
+    if (hits === null && typeof page.numberMatched === 'number') hits = page.numberMatched;
+    if (!features.length) break;
+    let fresh = 0;
     features.forEach(function(f) {
       const p = f.properties || {};
+      const key = String(f.id || p.identifier || '');
+      if (!seen.has(key)) { seen.add(key); fresh++; }
       if (String(p.nvclCollection) !== 'true') return;
       addFeature(out, f);
     });
-    if (features.length < FALLBACK_PAGE) break;
-    startIndex += features.length;
-    console.log('  paged ' + startIndex + ' features, ' + out.size + ' NVCL so far...');
+    // A server that ignores startIndex hands back the same page for ever.
+    if (!fresh) throw new Error('WFS page at startIndex ' + startIndex + ' held no new features (startIndex ignored?)');
+    startIndex += FALLBACK_PAGE;
+    if (startIndex > Math.max(2 * (hits || 0), 1000000)) {
+      throw new Error('WFS paging passed ' + startIndex + ' rows without an empty page (count ' + hits + ')');
+    }
+    console.log('  paged ' + startIndex + ' rows, ' + seen.size + ' features, ' + out.size + ' NVCL so far...');
   }
-  return Array.from(out.values());
+  return { boreholes: Array.from(out.values()), features: seen.size, hits: hits };
+}
+
+// The node's own count of BoreholeView features (resultType=hits, no
+// filter). NT took about 50 s to answer it on 2026-10-13.
+async function fetchWfsHits(node) {
+  const url = node.wfs + '?service=WFS&version=2.0.0&request=GetFeature'
+    + '&typeNames=gsmlp:BoreholeView&resultType=hits';
+  const text = await fetchText(url, WFS_FALLBACK_TIMEOUT_MS);
+  const m = text.match(/numberMatched="(\d+)"/);
+  if (!m) throw new Error('no numberMatched in the hits response');
+  return Number(m[1]);
 }
 
 // The borehole id is the WFS identifier with the node's borehole-URL base
@@ -954,11 +1022,14 @@ const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
 // Assign each archive to at most one borehole (added 2026-10-13). Matching
 // hole by hole, each taking the first tier that hit anything, let one
 // archive land on several holes: NT 8445355 and 8446742 are both named DDH1,
-// so each took the NN_DDH1.zip archives of six other holes that had already
-// matched them by id; SA 139115 'DDH 1' took 72812_DDH1.zip from SA 72812.
-// Ten archives were counted twice, their metres too, and gave the wrong
-// month to the hole that borrowed them. Now the tiers run in order across
-// the whole node, and:
+// so each took the six NN_DDH1.zip archives (8618198_DDH1.zip and five
+// more), which belong to six other NT holes; SA 139115 'DDH 1' took
+// 72812_DDH1.zip from SA 72812. The NT owners were not in the harvest at the
+// time: all six lie past the point where the unsorted NT paging stopped (see
+// fetchWfsUnfiltered), so nothing else claimed their archives. Ten archives
+// were counted twice, their metres too, and gave the wrong month to the
+// hole that borrowed them. Now the tiers run in order across the whole
+// node, and:
 //   - an archive matched at one tier is never matched again at a weaker one;
 //   - an archive two holes claim at the same tier goes to neither (it is
 //     counted as mirror-only rather than guessed);
@@ -998,9 +1069,10 @@ function resolveTsgMatches(st, boreholes) {
           return false;
         }
         // A hole that has its own feature number cannot own an archive filed
-        // under a different one, even when that other hole is not on the
-        // node's NVCL list: NT 8445359 'DDH3' was taking 8708941_DDH3.zip
-        // and 8750821_DDH3.zip, two holes scanned 20 months apart.
+        // under a different one, even when that other hole is not in the
+        // harvested list: NT 8445359 'DDH3' was taking 8708941_DDH3.zip and
+        // 8750821_DDH3.zip, two holes scanned 20 months apart whose owners
+        // the unsorted NT paging never reached.
         if (lead && bh.ownNum && lead !== bh.ownNum) {
           refuse('owner', r, bh, null);
           return false;
@@ -1303,7 +1375,13 @@ function aggregate(results, asOf, tsgIndex, prev) {
           // measured last week - which is precisely the lie this field exists
           // to prevent.
           measured_as_of: before.measured_as_of || (prev && prev.as_of) || null,
-          note: r.degraded
+          wfs_paging: r.wfsPaging ? pagingEntry(r.wfsPaging) : before.wfs_paging,
+          note: r.wfsShort
+            ? 'This node\'s borehole list paged short of the count the node reports, '
+              + 'so the figures are those last measured on '
+              + ((prev && prev.as_of) || 'an earlier run')
+              + '. Coordinates read this run are kept; the measurements are not current.'
+            : r.degraded
             ? 'This node served its borehole list but its dataset service failed '
               + 'most queries, so the figures are those last measured on '
               + ((prev && prev.as_of) || 'an earlier run')
@@ -1470,6 +1548,7 @@ function aggregate(results, asOf, tsgIndex, prev) {
       }
     }
     if (node.note && !isParticipating) entry.note = node.note;
+    if (r.wfsPaging) entry.wfs_paging = pagingEntry(r.wfsPaging);
     if (r.fetchFailures) entry.dataset_fetch_failures = r.fetchFailures;
     if (r.tsg && r.tsg.rows) {
       entry.tsg_cache_rows = r.tsg.rows;
@@ -1579,6 +1658,15 @@ function aggregate(results, asOf, tsgIndex, prev) {
     },
     states: states.sort(function(a, b) { return a.state < b.state ? -1 : 1; }),
     endpoints: endpoints,
+  };
+}
+
+// What an unfiltered (sorted, paged) borehole list covered, for the snapshot.
+function pagingEntry(pg) {
+  return {
+    features_paged: pg.features,
+    features_reported: pg.reported,
+    paged_pct: pg.reported ? Math.round(pg.features / pg.reported * 1000) / 10 : null,
   };
 }
 
