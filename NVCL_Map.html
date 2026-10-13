@@ -627,7 +627,7 @@
   </div>
 
   <footer class="footer">
-    Boreholes harvested weekly from the eight NVCL node services. Scan dates and scanned
+    Boreholes harvested weekly from the eight NVCL node services and the AuScope TSG mirror on NCI THREDDS. Scan dates and scanned
     lengths from TSG metadata on <a href="https://thredds.nci.org.au">NCI THREDDS</a>
     (<a href="https://doi.org/10.25914/bztg-rg43">doi:10.25914/bztg-rg43</a>) where available,
     otherwise from the NVCL dataset record.
@@ -1000,8 +1000,12 @@
     const scans = b.n_datasets > 1 ? ` &middot; ${NUM.format(b.n_datasets)} scans` : '';
     const dateSrc = b.month_source === 'tsg' ? ' (TSG header)'
       : b.month_source === 'api' ? ' (NVCL record)' : '';
-    // The hole's first-scan TSG archive on the NCI mirror. A plain link,
-    // fetched only if clicked; THREDDS folder names are case-sensitive.
+    // The hole's TSG archive on the NCI mirror, as write-map-data.js picks
+    // it: the core archive named as the hole (its id, else its name), else
+    // the one filed under its own feature number, else the one that gave it
+    // its month, else the earliest high-confidence scan, else the earliest.
+    // A plain link, fetched only if clicked; THREDDS folder names are
+    // case-sensitive.
     let archive = '';
     if (b.z && THREDDS_SUBPATH[b.state]) {
       const href = THREDDS_FILES + THREDDS_SUBPATH[b.state] + '/' + encodeURIComponent(b.z) + '.zip';

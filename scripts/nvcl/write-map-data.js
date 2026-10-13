@@ -30,10 +30,12 @@
  *           dataSize when it has one, else the TSG cache's zipBytes. Only
  *           archives the mirror lists right now; none at all for a state
  *           whose catalogue listing is missing. Which archive (changed
- *           2026-10-13): the one filed under the hole's own feature number,
- *           else the one that gave the hole its month, else the earliest
- *           high-confidence scan, else the earliest; never one filed under
- *           another feature number when the hole has its own.
+ *           2026-10-13): the core archive, whose whole name is the hole's id
+ *           (not its name, which a node may take from a later rescan);
+ *           else the one filed under the hole's own
+ *           feature number; else the one that gave the hole its month; else
+ *           the earliest high-confidence scan; else the earliest. Never one
+ *           filed under another feature number when the hole has its own.
  *   p       't' on a THREDDS-only hole (added 2026-10-13): no node lists it,
  *           and its position is its TSG header's (harvest.js places it only
  *           when scripts/nvcl/coords.js accepts that position's class for
@@ -495,12 +497,19 @@ function loadArchives(cacheFile, catalogFile) {
 }
 
 // The archive the popup links for a hole (changed 2026-10-13), in order of
-// preference: the one filed under the hole's own feature number
-// ('<number>_<HOLE>.zip', the number the node files the hole under), then
-// the one that gave the hole its month, then the earliest high-confidence
-// scan, then the earliest scan; ties (and undated archives, which sort
-// last) by name. An archive filed under another feature number is never
-// linked when the hole has one of its own. Only archives the mirror lists
+// preference: the core archive, whose whole name (normalised: letters and
+// digits, upper case) is the hole's id, never its name, because a node may
+// name a hole after a later rescan ('GSWA Harvey 1.zip'
+// before 'GSWA Harvey 1_cuttings.zip', '12CADD001.zip' before
+// '12CADD001_wedge.zip' even where the node names the hole
+// '12CADD001_wedge'); then the one filed under the hole's own feature
+// number ('<number>_<HOLE>.zip', the number the node files the hole
+// under); then the one that gave the hole its month; then the earliest
+// high-confidence scan; then the earliest scan. Ties (and undated
+// archives, which sort last) by name. An archive filed under another
+// feature number is never linked when the hole has one of its own, at any
+// step. A wedge, cuttings or rescan archive is linked only when the hole
+// has no core archive on the mirror. Only archives the mirror lists
 // are linked, so the popup never points at a file that has gone, and a
 // state with no listing gets no link at all. z is the name without '.zip'
 // (the popup rebuilds the URL); mb is the size in whole megabytes (10^6
@@ -517,7 +526,11 @@ function pickArchive(d, archives, when) {
   }).sort(byDate);
   if (!tsg.length) return null;
   const month = when && when.source === 'tsg' ? when.month : null;
-  const pick = tsg.filter(function(t) { return own && lead(t) === own; })[0]
+  const whole = function(key) {
+    return key ? tsg.filter(function(t) { return normKey(t.zip.replace(/\.zip$/i, '')) === key; })[0] : null;
+  };
+  const pick = whole(normKey(d.id))
+    || tsg.filter(function(t) { return own && lead(t) === own; })[0]
     || (month && tsg.filter(function(t) { return String(t.scanDate || '').substring(0, 7) === month; })[0])
     || tsg.filter(function(t) { return t.confidence === 'high' || t.confidence === 'good'; })[0]
     || tsg[0];
@@ -716,6 +729,11 @@ function round(x, dp) {
 }
 
 function cmp(a, b) { return a < b ? -1 : (a > b ? 1 : 0); }
+
+// As harvest.js normKey: letters and digits, upper case.
+function normKey(s) {
+  return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
 
 function pad(v, w) { return String(v).padEnd(w); }
 

@@ -47,7 +47,10 @@
  * distance from the header position to that collar. Median and p95 per
  * class and state; a class/state with p95 above 5 km is NOT used for
  * placement (ACCEPT_P95_M). One with fewer than MIN_VALIDATED rows to judge
- * by takes the class's national verdict (all states pooled).
+ * by takes the class's national verdict (all states pooled), except
+ * mga_inferred (OWN_STATE_ONLY), which is placed only in a state whose own
+ * validated rows pass: the zone it settles on depends on the state's zones
+ * and its projects' neighbours, so QLD's verdict says nothing about WA's.
  *
  * CLI: node scripts/nvcl/coords.js
  *   Classifies every live cache row, records the result on the row
@@ -86,6 +89,9 @@ const STATE_ZONES = {
 
 const ACCEPT_P95_M = 5000;
 const MIN_VALIDATED = 5;
+// Classes that never take the national verdict: accepted only on validated
+// rows of their own state (changed 2026-10-13).
+const OWN_STATE_ONLY = ['mga_inferred'];
 const NEIGHBOUR_MIN = 3;
 const NEIGHBOUR_MAX_M = 50000;
 // A plausible MGA easting and (southern hemisphere) northing anywhere in
@@ -338,11 +344,13 @@ function validate(rows, results) {
 }
 
 // Accepted for placement: p95 <= 5 km over at least MIN_VALIDATED rows of
-// the class in the state; with fewer, the class's national verdict.
+// the class in the state; with fewer, the class's national verdict, except
+// for an OWN_STATE_ONLY class, which is refused there.
 function accepted(table, cls, state) {
   if (PLACED_CLASSES.indexOf(cls) === -1) return false;
   const own = table[cls + '/' + state];
   if (own && own.n >= MIN_VALIDATED) return own.p95_m <= ACCEPT_P95_M;
+  if (OWN_STATE_ONLY.indexOf(cls) !== -1) return false;
   const all = table[cls + '/*'];
   if (all && all.n >= MIN_VALIDATED) return all.p95_m <= ACCEPT_P95_M && !(own && own.p95_m > ACCEPT_P95_M);
   return false;
@@ -436,7 +444,8 @@ function main() {
     generated: new Date().toISOString().replace(/\.\d{3}Z$/, 'Z'),
     source: 'scripts/nvcl/coords.js - TSG header lat lon against the WFS collar of the hole each archive joined',
     rule: 'a class/state pair is used for placement when the p95 distance to the WFS collar is at most '
-      + ACCEPT_P95_M + ' m over at least ' + MIN_VALIDATED + ' validated rows; with fewer, the class\'s national verdict',
+      + ACCEPT_P95_M + ' m over at least ' + MIN_VALIDATED + ' validated rows; with fewer, the class\'s national verdict, except '
+      + OWN_STATE_ONLY.join(', ') + ', which needs validated rows of its own state',
     classes_by_state: counts,
     validation: table,
     accepted: acc,
@@ -464,7 +473,7 @@ if (require.main === module) {
 }
 
 module.exports = {
-  STATE_BOX, STATE_ZONES, PLACED_CLASSES, ACCEPT_P95_M,
+  STATE_BOX, STATE_ZONES, PLACED_CLASSES, OWN_STATE_ONLY, ACCEPT_P95_M,
   mgaToLatLng, distanceM, classify, classifyAll, validate, accepted, acceptance,
   rowFields, holesFromDetail, projectKey, zoneOf, TABLE_FILE,
 };

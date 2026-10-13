@@ -65,10 +65,11 @@ jobs:
 
       # Re-read ONLY the identity block (drillhole name, hole service, lat
       # lon, geo datum, collar) of up to 400 archives read before it was
-      # parsed: HEAD, the 64 KB tail and 32 KB of the .tsg entry each, about
-      # 100 KB an archive. Stops cleanly at 60 minutes, keeping what it read
-      # (NCI answered at about 8 s an archive on 2026-10-13, so the cap, not
-      # the budget, may end it). Optional, like the enrichment.
+      # parsed: the 64 KB tail (at the cached size, so no HEAD) and 32 KB of
+      # the .tsg entry each, about 100 KB an archive. Stops cleanly at 60
+      # minutes, keeping what it read (NCI answered at about 8 s an archive
+      # on 2026-10-13, so the cap, not the budget, may end it). Optional,
+      # like the enrichment.
       - name: TSG identity backfill (budgeted)
         id: backfill
         continue-on-error: true

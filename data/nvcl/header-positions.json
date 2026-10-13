@@ -1,7 +1,7 @@
 {
- "generated": "2026-10-13T10:53:52Z",
+ "generated": "2026-10-13T12:06:07Z",
  "source": "scripts/nvcl/coords.js - TSG header lat lon against the WFS collar of the hole each archive joined",
- "rule": "a class/state pair is used for placement when the p95 distance to the WFS collar is at most 5000 m over at least 5 validated rows; with fewer, the class's national verdict",
+ "rule": "a class/state pair is used for placement when the p95 distance to the WFS collar is at most 5000 m over at least 5 validated rows; with fewer, the class's national verdict, except mga_inferred, which needs validated rows of its own state",
  "classes_by_state": {
   "NT": {
    "zeroed": 73,

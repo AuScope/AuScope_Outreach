@@ -58,8 +58,10 @@
  *
  * --backfill-identity (added 2026-10-13): for cached rows read before the
  * identity block was parsed (no drillholeName, no identityFetchedAt), re-read
- * ONLY the identity block: HEAD, the 64 KB tail (EOCD and, when it fits
- * there, the central directory; ZIP64-aware), then a 32 KB range at the start
+ * ONLY the identity block: the 64 KB tail (EOCD and, when it fits there, the
+ * central directory; ZIP64-aware), asked for at the row's cached zipBytes
+ * with no HEAD (a HEAD only when that size is missing or the answer's
+ * Content-Range says it is no longer right), then a 32 KB range at the start
  * of the .tsg entry, inflated with a sync flush so the partial deflate stream
  * decodes as far as it goes. The [description] block (UUID, Created, Last
  * modified, Executive Summary) and [dbextra] end within about 2-3.5 KB of the
@@ -751,19 +753,31 @@ async function backfillState(state, zipNames, cache, deadline, p) {
     + (p.bytes / 1048576).toFixed(1) + ' MB');
 }
 
-// HEAD, the 64 KB tail, the central directory (sliced out of the tail when
-// it lies inside it), then the first 32 KB of the .tsg entry. Returns
+// The 64 KB tail, the central directory (sliced out of the tail when it
+// lies inside it), then the first 32 KB of the .tsg entry. The tail is
+// asked for at the row's cached zipBytes, with no HEAD (changed
+// 2026-10-13: saves one of the usual three requests): a 206 is proof the
+// server honours Range, its Content-Range names the file's length now, and
+// a 200 longer than the range is refused unread (httpRange). When that
+// length differs from the cached one (the archive was rewritten), is not
+// given, or the range lies past the end (416, it shrank), or the row has
+// no zipBytes, it is a HEAD and a fresh tail as before. Returns
 // { parsed, bytes, wider, error }.
 async function readIdentity(state, row) {
   const url = fileUrl(state, row.zipName);
   const out = { parsed: null, bytes: 0, wider: false, error: null };
   try {
-    const head = await httpHead(url);
-    if (!/bytes/i.test(head.acceptRanges || '')) { out.error = 'range_unsupported'; return out; }
-    if (!head.size) { out.error = 'empty_file'; return out; }
-    const tailStart = Math.max(0, head.size - EOCD_TAIL);
-    const tail = await httpRange(url, tailStart, head.size - 1);
-    out.bytes += tail.length;
+    let size = row.zipBytes > 0 ? row.zipBytes : 0;
+    let tail = size ? await tailIfSize(url, size, out) : null;
+    if (!tail) {
+      const head = await httpHead(url);
+      if (!/bytes/i.test(head.acceptRanges || '')) { out.error = 'range_unsupported'; return out; }
+      if (!head.size) { out.error = 'empty_file'; return out; }
+      size = head.size;
+      tail = await httpRange(url, Math.max(0, size - EOCD_TAIL), size - 1);
+      out.bytes += tail.length;
+    }
+    const tailStart = Math.max(0, size - EOCD_TAIL);
     let eocd = findEocd(tail);
     if (!eocd) { out.error = 'eocd_not_found'; return out; }
     if (eocd.cdOffset === 0xFFFFFFFF || eocd.cdSize === 0xFFFFFFFF || eocd.zip64Locator) {
@@ -808,6 +822,22 @@ async function readIdentity(state, row) {
     out.error = classifyError(e);
     return out;
   }
+}
+
+// The last EOCD_TAIL bytes of a file believed to be `size` bytes long, or
+// null when the server says otherwise: a Content-Range length that differs
+// or is missing, a short body, or 416 (the range starts past the end).
+async function tailIfSize(url, size, out) {
+  const start = Math.max(0, size - EOCD_TAIL);
+  let got;
+  try {
+    got = await httpRangeRead(url, start, size - 1);
+  } catch (e) {
+    if (e && e.message === 'http_416') return null;
+    throw e;
+  }
+  out.bytes += got.buf.length;
+  return got.total === size && got.buf.length === size - start ? got.buf : null;
 }
 
 // The local header and the first `want` compressed bytes of an entry in ONE
@@ -1295,6 +1325,14 @@ async function httpHead(url) {
 }
 
 async function httpRange(url, start, end) {
+  return (await httpRangeRead(url, start, end)).buf;
+}
+
+// The body of a range request and the file's whole length as the answer
+// gives it: the Content-Range total of a 206 ('bytes 0-65535/1324325126';
+// null when absent or '*'), or the body's length on a 200, which is then
+// the whole file.
+async function httpRangeRead(url, start, end) {
   const resp = await fetchWithRetry(url, { headers: { Range: 'bytes=' + start + '-' + end } });
   // A server that ignores Range answers 200 with the whole file. Never
   // read that body unless it is no longer than what was asked for.
@@ -1305,8 +1343,15 @@ async function httpRange(url, start, end) {
       throw new Error('range_ignored');
     }
   }
-  const ab = await resp.arrayBuffer();
-  return Buffer.from(ab);
+  const buf = Buffer.from(await resp.arrayBuffer());
+  let total = null;
+  if (resp.status === 200) {
+    total = buf.length;
+  } else {
+    const m = /\/\s*(\d+)\s*$/.exec(resp.headers.get('content-range') || '');
+    if (m) total = Number(m[1]);
+  }
+  return { buf: buf, total: total };
 }
 
 async function fetchWithRetry(url, opts) {

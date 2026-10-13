@@ -90,12 +90,18 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
 - **depth_m:** unique scanned metres (union of intervals, TSG first), never
   drilled length; `null` when no interval was recorded.
 - **z, mb** (popup link): the hole's TSG archive, preferring, in order, the
-  one filed under the hole's own feature number (`<number>_<HOLE>.zip`),
-  the one that gave the hole its month, the earliest high-confidence scan,
-  then the earliest scan (ties by name); one filed under another feature
-  number is never linked when the hole has its own (TAS 13978 links its
-  own `13978_RG145_Tunbridge_Tier.zip`, no longer `13968_BB-BH1_Bell_Bay.zip`).
-  As the
+  core archive, whose whole name (letters and digits, case ignored) is the
+  hole's id (never its name, which a node may take from a later rescan); the
+  one filed under the hole's own feature
+  number (`<number>_<HOLE>.zip`); the one that gave the hole its month; the
+  earliest high-confidence scan; then the earliest scan (ties by name). One
+  filed under another feature number is never linked when the hole has its
+  own (TAS 13978 links its own `13978_RG145_Tunbridge_Tier.zip`, no longer
+  `13968_BB-BH1_Bell_Bay.zip`). The core archive comes first so a later
+  wedge, cuttings or rescan archive that dated the hole does not displace
+  it: WA `12CADD001`, `GSWA Harvey 1` and `Hovea 3` link `12CADD001.zip`,
+  `GSWA Harvey 1.zip` and `Hovea 3.zip` again, not their `_wedge` or
+  `_cuttings` archives. As the
   file name without `.zip`, and its size in whole MB (10^6 bytes): the
   catalogue's `dataSize` from `thredds-catalog.json` when it has one, else
   `tsg-cache.jsonl` `zipBytes` (omitted when neither is known). Only
@@ -278,9 +284,9 @@ Changed:
   `latRaw`/`lonRaw`/`geoDatum`, with `coordStatus` `zeroed` or `absent`
   when there is nothing to read) into the cache row, and stamps
   `identityFetchedAt`. Rows read before 2026-10-13 get them from
-  `--backfill-identity`, which re-reads ONLY the identity block: a HEAD,
-  the 64 KB tail (EOCD, and the central directory when it lies inside the
-  tail; ZIP64-aware) and the first 32 KB of the `.tsg` entry, inflated
+  `--backfill-identity`, which re-reads ONLY the identity block: the 64 KB
+  tail (EOCD, and the central directory when it lies inside the tail;
+  ZIP64-aware) and the first 32 KB of the `.tsg` entry, inflated
   with a sync flush so the cut deflate stream decodes as far as it goes.
   `[description]` and `[dbextra]` end 2-3.5 KB into the entry in every
   header sampled; a header whose `[dbextra]` is not closed within 32 KB is
@@ -292,7 +298,16 @@ Changed:
   7.7 s an archive at three in flight on 2026-10-13 (each request 4-6 s on
   its own), not the 1.5-3 s expected, so the first 75-minute run read 584
   archives (all 504 of TAS, 80 of NT; 55 MB) and the weekly step is capped
-  at 60 minutes. Two comments
+  at 60 minutes. The tail is now asked for at the row's cached `zipBytes`
+  with no HEAD: the 206's `Content-Range` names the file's current length,
+  and a length that differs or is missing, or a 416 (the file shrank), falls
+  back to a HEAD and a fresh tail, as does a row with no `zipBytes`. All
+  4,874 rows still awaiting the backfill on 2026-10-13 carry `zipBytes`, so
+  each read is two requests instead of three. Expected, not yet measured:
+  about a third less time per archive while NCI's per-request latency
+  dominates (about 5 s instead of 7.7 s at three in flight), so roughly
+  700 archives in the 60-minute step instead of about 470; bytes barely
+  change, since a HEAD carries no body. Two comments
   were also corrected: the `Depth (m)` lines sit in `[band headers]` and
   `lat lon =` in `[dbextra]` (there is no `[borehole]` block). A range
   request answered with the whole file (a server ignoring `Range`) is
@@ -313,14 +328,19 @@ Changed:
   writes median and p95 distance per class and state to
   `header-positions.json`; a class/state pair whose p95 exceeds 5 km places
   nothing (with fewer than 5 rows to judge by, the class's national verdict
-  applies). `harvest.js` groups the archives that joined no hole by the
-  header's drillhole name and emits each group with an accepted position as
+  applies, except for `mga_inferred`, which places holes only in a state
+  whose own validated rows pass: the zone it settles on depends on the
+  state's zones and its projects' neighbours, so QLD's 17 rows say nothing
+  about another state's). `harvest.js` groups the archives that joined no
+  hole by the header's drillhole name and emits each group with an accepted position as
   a provisional hole, reason `orphan` or `node_unreachable`. The MGA
   northing floor is 5,000,000, not 6,000,000: Tasmania lies at 5.16-5.62
   million (TAS `GL14_25` reads `5340643 382466`). First live run
   (2026-10-13, every node up): 11 holes placed, all `orphan` (QLD 10,
   among them five Alice River holes and Mungana `MND003`; SA 1,
-  `288241_PN-07-09`), and 27 left unplaced (TAS 17, all zeroed; QLD 6;
+  `288241_PN-07-09`), and 27 left unplaced (TAS 17: 16 zeroed, and
+  `GL14_25`, drillhole `15610`, class `swapped`, refused because
+  `swapped`/TAS has no validated rows, nor has `swapped` nationally; QLD 6;
   SA 3; NT 1). Accepted that day: `decimal` in QLD, SA, TAS and WA
   (p95 0-31 m), `mga_inferred` in QLD (17 rows, p95 12 m); refused:
   `decimal` in NT (9 rows, one 16.6 km off, so p95 16.6 km) and every
@@ -337,7 +357,10 @@ Changed:
   `uuid` tier is blind; the previous run's detail file stands in for it
   (tier `prev`), the other tiers run as usual, and only archives no hole
   has ever held become THREDDS-only (`node_unreachable`). The coordinate
-  cache now keeps each hole's feature numbers for the same reason. In a
+  cache now keeps a hole's feature numbers, where the node gives them, for
+  the same reason, not on every row: `featureNum` (the feature id's
+  trailing number) on 6,882 of its 7,046 rows, and `ownNum` (the leading
+  number archives are filed under) on 3,290, all in NT, SA, TAS and VIC. In a
   simulated TAS outage with the previous attribution removed as well, the
   `drillhole` tier alone joined the archives of 478 of TAS's 482 holes.
 - `map_summary.json` carries `spectra_measured`, nationally and per state
