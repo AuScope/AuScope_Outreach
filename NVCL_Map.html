@@ -535,6 +535,15 @@
       color: var(--fg);
       font-weight: 500;
     }
+    /* Same treatment as the footer links (outranks Leaflet's link colour) */
+    .leaflet-popup-content .popup-row a {
+      color: var(--navy);
+      text-decoration: none;
+      border-bottom: 1px solid var(--teal);
+      padding-bottom: 1px;
+      transition: color 160ms ease;
+    }
+    .leaflet-popup-content .popup-row a:hover { color: var(--teal-deep); }
     .leaflet-control-attribution {
       background: rgba(255,255,255,0.85);
       font-size: 10px;
@@ -622,6 +631,7 @@
     lengths from TSG metadata on <a href="https://thredds.nci.org.au">NCI THREDDS</a>
     (<a href="https://doi.org/10.25914/bztg-rg43">doi:10.25914/bztg-rg43</a>) where available,
     otherwise from the NVCL dataset record.
+    <span id="stale-note" hidden></span>
     <span id="generated"></span>
   </footer>
 
@@ -649,6 +659,12 @@
     const [y, mo] = m.split('-');
     return MONTHS[parseInt(mo,10)-1] + ' ' + y;
   }
+  // Text from the data files goes into popup HTML, so escape it (as index.html does).
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
 
   // Facility metadata
   //
@@ -658,6 +674,14 @@
   // before GSWA had its own machine. WA uses onlineMonth instead, gated
   // to July 2009 when GSWA's HyLogger was installed at Carlisle.
   //
+  // TAS and NT are gated the same way. With first-scan months taken from
+  // the TSG headers, TAS's first record is 19730 CM1, scanned in October
+  // 2007, and NT's is from October 2008: holes scanned before the node's
+  // own HyLogger was installed. The badge should show when the facility
+  // came online, not when its first core was scanned elsewhere, so they
+  // keep the months their logos have always appeared (October 2009 and
+  // November 2009).
+  //
   // CSIRO has alwaysOn = true because it's the originating facility.
   //
   // offsetX/Y are pixel offsets from the capital city marker to the
@@ -666,10 +690,10 @@
     { state: 'CSIRO', lat: -31.953, lng: 115.857, logo: 'assets/CSIRO_Logo.png', offsetX:    0, offsetY: 95, alwaysOn: true },
     { state: 'WA',    lat: -31.953, lng: 115.857, logo: 'assets/WA_Gvmt.png',    offsetX:  -65, offsetY: 0, onlineMonth: '2009-07' },
     { state: 'SA',    lat: -34.928, lng: 138.600, logo: 'assets/SA_Gvmt.png',    offsetX:  -80, offsetY: 40 },
-    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -155, offsetY: 0 },
+    { state: 'NT',    lat: -12.462, lng: 130.842, logo: 'assets/NT_Gvmt.png',    offsetX: -155, offsetY: 0, onlineMonth: '2009-11' },
     { state: 'NSW',   lat: -33.868, lng: 151.209, logo: 'assets/NSW_Gvmt.png',   offsetX:   55, offsetY: 0 },
     { state: 'QLD',   lat: -27.470, lng: 153.026, logo: 'assets/QLD_Gvmt.png',   offsetX:    0, offsetY: -130 },
-    { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30 },
+    { state: 'TAS',   lat: -42.882, lng: 147.327, logo: 'assets/TAS_Gvmt.png',   offsetX:   80, offsetY: -30, onlineMonth: '2009-10' },
   ];
 
   let boreholes = [], timeline = [], summary = {};
@@ -728,6 +752,22 @@
     const gen = summary.generated || '';
     if (gen) {
       document.getElementById('generated').textContent = ' Last updated ' + gen.slice(0, 10) + '.';
+    }
+    // States whose figures were carried forward this week (node down, or a
+    // drop the writer refused to publish): say when they were last fresh.
+    const stale = summary.stale_states || [];
+    if (stale.length) {
+      const byDate = {};
+      for (const code of stale) {
+        const s = (summary.by_state || []).find(x => x.state === code);
+        const d = (s && s.fetched) || 'an earlier harvest';
+        (byDate[d] = byDate[d] || []).push(code);
+      }
+      const joinAnd = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0];
+      const note = document.getElementById('stale-note');
+      note.textContent = Object.keys(byDate).sort()
+        .map(d => 'Data for ' + joinAnd(byDate[d]) + ' last refreshed ' + d + '.').join(' ');
+      note.hidden = false;
     }
   }
 
@@ -944,6 +984,9 @@
     return 6;
   }
 
+  const THREDDS_FILES = 'https://thredds.nci.org.au/thredds/fileServer/rs07/';
+  const THREDDS_SUBPATH = { SA: 'SA', TAS: 'Tas', WA: 'WA', NT: 'NT', QLD: 'Qld', VIC: 'Vic' };
+
   function popupHtml(b) {
     let v;
     if (b.v) {
@@ -954,11 +997,22 @@
       v = 'Instrument unknown';
     }
     const depth = b.depth_m != null ? NUM.format(Math.round(b.depth_m)) + ' m scanned' : 'depth unknown';
-    const scans = b.n_datasets > 1 ? ` &middot; ${b.n_datasets} scans` : '';
+    const scans = b.n_datasets > 1 ? ` &middot; ${NUM.format(b.n_datasets)} scans` : '';
+    const dateSrc = b.month_source === 'tsg' ? ' (TSG header)'
+      : b.month_source === 'api' ? ' (NVCL record)' : '';
+    // The hole's first-scan TSG archive on the NCI mirror. A plain link,
+    // fetched only if clicked; THREDDS folder names are case-sensitive.
+    let archive = '';
+    if (b.z && THREDDS_SUBPATH[b.state]) {
+      const href = THREDDS_FILES + THREDDS_SUBPATH[b.state] + '/' + encodeURIComponent(b.z) + '.zip';
+      archive = `<div class="popup-row"><a href="${esc(href)}" target="_blank" rel="noopener">TSG archive on NCI THREDDS</a>`
+        + (b.mb ? ` (${NUM.format(b.mb)} MB)` : '') + `</div>`;
+    }
     return `
-      <div class="popup-title">${b.name || b.id}</div>
-      <div class="popup-row"><strong>${b.state}</strong> &middot; ${fmtMonth(b.month)}</div>
-      <div class="popup-row">${v} &middot; ${depth}${scans}</div>
+      <div class="popup-title">${esc(b.name || b.id)}</div>
+      <div class="popup-row"><strong>${esc(b.state)}</strong> &middot; ${esc(fmtMonth(b.month))}${dateSrc}</div>
+      <div class="popup-row">${esc(v)} &middot; ${depth}${scans}</div>
+      ${archive}
     `;
   }
 

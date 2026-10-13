@@ -65,6 +65,13 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   name, e.g. `HyChips 6-3`, rather than becoming a HyLogger 3 dot).
 - **depth_m:** unique scanned metres (union of intervals, TSG first), never
   drilled length; `null` when no interval was recorded.
+- **z, mb** (popup link): the TSG archive behind the hole's first scan
+  (earliest TSG scan date among its matched archives, ties by name), as the
+  file name without `.zip`, and its size in whole MB (10^6 bytes) from
+  `tsg-cache.jsonl` `zipBytes` (omitted when unknown). Only archives the
+  current `thredds-catalog.json` lists are linked. `NVCL_Map.html` builds
+  `https://thredds.nci.org.au/thredds/fileServer/rs07/<Subpath>/<z>.zip`
+  with the case-sensitive subpaths `SA`, `Tas`, `WA`, `NT`, `Qld`, `Vic`.
 - **Timeline** is computed from the final rows, so the counters always match
   the dots.
 - **Stale nodes** (unreachable or degraded this run) keep their previous map
@@ -75,7 +82,8 @@ WA; endpoints in `harvest.js` and in the snapshot's `endpoints` block) and
   `stale_states`. One state collapsing is treated as a measurement fault
   (a dataset service failing a share of its queries, a matching rule gone
   wrong) rather than published. More than two states carried in one run
-  fails it.
+  fails it. `NVCL_Map.html` names every state in `stale_states` in its
+  footer with the date it was last refreshed (`by_state[].fetched`).
 - **Guards** (exit 1, nothing written): more than two states carried by the
   90% rule, a negative scanned length on a freshly harvested borehole, a
   state on the live map missing from the new one, fewer than 95% of the live

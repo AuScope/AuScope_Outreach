@@ -25,6 +25,9 @@
  *           type is known.
  *   depth_m unique scanned metres (union of intervals, TSG first) from the
  *           harvest; null when no interval was recorded. Never drilled length.
+ *   z, mb   the TSG archive behind the first scan (name without '.zip') and
+ *           its size in whole MB, for the popup's NCI THREDDS link. Only
+ *           archives the mirror still lists; absent when there is none.
  *
  * Carry-forward: a state whose node was unreachable or degraded this run
  * keeps its previous map rows and its previous geojson file. So does a state
@@ -59,6 +62,11 @@ const DEST = OUT_DIR || DATA_DIR;
 const SNAPSHOT_FILE = path.join(IN_DIR, 'nvcl_stats.json');
 const DETAIL_FILE = path.join(IN_DIR, 'nvcl', 'boreholes-detail.jsonl');
 const CACHE_FILE = path.join(IN_DIR, 'nvcl', 'boreholes.jsonl');
+// Archive sizes (zipBytes) and the mirror's current listing, for the popup's
+// link to each hole's TSG archive. Both live in data/ even under
+// NVCL_OUT_DIR: the harvest never writes them.
+const TSG_CACHE_FILE = path.join(DATA_DIR, 'nvcl', 'tsg-cache.jsonl');
+const CATALOG_FILE = path.join(DATA_DIR, 'nvcl', 'thredds-catalog.json');
 
 // The node codes harvest.js uses, with the geojson file and label index.html
 // expects for each.
@@ -115,6 +123,7 @@ function main() {
 
   // -- Map rows --
   const errors = [];
+  const archives = loadArchives(TSG_CACHE_FILE, CATALOG_FILE);
   const freshByState = {};
   const tierCounts = { tsg_scan: 0, api: 0, tsg_created: 0, none: 0, out_of_range_skipped: 0 };
   detail.forEach(function(d) {
@@ -144,6 +153,11 @@ function main() {
       n_datasets: (d.datasets && d.datasets.length) || (d.tsg && d.tsg.length) || 0,
     };
     if (inst.label) row.instrument_label = inst.label;
+    const arc = pickArchive(d, archives);
+    if (arc) {
+      row.z = arc.z;
+      if (arc.mb) row.mb = arc.mb;
+    }
     (freshByState[d.state] || (freshByState[d.state] = [])).push(row);
   });
 
@@ -367,6 +381,53 @@ function pickMonth(d, maxMonth) {
     if (m) return { month: m, source: tiers[i][1], tier: tiers[i][0], skipped: skipped };
   }
   return { month: null, source: null, tier: 'none', skipped: skipped };
+}
+
+// -- TSG archive link ------------------------------------------------
+
+// Sizes from the TSG cache and, per state, the archive names the mirror
+// lists right now. A state whose listing is missing (its catalogue failed
+// and never succeeded) gets no listing, and its archives are not checked.
+function loadArchives(cacheFile, catalogFile) {
+  const bytes = {};
+  // Line by line and forgiving, as harvest.js reads this file: a size is a
+  // popup detail, and a torn line from an interrupted enrichment run must
+  // not stop the map being written.
+  if (fs.existsSync(cacheFile)) {
+    fs.readFileSync(cacheFile, 'utf8').split('\n').forEach(function(l) {
+      let r = null;
+      try { r = l.trim() ? JSON.parse(l) : null; } catch (e) { return; }
+      if (r && r.state && r.zipName && r.zipBytes > 0) bytes[r.state + '/' + r.zipName] = r.zipBytes;
+    });
+  }
+  const listed = {};
+  const cat = readJson(catalogFile);
+  Object.keys((cat && cat.states) || {}).forEach(function(code) {
+    const names = cat.states[code].names || [];
+    if (names.length) listed[code] = new Set(names);
+  });
+  return { bytes: bytes, listed: listed };
+}
+
+// The archive behind a borehole's first scan: the earliest scan date among
+// its matched archives, ties (and undated archives, which sort last) by
+// name. Only archives the mirror still lists are linked, so the popup never
+// points at a file that has gone. z is the name without '.zip' (the popup
+// rebuilds the URL); mb is the size in whole megabytes (10^6 bytes, at
+// least 1), omitted when the cache has no size.
+function pickArchive(d, archives) {
+  const listed = archives.listed[d.state];
+  const tsg = (d.tsg || []).filter(function(t) {
+    return t.zip && (!listed || listed.has(t.zip));
+  }).sort(function(a, b) {
+    return cmp(a.scanDate || '9999', b.scanDate || '9999') || cmp(a.zip, b.zip);
+  });
+  if (!tsg.length) return null;
+  const size = archives.bytes[d.state + '/' + tsg[0].zip];
+  return {
+    z: tsg[0].zip.replace(/\.zip$/i, ''),
+    mb: size ? Math.max(1, Math.round(size / 1e6)) : null,
+  };
 }
 
 // -- Instrument ----------------------------------------------------
