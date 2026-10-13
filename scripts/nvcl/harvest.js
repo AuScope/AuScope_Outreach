@@ -11,7 +11,9 @@
  *   1. WFS GetFeature gsmlp:BoreholeView (CQL nvclCollection='true', paged)
  *      -> registered borehole list per node (id, name, lat/lng, length)
  *   2. NVCLDataServices getDatasetCollection.html per borehole
- *      -> datasets with TSG metadata (instrument, dates) + DepthRange
+ *      -> datasets with TSG metadata (instrument, dates) + DepthRange,
+ *         each with its DatasetID (the TSG header's UUID) and the number
+ *         of sample positions it holds spectra for
  *
  * Counting rules (see scripts/nvcl/METHODOLOGY.md - the citable document):
  *   - The atom is the per-DATASET scan interval (depth_start, depth_end).
@@ -677,6 +679,16 @@ async function fetchDatasets(node, boreholeId, timeoutMs) {
       drillDate: dateOnly(tag(desc, 'DrillDate')) || null,
       project: tag(desc, 'Project') || null,
       owner: tag(desc, 'Owner') || null,
+      // Spectra measured: the sample positions the instrument recorded a
+      // spectrum at (added 2026-10-13, for map_summary.json). Every
+      // SpectralLog of a dataset (Reflectance, HullQuot, the derivatives,
+      // the TIR set) carries the same sampleCount, because each is a product
+      // of the same measurements, so the dataset's figure is the largest of
+      // them; summing the logs would count one spectrum up to 15 times.
+      spectra: (b.match(/<SpectralLog>[\s\S]*?<\/SpectralLog>/g) || []).reduce(function(acc, sl) {
+        const n = num(tag(sl, 'sampleCount'));
+        return n !== null && n > acc ? n : acc;
+      }, 0) || null,
     };
     // The node's own instrument string, kept apart from `instrument`, which
     // aggregate() back-fills from the TSG header when the node says Unknown.
@@ -727,12 +739,13 @@ function loadTsgIndex(file) {
     if (!r || !r.state || !r.zipName) return;
     idx.rows++;
     const st = idx.byState[r.state] || (idx.byState[r.state] = {
-      rows: [], full: new Map(), prefix: new Map(), suffix: new Map(),
+      rows: [], full: new Map(), prefix: new Map(), suffix: new Map(), uuid: new Map(),
     });
     r._key = r.state + '/' + r.zipName;
     st.rows.push(r);
     const base = String(r.zipName).replace(/\.zip$/i, '');
     const cut = base.indexOf('_');
+    push(st.uuid, uuidKey(r.tsgUuid), r);
     push(st.full, normKey(base), r);
     if (cut > 0) {
       push(st.prefix, normKey(base.slice(0, cut)), r);
@@ -749,6 +762,18 @@ function loadTsgIndex(file) {
     const a = map.get(k);
     if (a) a.push(v); else map.set(k, [v]);
   }
+}
+
+// The TSG header's UUID as a join key (added 2026-10-13). It is the same
+// value as the node's getDatasetCollection DatasetID. Most headers and most
+// DatasetIDs carry a 35-character form missing the GUID's last digit
+// ('45abb8f4-267e-46a6-bab1-63bf4d2f17a'); some of both carry all 36 (141
+// cached headers; 121 of SA's and TAS's 2,327 DatasetIDs on 2026-10-13).
+// Both sides are lower-cased and cut to 35 characters so either form meets
+// the other. Anything that is not GUID-shaped gives no key, and joins nothing.
+function uuidKey(s) {
+  const v = String(s || '').trim().toLowerCase();
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11,12}$/.test(v) ? v.slice(0, 35) : '';
 }
 
 // Uppercase, strip every separator. '115904_ALF006/01' and 'ALF006-01' both
@@ -930,7 +955,7 @@ function saveBoreholeCache(cache, file) {
 // nothing are counted and logged - never silently dropped.
 function attachTsg(result, idx) {
   const st = idx.byState[result.node.code];
-  result.tsg = { rows: st ? st.rows.length : 0, matchedRows: 0, matchedBoreholes: 0, tiers: {} };
+  result.tsg = { rows: st ? st.rows.length : 0, matchedRows: 0, matchedBoreholes: 0, tiers: {}, tierRows: {} };
   if (!st) return;
 
   // A node that returned NO boreholes - unreachable, or not participating -
@@ -963,18 +988,22 @@ function attachTsg(result, idx) {
     const hit = resolved.hits[i];
     if (!hit) return;
     bh.tsg = hit.rows;
-    bh.tsgTier = hit.tier;
+    bh.tsgTier = hit.tiers.join('+');
     result.tsg.matchedBoreholes++;
     result.tsg.tiers[hit.tier] = (result.tsg.tiers[hit.tier] || 0) + 1;
     hit.rows.forEach(function(r) { used.add(r._key); idx.matchedRows.add(r._key); });
+    Object.keys(hit.rowTiers).forEach(function(t) {
+      result.tsg.tierRows[t] = (result.tsg.tierRows[t] || 0) + hit.rowTiers[t];
+    });
   });
   result.tsg.matchedRows = used.size;
   result.tsg.rejected = resolved.rejected;
   const rj = resolved.rejected;
-  if (rj.claimed || rj.owner || rj.generic || rj.ambiguous) {
+  if (rj.claimed || rj.owner || rj.generic || rj.ambiguous || rj.prefix) {
     console.log('  TSG: weaker-tier hits refused - ' + rj.claimed + ' already matched to another hole, '
       + rj.owner + ' filed under another hole\'s feature number, ' + rj.generic
-      + ' generic suffix not the hole\'s whole name, ' + rj.ambiguous + ' ambiguous'
+      + ' generic suffix not the hole\'s whole name, ' + rj.prefix
+      + ' prefix hit beaten by another hole\'s whole-name hit, ' + rj.ambiguous + ' ambiguous'
       + (rj.examples.length ? ' (e.g. ' + rj.examples.slice(0, 4).join('; ') + ')' : ''));
   }
 
@@ -1001,9 +1030,8 @@ function attachTsg(result, idx) {
   const pct = st.rows.length ? Math.round(used.size / st.rows.length * 1000) / 10 : 0;
   console.log('  TSG: ' + used.size + '/' + st.rows.length + ' cache rows matched ('
     + pct + '%) to ' + result.tsg.matchedBoreholes + ' boreholes'
-    + '  [' + Object.keys(result.tsg.tiers).map(function(k) {
-      return k + ':' + result.tsg.tiers[k];
-    }).join(' ') + ']');
+    + '  [holes by first tier ' + tierList(result.tsg.tiers) + ']'
+    + '  [archives by tier ' + tierList(result.tsg.tierRows) + ']');
   const orphan = st.rows.length - used.size;
   if (orphan > 0) {
     const sample = st.rows.filter(function(r) { return !used.has(r._key); })
@@ -1012,11 +1040,20 @@ function attachTsg(result, idx) {
   }
 }
 
-// Tier order, strongest first. The suffix tiers key on the part of an
-// archive name after its first underscore, which is how NT, SA and VIC file
-// a hole ('<featureNumber>_<HOLE>.zip') - and also where generic hole names
-// like DDH1 or BD2 live, so those two tiers carry extra conditions.
-const TSG_TIERS = ['id', 'num', 'name', 'name-suffix', 'id-suffix', 'local-name'];
+function tierList(counts) {
+  return TSG_TIERS.filter(function(t) { return counts[t]; }).map(function(t) {
+    return t + ':' + counts[t];
+  }).join(' ');
+}
+
+// Tier order, strongest first. 'uuid' (added 2026-10-13) is not a name
+// match at all: the archive's TSG UUID is one of the hole's DatasetIDs, so
+// the node itself says the archive is that hole's dataset. The suffix tiers
+// key on the part of an archive name after its first underscore, which is
+// how NT, SA and VIC file a hole ('<featureNumber>_<HOLE>.zip') - and also
+// where generic hole names like DDH1 or BD2 live, so those two tiers carry
+// extra conditions.
+const TSG_TIERS = ['uuid', 'id', 'num', 'name', 'name-suffix', 'id-suffix', 'local-name'];
 const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
 
 // Assign each archive to at most one borehole (added 2026-10-13). Matching
@@ -1037,9 +1074,21 @@ const SUFFIX_TIERS = { 'name-suffix': true, 'id-suffix': true };
 //     hole's feature number - 72812_DDH1.zip is filed under SA 72812;
 //   - a generic suffix (shorter than 5 characters, or letters-then-digits
 //     like DDH1, BD2, BDH3) matches only a hole whose whole normalised name
-//     it is.
+//     it is;
+//   - (e) within a tier, a hole whose WHOLE name or id is the archive's
+//     name beats holes that only reach it as a prefix (added 2026-10-13):
+//     when exactly one claimant has the whole-name hit, it takes the
+//     archive, and only otherwise is the archive declared ambiguous.
 // A hole whose candidates at one tier are all refused falls through to the
 // next tier, exactly as a hole with no candidates there does.
+//
+// The 'uuid' tier runs first and is ADDITIVE (added 2026-10-13): the
+// archives whose UUID is one of a hole's DatasetIDs are that hole's, and are
+// out of reach of every name tier, but the hole still takes part in the name
+// tiers for its other archives. A node lists only the datasets it publishes,
+// and a hole's unpublished scan (a wedge, an older run) is still matched by
+// name exactly as before. Two holes listing the same DatasetID would make
+// its archive ambiguous like any other tier; none did on 2026-10-13.
 function resolveTsgMatches(st, boreholes) {
   const cands = boreholes.map(function(bh) { return tsgCandidates(st, bh); });
   const numOwners = new Map();
@@ -1049,15 +1098,17 @@ function resolveTsgMatches(st, boreholes) {
   });
   const hits = boreholes.map(function() { return null; });
   const claimed = new Map();               // archive key -> borehole index
-  const rejected = { claimed: 0, owner: 0, generic: 0, ambiguous: 0, examples: [] };
+  const rejected = { claimed: 0, owner: 0, generic: 0, ambiguous: 0, prefix: 0, examples: [] };
   TSG_TIERS.forEach(function(tier, t) {
     const tentative = new Map();           // borehole index -> rows
     const claimants = new Map();           // archive key -> borehole indexes
     boreholes.forEach(function(bh, i) {
-      if (hits[i] || !cands[i] || !cands[i][t] || !cands[i][t].length) return;
+      // A name-tier hit ends a hole's matching; a uuid hit does not.
+      if ((hits[i] && hits[i].named) || !cands[i] || !cands[i][t] || !cands[i][t].length) return;
       const rows = cands[i][t].filter(function(r) {
         if (claimed.has(r._key)) {
-          refuse('claimed', r, bh, boreholes[claimed.get(r._key)]);
+          // Already this hole's (by uuid) is not a refusal.
+          if (claimed.get(r._key) !== i) refuse('claimed', r, bh, boreholes[claimed.get(r._key)]);
           return false;
         }
         if (!SUFFIX_TIERS[tier]) return true;
@@ -1092,17 +1143,30 @@ function resolveTsgMatches(st, boreholes) {
     });
     tentative.forEach(function(rows, i) {
       const kept = rows.filter(function(r) {
-        if (claimants.get(r._key).length === 1) return true;
-        if (claimants.get(r._key)[0] === i) {
+        const who = claimants.get(r._key);
+        if (who.length === 1) return true;
+        // (e) one whole-name claimant beats prefix claimants.
+        const whole = who.filter(function(k) { return cands[k].whole[t].has(r._key); });
+        if (whole.length === 1) {
+          if (whole[0] === i) return true;
+          rejected.prefix++;
+          example(r.zipName + ' not ' + boreholes[i].id + ' (whole name of ' + boreholes[whole[0]].id + ')');
+          return false;
+        }
+        if (who[0] === i) {
           rejected.ambiguous++;
-          example(r.zipName + ' claimed at ' + tier + ' by ' + claimants.get(r._key).map(function(k) {
+          example(r.zipName + ' claimed at ' + tier + ' by ' + who.map(function(k) {
             return boreholes[k].id;
           }).join(' and '));
         }
         return false;
       });
       if (!kept.length) return;
-      hits[i] = { tier: tier, rows: kept };
+      const h = hits[i] || (hits[i] = { tier: tier, tiers: [], rows: [], rowTiers: {}, named: false });
+      h.tiers.push(tier);
+      h.rowTiers[tier] = kept.length;
+      h.rows = h.rows.concat(kept);
+      if (tier !== 'uuid') h.named = true;
       kept.forEach(function(r) { claimed.set(r._key, i); });
     });
   });
@@ -1121,7 +1185,10 @@ function isGenericToken(token) {
 }
 
 // Every tier's candidate archives for one borehole, in TSG_TIERS order
-// (null for a seeded placeholder). Whole-name and prefix hits are unioned at
+// (null for a seeded placeholder), with `whole[t]` the keys of the ones the
+// tier reached by the archive's WHOLE name (or, for 'uuid', all of them),
+// which rule (e) in resolveTsgMatches ranks above prefix hits. Whole-name
+// and prefix hits are unioned at
 // the same tier so a hole and its daughter wedges (12CADD001.zip +
 // 12CADD001_wedge.zip) are counted together - the interval union then
 // absorbs their overlap. normKey drops every separator, so an id written
@@ -1153,12 +1220,20 @@ function tsgCandidates(st, bh) {
     const m = t.trim().match(/^LOCAL-(.+)$/i);
     return m ? normKey(m[1]) : '';
   }).filter(Boolean);
-  let localHit = null;
+  let localHit = null, localWhole = null;
   localKeys.forEach(function(k) {
     localHit = union(localHit, union(st.full.get(k), st.prefix.get(k)));
+    localWhole = union(localWhole, st.full.get(k));
+  });
+  // The archives whose UUID is one of this hole's DatasetIDs.
+  let uuidHit = null;
+  (bh.datasets || []).forEach(function(ds) {
+    const k = uuidKey(ds.id);
+    if (k) uuidHit = union(uuidHit, st.uuid.get(k));
   });
   // Same order as TSG_TIERS.
-  return [
+  const out = [
+    uuidHit,
     union(st.full.get(idKey), st.prefix.get(idKey)),
     numKey ? union(st.full.get(numKey), st.prefix.get(numKey)) : null,
     union(st.full.get(nameKey), st.prefix.get(nameKey)),
@@ -1166,6 +1241,16 @@ function tsgCandidates(st, bh) {
     st.suffix.get(idKey) || null,
     localHit,
   ];
+  out.whole = [
+    uuidHit,
+    st.full.get(idKey),
+    numKey ? st.full.get(numKey) : null,
+    st.full.get(nameKey),
+    null,
+    null,
+    localWhole,
+  ].map(function(rows) { return new Set((rows || []).map(function(r) { return r._key; })); });
+  return out;
 
   function union(a, b) {
     if (!a) return b || null;
@@ -1566,6 +1651,9 @@ function aggregate(results, asOf, tsgIndex, prev) {
       entry.tsg_cache_rows_matched = r.tsg.matchedRows;
       entry.tsg_cache_rows_unmatched = r.tsg.rows - r.tsg.matchedRows;
       entry.tsg_matched_boreholes = r.tsg.matchedBoreholes;
+      // Archives matched at each tier, and holes by the first tier they
+      // matched at (a hole matched by uuid and by name counts under uuid).
+      entry.tsg_match_tiers = { archives: r.tsg.tierRows || {}, boreholes: r.tsg.tiers || {} };
       entry.tsg_match_rate_pct = Math.round(r.tsg.matchedRows / r.tsg.rows * 1000) / 10;
     }
     states.push(entry);
@@ -1715,6 +1803,9 @@ function buildDetail(results) {
     r.boreholes.forEach(function(bh) {
       const datasets = (bh.datasets || []).map(function(ds) {
         return {
+          // The node's DatasetID: the TSG header's UUID, and the key the
+          // 'uuid' match tier joins on.
+          id: ds.id || undefined,
           created: ds.created || null,
           scanDate: ds.scanDate || undefined,
           instrument: ds.apiInstrument || 'Unknown',
@@ -1724,6 +1815,7 @@ function buildDetail(results) {
           drillDate: ds.drillDate || undefined,
           project: ds.project || undefined,
           owner: ds.owner || undefined,
+          spectra: ds.spectra || undefined,
         };
       }).sort(function(a, b) {
         const ka = (a.scanDate || a.created || '') + '|' + a.from + '|' + a.to + '|' + a.instrument;
@@ -1885,5 +1977,6 @@ if (require.main === module) {
   module.exports = {
     boreholeIdFrom: boreholeIdFrom, addFeature: addFeature, loadTsgIndex: loadTsgIndex,
     attachTsg: attachTsg, resolveTsgMatches: resolveTsgMatches, normKey: normKey,
+    uuidKey: uuidKey,
   };
 }

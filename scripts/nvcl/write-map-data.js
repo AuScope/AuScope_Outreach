@@ -29,6 +29,12 @@
  *           its size in whole MB, for the popup's NCI THREDDS link. Only
  *           archives the mirror still lists; absent when there is none.
  *
+ * spectra_measured (map_summary.json, nationally and per state): the sum,
+ *           over every dataset of the boreholes on the map, of the sample
+ *           positions the node says it holds spectra for (the largest
+ *           SpectralLog sampleCount of each dataset). Holes known only from a
+ *           TSG archive add nothing. A held state keeps its previous figure.
+ *
  * Carry-forward: a state whose node was unreachable or degraded this run
  * keeps its previous map rows and its previous geojson file. So does a state
  * whose fresh rows fall below 90% of its rows on the live map (status
@@ -125,6 +131,7 @@ function main() {
   const errors = [];
   const archives = loadArchives(TSG_CACHE_FILE, CATALOG_FILE);
   const freshByState = {};
+  const spectraByState = {};
   const tierCounts = { tsg_scan: 0, api: 0, tsg_created: 0, none: 0, out_of_range_skipped: 0 };
   detail.forEach(function(d) {
     if (stale.indexOf(d.state) !== -1) return;
@@ -153,6 +160,9 @@ function main() {
       n_datasets: (d.datasets && d.datasets.length) || (d.tsg && d.tsg.length) || 0,
     };
     if (inst.label) row.instrument_label = inst.label;
+    spectraByState[d.state] = (spectraByState[d.state] || 0) + (d.datasets || []).reduce(function(acc, x) {
+      return acc + (x.spectra > 0 ? x.spectra : 0);
+    }, 0);
     const arc = pickArchive(d, archives);
     if (arc) {
       row.z = arc.z;
@@ -266,8 +276,11 @@ function main() {
 
   // -- Summary --
   const generated = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-  const prevFetched = {};
-  (prevSummary.by_state || []).forEach(function(s) { if (s.fetched) prevFetched[s.state] = s.fetched; });
+  const prevFetched = {}, prevSpectra = {};
+  (prevSummary.by_state || []).forEach(function(s) {
+    if (s.fetched) prevFetched[s.state] = s.fetched;
+    if (typeof s.spectra_measured === 'number') prevSpectra[s.state] = s.spectra_measured;
+  });
   const prevGenerated = prevSummary.generated ? String(prevSummary.generated).substring(0, 10) : null;
   const byState = STATES.map(function(s) {
     const mine = rows.filter(function(r) { return r.state === s.code; });
@@ -278,6 +291,9 @@ function main() {
       km: round(sum(mine, 'depth_m') / 1000, 1),
       status: carried.indexOf(s.code) !== -1 ? 'carried' : (statusOf[s.code] || 'not_harvested'),
       fetched: isHeld ? (prevFetched[s.code] || prevGenerated) : snapshot.as_of,
+      // A held state keeps the figure it had; null when it never had one.
+      spectra_measured: isHeld ? (prevSpectra[s.code] !== undefined ? prevSpectra[s.code] : null)
+        : (spectraByState[s.code] || 0),
     };
   }).filter(function(s) { return s.boreholes > 0 || statusOf[s.state]; });
   const months = rows.map(function(r) { return r.month; }).filter(Boolean).sort();
@@ -294,6 +310,8 @@ function main() {
     harvest_as_of: snapshot.as_of,
     total_boreholes: rows.length,
     total_km: round(sum(rows, 'depth_m') / 1000, 1),
+    // Spectra the nodes hold for the boreholes on the map (see the header).
+    spectra_measured: sum(byState, 'spectra_measured'),
     undated: rows.filter(function(r) { return !r.month; }).length,
     by_state: byState,
     date_range: { earliest: months[0] || null, latest: months[months.length - 1] || null },
@@ -328,6 +346,7 @@ function main() {
     + 'summary and ' + geo.length + ' geojson file(s) to ' + DEST);
   console.log('Month tiers: ' + JSON.stringify(tierCounts));
   console.log('Month sources: ' + JSON.stringify(sources) + ', undated ' + summary.undated);
+  console.log('Spectra measured: ' + summary.spectra_measured.toLocaleString('en-AU'));
   console.log('Total ' + summary.total_km + ' km; timeline ends ' + (timeline.length
     ? timeline[timeline.length - 1].month + ' at ' + timeline[timeline.length - 1].cum_boreholes
       + ' boreholes / ' + timeline[timeline.length - 1].cum_km + ' km' : 'empty'));

@@ -28,7 +28,11 @@
  *   TIDL Depth Backup;<from>;<to>  secondary source for the same interval
  *   scan date = / scan date: / Created :   three-tier scan date
  *   hylogger name = / HyLogger : instrument
- *   UUID :                       TSG identity
+ *   UUID :                       TSG identity (the node's DatasetID)
+ *   [dbextra] identity           drillhole name, hole service, dataset name,
+ *                                collar, ntrays, nsamples and the four
+ *                                image-log GUIDs (added 2026-10-13; read
+ *                                for archives fetched from then on only)
  *
  * Cache: data/nvcl/tsg-cache.jsonl - one JSON line per archive, keyed by
  * state + zipName. It is committed to git and is the durable asset: a weekly
@@ -283,6 +287,8 @@ function isDone(row, retryFailed) {
 const MERGE_KEEP = [
   'tsgEntryName', 'boreholeId', 'datasetId', 'scanDate', 'dateConfidence',
   'depthFromM', 'depthToM', 'depthSource', 'instrument', 'tsgUuid', 'zipBytes',
+  'drillholeName', 'holeService', 'datasetName', 'collar', 'ntrays', 'nsamples',
+  'traypicsLogId', 'traythumbsLogId', 'mospicLogId', 'imageLogId',
 ];
 
 function mergeRow(prev, next) {
@@ -534,6 +540,10 @@ async function harvestOne(state, zipName) {
   row.instrument = parsed.instrument;
   row.tsgUuid = parsed.tsgUuid;
   row.datasetId = parsed.tsgUuid || null;
+  // Only the identity fields the header actually carries are written, so a
+  // row read before they were parsed and one whose file lacks them look the
+  // same: absent, not null.
+  Object.keys(parsed.identity).forEach(function(k) { row[k] = parsed.identity[k]; });
   if (parsed.coords) {
     row.latRaw = parsed.coords.rawLat;
     row.lonRaw = parsed.coords.rawLon;
@@ -665,7 +675,9 @@ function parseCentralDirectory(buf) {
 
 // ── TSG header parsing ────────────────────────────────────────────
 
-// The scanned interval, from the [coordinates] block. Entries there are
+// The scanned interval, from the [band headers] block (corrected
+// 2026-10-13: an inventory of full headers found these lines there, not in
+// [coordinates]). Entries there are
 // written as "<index>:<name>;<min>;<max>;..." - the index prefix is present
 // in some files and absent in others, hence the optional group.
 // Verified WA/05GJD001:  Depth (m);150.000000;316.000000;2;-1;0;
@@ -691,7 +703,8 @@ const INSTRUMENT_EQ_RE = /^\s*hylogger\s*name\s*=\s*(\S.*?)\s*$/mi;
 const INSTRUMENT_COLON_RE = /^\s*HyLogger\s*:\s*(\S.*?)\s*$/mi;
 const UUID_RE = /^\s*UUID\s*:\s*(\S+)/mi;
 
-// Collar position from the [borehole] block. Verified in the wild (31 Aug
+// Collar position from the [dbextra] block (corrected 2026-10-13: there is
+// no [borehole] block; 'lat lon =' sits in [dbextra]). Verified in the wild (31 Aug
 // 2026, 36-archive sample across six states): the field EXISTS everywhere
 // but is operator-entered free text - WA populates it 6/6 in clean GDA94,
 // VIC zeroes it 6/6, and the populated remainder includes swapped axes
@@ -703,6 +716,57 @@ const UUID_RE = /^\s*UUID\s*:\s*(\S+)/mi;
 // window. Projected-looking magnitudes are kept raw and never converted.
 const LAT_LON_RE = /^\s*lat lon\s*=\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/mi;
 const GEO_DATUM_RE = /^\s*geo datum\s*=\s*(\S+)/mi;
+
+// Identity fields of the [dbextra] block, read only inside that block so a
+// same-named key elsewhere in the header can never stand in for one. Seen
+// in all 20 full headers sampled on 2026-10-13 (NT, QLD, TAS):
+//   drillhole name = bh080912      the node's hole id (QLD), or a number
+//   hole service = http://.../borehole/    the node the hole belongs to
+//   dataset name = BaalGammon_BG053
+//   collar = 0.0 0.0 -90.0         three numbers, operator-entered
+//   ntrays = 43    nsamples = 28380
+//   traypicslog id / traythumbslog id / mospiclog id / imagelog id = GUIDs
+//     of the node's image logs (tray photos, thumbnails, mosaic, imagery)
+// [key, row field, kind]
+const DBEXTRA_FIELDS = [
+  ['drillhole name', 'drillholeName', 'text'],
+  ['hole service', 'holeService', 'text'],
+  ['dataset name', 'datasetName', 'text'],
+  ['collar', 'collar', 'numbers'],
+  ['ntrays', 'ntrays', 'int'],
+  ['nsamples', 'nsamples', 'int'],
+  ['traypicslog id', 'traypicsLogId', 'text'],
+  ['traythumbslog id', 'traythumbsLogId', 'text'],
+  ['mospiclog id', 'mospicLogId', 'text'],
+  ['imagelog id', 'imageLogId', 'text'],
+];
+
+function parseDbextra(text) {
+  const out = {};
+  const lines = String(text).split(/\r?\n/);
+  let i = 0;
+  while (i < lines.length && !/^\s*\[dbextra\]\s*$/i.test(lines[i])) i++;
+  if (i >= lines.length) return out;
+  const kv = {};
+  for (i++; i < lines.length && !/^\s*\[[^\]]+\]\s*$/.test(lines[i]); i++) {
+    const m = lines[i].match(/^\s*([^=]+?)\s*=\s*(.*?)\s*$/);
+    if (m && !(m[1].toLowerCase() in kv)) kv[m[1].toLowerCase()] = m[2];
+  }
+  DBEXTRA_FIELDS.forEach(function(f) {
+    const v = kv[f[0]];
+    if (v === undefined || v === '') return;
+    if (f[2] === 'int') {
+      const n = Number(v);
+      if (Number.isInteger(n) && n >= 0) out[f[1]] = n;
+    } else if (f[2] === 'numbers') {
+      const a = v.split(/\s+/).map(Number);
+      if (a.length && a.every(isFinite)) out[f[1]] = a;
+    } else {
+      out[f[1]] = v;
+    }
+  });
+  return out;
+}
 
 // The Australian window: lat -45..-8, lng 110..155.
 function inAu(lat, lng) {
@@ -721,7 +785,7 @@ function classifyLatLon(a, b) {
 function parseTsgHeader(text) {
   const out = {
     scanDate: null, dateConfidence: null, instrument: null, tsgUuid: null,
-    depth: null, depthRejected: false,
+    depth: null, depthRejected: false, identity: parseDbextra(text),
   };
 
   const u = text.match(UUID_RE);

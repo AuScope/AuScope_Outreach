@@ -37,7 +37,7 @@ fails every week would otherwise go unnoticed behind the green tick.
 | Path | Written by | Role |
 |---|---|---|
 | `data/nvcl/thredds-catalog.json` | step 1 | archive names per state on the mirror (reconciliation) |
-| `data/nvcl/tsg-cache.jsonl` | step 2 | one line per mirrored archive: scan interval, scan date + confidence, instrument. Durable; never re-read |
+| `data/nvcl/tsg-cache.jsonl` | step 2 | one line per mirrored archive: scan interval, scan date + confidence, instrument, TSG UUID (and, for archives read from 2026-10-13, the `[dbextra]` identity fields). Durable; never re-read |
 | `data/nvcl/boreholes.jsonl` | step 3 (always) | every borehole coordinate ever read; a down node is drawn from here |
 | `data/nvcl_stats.json` | step 3 | canonical per-state snapshot (the 80% guard and carry-forward read it) |
 | `data/nvcl/boreholes-detail.jsonl` | step 3 | one line per WFS borehole: its datasets and matched TSG archives (raw evidence) |
@@ -187,6 +187,40 @@ Changed:
   reconciled against `resultType=hits`: below 98% the node is marked
   degraded (figures carried forward). The snapshot records the coverage in
   the state's `wfs_paging`.
+- TSG archives join node datasets by UUID first. The TSG header's `UUID`
+  (cached as `tsgUuid`) is the same value as the node's
+  `getDatasetCollection` `DatasetID`, which the harvest now keeps (`id` on
+  each dataset in `boreholes-detail.jsonl`). A new top tier `uuid` gives an
+  archive to the hole that lists its UUID as a dataset, before any name
+  tier can claim it; it is additive, so the hole still takes its
+  unpublished archives (a wedge, an older run) by name. Most UUIDs are
+  written 35 characters long (one digit short of a GUID) on both sides and
+  some of both carry all 36, so both are lower-cased and cut to 35. This
+  joins archives no name rule could, such as QLD's `BlueBush_BBDD51.zip`
+  for hole `bh076416`. Where the node links a dataset to a different hole
+  than the archive's name does, the node wins: SA lists `131277_INL06.zip`
+  and `131278_INL07.zip` under hole 131276 (`INL 5`, 7.7 m drilled), whose
+  own archive they continue (6.2-6.7, 6.7-7.2, 7.2-7.7 m) and which `INL 6`
+  (5.5 m drilled) could not hold. Four SA holes lost their only archive
+  this way on 2026-10-13 (131277, 131278, 131281, 134154). `nvcl_stats.json` records per state `tsg_match_tiers`
+  (archives per tier, holes by first tier). Also in matching: within a name
+  tier, when exactly one claimant reaches an archive by its whole name and
+  the rest only by a prefix, the whole-name claimant takes it instead of
+  the archive being declared ambiguous.
+- `tsg-enrich.js` also parses the `[dbextra]` identity fields
+  (`drillholeName`, `holeService`, `datasetName`, `collar`, `ntrays`,
+  `nsamples`, `traypicsLogId`, `traythumbsLogId`, `mospicLogId`,
+  `imageLogId`) into the cache row, for archives read from 2026-10-13 on.
+  There is no backfill: the UUID join already ties existing rows to their
+  datasets. Two comments were also corrected: the `Depth (m)` lines sit in
+  `[band headers]` and `lat lon =` in `[dbextra]` (there is no `[borehole]`
+  block).
+- `map_summary.json` carries `spectra_measured`, nationally and per state
+  in `by_state`: for every dataset of the boreholes on the map, the largest
+  `SpectralLog` `sampleCount` the node reports (each log of a dataset is a
+  product of the same measurements, so they are not summed), i.e. the
+  sample positions a spectrum was recorded at. Holes known only from a TSG
+  archive add nothing; a held state keeps its previous figure.
 - A `data/nvcl_stats.json` that exists but does not parse stops the harvest
   before it starts (exit 1), instead of being treated as a first run with
   the 80% check skipped.

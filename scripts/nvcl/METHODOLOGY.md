@@ -54,7 +54,21 @@
 > - NT's unfiltered borehole list is paged in a stable order (sorted on the
 >   identifier) until an empty page, and reconciled against the node's
 >   `resultType=hits` count; below 98% the node is marked degraded. The
->   unsorted paging stopped at about 210,000 of ~329,000 features.
+>   unsorted paging stopped at about 210,000 of ~329,000 features;
+> - a `uuid` TSG match tier above every name tier: an archive joins the
+>   hole whose `getDatasetCollection` lists its TSG UUID as a DatasetID
+>   (additive: the hole still takes its other archives by name), and within
+>   a name tier a whole-name hit beats a prefix hit before an archive is
+>   called ambiguous;
+> - `tsg-enrich.js` also caches the `[dbextra]` identity fields (drillhole
+>   name, hole service, dataset name, collar, tray and sample counts, image
+>   log GUIDs) for archives read from 2026-10-13 on.
+>
+> **Corrections to the text below.** Two block names were wrong in
+> merged-v1.2 and are corrected in place: the `Depth (m)` and `TIDL Depth
+> Backup` lines sit in the `[band headers]` block, not `[coordinates]`, and
+> `lat lon =` sits in `[dbextra]`; a TSG header has no `[borehole]` block
+> (inventory of full headers, 2026-10-13).
 
 Counting rules for every NVCL figure published by this repository
 (`data/nvcl-stats.json`, `docs/nvcl-data.json`, the dashboard and the NVCL
@@ -255,7 +269,7 @@ recorded in `tsgEntryName`.
 
 ### The depth field
 
-The interval comes from the `[coordinates]` block, whose lines are written
+The interval comes from the `[band headers]` block, whose lines are written
 `<index>:<name>;<min>;<max>;…` (the index prefix is present in some files,
 absent in others):
 
@@ -300,6 +314,7 @@ normalised keys - whole name, part before the first underscore, part after it
  - with normalisation to uppercase alphanumerics only, so punctuation
 differences never cost a match. A borehole is matched in fixed precedence:
 exact on WFS id, exact on WFS name, then name-as-suffix, then id-as-suffix.
+(In this repository a `uuid` tier comes first: see the port header.)
 Rows that match nothing are **counted and logged**, never silently dropped:
 see `tsg_cache.unmatched_rows` nationally and `tsg_cache_rows_unmatched` per
 state.
@@ -673,7 +688,7 @@ it if the page says which numbers are old.
 
 ## TSG collar coordinates (added 31 Aug 2026, extraction from merged-v1.4)
 
-The `.tsg` header's `[borehole]` block carries a `lat lon =` pair, a
+The `.tsg` header's `[dbextra]` block carries a `lat lon =` pair, a
 `geo datum =` line, and a `collar =` triple. This was checked properly - 
 full archives, six states, 36 samples spread through each catalogue - after
 an earlier inference ("the cache has no coordinates, therefore TSG has
