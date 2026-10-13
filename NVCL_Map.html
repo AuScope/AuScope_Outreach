@@ -750,8 +750,9 @@
     map.fitBounds(ausBounds, { padding: [4, 4] });
     map.setMaxBounds(ausBounds.pad(0.5));
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap, &copy; CARTO',
+    // CARTO requires an API key since Sep 2026; this is the keyless Esri equivalent (Esri retires this legacy service in December 2029)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri',
       maxZoom: 12,
     }).addTo(map);
 
