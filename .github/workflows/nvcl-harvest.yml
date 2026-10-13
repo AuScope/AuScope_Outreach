@@ -39,11 +39,12 @@ jobs:
       # Node built-ins only (fs, path, zlib, fetch): no npm install step.
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       # What the NCI mirror holds per state, for the harvest's mirror
       # reconciliation. Optional: the harvest runs without a fresh copy.
       - name: THREDDS catalogue snapshot
+        id: catalog
         continue-on-error: true
         run: node scripts/nvcl/thredds-catalog.js
 
@@ -52,6 +53,7 @@ jobs:
       # Incremental: what is cached is never re-read. Optional: a partial
       # cache is still an improvement and the harvest works without it.
       - name: TSG enrichment (incremental, budgeted)
+        id: enrich
         continue-on-error: true
         run: node scripts/nvcl/tsg-enrich.js --max-new=150
 
@@ -107,4 +109,29 @@ jobs:
             gh issue create --title "$title" --body "$body
 
           Auto-filed by the workflow's failure alert. Close once the pipeline is green again."
+          fi
+
+      # The two optional steps above may fail without failing the run (the
+      # harvest works without them), but a catalogue or enrichment that
+      # fails every week would hide behind a green tick. With
+      # continue-on-error their conclusion is always success, so this keys on
+      # their outcome, warns on the same issue, and never fails the job.
+      - name: Warn on a failed optional step
+        if: always() && (steps.catalog.outcome == 'failure' || steps.enrich.outcome == 'failure')
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          CATALOG: ${{ steps.catalog.outcome }}
+          ENRICH: ${{ steps.enrich.outcome }}
+        run: |
+          title="Pipeline failure: ${{ github.workflow }}"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number' 2>/dev/null || true)
+          body="Warning at $(date -u +%FT%TZ): THREDDS catalogue step $CATALOG, TSG enrichment step $ENRICH. The harvest ran without them, so the map may be on an older catalogue or missing this week's newly mirrored archives. $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body" || true
+          else
+            gh issue create --title "$title" --body "$body
+
+          Auto-filed by the workflow's warning step. The run itself stayed green. Close once the catalogue and enrichment steps pass again." || true
           fi

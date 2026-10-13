@@ -10,12 +10,12 @@ in [`METHODOLOGY.md`](METHODOLOGY.md) (merged-v1.2, TSG-first).
 ## What runs when
 
 `.github/workflows/nvcl-harvest.yml`, Sundays 20:33 UTC (Monday 06:33 AEST),
-plus manual dispatch. Node 20, built-ins only (no `npm install`).
+plus manual dispatch. Node 22, built-ins only (no `npm install`).
 
 | Step | Script | Fails the run? |
 |---|---|---|
-| 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state | no (continue-on-error) |
-| 2 | `tsg-enrich.js --max-new=150` - read TSG headers of newly mirrored archives | no (continue-on-error) |
+| 1 | `thredds-catalog.js` - list what the NCI TSG mirror holds per state | no (continue-on-error; warns) |
+| 2 | `tsg-enrich.js --max-new=150` - read TSG headers of newly mirrored archives | no (continue-on-error; warns) |
 | 3 | `harvest.js` - WFS + `getDatasetCollection` on all 8 nodes, TSG matching, snapshot | **yes** |
 | 4 | `write-map-data.js` - map feeds from the snapshot | **yes** |
 | 5 | commit by explicit path, `git pull --rebase`, push (3 tries) | **yes** |
@@ -25,6 +25,12 @@ issue. **Why the rebase:** the hourly earthquake and status bots push to
 `main` throughout this job, which can run for hours, so `main` has nearly
 always moved since checkout and a plain push would be rejected. The files
 never overlap, so rebasing onto the new `main` is always clean.
+
+When step 1 or 2 fails, a last step (`if: always()`, keyed on those steps'
+`outcome`, since `continue-on-error` makes their conclusion a success)
+comments a warning on the same issue, or opens it, and the run stays green.
+The harvest works without either step, but a catalogue or enrichment that
+fails every week would otherwise go unnoticed behind the green tick.
 
 ## Inputs and outputs
 
@@ -177,7 +183,8 @@ Changed:
   that `index.html` popups show, and writes `boreholes-detail.jsonl`.
 - `thredds-catalog.js` keeps a state's previous entry when its catalogue
   fails, and both it and `tsg-enrich.js` exit 1 on upstream failure (the
-  workflow tolerates it; the step still shows red).
+  workflow tolerates it, the step still shows red, and the warning step
+  comments on the issue).
 
 Left behind, because nothing in this repo uses them: the `docs/nvcl-data.json`
 page feed and its dot array, seeding the coordinate cache from that feed,
