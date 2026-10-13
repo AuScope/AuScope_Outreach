@@ -326,12 +326,15 @@
       pointer-events: auto;
     }
     .facility-logo.visible { opacity: 1; }
+    /* Hiding for zoom is quick (the map is already moving); the reveal on
+       the way back keeps the slower 600 ms fade of the rules above. */
     .facility-logo.visible.zoomed-hidden {
       opacity: 0;
       pointer-events: none;
+      transition: opacity 150ms ease;
     }
-    .callout-line.visible.zoomed-hidden { opacity: 0; }
-    .callout-dot.visible.zoomed-hidden { opacity: 0; }
+    .callout-line.visible.zoomed-hidden { opacity: 0; transition: opacity 150ms ease; }
+    .callout-dot.visible.zoomed-hidden { opacity: 0; transition: opacity 150ms ease; }
     .facility-logo img {
       height: 35px;
       width: auto;
@@ -867,11 +870,19 @@
       svg.setAttribute('height', mapEl.clientHeight);
       repositionFacilities();
     };
+    // Hide the logos the instant a zoom starts. From the fitted view every
+    // zoom is a zoom in, and a logo that lingers through the animation at
+    // its old position looks broken. These run before the reposition
+    // handler below, so zoomend clears the flag before the logos are
+    // re-evaluated for the new zoom.
+    map.on('zoomstart', () => { zoomInFlight = true; repositionFacilities(); });
+    map.on('zoomend', () => { zoomInFlight = false; });
     map.on('move zoom resize zoomend moveend', resize);
     window.addEventListener('resize', resize);
   }
 
   let initialHomeZoom = null;  // captured once at startup
+  let zoomInFlight = false;    // true between zoomstart and zoomend
 
   function repositionFacilities() {
     // Capture the initial fit-to-Australia zoom on first call. This is the
@@ -891,7 +902,7 @@
     // Facility logos belong to the national view only. The fitted view is
     // the map's minimum zoom (set by fitAustralia, in fullscreen too), so any
     // zoom above it hides the logos and callouts and lets the drill holes win.
-    const zoomedIn = currentZoom > map.getMinZoom();
+    const zoomedIn = zoomInFlight || currentZoom > map.getMinZoom();
 
     for (const [state, els] of facilityEls.entries()) {
       const f = els.conf;
