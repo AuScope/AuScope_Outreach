@@ -1,0 +1,2457 @@
+<!doctype html>
+<!--
+    AuScope PID demonstrator: "Where AuScope's instruments have been".
+
+    Embedded on auscope.org.au (Squarespace) in an auto-height iframe; also
+    works opened directly (html.standalone adds the page background).
+    Three features, in this order: #follow (follow one instrument),
+    #resolve (watch its identifiers resolve), #map (time-scrubber map).
+
+    Every figure is read from the tracker feed
+    DATA_BASE + 'pid-demonstrator-data.json' (built from AusMT station.json
+    runs plus DataCite) or fetched live (AusMT build.json, for the staleness
+    note; DataCite citation counts; the four #resolve hops: doi.org,
+    DataCite, the feed again, and one AusMT station.json). Nothing is
+    hardcoded except two brief-mandated defaults:
+    the instrument followed first (LEMI-423 #0006) and the opening date.
+
+    Embed contract: one #embed-root measured and posted to the parent as
+    {type:'auscope-embed:height', height}; in-page links post
+    {type:'auscope-embed:scroll', top} once the parent has resized us
+    (a fragment jump cannot scroll the host page); no viewport-height units, no
+    pinned or overlay positioning, no programmatic scrolling or focusing on
+    load; status and help text are inline; links open in a new tab.
+    Light theme only.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Where AuScope's instruments have been</title>
+<base target="_blank">
+<link rel="preconnect" href="https://doi.org" crossorigin>
+<link rel="preconnect" href="https://api.datacite.org" crossorigin>
+<link rel="preconnect" href="https://ausmt.auscope.org.au" crossorigin>
+<link rel="preconnect" href="https://bvkay.github.io" crossorigin>
+<link rel="preconnect" href="https://static1.squarespace.com" crossorigin>
+<script>try { if (window.parent === window) document.documentElement.className += ' standalone'; } catch (e) {}</script>
+<style>
+/* Calibre: AuScope's Squarespace font licence; copied from the site's custom.css, plus font-display:swap. */
+@font-face{font-family:'Calibre-light';src:url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b718f950b713d5f073c3/1531295513244/CalibreWeb-Light.eot');src:url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b718f950b713d5f073c3/1531295513244/CalibreWeb-Light.eot?#iefix') format('embedded-opentype'),url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b76a2b6a28c31c635df2/1531295594953/CalibreWeb-Light.woff') format('woff');font-weight:normal;font-style:normal;font-display:swap}@font-face{font-family:'Calibre-Medium';src:url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b86ff950b713d5f08f05/1531295855849/CalibreWeb-Medium.eot');src:url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b86ff950b713d5f08f05/1531295855849/CalibreWeb-Medium.eot?#iefix') format('embedded-opentype'),url('https://static1.squarespace.com/static/5b440dc18ab722131f76b631/t/5b45b872aa4a99336fbaf2c3/1531295858310/CalibreWeb-Medium.woff') format('woff');font-weight:normal;font-style:normal;font-display:swap}
+
+:root {
+    --brand: #282572;
+    --brand-dark: #1a1850;
+    --accent: #59c2aa;          /* filled marks only, always with a --brand outline; never text */
+    --cta: #ed5d4a;
+    --text: #231f20;
+    --muted: #5c5a82;           /* captions, 5:1 on white */
+    --rule: #d9d9d7;
+    --caption-bg: #ececeb;
+    --card: #ffffff;
+    --page-bg: #f2f2f1;
+    --radius: 3px;
+    --font-light: 'Calibre-light', Arial, Helvetica, sans-serif;
+    --font-medium: 'Calibre-Medium', Arial, Helvetica, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    color-scheme: light;
+}
+
+html, body { margin: 0; padding: 0; background: transparent; }
+html.standalone, html.standalone body { background: var(--page-bg); }
+#embed-root { display: flow-root; position: relative; }
+html.ah-on, html.ah-on body { overflow: hidden; }
+/* Auto-height contract: inside #embed-root never use viewport-height units,
+   height:100% chains on html/body, or pinned/overlay UI (toasts, modals).
+   Each one either causes a resize feedback loop or puts the UI off-screen. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-light);
+    font-weight: 400;
+    font-size: 15.3px;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+strong, b { font-family: var(--font-medium); font-weight: 500; }
+a { color: var(--brand); }
+a:hover { color: var(--brand-dark); }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- page chassis ---------- */
+.page { max-width: 1110px; margin: 0 auto; padding: 4px 6px 8px; display: flex; flex-direction: column; gap: 28px; }
+html.standalone .page { padding: 24px 24px 32px; }
+
+.section-label { font-family: var(--font-medium); font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
+h2, .feature-title { margin: 0; font-family: var(--font-light); font-size: 30.6px; font-weight: 300; line-height: 1.3; letter-spacing: 0.03em; color: var(--brand); }
+h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-weight: 500; line-height: 1.4; }
+.lede { margin: 0; max-width: 72ch; }
+.page-head, .feature-head { display: flex; flex-direction: column; gap: 6px; }
+.feature { display: flex; flex-direction: column; gap: 24px; }
+.feature:empty { display: none; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.mono { font-family: var(--font-mono); letter-spacing: 0; }
+
+.card { background: var(--card); border: 2px solid var(--rule); border-radius: var(--radius); padding: 16px 20px; }
+.kicker { font-family: var(--font-medium); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px; padding: 8px 16px;
+    border: 2px solid var(--brand); border-radius: var(--radius);
+    background: transparent; color: var(--brand);
+    font-family: var(--font-medium); font-size: 15.3px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.2;
+    text-decoration: none; cursor: pointer;
+}
+.btn:hover, .btn:active, .btn[aria-pressed="true"] { background: var(--brand); color: #ffffff; }
+.btn.icon { width: 44px; height: 44px; padding: 0; flex: 0 0 auto; }
+.btn.compact { font-size: 13px; }
+.doi-chip {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 6px 12px;
+    border: 2px solid var(--brand); border-radius: var(--radius);
+    background: transparent; color: var(--brand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; text-decoration: none; word-break: break-all;
+}
+.doi-chip:hover, .doi-chip:active { background: var(--brand); color: #ffffff; }
+
+.status { padding: 14px 20px; background: var(--caption-bg); border-radius: var(--radius); font-size: 13px; }
+.status.error { background: var(--card); border: 2px solid var(--brand); font-size: 15.3px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.status.error p { margin: 0; flex: 1 1 320px; min-width: 0; }
+.status.error .mono { overflow-wrap: anywhere; }
+
+.page-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 2px solid var(--rule); font-size: 13px; color: var(--muted); }
+
+/* ---------- #map: time-scrubber ---------- */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.controls .ctl-label { font-family: var(--font-medium); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.controls .ctl-date { min-width: 150px; font-family: var(--font-medium); font-size: 18.9px; font-weight: 500; color: var(--brand); }
+.controls .ctl-span { font-size: 13px; color: var(--muted); }
+.controls .span-short { display: none; }
+
+.range {
+    -webkit-appearance: none; appearance: none;
+    flex: 1 1 320px; min-width: 0; height: 44px; margin: 0;
+    background: transparent; cursor: pointer; touch-action: pan-y;
+    --p: 0;                     /* 0-1 slider position; the fill ends under the thumb's centre */
+}
+.range::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--brand) calc(22px + (100% - 44px) * var(--p)), var(--rule) 0); }
+.range::-moz-range-track { height: 4px; border-radius: 2px; background: var(--rule); }
+.range::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--brand); }
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 44px; height: 44px; margin-top: -20px; border: 0; border-radius: 50%;
+    background: radial-gradient(circle, #282572 0, #282572 9px, #ffffff 9.5px, #ffffff 11px, rgba(255, 255, 255, 0) 11.5px);
+}
+.range::-moz-range-thumb {
+    width: 44px; height: 44px; border: 0; border-radius: 50%;
+    background: radial-gradient(circle, #282572 0, #282572 9px, #ffffff 9.5px, #ffffff 11px, rgba(255, 255, 255, 0) 11.5px);
+}
+.range:disabled { cursor: default; opacity: 0.5; }
+
+.map-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.map-fig { margin: 0; padding: 16px; }
+.map-svg { display: block; width: 100%; height: auto; aspect-ratio: 600 / 520; touch-action: pan-y; }
+.map-svg .coast path { fill: var(--caption-bg); stroke: #8f8f8c; stroke-width: 1.5; stroke-linejoin: round; }
+.map-svg text { font-family: var(--font-medium); letter-spacing: 0; }
+.map-svg .trail { fill: none; stroke: var(--brand); opacity: 0.7; }
+.map-svg .stop-past { fill: #ffffff; stroke: var(--brand); }
+.map-svg .halo { fill: var(--accent); fill-opacity: 0.25; stroke: var(--brand); }
+.map-svg .dot { fill: var(--accent); stroke: var(--brand); }
+.map-svg .cur { fill: var(--brand); stroke: #ffffff; }
+.map-svg .cur-ring { fill: none; stroke: var(--brand); }
+.map-svg .lbl { paint-order: stroke; stroke: #ffffff; stroke-linejoin: round; }
+.map-svg .lbl-cluster { fill: var(--brand); }
+.map-svg .lbl-stop { fill: var(--muted); font-family: var(--font-light); }
+.map-cap { margin-top: 10px; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+.map-cap p { margin: 0; }
+
+.map-side { display: flex; flex-direction: column; gap: 16px; }
+.now, .follow { display: flex; flex-direction: column; gap: 10px; }
+.now-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.stat-big { font-family: var(--font-medium); font-size: 26px; font-weight: 500; line-height: 1.2; color: var(--brand); }
+.stat-mid { font-family: var(--font-medium); font-size: 18.9px; font-weight: 500; line-height: 1.3; color: var(--text); }
+.stat-lbl { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.plain { margin: 0; padding: 0; list-style: none; font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+.now-empty { margin: 0; font-size: 13px; }
+
+.follow-head { display: flex; align-items: center; gap: 10px; }
+.swatch-cur { width: 14px; height: 14px; flex: 0 0 auto; border-radius: 50%; background: var(--brand); border: 2px solid #ffffff; box-shadow: 0 0 0 1.5px var(--brand); }
+.follow-title { font-family: var(--font-medium); font-weight: 500; }
+.follow-meta, .follow-status { margin: 0; font-size: 13px; }
+.follow-meta { color: var(--muted); }
+.stops { margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.9; }
+.stops li.future { color: var(--muted); }
+.stops li.current { font-family: var(--font-medium); font-weight: 500; color: var(--brand); }
+.follow .btn { align-self: flex-start; }
+
+.legend { display: flex; flex-direction: column; gap: 6px; padding: 14px 20px; background: var(--caption-bg); border-radius: var(--radius); font-size: 13px; }
+.legend div { display: flex; align-items: center; gap: 10px; }
+.sw { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 50%; }
+.sw-active { background: var(--accent); border: 1.5px solid var(--brand); }
+.sw-past { background: #ffffff; border: 2px solid var(--brand); }
+.sw-cur { background: var(--brand); }
+.coverage { margin: 0; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 860px) {
+    .map-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+    h2, .feature-title { font-size: 26px; line-height: 1.25; }
+    .page { gap: 22px; }
+    html.standalone .page { padding: 20px 16px 28px; }
+    .feature { gap: 14px; }
+    .card { padding: 12px 14px; }
+    .map-fig { padding: 10px; }
+    .controls { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; grid-template-areas: "play date span" "label label label" "range range range"; gap: 8px 10px; }
+    .controls #map-play { grid-area: play; }
+    .controls .ctl-date { grid-area: date; min-width: 0; font-size: 18px; }
+    .controls .ctl-span { grid-area: span; }
+    .controls .ctl-label { grid-area: label; }
+    .controls .range { grid-area: range; width: 100%; }
+    .controls .span-long { display: none; }
+    .controls .span-short { display: inline; }
+    .now { padding: 0; border: 0; background: transparent; }
+    .now .stat { padding: 10px 12px; border-top: 2px solid var(--brand); background: var(--caption-bg); }
+    .stat-big { font-size: 22px; }
+}
+
+/* ---------- #follow: follow one instrument ---------- */
+.fo-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.fo-label { font-family: var(--font-medium); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.fo-select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    min-height: 44px; max-width: 100%; margin: 0; padding: 8px 42px 8px 16px;
+    border: 2px solid var(--brand); border-radius: var(--radius);
+    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none' stroke='%23282572' stroke-width='2'%3E%3Cpath d='M2 5l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center;
+    color: var(--brand); font-family: var(--font-medium); font-size: 15.3px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.2;
+    cursor: pointer;
+}
+.fo-id { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-width: 0; }
+.fo-owner { font-size: 13px; color: var(--muted); }
+
+.fo-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.fo-tile { padding: 14px 16px; border-top: 2px solid var(--brand); background: var(--caption-bg); min-width: 0; }
+.fo-short { display: none; }
+
+.fo-sub { display: flex; flex-direction: column; gap: 10px; }
+.fo-h3 { color: var(--brand); line-height: 1.8; }
+.fo-rule { border-top: 2px solid var(--rule); }
+.fo-stops { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 220px)); gap: 8px; }   /* capped so two stops do not become two half-width buttons */
+.fo-stop {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    min-width: 0; margin: 0; padding: 10px;
+    border: 2px solid transparent; border-radius: var(--radius); background: transparent;
+    font: inherit; color: var(--text); text-align: left; cursor: pointer;
+}
+.fo-stop:hover { border-color: var(--rule); }
+.fo-stop[aria-current="true"] { border-color: var(--brand); background: #ffffff; }
+.fo-when, .fo-meta, .fo-meta-s { font-size: 13px; line-height: 1.4; color: var(--muted); }
+.fo-name { font-family: var(--font-medium); font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
+.fo-mark { width: 14px; height: 14px; flex: 0 0 auto; border-radius: 50%; border: 2px solid var(--brand); background: #ffffff; }
+.fo-mark.is-data { background: var(--accent); }
+.fo-stop[aria-current="true"] .fo-mark { box-shadow: 0 0 0 3px rgba(40, 37, 114, 0.2); }
+.fo-meta-s { display: none; }
+.fo-cap { margin: 0; font-size: 13px; color: var(--muted); }
+
+.fo-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.fo-card { display: flex; flex-direction: column; gap: 12px; padding: 20px; min-width: 0; }
+.fo-card .btn { align-self: flex-start; }
+.fo-title { font-family: var(--font-medium); font-size: 18.9px; font-weight: 500; line-height: 1.4; color: var(--brand); }
+.fo-facts { display: flex; flex-wrap: wrap; gap: 4px 24px; font-size: 13px; color: var(--muted); }
+.fo-facts strong { color: var(--text); }
+.fo-small { font-size: 13px; color: var(--muted); }
+.fo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-size: 13px; }
+.fo-row-lbl { color: var(--muted); }
+.fo-ds { display: flex; flex-direction: column; gap: 8px; }
+.doi-chip.quiet { border-color: var(--muted); color: var(--text); }
+.doi-chip.quiet:hover, .doi-chip.quiet:active { border-color: var(--brand); background: var(--brand); color: #ffffff; }
+.fo-cites { padding: 10px 12px; background: var(--caption-bg); border-radius: var(--radius); font-size: 13px; }
+.fo-papers { display: flex; flex-direction: column; gap: 10px; }
+.fo-paper { display: flex; flex-direction: column; gap: 4px; }
+.fo-paper a { font-family: var(--font-medium); font-weight: 500; line-height: 1.4; text-decoration: none; }
+.fo-paper a:hover { text-decoration: underline; }
+.fo-p { margin: 0; }
+.fo-note { margin: 0; font-size: 13px; color: var(--muted); }
+.fo-note:empty { display: none; }
+
+.fo-chain { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.fo-link { min-width: 0; padding: 14px 16px; border: 2px solid var(--brand); border-radius: var(--radius); background: #ffffff; }
+.fo-link .k { font-size: 13px; color: var(--muted); }
+.fo-link .n { font-family: var(--font-medium); font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; }
+.fo-link .d { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; word-break: break-all; }
+.fo-link .d.none { font-family: var(--font-light); letter-spacing: 0.02em; word-break: normal; color: var(--muted); }
+
+.fo-more { margin: 0; font-size: 13px; }
+.fo-more a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+
+@media (max-width: 800px) {
+    .fo-long { display: none; }
+    .fo-short { display: inline; }
+}
+@media (max-width: 760px) {
+    .fo-cards { grid-template-columns: minmax(0, 1fr); }
+    .fo-chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+    .fo-pick { flex-direction: column; align-items: stretch; gap: 10px; }
+    .fo-label { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .fo-select { width: 100%; min-height: 48px; padding: 10px 40px 10px 14px; font-size: 16px; background-position: right 14px center; }
+    .fo-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .fo-tile { padding: 10px 12px; }
+    .fo-sub { gap: 8px; }
+    .fo-h3 { font-size: 17px; line-height: 1.5; }
+    .fo-rule-route { display: none; }
+    .fo-stops { display: flex; flex-direction: column; gap: 4px; }
+    .fo-stop { flex-direction: row; align-items: center; gap: 12px; min-height: 44px; padding: 6px 10px; }
+    .fo-when, .fo-meta { display: none; }
+    .fo-meta-s { display: block; flex: 0 0 auto; white-space: nowrap; text-align: right; }
+    .fo-name { flex: 1 1 auto; min-width: 0; }
+    .fo-mark { order: -1; width: 12px; height: 12px; }
+    .fo-cards { gap: 0; background: #ffffff; border: 2px solid var(--rule); border-radius: var(--radius); }
+    .fo-card { gap: 10px; padding: 16px; border: 0; }
+    .fo-card + .fo-card { padding-top: 0; }
+    .fo-card + .fo-card::before { content: ""; border-top: 2px solid var(--rule); }
+    .fo-title { font-size: 15.3px; }
+    .fo-chain { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .fo-link { padding: 10px 12px; }
+}
+
+/* ---------- #resolve: watch it resolve ---------- */
+/* All four hops share one style; state classes are is-pending, is-running, is-done, is-failed. */
+.rv-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.rv-id { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-width: 0; }
+.rv-lbl { font-family: var(--font-medium); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.rv-run { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-left: auto; }
+.rv-total { font-size: 13px; color: var(--muted); }
+.rv-total strong { color: var(--text); }
+
+.rv-hops { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.rv-hop {
+    display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 16px;
+    padding: 18px 20px; background: var(--card);
+    border: 2px solid var(--rule); border-radius: var(--radius);
+}
+.rv-hop.is-done { border-color: var(--brand); }
+.rv-mark { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--brand); }
+.rv-disc {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--rule); background: #ffffff; color: var(--muted);
+    font-family: var(--font-medium); font-weight: 500; line-height: 1;
+}
+.rv-hop.is-running .rv-disc, .rv-hop.is-failed .rv-disc { border-color: var(--brand); color: var(--brand); }
+.rv-hop.is-done .rv-disc { border-color: var(--brand); background: var(--brand); color: #ffffff; }
+.rv-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rv-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.rv-name { font-family: var(--font-medium); font-size: 18.9px; font-weight: 500; line-height: 1.4; color: var(--brand); }
+.rv-sub { font-size: 13px; color: var(--muted); }
+.rv-ms {
+    margin-left: auto; padding: 2px 10px; border-radius: var(--radius); background: var(--caption-bg);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; white-space: nowrap; color: var(--text);
+}
+.rv-ms.is-wait { color: var(--muted); }
+.rv-get { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; color: var(--muted); overflow-wrap: anywhere; }
+.rv-dl { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 4px 16px; margin: 0; font-size: 13px; }
+.rv-dl > div { display: contents; }
+.rv-dl dt { color: var(--muted); }
+.rv-dl dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.rv-dl dd a { display: inline-block; padding: 6px 0; margin: -6px 0; }
+.rv-s { display: none; }
+.rv-note { margin: 0; font-size: 13px; color: var(--muted); }
+.rv-more { margin: -8px 0 -10px; font-size: 13px; }
+.rv-more a { display: inline-flex; align-items: center; min-height: 44px; }
+.rv-match {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    border-radius: var(--radius); background: var(--caption-bg);
+    font-family: var(--font-medium); font-size: 13px; font-weight: 500; color: var(--brand);
+}
+.rv-match svg { flex: 0 0 auto; }
+.rv-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 16px; padding-top: 6px; border-top: 2px solid var(--rule); font-size: 13px; color: var(--muted); }
+.rv-links { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.rv-links a { display: inline-flex; align-items: center; min-height: 44px; }
+
+@media (max-width: 640px) {
+    .rv-strip { flex-direction: column; align-items: stretch; gap: 8px; }
+    .rv-lbl { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .rv-run { margin-left: 0; justify-content: space-between; flex-wrap: nowrap; }
+    .rv-run .btn { padding: 6px 14px; white-space: nowrap; }
+    .rv-again-icon { display: none; }
+    .rv-hops { gap: 10px; }
+    .rv-hop { display: flex; gap: 12px; padding: 12px 14px; }
+    .rv-mark { flex: 0 0 auto; }
+    .rv-mark .rv-check { display: none; }
+    .rv-disc { width: 30px; height: 30px; font-size: 14px; }
+    .rv-main { flex: 1 1 auto; gap: 4px; }
+    .rv-head { flex-wrap: nowrap; gap: 8px; }
+    .rv-name { font-size: 15.3px; }
+    .rv-ms { padding: 0; background: transparent; font-size: 12px; color: var(--muted); }
+    .rv-get { font-size: 12px; }
+    .rv-dl { display: block; font-size: 13px; line-height: 1.55; }
+    .rv-dl > div { display: inline; }
+    .rv-dl > div + div::before { content: " · "; color: var(--muted); }
+    .rv-dl dt, .rv-dl dd { display: inline; }
+    .rv-dl dt::after { content: " "; }
+    .rv-match { padding: 6px 10px; font-size: 12px; }
+}
+/* Phones only: content is shortened or hidden here, not in a 481-640 px desktop embed. */
+@media (max-width: 480px) {
+    .rv-sub { display: none; }
+    .rv-get { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+    .rv-dl > div.rv-wide { display: none; }
+    .rv-l { display: none; }
+    .rv-s { display: inline; }
+}
+
+@media print {
+    .btn, .controls, #pid-status:not(.error) { display: none; }
+    .card, .rv-hop, .fo-card, .fo-link { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div id="embed-root">
+<main class="page">
+
+    <header class="page-head">
+        <div class="section-label">Instrument PIDs in practice</div>
+        <h2>Where AuScope's instruments have been</h2>
+        <p class="lede">Every AuScope magnetotelluric instrument carries a persistent identifier, so each one can be followed from the stations where it recorded to the data and papers that came out of that work. Where a link is still missing, the page says so.</p>
+    </header>
+
+    <noscript><div class="status">This page draws everything from a live data feed and needs JavaScript to run.</div></noscript>
+    <div id="pid-status" class="status" role="status" aria-live="polite">Loading the deployment feed&hellip;</div>
+
+    <section id="follow" class="feature" aria-labelledby="follow-h">
+        <div class="feature-head">
+            <h3 id="follow-h" class="feature-title">Follow one instrument</h3>
+            <p class="lede">Pick an instrument, then one of the surveys it recorded in, to see what that survey produced and how the identifiers link up.</p>
+        </div>
+
+        <div id="follow-body" class="feature" hidden>
+            <div class="fo-pick">
+                <label for="fo-select" class="fo-label">Instrument</label>
+                <select id="fo-select" class="fo-select"></select>
+                <div class="fo-id">
+                    <a id="fo-doi" class="doi-chip" href="https://doi.org/" rel="noopener"></a>
+                    <span id="fo-owner" class="fo-owner"></span>
+                </div>
+            </div>
+
+            <div id="fo-tiles" class="fo-tiles"></div>
+
+            <section class="fo-sub">
+                <h4 id="fo-route-h" class="fo-h3">Where it has been</h4>
+                <div class="fo-rule fo-rule-route"></div>
+                <div id="fo-stops" class="fo-stops"></div>
+                <p id="fo-cap" class="fo-cap"></p>
+            </section>
+
+            <div id="fo-cards" class="fo-cards"></div>
+
+            <section id="fo-chain-wrap" class="fo-sub">
+                <h4 id="fo-chain-h" class="fo-h3">The chain, in identifiers</h4>
+                <ol id="fo-chain" class="fo-chain"></ol>
+            </section>
+
+            <p class="fo-more"><a href="#map" target="_self">See all instruments on the map <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8M3 7l4 4 4-4"></path></svg></a></p>
+        </div>
+    </section>
+
+    <section id="resolve" class="feature" aria-labelledby="resolve-h">
+        <div class="feature-head">
+            <h3 id="resolve-h" class="feature-title">Watch it resolve</h3>
+            <p class="lede">A persistent identifier is only useful if it resolves. Watch this instrument's DOI do its job, hop by hop, live from the services themselves, with the time each hop took.</p>
+        </div>
+
+        <div id="rv-body" class="feature" hidden>
+            <div class="card rv-strip">
+                <div class="rv-id">
+                    <span class="rv-lbl">Resolving</span>
+                    <a id="rv-doi" class="doi-chip" href="https://doi.org/" rel="noopener"></a>
+                    <span id="rv-inst"></span>
+                </div>
+                <div class="rv-run">
+                    <span id="rv-total" class="rv-total" aria-live="polite"></span>
+                    <button type="button" class="btn" id="rv-again">Resolve again <svg class="rv-again-icon" aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7A5 5 0 1 1 9.5 2.7M12 2v4H8"></path></svg></button>
+                </div>
+            </div>
+
+            <ol id="rv-hops" class="rv-hops" aria-label="Resolution hops"></ol>
+
+            <div class="rv-foot">
+                <span>Every hop is a live request from your browser · times measured on this visit</span>
+                <span class="rv-links"><a href="#follow" target="_self">Back to the instrument</a><a id="rv-ausmt" href="https://ausmt.auscope.org.au/" rel="noopener">Open in AusMT<span aria-hidden="true">&nbsp;&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="map" class="feature" aria-labelledby="map-h">
+        <div class="feature-head">
+            <h3 id="map-h" class="feature-title">Where the fleet was, week by week</h3>
+            <p class="lede">Drag the slider. Every dot is a station where an AuScope instrument was recording that week, placed from its entry in the AusMT catalogue.</p>
+        </div>
+
+        <div id="map-body" class="feature" hidden>
+            <div class="card controls">
+                <button type="button" class="btn icon" id="map-play" aria-label="Play" aria-pressed="false" disabled></button>
+                <label for="map-day" class="ctl-label">Week ending</label>
+                <input id="map-day" class="range" type="range" min="0" max="0" value="0" step="1" disabled>
+                <span id="map-date" class="ctl-date"></span>
+                <span class="ctl-span"><span id="map-span-long" class="span-long"></span><span id="map-span-short" class="span-short"></span></span>
+            </div>
+
+            <div class="map-grid">
+                <figure class="card map-fig">
+                    <svg id="map-svg" class="map-svg" viewBox="0 0 600 520" role="img" aria-label="Map of Australia"><g class="coast"></g><g id="map-dyn"></g></svg>
+                    <figcaption class="map-cap">
+                        <p id="map-cap"></p>
+                        <p id="map-why"></p>
+                    </figcaption>
+                </figure>
+
+                <aside class="map-side" aria-label="The chosen week">
+                    <div class="card now" id="map-now"></div>
+                    <div class="card follow" id="map-follow"></div>
+                    <div class="legend">
+                        <div><span aria-hidden="true" class="sw sw-active"></span>Station recording in the chosen week</div>
+                        <div><span aria-hidden="true" class="sw sw-past"></span>Earlier stop of the followed instrument</div>
+                        <div><span aria-hidden="true" class="sw sw-cur"></span>Followed instrument this week</div>
+                    </div>
+                </aside>
+            </div>
+
+            <p class="coverage" id="map-coverage"></p>
+            <p class="sr-only" id="map-live" aria-live="polite"></p>
+        </div>
+    </section>
+
+    <footer class="page-foot">
+        <span id="foot-release"></span>
+        <a href="https://ausmt.auscope.org.au/" rel="noopener" style="display:inline-flex;align-items:center;min-height:44px">Open in AusMT<span aria-hidden="true">&nbsp;&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
+    </footer>
+
+</main>
+</div>
+
+<script>
+/* ==================================================================
+   CHASSIS: feed loader + shared state for the three features
+   ------------------------------------------------------------------
+   window.PID.DATA_BASE      base URL of the tracker feeds
+   window.PID.data           parsed pid-demonstrator-data.json (null until loaded)
+   window.PID.whenData(fn)   fn(data) once the feed has loaded (at once if it already has)
+   window.PID.selected       {doi, model, serial} of the instrument being followed
+   window.PID.select(sel)    set PID.selected and fire 'pid:selected' on window (detail = sel)
+   window.PID.util           shared helpers (esc, num, dayIndex, fmtDay, ...)
+   Events on window: 'pid:data' (detail = feed), 'pid:error' (detail = Error),
+   'pid:selected' (detail = selection).
+   After any change in layout, call window.auscopeEmbedResize() if it exists.
+   ================================================================== */
+(function () {
+    'use strict';
+
+    var DATA_BASE = 'https://bvkay.github.io/AuScope_doi_tracker/';
+    // Local verification only: on localhost, ?data=http://localhost:<port>/
+    // points the page at a locally served feed so the cross-origin path is
+    // exercised for real. Ignored on every other host.
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+        var qd = /[?&]data=(http:\/\/(?:localhost|127\.0\.0\.1):\d+\/)/.exec(location.search);
+        if (qd) DATA_BASE = qd[1];
+    }
+    var FEED_FILE = 'pid-demonstrator-data.json';
+    var FEED_MS = 20000;            // the feed load is abandoned after this and reported as unanswered
+    var AUSMT_BUILD = 'https://ausmt.auscope.org.au/data/build.json';
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var PID = window.PID = window.PID || {};
+    PID.DATA_BASE = DATA_BASE;
+    PID.data = PID.data || null;
+    PID.error = null;
+    PID.selected = PID.selected || { doi: '10.82388/ir7azuq1', model: 'LEMI-423', serial: '#0006' };
+    var waiting = [];
+
+    function fire(name, detail) {
+        var ev;
+        try { ev = new CustomEvent(name, { detail: detail }); }
+        catch (e) { ev = document.createEvent('CustomEvent'); ev.initCustomEvent(name, false, false, detail); }
+        window.dispatchEvent(ev);
+    }
+    function resized() { if (typeof window.auscopeEmbedResize === 'function') window.auscopeEmbedResize(); }
+
+    PID.whenData = function (fn) {
+        if (PID.data) { try { fn(PID.data); } catch (e) { if (window.console) console.error(e); } }
+        else waiting.push(fn);
+    };
+    PID.select = function (sel) {
+        if (!sel) return;
+        PID.selected = { doi: sel.doi || null, model: sel.model || null, serial: sel.serial || null };
+        fire('pid:selected', PID.selected);
+    };
+
+    // ---------- helpers (shared) ----------
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function num(n) { return (n == null || isNaN(n)) ? '–' : Number(n).toLocaleString('en-AU'); }
+    function num1(n) { return Number(n).toLocaleString('en-AU', { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+    function r1(x) { return Math.round(x * 10) / 10; }
+    function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+    // Days since epoch for the UTC calendar date; string-sliced so 6-digit
+    // fractional seconds in the feed can never trip Date.parse.
+    function dayIndex(iso) {
+        var p = String(iso || '').slice(0, 10).split('-');
+        if (p.length < 3) return NaN;
+        return Math.floor(Date.UTC(+p[0], (+p[1]) - 1, +p[2]) / 86400000);
+    }
+    function dayDate(i) { return new Date(i * 86400000); }
+    function fmtDay(i) { var d = dayDate(i); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+    function fmtRange(a, b) {
+        var A = dayDate(a), B = dayDate(b);
+        if (a === b) return fmtDay(a);
+        if (A.getUTCFullYear() === B.getUTCFullYear()) {
+            if (A.getUTCMonth() === B.getUTCMonth()) return A.getUTCDate() + ' → ' + fmtDay(b);
+            return A.getUTCDate() + ' ' + MONTHS[A.getUTCMonth()] + ' → ' + fmtDay(b);
+        }
+        return fmtDay(a) + ' → ' + fmtDay(b);
+    }
+    function fmtMonthRange(a, b) {
+        var A = dayDate(a), B = dayDate(b), ya = A.getUTCFullYear(), yb = B.getUTCFullYear();
+        var ma = MONTHS[A.getUTCMonth()], mb = MONTHS[B.getUTCMonth()];
+        if (ya === yb && ma === mb) return ma + ' ' + ya;
+        if (ya === yb) return ma + ' – ' + mb + ' ' + ya;
+        return ma + ' ' + ya + ' – ' + mb + ' ' + yb;
+    }
+    // Millisecond stamp for ISO strings with any number of fractional digits.
+    function stamp(iso) {
+        var t = Date.parse(String(iso || '').replace(/(\.\d{3})\d+/, '$1'));
+        return isNaN(t) ? 0 : t;
+    }
+    // feed.surveys is an object keyed by survey id; older feeds used an array of {id,...}.
+    function surveyMap(feed) {
+        var out = {}, s = feed && feed.surveys, i, k;
+        if (Array.isArray(s)) {
+            for (i = 0; i < s.length; i++) if (s[i] && s[i].id) out[s[i].id] = s[i];
+        } else if (s && typeof s === 'object') {
+            for (k in s) if (Object.prototype.hasOwnProperty.call(s, k) && s[k]) out[k] = s[k];
+        }
+        return out;
+    }
+    PID.util = {
+        esc: esc, num: num, num1: num1, plural: plural, dayIndex: dayIndex, fmtDay: fmtDay,
+        fmtRange: fmtRange, fmtMonthRange: fmtMonthRange, surveyMap: surveyMap, resized: resized, MONTHS: MONTHS
+    };
+
+    // ---------- feed loader ----------
+    var statusEl = document.getElementById('pid-status');
+
+    // Plain words for visitors; the raw error goes to the console.
+    function plainError(err) {
+        var m = err && err.message ? String(err.message) : '', h = /^HTTP (\d+)$/.exec(m);
+        if (h) return 'the feed returned HTTP ' + h[1];
+        if (err && err.name === 'SyntaxError') return 'the feed is not valid JSON';
+        if (err && err.name === 'Error' && m) return m;        // worded by loadFeed: the timeout or the shape check
+        return 'the feed host could not be reached';
+    }
+
+    // refocus: the reader pressed Try again, so the new Try again button takes focus.
+    function showError(err, refocus) {
+        statusEl.className = 'status error';
+        statusEl.innerHTML = '<p><strong>The deployment feed could not be loaded</strong> (' + esc(plainError(err)) + '). '
+            + 'Everything on this page is drawn from it, so nothing can be shown yet.<br>'
+            + '<span class="small mono">' + esc(DATA_BASE + FEED_FILE) + '</span></p>'
+            + '<button type="button" class="btn" id="pid-retry">Try again</button>';
+        statusEl.hidden = false;
+        var b = document.getElementById('pid-retry');
+        if (b) {
+            b.addEventListener('click', loadFeed);
+            if (refocus) b.focus({ preventScroll: true });
+        }
+        resized();
+    }
+
+    function loadFeed() {
+        // Only a retry moves focus; the first load never does.
+        var a = document.activeElement, retry = !!(a && a.id === 'pid-retry');
+        var ctrl = typeof AbortController === 'function' ? new AbortController() : null, timedOut = false, timer = 0;
+        statusEl.className = 'status';
+        statusEl.textContent = 'Loading the deployment feed…';
+        statusEl.hidden = false;
+        resized();
+        if (ctrl) timer = setTimeout(function () { timedOut = true; ctrl.abort(); }, FEED_MS);
+        fetch(DATA_BASE + FEED_FILE, ctrl ? { signal: ctrl.signal } : {})
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function (feed) {
+                clearTimeout(timer);
+                if (!feed || !feed.metadata || !Array.isArray(feed.occupations) || !feed.stations || !feed.surveys) {
+                    throw new Error('unexpected feed shape');
+                }
+                PID.data = feed;
+                PID.error = null;
+                statusEl.hidden = true;
+                renderRelease(feed.metadata);
+                var q = waiting; waiting = [];
+                for (var i = 0; i < q.length; i++) {
+                    try { q[i](feed); } catch (e) { if (window.console) console.error(e); }
+                }
+                fire('pid:data', feed);
+                resized();
+                var sel = retry ? document.getElementById('fo-select') : null;
+                if (sel) sel.focus({ preventScroll: true });
+            })
+            .catch(function (err) {
+                clearTimeout(timer);
+                if (window.console) console.error(err);
+                if (timedOut) err = new Error('no answer within ' + (FEED_MS / 1000) + ' s');
+                PID.error = err;
+                showError(err, retry);
+                fire('pid:error', err);
+            });
+    }
+
+    // ---------- footer: AusMT release + live staleness check ----------
+    function renderRelease(meta) {
+        var el = document.getElementById('foot-release');
+        if (!el || !meta || !meta.generated) return;
+        var di = dayIndex(meta.generated), ours = isFinite(di) ? fmtDay(di) : String(meta.generated).slice(0, 10);
+        el.textContent = 'Deployments from AusMT release ' + ours;
+        fetch(AUSMT_BUILD, { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (b) {
+                if (!b || !b.generated) return;
+                if (b.build_id && meta.build_id && b.build_id === meta.build_id) return;
+                if (stamp(b.generated) > stamp(meta.generated)) {
+                    el.textContent = 'Deployments from AusMT release ' + ours
+                        + ' · a newer AusMT release (' + fmtDay(dayIndex(b.generated)) + ') is not yet indexed';
+                    resized();
+                }
+            })
+            .catch(function () { /* staleness note is optional; stay quiet */ });
+    }
+
+    PID._loadFeed = loadFeed;
+})();
+</script>
+
+<script>
+/* ==================================================================
+   FEATURE 1 (#follow): follow one instrument
+   Picker -> summary tiles -> stops (one per survey, date order) ->
+   stop card (deployment | what it produced) -> identifier chain.
+   Every figure comes from the feed except the dataset citation count,
+   which is fetched live from DataCite once per DOI per page view; a
+   failed lookup is retried on the next render.
+   PID.selected carries {doi, model, serial} plus, from this section,
+   survey (the selected stop) and station (its first station). The
+   "Watch the instrument DOI resolve" button only fires 'pid:selected' with
+   resolve:true in the event detail; it never scrolls or focuses.
+   ================================================================== */
+(function () {
+    'use strict';
+
+    var PID = window.PID, U = PID.util;
+    var esc = U.esc, num = U.num, num1 = U.num1, plural = U.plural, fmtDay = U.fmtDay, dayIndex = U.dayIndex, MONTHS = U.MONTHS;
+    var DATACITE = 'https://api.datacite.org/dois/';
+    // A zero count is called "too new to be cited" only for DOIs minted in the last two years.
+    var TOO_NEW_DAYS = 730;
+    var CITE_MS = 20000;            // a citation lookup is abandoned after this and reads as unavailable
+    var NEW_TAB = '<span class="sr-only"> (opens in a new tab)</span>';
+    var IDENT = { collection: 'dataset collection', raw: 'raw time series', level2: 'level 2 transfer functions', other: 'other data product' };
+    var IDENT_SHORT = { collection: 'collection', raw: 'raw time series', level2: 'level 2', other: 'data product' };
+    var ICON_DOWN = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8M3 7l4 4 4-4"></path></svg>';
+
+    var els = {
+        body: document.getElementById('follow-body'),
+        select: document.getElementById('fo-select'),
+        doi: document.getElementById('fo-doi'),
+        owner: document.getElementById('fo-owner'),
+        tiles: document.getElementById('fo-tiles'),
+        stops: document.getElementById('fo-stops'),
+        cap: document.getElementById('fo-cap'),
+        cards: document.getElementById('fo-cards'),
+        chain: document.getElementById('fo-chain'),
+        chainWrap: document.getElementById('fo-chain-wrap')
+    };
+    var S = { surveys: {}, insts: [], byDoi: {}, occ: {}, inst: null, stops: [], stop: null, own: false };
+    var citeCache = {};             // lower-cased DOI -> Promise<{count, created}>, kept for the page view
+
+    // ---------- helpers ----------
+    function fire(name, detail) {
+        var ev;
+        try { ev = new CustomEvent(name, { detail: detail }); }
+        catch (e) { ev = document.createEvent('CustomEvent'); ev.initCustomEvent(name, false, false, detail); }
+        window.dispatchEvent(ev);
+    }
+    function href(doi) { return 'https://doi.org/' + encodeURI(String(doi)); }
+    function chip(doi, quiet) {
+        return '<a class="doi-chip' + (quiet ? ' quiet' : '') + '" href="' + esc(href(doi)) + '" rel="noopener">' + esc(doi) + NEW_TAB + '</a>';
+    }
+    function roleWord(role) { return role === 'recorder' ? 'recorder' : (role === 'sensor' ? 'coil' : ''); }
+    function hoursLabel(role) { return role === 'recorder' ? 'recorder-hours' : (role === 'sensor' ? 'coil-hours' : 'hours recorded'); }
+    function instLabel(i) {
+        var r = roleWord(i.role);
+        return (i.model || 'Instrument') + (r ? ' ' + r : '') + (i.serial ? ' · ' + i.serial : '');
+    }
+    function natural(a, b) { return String(a).localeCompare(String(b), 'en', { numeric: true, sensitivity: 'base' }); }
+    // Some AusMT run ids arrive as a one-item Python list repr ("['CC12']"); show the id itself.
+    function runId(r) {
+        if (r == null || r === '') return null;
+        var m = /^\[\s*'([^',]+)'\s*\]$/.exec(String(r));
+        return m ? m[1] : String(r);
+    }
+    function andList(list) {
+        return list.length < 2 ? list.join('') : list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1];
+    }
+    function has(list, n) { return n === 1 ? list + ' has' : list + ' have'; }
+    function yearSpan(first, last, short) {
+        var a = String(first || '').slice(0, 4), b = String(last || '').slice(0, 4);
+        if (!/^\d{4}$/.test(a) || !/^\d{4}$/.test(b)) return '–';
+        if (a === b) return a;
+        return short ? a + '–' + (a.slice(0, 2) === b.slice(0, 2) ? b.slice(2) : b) : a + ' – ' + b;
+    }
+    function shortWhen(a, b) {
+        var A = new Date(a * 86400000), B = new Date(b * 86400000), ya = A.getUTCFullYear(), yb = B.getUTCFullYear();
+        if (ya === yb && A.getUTCMonth() === B.getUTCMonth()) return MONTHS[A.getUTCMonth()] + ' ' + ya;
+        if (ya === yb) return String(ya);
+        return ya + '–' + (Math.floor(ya / 100) === Math.floor(yb / 100) ? String(yb).slice(2) : yb);
+    }
+    // The DOIs whose citations the stop card reports: its collections, else its first dataset.
+    function primaries(ds) {
+        var c = ds.filter(function (d) { return d.identifies === 'collection'; });
+        return c.length ? c : ds.slice(0, 1);
+    }
+
+    // ---------- data ----------
+    function prepare(feed) {
+        S.surveys = U.surveyMap(feed);
+        // af === false means the registry says this unit is NOT AuScope-funded (8 today:
+        // five Orange Box PAR24B and three LEMI-120). The page is about AuScope
+        // instruments and the map draws only AuScope-funded stations, so they are
+        // not offered here. af === null (funding tags unavailable) is kept.
+        S.insts = (Array.isArray(feed.instruments) ? feed.instruments : []).filter(function (i) { return i && i.doi && i.af !== false; });
+        S.byDoi = {};
+        S.insts.forEach(function (i) { S.byDoi[String(i.doi)] = i; });
+        S.occ = {};
+        (feed.occupations || []).forEach(function (o) {
+            if (!o || !o.doi) return;
+            var k = String(o.doi);
+            (S.occ[k] || (S.occ[k] = [])).push(o);
+        });
+    }
+
+    // One stop per survey, in date order, with this instrument's own runs only.
+    function stopsFor(inst) {
+        var occ = (S.occ[String(inst.doi)] || []).slice(), by = {}, list = [];
+        occ.sort(function (x, y) { return (dayIndex(x.start) - dayIndex(y.start)) || natural(x.start, y.start); });
+        occ.forEach(function (o) {
+            var a = dayIndex(o.start), b = dayIndex(o.end), id = String(o.survey), s;
+            if (!isFinite(a)) return;
+            if (!isFinite(b) || b < a) b = a;
+            s = by[id];
+            if (!s) {
+                s = by[id] = { id: id, first: a, last: b, hours: 0, seen: {}, stations: [], run: runId(o.run), station: String(o.station) };
+                list.push(s);
+            }
+            if (b > s.last) s.last = b;
+            s.hours += Number(o.hours) || 0;
+            if (!s.seen[o.station]) { s.seen[o.station] = 1; s.stations.push(String(o.station)); }
+        });
+        list.sort(function (x, y) { return x.first - y.first || x.last - y.last; });
+        list.forEach(function (s) {
+            var sv = S.surveys[s.id] || {};
+            s.title = sv.title || s.id;
+            s.org = sv.organisation || '';
+            s.reg = sv.registry_doi || null;
+            s.ds = (Array.isArray(sv.dataset_dois) ? sv.dataset_dois : []).filter(function (d) { return d && d.doi; });
+            s.papers = (Array.isArray(sv.papers) ? sv.papers : []).filter(function (p) { return p && p.doi; });
+            s.stations.sort(natural);
+        });
+        return list;
+    }
+
+    // Keep the reader's survey when the new instrument also went there; otherwise
+    // open on the first stop whose chain is complete (record, dataset, paper).
+    function pickStop(stops, keepId) {
+        var i;
+        if (keepId) for (i = 0; i < stops.length; i++) if (stops[i].id === keepId) return stops[i];
+        for (i = 0; i < stops.length; i++) if (stops[i].reg && stops[i].ds.length && stops[i].papers.length) return stops[i];
+        for (i = 0; i < stops.length; i++) if (stops[i].ds.length) return stops[i];
+        return stops[0] || null;
+    }
+
+    // ---------- shared selection ----------
+    function selection() {
+        var i = S.inst, s = S.stop;
+        return { doi: i.doi, model: i.model || null, serial: i.serial || null, survey: s ? s.id : null, station: s ? s.station : null };
+    }
+    function publish(resolve) {
+        var sel = selection(), detail = sel, k;
+        PID.selected = sel;
+        if (resolve) { detail = {}; for (k in sel) detail[k] = sel[k]; detail.resolve = true; }
+        S.own = true;
+        try { fire('pid:selected', detail); } finally { S.own = false; }
+    }
+
+    // ---------- render ----------
+    function buildPicker() {
+        var sorted = S.insts.slice().sort(function (a, b) { return natural(a.model || '', b.model || '') || natural(a.serial || '', b.serial || ''); });
+        function opt(i) { return '<option value="' + esc(i.doi) + '">' + esc(instLabel(i)) + '</option>'; }
+        function group(label, list) { return list.length ? '<optgroup label="' + esc(label) + '">' + list.map(opt).join('') + '</optgroup>' : ''; }
+        els.select.innerHTML =
+            group('Recorders', sorted.filter(function (i) { return i.role === 'recorder'; }))
+            + group('Coils', sorted.filter(function (i) { return i.role === 'sensor'; }))
+            + group('Other instruments', sorted.filter(function (i) { return i.role !== 'recorder' && i.role !== 'sensor'; }));
+    }
+
+    function tile(big, lbl) {
+        return '<div class="fo-tile"><div class="stat-big">' + big + '</div><div class="stat-lbl">' + lbl + '</div></div>';
+    }
+
+    function renderInstrument() {
+        var i = S.inst, owner = [];
+        els.doi.href = href(i.doi);
+        els.doi.innerHTML = esc(i.doi) + NEW_TAB;
+        if (i.owner) owner.push('Owner: ' + i.owner);
+        if (i.registry_title) owner.push('Registered in the AuScope Instrument Registry');
+        els.owner.textContent = owner.join(' · ');
+        els.owner.hidden = !owner.length;
+
+        var nSv = Array.isArray(i.surveys) && i.surveys.length ? i.surveys.length : S.stops.length;
+        var nSt = i.n_stations != null ? Number(i.n_stations) : null;
+        els.tiles.innerHTML =
+            tile(esc(num(nSv)), plural(nSv, 'survey'))
+            + tile(esc(num(nSt)), plural(nSt, 'station') + ' occupied')
+            + tile(i.hours != null && isFinite(i.hours) ? esc(num1(i.hours)) : '–', esc(hoursLabel(i.role)))
+            + tile('<span class="fo-long">' + esc(yearSpan(i.first, i.last)) + '</span><span class="fo-short">' + esc(yearSpan(i.first, i.last, true)) + '</span>',
+                '<span class="fo-long">in service, per AusMT runs</span><span class="fo-short">in service</span>');
+    }
+
+    function caption() {
+        var filled = 0, reg = [], none = [], noReg = [], out = [], gaps = [];
+        S.stops.forEach(function (s) {
+            if (s.ds.length) { filled++; if (!s.reg) noReg.push(s.title); }
+            else if (s.reg) reg.push(s.title);
+            else none.push(s.title);
+        });
+        if (filled) out.push(filled === 1 ? 'The filled mark reached a registered dataset.' : 'Filled marks reached registered datasets.');
+        if (reg.length) gaps.push(has(andList(reg), reg.length) + ' a registry record but no dataset DOI yet');
+        if (none.length) gaps.push(has(andList(none), none.length) + ' no registry record and no dataset DOI yet');
+        if (gaps.length) {
+            out.push((reg.length + none.length === 1 ? 'The hollow mark is an honest gap: ' : 'The hollow marks are honest gaps: ') + gaps.join('; ') + '.');
+        }
+        if (noReg.length) out.push(has(andList(noReg), noReg.length) + ' a dataset DOI but no registry record yet.');
+        var un = undatedNote(S.inst);
+        if (un) out.push(un);
+        return out.join(' ');
+    }
+
+    // Runs with no recorded time period: stopsFor() leaves them out, the caption counts them.
+    function undatedNote(inst) {
+        var seen = {}, n = 0, sv = {}, titles = [];
+        (S.occ[String(inst.doi)] || []).forEach(function (o) {
+            if (isFinite(dayIndex(o.start))) return;
+            var k = o.survey + '/' + o.station + '/' + o.run, id = String(o.survey);
+            if (!seen[k]) { seen[k] = 1; n++; }
+            if (!sv[id]) { sv[id] = 1; titles.push((S.surveys[id] && S.surveys[id].title) || id); }
+        });
+        if (!n) return '';
+        return num(n) + ' ' + plural(n, 'run') + ' at ' + andList(titles) + (n === 1 ? ' has' : ' have')
+            + ' no recorded time period and ' + (n === 1 ? 'is' : 'are') + ' not shown.';
+    }
+
+    function renderStops() {
+        var n = S.stops.length;
+        if (!n) {
+            els.stops.innerHTML = '';
+            els.cap.textContent = 'No runs for this instrument in the surveys indexed so far.';
+            return;
+        }
+        els.stops.innerHTML = S.stops.map(function (s) {
+            var hasDs = s.ds.length > 0, ns = s.stations.length, h = Math.round(s.hours);
+            var gap = !hasDs ? 'no dataset yet' : (!s.reg ? 'no registry record yet' : '');
+            return '<button type="button" class="fo-stop" data-sv="' + esc(s.id) + '"' + (s === S.stop ? ' aria-current="true"' : '') + '>'
+                + '<span class="fo-when">' + esc(U.fmtMonthRange(s.first, s.last)) + '</span>'
+                + '<span aria-hidden="true" class="fo-mark' + (hasDs ? ' is-data' : '') + '"></span>'
+                + '<span class="fo-name">' + esc(s.title) + '</span>'
+                + '<span class="fo-meta">' + esc(num(ns) + ' ' + plural(ns, 'station') + ' · ' + num(h) + ' h' + (gap ? ' · ' + gap : '')) + '</span>'
+                + '<span class="fo-meta-s">' + esc(shortWhen(s.first, s.last) + ' · ' + (hasDs ? num(h) + ' h' : 'no dataset yet')) + '</span>'
+                + '</button>';
+        }).join('');
+        els.cap.textContent = caption();
+    }
+
+    // Selection changes only flip aria-current, so a keyboard user keeps focus.
+    function markStop() {
+        var b = els.stops.querySelectorAll('[data-sv]'), k;
+        for (k = 0; k < b.length; k++) {
+            if (S.stop && b[k].getAttribute('data-sv') === S.stop.id) b[k].setAttribute('aria-current', 'true');
+            else b[k].removeAttribute('aria-current');
+        }
+    }
+
+    function paper(p) {
+        var meta = [];
+        if (p.journal) meta.push(esc(p.journal));
+        if (p.year) meta.push(esc(p.year));
+        if (p.cited != null && isFinite(p.cited)) meta.push(esc(num(p.cited)) + ' ' + plural(Number(p.cited), 'citation'));
+        return '<div class="fo-paper"><a href="' + esc(href(p.doi)) + '" rel="noopener">' + esc(p.title || p.doi) + NEW_TAB + '</a>'
+            + (meta.length ? '<div class="fo-small">' + meta.join(' · ') + '</div>' : '') + '</div>';
+    }
+
+    function renderStop() {
+        var s = S.stop, i = S.inst;
+        if (!s) { els.cards.innerHTML = ''; els.cards.hidden = true; return; }
+        els.cards.hidden = false;
+        var ns = s.stations.length, prim = primaries(s.ds);
+
+        var left = '<div class="card fo-card">'
+            + '<div class="kicker">Deployment</div>'
+            + '<div class="fo-title">' + esc(s.title) + '</div>'
+            + '<div>' + (s.org ? esc(s.org) + ' · ' : '') + esc(fmtDay(s.first) + ' → ' + fmtDay(s.last)) + '</div>'
+            + '<div class="fo-facts"><span><strong>' + esc(num(ns)) + '</strong> ' + plural(ns, 'station') + '</span>'
+            + '<span><strong>' + esc(num1(s.hours)) + '</strong> ' + esc(hoursLabel(i.role)) + '</span></div>'
+            + '<div class="fo-small">' + (ns === 1 ? 'Station: ' : 'Stations: ') + esc(s.stations.join(', ')) + '</div>'
+            + '<div class="fo-row"><span class="fo-row-lbl">Survey record</span>'
+            + (s.reg ? chip(s.reg) : '<span>' + esc(s.title) + ' has no registry record yet.</span>') + '</div>'
+            + '<button type="button" class="btn" data-resolve>Watch the instrument DOI resolve ' + ICON_DOWN + '</button>'
+            + '<p class="fo-note" data-note aria-live="polite"></p>'
+            + '</div>';
+
+        var right = '<div class="card fo-card"><div class="kicker">What it produced</div>';
+        if (s.ds.length) {
+            right += '<div class="fo-ds">' + s.ds.map(function (d) {
+                var main = prim.indexOf(d) >= 0, lbl = IDENT[d.identifies] || IDENT.other;
+                if (main && d.custodian) lbl += ' · ' + d.custodian;
+                return '<div class="fo-row">' + chip(d.doi, !main) + '<span class="fo-row-lbl">' + esc(lbl) + '</span></div>';
+            }).join('') + '</div>'
+                + '<div class="fo-cites" data-cites="' + esc(s.id) + '">Dataset citations: checking DataCite&hellip;</div>';
+        } else {
+            right += '<p class="fo-p">' + esc(s.title) + (s.reg ? ' has a registry record but no dataset DOI yet.' : ' has no registry record and no dataset DOI yet.') + '</p>';
+        }
+        right += '<div class="fo-rule"></div><div class="kicker">Described in</div>';
+        if (s.papers.length) {
+            right += '<div class="fo-papers">' + s.papers.map(paper).join('') + '</div>'
+                + '<p class="fo-note">Linked by the survey record, not by a dataset citation.</p>';
+        } else {
+            right += '<p class="fo-p fo-small">' + (s.reg ? 'No paper is linked to this survey record yet.' : 'No survey record, so no paper is linked yet.') + '</p>';
+        }
+        right += '</div>';
+
+        els.cards.innerHTML = left + right;
+        if (s.ds.length) loadCites(s, prim);
+    }
+
+    function renderChain() {
+        var i = S.inst, s = S.stop;
+        if (!s) { els.chainWrap.hidden = true; return; }
+        els.chainWrap.hidden = false;
+        var d = s.ds.length ? primaries(s.ds)[0] : null, p = s.papers[0] || null;
+        var pName = p ? ([p.journal, p.year].filter(function (x) { return x; }).join(' ') || 'Paper') + (s.papers.length > 1 ? ' · +' + (s.papers.length - 1) + ' more' : '') : s.title;
+        var boxes = [
+            ['Instrument', (i.model || 'Instrument') + (i.serial ? ' ' + i.serial : ''), i.doi, ''],
+            ['Deployment', s.title, s.reg, 'no registry record yet'],
+            ['Dataset', d ? s.title + ' · ' + (IDENT_SHORT[d.identifies] || IDENT_SHORT.other) : s.title, d ? d.doi : null, 'no dataset DOI yet'],
+            ['Paper', pName, p ? p.doi : null, 'no paper linked yet']
+        ];
+        els.chain.innerHTML = boxes.map(function (b) {
+            return '<li class="fo-link"><div class="k">' + esc(b[0]) + '</div><div class="n">' + esc(b[1]) + '</div>'
+                + (b[2] ? '<div class="d">' + esc(b[2]) + '</div>' : '<div class="d none">' + esc(b[3]) + '</div>') + '</li>';
+        }).join('');
+    }
+
+    // ---------- live dataset citations (DataCite), once per DOI ----------
+    function citeFor(doi) {
+        var k = String(doi).toLowerCase(), ctrl, timer = 0;
+        if (!citeCache[k]) {
+            ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+            if (ctrl) timer = setTimeout(function () { ctrl.abort(); }, CITE_MS);
+            citeCache[k] = fetch(DATACITE + encodeURI(String(doi)), ctrl ? { signal: ctrl.signal } : {})
+                .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                .then(function (j) {
+                    var a = j && j.data && j.data.attributes;
+                    if (!a || typeof a.citationCount !== 'number') throw new Error('no citation count');
+                    return { count: a.citationCount, created: a.created || null };
+                });
+            // The failure itself is handled where it is used; dropping it here lets the next render ask again.
+            citeCache[k].then(function () { clearTimeout(timer); }, function () { clearTimeout(timer); delete citeCache[k]; });
+        }
+        return citeCache[k];
+    }
+    function citeText(res, prim) {
+        var total = 0, made = [], many = res.length > 1, h, lo, hi, when, today;
+        res.forEach(function (r) { total += r.count; var d = dayIndex(r.created); if (isFinite(d)) made.push(d); });
+        h = 'Dataset citations: <strong>' + esc(num(total)) + '</strong>';
+        if (many) {
+            h += ' across ' + res.length + ' ' + (prim.every(function (d) { return d.identifies === 'collection'; }) ? 'collections' : 'datasets');
+        }
+        if (total === 0 && made.length) {
+            made.sort(function (a, b) { return a - b; });
+            lo = made[0]; hi = made[made.length - 1];
+            when = lo === hi ? fmtDay(lo) : fmtDay(lo) + (made.length === 2 ? ' and ' : ' to ') + fmtDay(hi);
+            today = Math.floor(Date.now() / 86400000);
+            h += ' - minted ' + esc(when) + (today - lo <= TOO_NEW_DAYS ? ', too new to be cited' : ', none recorded yet');
+        }
+        return h + '. Checked live against DataCite.';
+    }
+    function paintCites(id, html) {
+        var el = els.cards.querySelector('[data-cites]');
+        if (!el || el.getAttribute('data-cites') !== id) return;      // the reader has moved on
+        el.innerHTML = html;
+        U.resized();
+    }
+    function loadCites(s, prim) {
+        Promise.all(prim.map(function (d) { return citeFor(d.doi); }))
+            .then(function (res) { paintCites(s.id, citeText(res, prim)); })
+            .catch(function () { paintCites(s.id, 'Dataset citations: unavailable.'); });
+    }
+
+    // ---------- state changes ----------
+    function setInstrument(doi, keepSurvey) {
+        var inst = S.byDoi[String(doi)];
+        if (!inst) return false;
+        S.inst = inst;
+        S.stops = stopsFor(inst);
+        S.stop = pickStop(S.stops, keepSurvey);
+        if (els.select.value !== inst.doi) els.select.value = inst.doi;
+        renderInstrument();
+        renderStops();
+        renderStop();
+        renderChain();
+        U.resized();
+        return true;
+    }
+    function setStop(id) {
+        var k;
+        for (k = 0; k < S.stops.length; k++) {
+            if (S.stops[k].id === id) {
+                if (S.stops[k] === S.stop) return false;
+                S.stop = S.stops[k];
+                markStop();
+                renderStop();
+                renderChain();
+                U.resized();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function init(feed) {
+        prepare(feed);
+        if (!S.insts.length) {
+            els.body.innerHTML = '<div class="status">The feed lists no instruments yet, so there is nothing to follow.</div>';
+            els.body.hidden = false;
+            U.resized();
+            return;
+        }
+        buildPicker();
+        var cur = PID.selected || {};
+        var want = cur.doi && S.byDoi[cur.doi] ? cur.doi : els.select.options[0].value;
+        setInstrument(want, cur.survey || null);
+        els.body.hidden = false;
+        if (cur.doi !== want) publish(false);
+        else PID.selected = selection();        // same instrument: add the stop without a redundant event
+
+        els.select.addEventListener('change', function () {
+            if (setInstrument(els.select.value, S.stop ? S.stop.id : null)) publish(false);
+        });
+        els.stops.addEventListener('click', function (e) {
+            var b = e.target && e.target.closest ? e.target.closest('[data-sv]') : null;
+            if (b && setStop(b.getAttribute('data-sv'))) publish(false);
+        });
+        els.cards.addEventListener('click', function (e) {
+            var b = e.target && e.target.closest ? e.target.closest('[data-resolve]') : null;
+            if (!b) return;
+            publish(true);
+            var note = els.cards.querySelector('[data-note]'), h = document.getElementById('resolve-h');
+            if (note && h && h.textContent) note.textContent = 'Loaded into “' + h.textContent.trim() + '”, below.';
+            U.resized();
+        });
+        // Another section changed the instrument or stop: follow it without re-announcing.
+        window.addEventListener('pid:selected', function (e) {
+            if (S.own || !S.inst) return;
+            var d = (e && e.detail) || PID.selected || {};
+            if (d.doi && d.doi !== S.inst.doi && S.byDoi[d.doi]) setInstrument(d.doi, d.survey || (S.stop && S.stop.id));
+            else if (d.doi === S.inst.doi && d.survey) setStop(d.survey);
+            if (PID.selected && PID.selected.doi === S.inst.doi && !PID.selected.survey) PID.selected = selection();
+        });
+    }
+
+    PID.whenData(function (feed) {
+        try { init(feed); }
+        catch (e) {
+            els.body.innerHTML = '<div class="status">This section could not be drawn (' + esc(e && e.message ? e.message : 'error') + ').</div>';
+            els.body.hidden = false;
+            U.resized();
+            if (window.console) console.error(e);
+        }
+    });
+})();
+</script>
+
+<script>
+/* ==================================================================
+   FEATURE 2 (#resolve): watch it resolve
+   Four live hops for the DOI in PID.selected, one after another, each
+   timed with performance.now() from request to complete body:
+     1 doi.org handle API      -> the landing URL the DOI points to
+     2 DataCite REST API       -> the PIDINST record itself: title, type,
+       serial, manufacturer, owner, commissioning date, funders and the
+       survey records it is part of
+     3 deployment index        -> the feed again: where the instrument
+       recorded, and which occupation hop 4 opens (its first run in the
+       selected survey, the same station #follow names)
+     4 AusMT station.json      -> that run, and whether it names the DOI
+   A failed hop shows its error and no time; it never invents a field.
+   A run starts when the hop list first comes into view, on "Resolve
+   again", and after a 'pid:selected' (at once if the list is in view,
+   otherwise when it next is). A newer run supersedes an older one.
+   ================================================================== */
+(function () {
+    'use strict';
+
+    var PID = window.PID, U = PID.util;
+    var esc = U.esc, num = U.num, plural = U.plural, dayIndex = U.dayIndex, fmtDay = U.fmtDay, MONTHS = U.MONTHS;
+    var FEED_URL = PID.DATA_BASE + 'pid-demonstrator-data.json';
+    var HANDLE_API = 'https://doi.org/api/handles/';
+    var DATACITE = 'https://api.datacite.org/dois/';
+    var STATION_BASE = 'https://ausmt.auscope.org.au/data/products/';
+    var AUSMT = 'https://ausmt.auscope.org.au/';
+    var REGISTRY_URL = /^https?:\/\/pidinst\.data\.auscope\.org\.au\//i;
+    var FETCH_MS = 15000;           // per hop, before it is reported as unanswered
+    var SHOW_PARTS = 3;             // IsPartOf DOIs listed by name; the rest are counted
+    var HANDLE_CODES = { 1: 'success', 2: 'error', 100: 'handle not found', 200: 'no values for this handle' };
+    var HOPS = [
+        { name: 'doi.org', sub: 'Handle System · the global DOI resolver' },
+        { name: 'DataCite', sub: 'the PIDINST record registered against the DOI' },
+        { name: 'AuScope deployment index', sub: 'every AusMT run that names this DOI' },
+        { name: 'AusMT station record', sub: 'the data product that names this instrument' }
+    ];
+    var ICON_CHECK = '<svg class="rv-check" aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l4 4 8-8"></path></svg>';
+    var ICON_TICK = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3.5 3.5L13 4.5"></path></svg>';
+    var NEW_TAB = '<span class="sr-only"> (opens in a new tab)</span>';
+
+    var els = {
+        body: document.getElementById('rv-body'),
+        doi: document.getElementById('rv-doi'),
+        inst: document.getElementById('rv-inst'),
+        total: document.getElementById('rv-total'),
+        again: document.getElementById('rv-again'),
+        hops: document.getElementById('rv-hops'),
+        ausmt: document.getElementById('rv-ausmt')
+    };
+    var R = { sel: null, token: 0, cur: null, hops: [], pending: true, visible: false };
+    var now = (window.performance && typeof performance.now === 'function')
+        ? function () { return performance.now(); } : function () { return Date.now(); };
+
+    // ---------- helpers ----------
+    function lc(s) { return String(s == null ? '' : s).toLowerCase(); }
+    function secs(ms) { return (ms < 10000 ? (ms / 1000).toFixed(2) : (ms / 1000).toFixed(1)) + ' s'; }
+    function none(text) { return '<span class="muted">' + esc(text) + '</span>'; }
+    function link(url, text) {
+        if (!/^https?:\/\//i.test(String(url))) return esc(text || url);
+        return '<a href="' + esc(url) + '" rel="noopener">' + esc(text || url) + NEW_TAB + '</a>';
+    }
+    function doiLink(doi) { return link('https://doi.org/' + encodeURI(String(doi)), doi); }
+    // Phone form of a landing URL: host plus the start of its last path segment.
+    function shortUrl(url) {
+        var s = String(url).replace(/^https?:\/\//i, '').replace(/\/+$/, ''), parts = s.split('/'), last;
+        if (s.length <= 40) return s;
+        last = parts[parts.length - 1];
+        return parts[0] + (parts.length > 2 ? '/…/' : '/') + (last.length > 8 ? last.slice(0, 8) + '…' : last);
+    }
+    function natural(a, b) { return String(a).localeCompare(String(b), 'en', { numeric: true, sensitivity: 'base' }); }
+    // Some AusMT run ids arrive as a one-item Python list repr ("['CC12']"); show the id itself.
+    function runId(r) {
+        if (r == null || r === '') return null;
+        var m = /^\[\s*'([^',]+)'\s*\]$/.exec(String(r));
+        return m ? m[1] : String(r);
+    }
+    // UTC parts of an ISO time with any number of fractional digits; a time without a zone is UTC.
+    function utc(iso) {
+        var s = String(iso || '').replace(/(\.\d{3})\d+/, '$1');
+        if (/T\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(s)) s += 'Z';
+        var t = Date.parse(s);
+        return isNaN(t) ? null : new Date(t);
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function fmtTime(d) { return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' ' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()); }
+    // A DataCite date at whatever precision it was registered: "2017-03" -> "Mar 2017".
+    function fmtDate(s) {
+        var m = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(String(s).trim());
+        if (!m || (m[2] && !MONTHS[+m[2] - 1])) return String(s);
+        if (!m[2]) return m[1];
+        return (m[3] ? (+m[3]) + ' ' : '') + MONTHS[+m[2] - 1] + ' ' + m[1];
+    }
+    // A name identifier as a link target: already a URL, else schemeUri + id, else a bare ROR id.
+    function idUrl(id, scheme, schemeUri) {
+        id = String(id == null ? '' : id).trim();
+        if (!id) return null;
+        if (/^https?:\/\//i.test(id)) return id;
+        if (/^https?:\/\//i.test(String(schemeUri || ''))) return String(schemeUri).replace(/\/+$/, '') + '/' + id;
+        if (/^ror$/i.test(String(scheme || '')) && /^0[0-9a-z]{8}$/i.test(id)) return 'https://ror.org/' + id;
+        return null;
+    }
+    function rorId(url) { var m = /^https?:\/\/ror\.org\/(0[0-9a-z]{8})\/?$/i.exec(String(url || '')); return m ? m[1] : null; }
+    function instFor(doi) {
+        var list = (PID.data && Array.isArray(PID.data.instruments)) ? PID.data.instruments : [], i;
+        for (i = 0; i < list.length; i++) if (list[i] && lc(list[i].doi) === lc(doi)) return list[i];
+        return null;
+    }
+    function instLabel(sel) {
+        var i = instFor(sel.doi) || {}, model = i.model || sel.model, serial = i.serial || sel.serial;
+        var role = i.role === 'recorder' ? 'recorder' : (i.role === 'sensor' ? 'coil' : '');
+        return (model || 'Instrument') + (role ? ' ' + role : '') + (serial ? ' · ' + serial : '');
+    }
+    // registry_doi -> survey title, from the feed this page loaded.
+    function surveyTitles() {
+        var out = {}, sv = U.surveyMap(PID.data), k;
+        for (k in sv) if (Object.prototype.hasOwnProperty.call(sv, k) && sv[k].registry_doi) out[lc(sv[k].registry_doi)] = sv[k].title || k;
+        return out;
+    }
+
+    // ---------- requests ----------
+    // fetch + full body, timed. Rejects only when no response arrived.
+    function getJSON(url, c) {
+        var ctrl = typeof AbortController === 'function' ? new AbortController() : null, timedOut = false, timer = 0, t0;
+        if (ctrl) { c.aborts.push(function () { ctrl.abort(); }); timer = setTimeout(function () { timedOut = true; ctrl.abort(); }, FETCH_MS); }
+        t0 = now();
+        return fetch(url, ctrl ? { cache: 'no-store', signal: ctrl.signal } : { cache: 'no-store' })
+            .then(function (r) {
+                return r.text().then(function (txt) {
+                    var ms = now() - t0, body = null;
+                    clearTimeout(timer);
+                    try { body = JSON.parse(txt); } catch (e) { /* body stays null */ }
+                    return { ok: r.ok, status: r.status, body: body, ms: ms };
+                });
+            })
+            .catch(function (err) {
+                clearTimeout(timer);
+                if (timedOut) throw new Error('no answer within ' + (FETCH_MS / 1000) + ' s');
+                throw new Error('the request failed' + (err && err.message ? ' (' + err.message + ')' : ''));
+            });
+    }
+
+    // ---------- painting ----------
+    function blank() { return { state: 'pending', get: null, ms: null, fields: null, after: null, note: null, match: null }; }
+
+    function fieldsHTML(f) {
+        if (!f || !f.length) return '';
+        return '<dl class="rv-dl">' + f.map(function (x) {
+            var v = x.s != null ? '<span class="rv-l">' + x.v + '</span><span class="rv-s">' + x.s + '</span>' : x.v;
+            return '<div' + (x.wide ? ' class="rv-wide"' : '') + '><dt>' + esc(x.k) + '</dt><dd>' + v + '</dd></div>';
+        }).join('') + '</dl>';
+    }
+
+    // Every hop, the deployment index included, is drawn by this one function.
+    function paint(k) {
+        var h = R.hops[k], d = HOPS[k], st = h.state, li = els.hops.children[k], badge = '', state = '';
+        if (!li) return;
+        if (st === 'done' && h.ms != null) badge = '<span class="rv-ms">' + esc(secs(h.ms)) + '</span>';
+        else if (st === 'running') badge = '<span class="rv-ms is-wait"><span aria-hidden="true">…</span><span class="sr-only">in progress</span></span>';
+        if (st === 'pending') state = '<span class="sr-only">, waiting</span>';
+        else if (st === 'done') state = '<span class="sr-only">, resolved</span>';
+        else if (st === 'failed') state = '<span class="sr-only">, did not resolve</span>';
+        li.className = 'rv-hop is-' + st;
+        li.innerHTML = '<div class="rv-mark"><span class="rv-disc" aria-hidden="true">' + (k + 1) + '</span>' + (st === 'done' ? ICON_CHECK : '') + '</div>'
+            + '<div class="rv-main">'
+            + '<div class="rv-head"><span class="rv-name">' + esc(d.name) + state + '</span><span class="rv-sub">' + esc(d.sub) + '</span>' + badge + '</div>'
+            + (h.get ? '<div class="rv-get">GET ' + esc(h.get) + '</div>' : '')
+            + fieldsHTML(h.fields)
+            + (h.after || '')
+            + (h.note ? '<p class="rv-note">' + h.note + '</p>' : '')
+            + (h.match === true ? '<div class="rv-match">' + ICON_TICK + 'The station record names the same DOI we started from.</div>' : '')
+            + (h.match === false ? '<p class="rv-note">The station record does not name this DOI.</p>' : '')
+            + '</div>';
+        U.resized();
+    }
+
+    function live(c) { return c.token === R.token; }
+    function running(c, k, url) {
+        if (!live(c)) return;
+        R.hops[k].state = 'running';
+        R.hops[k].get = url || null;
+        paint(k);
+    }
+    function done(c, k, ms, fields, extra) {
+        if (!live(c)) return;
+        var h = R.hops[k];
+        extra = extra || {};
+        h.state = 'done'; h.ms = ms; h.fields = fields;
+        h.after = extra.after || null; h.note = extra.note || null; h.match = extra.match == null ? null : extra.match;
+        paint(k);
+    }
+    function failed(c, k, err) {
+        if (!live(c)) return;
+        var h = R.hops[k];
+        h.state = 'failed'; h.ms = null; h.fields = null; h.after = null; h.match = null;
+        h.note = esc('Did not resolve: ' + String(err && err.message ? err.message : 'the request failed').replace(/[.\s]+$/, '') + '.');
+        paint(k);
+    }
+
+    // ---------- hop 1: doi.org ----------
+    function hopHandle(c) {
+        var url = HANDLE_API + encodeURI(c.doi) + '?type=URL';
+        running(c, 0, url);
+        return getJSON(url, c).then(function (res) {
+            if (res.ok && (!res.body || typeof res.body !== 'object' || res.body.responseCode == null)) throw new Error('the reply is not a handle record');
+            var b = res.body || {}, code = b.responseCode, land = null;
+            (Array.isArray(b.values) ? b.values : []).forEach(function (v) {
+                if (!land && v && v.type === 'URL' && v.data && v.data.value) land = String(v.data.value);
+            });
+            if (!res.ok || code !== 1 || !land) {
+                throw new Error('HTTP ' + res.status + (code != null ? ', response code ' + code + (HANDLE_CODES[code] ? ' (' + HANDLE_CODES[code] + ')' : '') : ''));
+            }
+            done(c, 0, res.ms, [
+                { k: 'points to', v: link(land), s: link(land, shortUrl(land)) },
+                { k: 'response', v: esc(code + ' · ' + HANDLE_CODES[code] + ' (HTTP ' + res.status + ')'), wide: true }
+            ]);
+        });
+    }
+
+    // ---------- hop 2: DataCite, the PIDINST record ----------
+    function dcTitle(a) {
+        var t = Array.isArray(a.titles) ? a.titles : [], i;
+        for (i = 0; i < t.length; i++) if (t[i] && t[i].title && !t[i].titleType) return String(t[i].title);
+        return t[0] && t[0].title ? String(t[0].title) : null;
+    }
+    function dcSerial(a) {
+        var lists = [a.alternateIdentifiers, a.identifiers], i, j, x;
+        for (i = 0; i < lists.length; i++) {
+            if (!Array.isArray(lists[i])) continue;
+            for (j = 0; j < lists[i].length; j++) {
+                x = lists[i][j] || {};
+                if (/^serial\s*number$/i.test(String(x.alternateIdentifierType || x.identifierType || '')) && (x.alternateIdentifier || x.identifier)) {
+                    return String(x.alternateIdentifier || x.identifier);
+                }
+            }
+        }
+        return null;
+    }
+    // PIDINST Manufacturer: the first creator, linked through its name identifier when it has one.
+    function dcMaker(a) {
+        var c = Array.isArray(a.creators) ? a.creators[0] : null, ids, url = null, i;
+        if (!c || !c.name) return null;
+        ids = Array.isArray(c.nameIdentifiers) ? c.nameIdentifiers : [];
+        for (i = 0; i < ids.length && !url; i++) if (ids[i]) url = idUrl(ids[i].nameIdentifier, ids[i].nameIdentifierScheme, ids[i].schemeUri);
+        return url ? link(url, c.name) : esc(c.name);
+    }
+    // PIDINST Owner: each HostingInstitution contributor, with its ROR.
+    function dcOwners(a) {
+        return (Array.isArray(a.contributors) ? a.contributors : []).filter(function (x) {
+            return x && x.contributorType === 'HostingInstitution' && x.name;
+        }).map(function (x) {
+            var ids = Array.isArray(x.nameIdentifiers) ? x.nameIdentifiers : [], ror = null, i, u;
+            for (i = 0; i < ids.length && !ror; i++) {
+                u = ids[i] ? idUrl(ids[i].nameIdentifier, ids[i].nameIdentifierScheme, ids[i].schemeUri) : null;
+                if (rorId(u)) ror = u;
+            }
+            return esc(x.name) + (ror ? ' · ' + link(ror, 'ROR ' + rorId(ror)) : '');
+        });
+    }
+    function dcCommissioned(a) {
+        var d = (Array.isArray(a.dates) ? a.dates : []).filter(function (x) {
+            return x && x.date && x.dateType === 'Other' && /^\s*commissioned\s*$/i.test(String(x.dateInformation || ''));
+        })[0];
+        return d ? fmtDate(d.date) : null;
+    }
+    function dcFunders(a) {
+        var seen = {}, out = [];
+        (Array.isArray(a.fundingReferences) ? a.fundingReferences : []).forEach(function (f) {
+            if (!f || !f.funderName || seen[lc(f.funderName)]) return;
+            seen[lc(f.funderName)] = 1;
+            var url = idUrl(f.funderIdentifier, f.funderIdentifierType, null);
+            out.push(url ? link(url, f.funderName) : esc(f.funderName));
+        });
+        return out;
+    }
+    function dcParts(a) {
+        return (Array.isArray(a.relatedIdentifiers) ? a.relatedIdentifiers : []).filter(function (r) {
+            return r && r.relationType === 'IsPartOf' && r.relatedIdentifier && lc(r.relatedIdentifierType) === 'doi';
+        }).map(function (r) { return String(r.relatedIdentifier); });
+    }
+    function partsCount(n) { return num(n) + ' survey ' + plural(n, 'record'); }
+    // The selected survey's record first, then the other records the index knows by name, then the rest.
+    function partsHTML(parts, c) {
+        var names = surveyTitles(), sv = U.surveyMap(PID.data)[c.sel.survey || ''], lead = sv && sv.registry_doi ? lc(sv.registry_doi) : null;
+        var ordered = parts.map(function (d, i) { return { d: d, i: i, w: lc(d) === lead ? 0 : (names[lc(d)] ? 1 : 2) }; })
+            .sort(function (x, y) { return x.w - y.w || x.i - y.i; });
+        var shown = ordered.slice(0, SHOW_PARTS).map(function (x) {
+            var t = names[lc(x.d)];
+            return doiLink(x.d) + (t ? ' (' + esc(t) + ')' : '');
+        });
+        var more = parts.length - shown.length;
+        return esc(partsCount(parts.length)) + ': ' + shown.join(', ') + (more > 0 ? ', +' + esc(num(more)) + ' more' : '');
+    }
+    function registryLink(a) {
+        var u = String(a.url || '');
+        if (!/^https?:\/\//i.test(u)) return null;
+        return '<p class="rv-more"><a href="' + esc(u) + '" rel="noopener">'
+            + (REGISTRY_URL.test(u) ? 'View in the AuScope Instrument Registry' : 'View the registered landing page')
+            + '<span aria-hidden="true">&nbsp;&#8599;</span>' + NEW_TAB + '</a></p>';
+    }
+
+    function hopDataCite(c) {
+        var url = DATACITE + encodeURI(c.doi);
+        running(c, 1, url);
+        return getJSON(url, c).then(function (res) {
+            var a = res.body && res.body.data && res.body.data.attributes;
+            if (!res.ok) {
+                var e = res.body && Array.isArray(res.body.errors) && res.body.errors[0] && res.body.errors[0].title;
+                throw new Error('HTTP ' + res.status + (e ? ', ' + e : ''));
+            }
+            if (!a || typeof a !== 'object') throw new Error('the reply is not a DataCite record');
+            var title = dcTitle(a), type = a.types && a.types.resourceTypeGeneral, serial = dcSerial(a), maker = dcMaker(a);
+            var owners = dcOwners(a), comm = dcCommissioned(a), funders = dcFunders(a), parts = dcParts(a);
+            var f = [
+                { k: 'title', v: title ? esc(title) : none('none registered') },
+                { k: 'resource type', v: type ? esc(type) : none('none registered') },
+                { k: 'serial number', v: serial ? esc(serial) : none('none registered') },
+                { k: 'manufacturer', v: maker || none('none registered') },
+                { k: 'owner', v: owners.length ? owners.join('; ') : none('none registered') }
+            ];
+            if (comm) f.push({ k: 'commissioned', v: esc(comm) });
+            if (funders.length) f.push({ k: 'funded by', v: funders.join(', ') });
+            f.push({ k: 'part of', v: parts.length ? partsHTML(parts, c) : none('no IsPartOf relation registered'),
+                     s: parts.length ? esc(partsCount(parts.length)) : null });
+            done(c, 1, res.ms, f, { after: registryLink(a) });
+        });
+    }
+
+    // ---------- hop 3: the deployment index ----------
+    // The occupation hop 4 opens: this DOI's first run in the selected survey (else its first run anywhere).
+    // Undated runs are counted apart and opened only when the DOI has no dated run at all.
+    function locate(c, feed) {
+        var key = lc(c.doi), st = {}, sv = {}, un = {}, nSt = 0, nSv = 0, nUndated = 0, dated = [];
+        var occ = (Array.isArray(feed.occupations) ? feed.occupations : []).filter(function (o) { return o && lc(o.doi) === key; });
+        occ.forEach(function (o) {
+            var k = o.survey + '/' + o.station;
+            if (!isFinite(dayIndex(o.start))) {
+                if (!un[k + '/' + o.run]) { un[k + '/' + o.run] = 1; nUndated++; }
+                return;
+            }
+            dated.push(o);
+            if (!st[k]) { st[k] = 1; nSt++; }
+            if (!sv[o.survey]) { sv[o.survey] = 1; nSv++; }
+        });
+        var base = dated.length ? dated : occ;
+        var inSv = c.sel.survey ? base.filter(function (o) { return String(o.survey) === String(c.sel.survey); }) : [];
+        var pool = (inSv.length ? inSv : base).slice().sort(function (x, y) {
+            return (dayIndex(x.start) - dayIndex(y.start)) || natural(x.start, y.start);
+        });
+        c.occ = pool[0] || null;
+        var gen = feed.metadata && feed.metadata.generated, gd = dayIndex(gen);
+        return { nSt: nSt, nSv: nSv, nUndated: nUndated, release: gen ? (isFinite(gd) ? fmtDay(gd) : String(gen).slice(0, 10)) : null };
+    }
+
+    function hopIndex(c) {
+        var url = FEED_URL;
+        running(c, 2, url);
+        return getJSON(url, c).then(function (res) {
+            var feed = res.body;
+            if (!res.ok || !feed || !Array.isArray(feed.occupations)) throw new Error(res.ok ? 'the reply is not the deployment index' : 'HTTP ' + res.status);
+            var f = locate(c, feed), o = c.occ;
+            var more = f.nUndated ? ', plus ' + num(f.nUndated) + ' undated ' + plural(f.nUndated, 'run') : '';
+            done(c, 2, res.ms, [
+                { k: 'found at', v: f.nSt
+                    ? esc(num(f.nSt) + ' ' + plural(f.nSt, 'station') + ' across ' + num(f.nSv) + ' ' + plural(f.nSv, 'survey') + more + ' · showing ' + o.survey + '/' + o.station)
+                    : none('no AusMT run names this DOI yet') },
+                { k: 'index built from', v: f.release ? esc('AusMT release ' + f.release) : none('release date not recorded') }
+            ]);
+        }).catch(function (err) {
+            // Hop 4 still needs a station: take it from the copy of the index this page loaded.
+            if (!c.occ && PID.data) locate(c, PID.data);
+            throw err;
+        });
+    }
+
+    // ---------- hop 4: the AusMT station record ----------
+    function device(d, comp, doi) {
+        if (!d) return null;
+        var name = [d.model, d.serial_number].filter(function (x) { return x != null && x !== ''; }).join(' · ') || 'unnamed';
+        var ids = (Array.isArray(d.identifiers) ? d.identifiers : []).filter(function (x) { return x && x.identifier; });
+        return esc(name) + (comp ? ' on ' + esc(comp) : '') + (ids.length ? ' → ' + ids.map(function (x) {
+            var t = esc((x.scheme ? x.scheme + ' ' : '') + x.identifier);
+            return lc(x.identifier) === lc(doi) ? '<strong>' + t + '</strong>' : t;
+        }).join(', ') : '');
+    }
+    function pickRun(runs, o, doi) {
+        var i;
+        for (i = 0; i < runs.length; i++) if (runs[i] && String(runs[i].id) === String(o.run)) return runs[i];
+        for (i = 0; i < runs.length; i++) if (runs[i] && runId(runs[i].id) === runId(o.run)) return runs[i];
+        for (i = 0; i < runs.length; i++) if (runs[i] && lc(JSON.stringify(runs[i])).indexOf(lc(doi)) >= 0) return runs[i];
+        return runs[0];
+    }
+
+    function hopStation(c) {
+        var o = c.occ;
+        if (!o) throw new Error('the deployment index has no run for this DOI, so there is no station record to open');
+        var url = STATION_BASE + encodeURIComponent(o.survey) + '/' + encodeURIComponent(o.station) + '/station.json';
+        running(c, 3, url);
+        return getJSON(url, c).then(function (res) {
+            var sj = res.body;
+            if (!res.ok || !sj || typeof sj !== 'object') throw new Error(res.ok ? 'the reply is not a station record' : 'HTTP ' + res.status);
+            var runs = (Array.isArray(sj.runs) ? sj.runs : []).filter(function (r) { return r && typeof r === 'object'; });
+            if (!runs.length) throw new Error('the station record lists no runs');
+            var run = pickRun(runs, o, c.doi), tp = run.time_period || {}, a = utc(tp.start), b = utc(tp.end);
+            var rate = run.sample_rate_hz != null && isFinite(run.sample_rate_hz)
+                ? Number(run.sample_rate_hz).toLocaleString('en-AU', { useGrouping: false, maximumFractionDigits: 3 }) + ' Hz' : null;
+            var id = runId(run.id) || 'unnamed run';
+            var long = [id, a && b ? fmtTime(a) + ' → ' + fmtTime(b) + ' UTC' : null, rate].filter(Boolean).join(' · ');
+            var short = [id, a && b ? U.fmtRange(dayIndex(a.toISOString()), dayIndex(b.toISOString())) : null, rate].filter(Boolean).join(' · ');
+
+            // The coil this DOI names (by component, else by DOI), or the first coil for a recorder.
+            var chans = (Array.isArray(run.channels) ? run.channels : []).filter(function (ch) { return ch && ch.sensor; }), coil = null, i;
+            for (i = 0; i < chans.length && !coil; i++) if (o.component && chans[i].component === o.component) coil = chans[i];
+            for (i = 0; i < chans.length && !coil; i++) if (lc(JSON.stringify(chans[i].sensor)).indexOf(lc(c.doi)) >= 0) coil = chans[i];
+            if (!coil) coil = chans[0] || null;
+            var logger = { k: 'data logger', v: device(run.data_logger, null, c.doi) || none('not in the record') };
+            var sensor = { k: 'magnetic sensor', v: coil ? device(coil.sensor, coil.component, c.doi) : none('not in the record') };
+            var isCoil = o.role === 'sensor';
+            if (isCoil) logger.wide = true; else sensor.wide = true;
+
+            // The open link follows the station record's own AusMT id.
+            if (live(c) && typeof sj.ausmt_id === 'string' && sj.ausmt_id) els.ausmt.href = AUSMT + '#/station/' + encodeURIComponent(sj.ausmt_id);
+
+            var named = lc(JSON.stringify(run)).indexOf(lc(c.doi)) >= 0;
+            done(c, 3, res.ms, [{ k: 'run', v: esc(long), s: esc(short) }].concat(isCoil ? [sensor, logger] : [logger, sensor]), { match: named });
+        });
+    }
+
+    // ---------- runs ----------
+    function paintStrip() {
+        var s = R.sel;
+        els.doi.innerHTML = esc(s.doi) + NEW_TAB;
+        els.doi.href = 'https://doi.org/' + encodeURI(s.doi);
+        els.inst.textContent = instLabel(s);
+    }
+    function idle() {
+        var k;
+        R.token++;
+        if (R.cur) { R.cur.aborts.forEach(function (f) { try { f(); } catch (e) { /* already settled */ } }); R.cur = null; }
+        R.hops = [];
+        for (k = 0; k < HOPS.length; k++) { R.hops.push(blank()); paint(k); }
+        els.ausmt.href = AUSMT;
+    }
+    // Unchanged text is not rewritten, so the live region stays quiet on a selection change.
+    function ready() { var t = HOPS.length + ' hops · ready'; if (els.total.textContent !== t) els.total.textContent = t; }
+    function run() {
+        if (!R.sel || !R.sel.doi) return;
+        R.pending = false;
+        idle();
+        var c = R.cur = { token: R.token, doi: R.sel.doi, sel: R.sel, aborts: [], occ: null };
+        var steps = [hopHandle, hopDataCite, hopIndex, hopStation], k = 0, t0 = now();
+        els.total.textContent = 'Resolving…';
+        (function next() {
+            if (!live(c)) return;
+            if (k === steps.length) { finish(c, now() - t0); return; }
+            var i = k++;
+            new Promise(function (resolve) { resolve(steps[i](c)); })
+                .catch(function (err) { failed(c, i, err); })
+                .then(next);
+        })();
+    }
+    function finish(c, ms) {
+        var bad = R.hops.filter(function (h) { return h.state === 'failed'; }).length;
+        R.cur = null;
+        els.total.innerHTML = esc(HOPS.length + ' hops') + (bad ? ' · ' + esc(num(bad) + ' did not resolve') : '')
+            + ' · <strong>' + esc((ms / 1000).toFixed(1) + ' s') + '</strong><span class="rv-l"> end to end</span>';
+        U.resized();
+    }
+    // Run now if the hop list is on screen, otherwise the next time it is.
+    function want() {
+        R.pending = true;
+        if (R.visible) run();
+    }
+    function setSel(d) {
+        R.sel = { doi: d.doi, model: d.model || null, serial: d.serial || null, survey: d.survey || null, station: d.station || null };
+        paintStrip();
+    }
+
+    function init() {
+        var cur = PID.selected || {};
+        if (!cur.doi) return;
+        setSel(cur);
+        els.hops.innerHTML = HOPS.map(function () { return '<li class="rv-hop is-pending"></li>'; }).join('');
+        idle();
+        ready();
+        els.body.hidden = false;
+        U.resized();
+
+        els.again.addEventListener('click', function () { run(); });
+        window.addEventListener('pid:selected', function (e) {
+            var d = (e && e.detail) || PID.selected || {}, p = PID.selected || {};
+            if (!d.doi) return;
+            // PID.select() carries no survey; #follow, whose listener runs first, records the stop it moved to.
+            if (!d.survey && p.doi === d.doi && p.survey) {
+                d = { doi: d.doi, model: d.model || p.model, serial: d.serial || p.serial, survey: p.survey, station: p.station, resolve: d.resolve };
+            }
+            var same = R.sel && R.sel.doi === d.doi && (R.sel.survey || null) === (d.survey || null);
+            if (same && (!d.resolve || R.cur)) return;      // nothing new, or already resolving this DOI
+            setSel(d);
+            if (!same) { idle(); ready(); }
+            want();
+        });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(function (entries) {
+                R.visible = entries[entries.length - 1].isIntersecting;
+                if (R.visible && R.pending) run();
+            }).observe(els.hops);
+        } else {
+            R.visible = true;
+            want();
+        }
+    }
+
+    PID.whenData(function () {
+        try { init(); }
+        catch (e) {
+            els.body.innerHTML = '<div class="status">This section could not be drawn (' + esc(e && e.message ? e.message : 'error') + ').</div>';
+            els.body.hidden = false;
+            U.resized();
+            if (window.console) console.error(e);
+        }
+    });
+})();
+</script>
+
+<script>
+/* ==================================================================
+   FEATURE 3 (#map): time-scrubber map
+   A station is "active" when any of its runs overlaps the 7 days ending
+   on the slider date. Play advances one week per tick.
+   ================================================================== */
+(function () {
+    'use strict';
+
+    var PID = window.PID, U = PID.util;
+    var esc = U.esc, num = U.num, num1 = U.num1, plural = U.plural, fmtDay = U.fmtDay;
+    var OUTLINE_URL = 'australia-outline.json';
+    var DEFAULT_DAY = U.dayIndex('2022-02-18');
+    var WINDOW = 7;                 // days in the week window
+    var CLUSTER_PX = 6;             // dots closer than this (screen px) link into one cluster...
+    var CLUSTER_MIN = 6;            // ...and more than 5 linked dots get a ringed, labelled mark
+    var TICK_MS = 450, TICK_EMPTY_MS = 40;
+
+    var els = {
+        body: document.getElementById('map-body'),
+        play: document.getElementById('map-play'),
+        range: document.getElementById('map-day'),
+        date: document.getElementById('map-date'),
+        spanLong: document.getElementById('map-span-long'),
+        spanShort: document.getElementById('map-span-short'),
+        svg: document.getElementById('map-svg'),
+        coast: document.querySelector('#map-svg .coast'),
+        dyn: document.getElementById('map-dyn'),
+        cap: document.getElementById('map-cap'),
+        why: document.getElementById('map-why'),
+        now: document.getElementById('map-now'),
+        follow: document.getElementById('map-follow'),
+        coverage: document.getElementById('map-coverage'),
+        live: document.getElementById('map-live'),
+        grid: document.querySelector('#map-body .map-grid')
+    };
+
+    var ICON_PLAY = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2l11 6-11 6z"></path></svg>';
+    var ICON_PAUSE = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2h4v12H3zM9 2h4v12H9z"></path></svg>';
+    var ICON_ARROW = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11V3M3 7l4-4 4 4"></path></svg>';
+    var NEW_TAB = '<span class="sr-only"> (opens in a new tab)</span>';
+    els.play.innerHTML = ICON_PLAY;
+
+    var M = {
+        ready: false, feed: null, surveys: {}, all: [], occ: [], buckets: [], min: 0, max: 0,
+        span: {}, nInst: 0, excluded: 0, untagged: false, missing: 0,
+        nRuns: 0, nStations: 0, excludedStations: 0, nUndatedRuns: 0, said: '', gridMin: 0,
+        outline: null, outlineFailed: false, w: 0, playing: false, timer: 0, it: null, itKey: null
+    };
+
+    // Equirectangular frame shared with the tracker maps: 112..154 E, 9..44 S, here at 600 x 520.
+    function proj(lat, lon) { return [(lon - 112) / 42 * 600, (-9 - lat) / 35 * 520]; }
+    function r1(x) { return Math.round(x * 10) / 10; }
+    function svTitle(id) { return (M.surveys[id] && M.surveys[id].title) || id; }
+    function svOrg(id) { return (M.surveys[id] && M.surveys[id].organisation) || ''; }
+
+    // ---------- coastline (same-origin, fetched once) ----------
+    var outlineP = fetch(OUTLINE_URL)
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (o) {
+            M.outline = (o && o.rings && o.rings.length) ? o.rings : null;
+            if (!M.outline) M.outlineFailed = true;
+        })
+        .catch(function () { M.outlineFailed = true; });
+
+    function drawCoast() {
+        if (!M.outline) return;
+        var out = '', i, j, ring, d, p;
+        for (i = 0; i < M.outline.length; i++) {
+            ring = M.outline[i]; d = '';
+            for (j = 0; j < ring.length; j++) {
+                p = proj(Number(ring[j][1]), Number(ring[j][0]));
+                d += (j === 0 ? 'M' : 'L') + r1(p[0]) + ',' + r1(p[1]);
+            }
+            out += '<path d="' + d + 'Z"></path>';
+        }
+        els.coast.innerHTML = out;
+    }
+
+    // ---------- data preparation ----------
+    // Distinct values of fn(x) over list.
+    function distinct(list, fn) {
+        var seen = {}, n = 0, i, k;
+        for (i = 0; i < list.length; i++) { k = fn(list[i]); if (!seen[k]) { seen[k] = 1; n++; } }
+        return n;
+    }
+    function runKey(x) { return x.key + '/' + x.run; }
+
+    function prepare(feed) {
+        var coords = feed.stations || {}, raw = feed.occupations || [], all = [], undated = {}, missing = {}, i, o, a, b, c, key;
+        M.feed = feed;
+        M.surveys = U.surveyMap(feed);
+        for (i = 0; i < raw.length; i++) {
+            o = raw[i];
+            if (!o) continue;
+            a = U.dayIndex(o.start); b = U.dayIndex(o.end);
+            key = String(o.survey) + '/' + String(o.station);
+            if (!isFinite(a)) { undated[key + '/' + String(o.run)] = 1; continue; }
+            if (!isFinite(b) || b < a) b = a;
+            c = coords[key];
+            if (!c || c.length < 2 || !isFinite(+c[0]) || !isFinite(+c[1])) { missing[key + '/' + String(o.run)] = 1; continue; }
+            all.push({
+                survey: String(o.survey), station: String(o.station), run: String(o.run), key: key, a: a, b: b,
+                role: o.role, model: o.model, serial: o.serial, doi: o.doi || null,
+                ikey: o.doi ? String(o.doi) : String(o.model || '?') + '|' + String(o.serial || '?'),
+                hours: Number(o.hours) || 0, af: o.af, lat: +c[0], lon: +c[1]
+            });
+        }
+        all.sort(function (x, y) { return x.a - y.a || x.b - y.b; });
+        M.all = all;
+        // Scope: AuScope-funded instruments (af === true). An untagged snapshot
+        // (no af at all) falls back to every instrument and says so.
+        M.occ = all.filter(function (x) { return x.af === true; });
+        if (!M.occ.length && all.length) { M.occ = all.slice(); M.untagged = true; }
+        M.excluded = all.length - M.occ.length;
+        // Each feed row is one instrument at one run, so runs and stations are counted by key.
+        M.nRuns = distinct(M.occ, runKey);
+        M.nStations = distinct(M.occ, function (x) { return x.key; });
+        M.nUndatedRuns = Object.keys(undated).length;
+        M.missing = Object.keys(missing).length;
+        M.excludedStations = 0;
+        if (!M.untagged) {
+            var funded = {};
+            M.occ.forEach(function (x) { funded[x.key] = 1; });
+            M.excludedStations = distinct(all.filter(function (x) { return !funded[x.key]; }), function (x) { return x.key; });
+        }
+
+        M.min = Infinity; M.max = -Infinity;
+        var inst = {};
+        M.span = {};
+        M.occ.forEach(function (x) {
+            if (x.a < M.min) M.min = x.a;
+            if (x.b > M.max) M.max = x.b;
+            inst[x.ikey] = 1;
+            var s = M.span[x.survey];
+            if (!s) M.span[x.survey] = { a: x.a, b: x.b };
+            else { if (x.a < s.a) s.a = x.a; if (x.b > s.b) s.b = x.b; }
+        });
+        M.nInst = Object.keys(inst).length;
+        // Day buckets: occupation indices covering each day.
+        M.buckets = new Array(M.max - M.min + 1);
+        M.occ.forEach(function (x, idx) {
+            for (var d = x.a; d <= x.b; d++) {
+                var k = d - M.min;
+                (M.buckets[k] || (M.buckets[k] = [])).push(idx);
+            }
+        });
+    }
+
+    // Occupations overlapping days [from, to], each once.
+    function windowOcc(from, to) {
+        var seen = {}, out = [], d, k, list, i;
+        for (d = Math.max(from, M.min); d <= Math.min(to, M.max); d++) {
+            list = M.buckets[d - M.min];
+            if (!list) continue;
+            for (i = 0; i < list.length; i++) {
+                k = list[i];
+                if (!seen[k]) { seen[k] = 1; out.push(M.occ[k]); }
+            }
+        }
+        return out;
+    }
+    function stationCount(from, to) {
+        var w = windowOcc(from, to), s = {}, n = 0, i;
+        for (i = 0; i < w.length; i++) if (!s[w[i].key]) { s[w[i].key] = 1; n++; }
+        return n;
+    }
+
+    // Why a week, in the feed's own numbers.
+    function renderWhy() {
+        // One hours value per run: the instrument rows of a run share it.
+        var seen = {}, hrs = [];
+        M.occ.forEach(function (x) {
+            if (!(x.hours > 0) || seen[runKey(x)]) return;
+            seen[runKey(x)] = 1;
+            hrs.push(x.hours);
+        });
+        hrs.sort(function (x, y) { return x - y; });
+        if (!hrs.length) { els.why.textContent = ''; return; }
+        var med = hrs.length % 2 ? hrs[(hrs.length - 1) / 2] : (hrs[hrs.length / 2 - 1] + hrs[hrs.length / 2]) / 2;
+        var spans = [], fieldDays = 0, sum1 = 0, sum7 = 0, empty1 = 0, d, j, k, n1, n7, inField;
+        for (k in M.span) if (Object.prototype.hasOwnProperty.call(M.span, k)) spans.push(M.span[k]);
+        for (d = M.min; d <= M.max; d++) {
+            // A field day lies inside some survey's span, from its first run to its last,
+            // and its 7-day window holds a run (long idle gaps inside a survey do not count).
+            for (inField = false, j = 0; j < spans.length && !inField; j++) inField = spans[j].a <= d && d <= spans[j].b;
+            if (!inField) continue;
+            n7 = stationCount(d - WINDOW + 1, d);
+            if (!n7) continue;
+            n1 = stationCount(d, d);
+            fieldDays++; sum1 += n1; sum7 += n7; if (!n1) empty1++;
+        }
+        if (!fieldDays) { els.why.textContent = ''; return; }
+        var days = Math.max(1, Math.round(med / 24));
+        els.why.textContent = 'Why a week: a run lasts about ' + days + ' ' + plural(days, 'day')
+            + ' (median ' + Math.round(med) + ' h over ' + num(hrs.length) + ' runs), so a single day catches few stations. '
+            + 'On days with a survey in the field, one day shows ' + Math.round(sum1 / fieldDays) + ' stations on average and none at all on '
+            + Math.round(100 * empty1 / fieldDays) + '% of them; the 7-day window shows ' + Math.round(sum7 / fieldDays) + '. '
+            + 'Play moves one week per tick, so no run is skipped, and hurries through weeks with nothing in the field.';
+    }
+
+    function renderCoverage() {
+        var m = M.feed.metadata || {}, t = '';
+        if (m.surveys_populated != null && m.surveys_total != null) {
+            t += num(m.surveys_populated) + ' of ' + num(m.surveys_total) + ' AusMT surveys carry run-level instrument identifiers so far · ';
+        }
+        t += num(M.nInst) + ' instruments · ' + num(M.nRuns) + ' ' + plural(M.nRuns, 'run')
+            + (M.nRuns === M.nStations ? ', one per station' : ' at ' + num(M.nStations) + ' ' + plural(M.nStations, 'station'))
+            + ' · the map fills in as more surveys are published with PIDs.';
+        if (M.untagged) t += ' Funding tags were missing from this snapshot, so every instrument is shown.';
+        else if (M.excludedStations) {
+            t += ' ' + num(M.excludedStations) + ' ' + plural(M.excludedStations, 'station') + ' recorded only by instruments without AuScope funding '
+                + plural(M.excludedStations, 'is', 'are') + ' left out.';
+        }
+        if (M.missing) t += ' ' + num(M.missing) + ' ' + plural(M.missing, 'run has', 'runs have') + ' no station coordinates and ' + plural(M.missing, 'is', 'are') + ' not mapped.';
+        if (M.nUndatedRuns) t += ' ' + num(M.nUndatedRuns) + ' ' + plural(M.nUndatedRuns, 'run has', 'runs have') + ' no recorded time period and cannot be placed on the timeline.';
+        els.coverage.textContent = t;
+    }
+
+    // ---------- the followed instrument ----------
+    function selKey(sel) { return sel ? (sel.doi || (String(sel.model) + '|' + String(sel.serial))) : ''; }
+
+    function itinerary(sel) {
+        var key = selKey(sel);
+        if (M.it && M.itKey === key) return M.it;
+        var occs = [], i, o, bySv = {}, stops = [], hours = 0, stn = {}, nStn = 0;
+        for (i = 0; i < M.all.length; i++) {
+            o = M.all[i];
+            if (sel.doi ? o.doi === sel.doi : (o.model === sel.model && o.serial === sel.serial)) occs.push(o);
+        }
+        occs.forEach(function (x) {
+            var s = bySv[x.survey], p;
+            if (!s) {
+                s = bySv[x.survey] = { survey: x.survey, title: svTitle(x.survey), first: x.a, last: x.b, occs: [], st: {}, n: 0, sx: 0, sy: 0 };
+                stops.push(s);
+            }
+            s.occs.push(x);
+            if (x.b > s.last) s.last = x.b;
+            if (!s.st[x.station]) { s.st[x.station] = 1; s.n++; p = proj(x.lat, x.lon); s.sx += p[0]; s.sy += p[1]; }
+            if (!stn[x.key]) { stn[x.key] = 1; nStn++; }
+            hours += x.hours;
+        });
+        stops.forEach(function (s, idx) { s.idx = idx; s.xy = [s.sx / s.n, s.sy / s.n]; });
+        var f = occs[0];
+        M.itKey = key;
+        M.it = {
+            occs: occs, stops: stops, hours: hours, nStations: nStn,
+            model: f ? f.model : sel.model, serial: f ? f.serial : sel.serial,
+            role: f ? f.role : null, doi: sel.doi || (f && f.doi) || null
+        };
+        return M.it;
+    }
+
+    function followState(it, D) {
+        var latest = null, i, st = { latest: null, cur: -1, recording: false, next: null, nextOcc: null, drawn: [] };
+        // nextOcc: the first run after D, which may be in a survey the instrument already visited.
+        for (i = 0; i < it.occs.length; i++) {
+            if (it.occs[i].a <= D) latest = it.occs[i]; else { st.nextOcc = it.occs[i]; break; }
+        }
+        st.latest = latest;
+        it.stops.forEach(function (s) {
+            if (s.first <= D) st.drawn.push(s);
+            else if (!st.next) st.next = s;
+        });
+        if (latest) {
+            for (i = 0; i < it.stops.length; i++) {
+                if (it.stops[i].survey === latest.survey) {
+                    if (it.stops[i].last >= D - WINDOW + 1) st.cur = i;
+                    st.last = it.stops[i];
+                    break;
+                }
+            }
+            st.recording = latest.b >= D - WINDOW + 1;
+        }
+        return st;
+    }
+
+    // ---------- labels: greedy placement, no overlaps, inside the frame ----------
+    function placeLabel(boxes, x, y, r, text, fs, u) {
+        var tw = text.length * fs * 0.5, gap = 4 * u, i, j, c, bx;
+        var cands = [
+            [x + r + gap, y - r * 0.3 + fs * 0.35, 'start'],
+            [x - r - gap, y + fs * 0.35, 'end'],
+            [x, y - r - gap, 'middle'],
+            [x, y + r + fs, 'middle']
+        ];
+        for (i = 0; i < cands.length; i++) {
+            c = cands[i];
+            var x0 = c[2] === 'start' ? c[0] : (c[2] === 'end' ? c[0] - tw : c[0] - tw / 2);
+            bx = [x0, c[1] - fs * 0.85, x0 + tw, c[1] + fs * 0.25];
+            if (bx[0] < 2 || bx[2] > 598 || bx[1] < 2 || bx[3] > 518) continue;
+            var hit = false;
+            for (j = 0; j < boxes.length; j++) {
+                var o = boxes[j];
+                if (bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1]) { hit = true; break; }
+            }
+            if (hit) continue;
+            boxes.push(bx);
+            return { x: c[0], y: c[1], anchor: c[2] };
+        }
+        return null;
+    }
+
+    // Single-linkage clusters of screen-close dots.
+    function clusters(pts, thr) {
+        var parent = [], i, j, t2 = thr * thr, groups = {}, out = [], k;
+        function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+        for (i = 0; i < pts.length; i++) parent[i] = i;
+        for (i = 0; i < pts.length; i++) {
+            for (j = i + 1; j < pts.length; j++) {
+                var dx = pts[i].xy[0] - pts[j].xy[0], dy = pts[i].xy[1] - pts[j].xy[1];
+                if (dx * dx + dy * dy <= t2) { var ri = find(i), rj = find(j); if (ri !== rj) parent[ri] = rj; }
+            }
+        }
+        for (i = 0; i < pts.length; i++) { k = find(i); (groups[k] || (groups[k] = [])).push(pts[i]); }
+        for (k in groups) if (Object.prototype.hasOwnProperty.call(groups, k)) out.push(groups[k]);
+        return out;
+    }
+
+    // ---------- main render ----------
+    function setDay(v) {
+        v = Math.max(M.min, Math.min(M.max, Math.round(v)));
+        els.range.value = String(v);
+        var p = M.max > M.min ? (v - M.min) / (M.max - M.min) : 0;
+        els.range.style.setProperty('--p', String(Math.round(p * 10000) / 10000));
+        els.range.setAttribute('aria-valuetext', 'week ending ' + fmtDay(v));
+        els.date.textContent = fmtDay(v);
+    }
+
+    function render() {
+        if (!M.ready) return;
+        var D = +els.range.value, from = D - WINDOW + 1;
+        var w = els.svg.getBoundingClientRect().width || 600;
+        M.w = w;
+        var u = 600 / w;                       // viewBox units per screen pixel
+        var occ = windowOcc(from, D);
+
+        // tallies for the week
+        var st = {}, stList = [], inst = {}, nInst = 0, nRec = 0, nCoil = 0, svs = {}, svList = [], i, o;
+        for (i = 0; i < occ.length; i++) {
+            o = occ[i];
+            if (!st[o.key]) { st[o.key] = { key: o.key, survey: o.survey, xy: proj(o.lat, o.lon) }; stList.push(st[o.key]); }
+            if (!inst[o.ikey]) {
+                inst[o.ikey] = 1; nInst++;
+                if (o.role === 'recorder') nRec++; else if (o.role === 'sensor') nCoil++;
+            }
+            if (!svs[o.survey]) { svs[o.survey] = 1; svList.push(o.survey); }
+        }
+        svList.sort(function (x, y) { return M.span[x].a - M.span[y].a; });
+
+        // followed instrument
+        var sel = PID.selected || {};
+        var it = itinerary(sel);
+        var fs = followState(it, D);
+        // The filled mark only while it records or within 14 days of its last run; otherwise its survey reads as an earlier stop.
+        var curXY = (fs.cur >= 0 && fs.latest && (fs.recording || D - fs.latest.b <= 14)) ? proj(fs.latest.lat, fs.latest.lon) : null;
+
+        // ----- SVG -----
+        var parts = [], boxes = [], labels = [], k, g;
+        var rDot = 3.5 * u, rStop = 6 * u, rCur = 7 * u;
+
+        if (fs.drawn.length) {
+            var pts = fs.drawn.map(function (s) { return (s.idx === fs.cur && curXY) ? curXY : s.xy; });
+            if (pts.length > 1) {
+                parts.push('<polyline class="trail" points="' + pts.map(function (p) { return r1(p[0]) + ',' + r1(p[1]); }).join(' ')
+                    + '" stroke-width="' + r1(1.5 * u) + '" stroke-dasharray="' + r1(4 * u) + ' ' + r1(4 * u) + '"></polyline>');
+            }
+            fs.drawn.forEach(function (s) {
+                if (s.idx === fs.cur && curXY) return;
+                parts.push('<circle class="stop-past" cx="' + r1(s.xy[0]) + '" cy="' + r1(s.xy[1]) + '" r="' + r1(rStop) + '" stroke-width="' + r1(2 * u) + '"></circle>');
+            });
+        }
+
+        var groups = clusters(stList, CLUSTER_PX * u), big = [];
+        for (k = 0; k < groups.length; k++) {
+            g = groups[k];
+            if (g.length < CLUSTER_MIN) continue;
+            var cx = 0, cy = 0, maxd = 0, bySv = {}, top = null;
+            g.forEach(function (p) { cx += p.xy[0]; cy += p.xy[1]; bySv[p.survey] = (bySv[p.survey] || 0) + 1; });
+            cx /= g.length; cy /= g.length;
+            g.forEach(function (p) { var dd = Math.sqrt(Math.pow(p.xy[0] - cx, 2) + Math.pow(p.xy[1] - cy, 2)); if (dd > maxd) maxd = dd; });
+            for (var sv in bySv) if (!top || bySv[sv] > bySv[top]) top = sv;
+            var rh = Math.max(maxd + 6 * u, 16 * u);
+            big.push({ n: bySv[top], x: cx, y: cy, r: rh, survey: top });       // n: the named survey's stations only
+            if (rh <= 40 * u) {
+                parts.push('<circle class="halo" cx="' + r1(cx) + '" cy="' + r1(cy) + '" r="' + r1(rh) + '" stroke-width="' + r1(1.5 * u) + '"></circle>');
+            }
+        }
+        big.sort(function (x, y) { return y.n - x.n; });
+
+        stList.forEach(function (p) {
+            parts.push('<circle class="dot" cx="' + r1(p.xy[0]) + '" cy="' + r1(p.xy[1]) + '" r="' + r1(rDot) + '" stroke-width="' + r1(1.2 * u) + '"></circle>');
+        });
+
+        if (curXY) {
+            parts.push('<circle class="cur" cx="' + r1(curXY[0]) + '" cy="' + r1(curXY[1]) + '" r="' + r1(rCur) + '" stroke-width="' + r1(2 * u) + '"></circle>');
+            parts.push('<circle class="cur-ring" cx="' + r1(curXY[0]) + '" cy="' + r1(curXY[1]) + '" r="' + r1(rCur + 1.8 * u) + '" stroke-width="' + r1(1.5 * u) + '"></circle>');
+        }
+
+        // labels: clusters first (always), then the followed instrument's stops (wide maps only).
+        // Marks are obstacles too, so a label never sits on a ring, stop or the current mark.
+        function obstacle(x, y, r) { boxes.push([x - r, y - r, x + r, y + r]); }
+        big.forEach(function (c) { if (c.r <= 40 * u) obstacle(c.x, c.y, c.r); });
+        fs.drawn.forEach(function (s) { var p = (s.idx === fs.cur && curXY) ? curXY : s.xy; obstacle(p[0], p[1], (s.idx === fs.cur && curXY) ? rCur + 2 * u : rStop); });
+        var fsC = 12 * u, fsS = 11 * u, labelled = {};
+        big.forEach(function (c) {
+            var text = svTitle(c.survey) + ' · ' + c.n + ' ' + plural(c.n, 'station');
+            var pl = placeLabel(boxes, c.x, c.y, c.r, text, fsC, u);
+            if (pl) { labels.push({ cls: 'lbl lbl-cluster', pl: pl, fs: fsC, text: text }); labelled[c.survey] = 1; }
+        });
+        if (w >= 480) {
+            fs.drawn.forEach(function (s) {
+                if (labelled[s.survey]) return;
+                var p = (s.idx === fs.cur && curXY) ? curXY : s.xy;
+                var pl = placeLabel(boxes, p[0], p[1], rStop, s.title, fsS, u);
+                if (pl) labels.push({ cls: 'lbl lbl-stop', pl: pl, fs: fsS, text: s.title });
+            });
+        }
+        labels.forEach(function (l) {
+            parts.push('<text class="' + l.cls + '" x="' + r1(l.pl.x) + '" y="' + r1(l.pl.y) + '" text-anchor="' + l.pl.anchor
+                + '" font-size="' + r1(l.fs) + '" stroke-width="' + r1(3 * u) + '">' + esc(l.text) + '</text>');
+        });
+        els.dyn.innerHTML = parts.join('');
+
+        // ----- captions -----
+        var who = it.occs.length ? ((it.model || 'Instrument') + ' ' + (it.serial || '')) : '';
+        var svNames = svList.map(svTitle);
+        els.svg.setAttribute('aria-label', 'Map of Australia: ' + stList.length + ' ' + plural(stList.length, 'station') + ' recording in the week to ' + fmtDay(D)
+            + (svNames.length ? ' (' + svNames.join(', ') + ')' : '')
+            + (who ? '; ' + who + (fs.recording && fs.latest ? ' recording at ' + fs.latest.station : ', ' + fs.drawn.length + ' of ' + it.stops.length + ' stops so far') : '') + '.');
+
+        var cap = 'Week to ' + fmtDay(D) + ' · ';
+        if (!stList.length) cap += 'no indexed station was recording.';
+        else {
+            cap += svNames.join(', ') + '.';
+            // Only the clusters whose ring is drawn.
+            var ringed = big.filter(function (c) { return c.r <= 40 * u; });
+            if (ringed.length) {
+                cap += ' Stations within a few pixels of each other at this scale share a ringed mark: '
+                    + ringed.map(function (c) { return c.n + ' of ' + svTitle(c.survey); }).join(', ') + '.';
+            }
+        }
+        if (fs.drawn.some(function (s) { return s.idx !== fs.cur || !curXY; })) cap += ' Hollow marks are the earlier stops of the followed instrument.';
+        if (M.outlineFailed) cap += ' Coastline outline unavailable.';
+        els.cap.textContent = cap;
+
+        renderNow(D, stList.length, nInst, nRec, nCoil, svList);
+        renderFollow(D, sel, it, fs);
+
+        if (!M.playing) {
+            // Only a changed week is announced; a resize or selection re-render stays quiet.
+            var said = 'Week to ' + fmtDay(D) + ': ' + nInst + ' ' + plural(nInst, 'instrument') + ' recording at '
+                + stList.length + ' ' + plural(stList.length, 'station') + (svNames.length ? ', ' + svNames.join(', ') : '') + '.';
+            if (said !== M.said) { M.said = said; els.live.textContent = said; }
+        } else if (els.grid && els.grid.offsetHeight > M.gridMin) {
+            // While playing the map block only grows, so the embed does not bounce in height every tick.
+            M.gridMin = els.grid.offsetHeight;
+            els.grid.style.minHeight = M.gridMin + 'px';
+        }
+        PID.util.resized();
+        return stList.length;
+    }
+
+    function renderNow(D, nSt, nInst, nRec, nCoil, svList) {
+        var h = '<div class="kicker">In the week to ' + esc(fmtDay(D)) + '</div>'
+            + '<div class="now-grid">'
+            + '<div class="stat"><div class="stat-big">' + num(nInst) + '</div><div class="stat-lbl">' + plural(nInst, 'instrument') + ' recording</div></div>'
+            + '<div class="stat"><div class="stat-big">' + num(nSt) + '</div><div class="stat-lbl">' + plural(nSt, 'station') + ' active</div></div>'
+            + '<div class="stat"><div class="stat-mid">' + num(nRec) + ' · ' + num(nCoil) + '</div><div class="stat-lbl">recorders · coils</div></div>'
+            + '<div class="stat"><div class="stat-mid">' + num(svList.length) + '</div><div class="stat-lbl">' + plural(svList.length, 'survey') + ' in the field</div></div>'
+            + '</div>';
+        if (svList.length) {
+            h += '<ul class="plain">' + svList.map(function (id) {
+                var s = M.span[id], org = svOrg(id);
+                return '<li><strong>' + esc(svTitle(id)) + '</strong>' + (org ? ' · ' + esc(org) : '') + ' · ' + esc(U.fmtRange(s.a, s.b)) + '</li>';
+            }).join('') + '</ul>';
+        } else {
+            var next = null, i;
+            for (i = 0; i < M.occ.length; i++) { if (M.occ[i].a > D) { next = M.occ[i]; break; } }
+            if (next) {
+                h += '<p class="now-empty">No indexed survey was recording this week. Next in the field: <strong>' + esc(svTitle(next.survey)) + '</strong>, from ' + esc(fmtDay(next.a)) + '.</p>'
+                    + '<button type="button" class="btn compact" data-skip="' + next.a + '" style="align-self:flex-start">Skip to the week of ' + esc(fmtDay(next.a)) + '</button>';
+            } else {
+                h += '<p class="now-empty">No indexed survey was recording this week.</p>';
+            }
+        }
+        els.now.innerHTML = h;
+    }
+
+    function renderFollow(D, sel, it, fs) {
+        var roleWord = it.role === 'recorder' ? 'recorder' : (it.role === 'sensor' ? 'coil' : '');
+        var title = (it.model || 'Instrument') + (roleWord ? ' ' + roleWord : '') + (it.serial ? ' · ' + it.serial : '');
+        var h = '<div class="follow-head"><span aria-hidden="true" class="swatch-cur"></span><span class="kicker">Following</span></div>'
+            + '<div class="follow-title">' + esc(title) + '</div>';
+        if (it.doi) h += '<a class="doi-chip" href="https://doi.org/' + esc(encodeURI(it.doi)) + '" rel="noopener" style="align-self:flex-start">' + esc(it.doi) + NEW_TAB + '</a>';
+
+        if (!it.occs.length) {
+            h += '<p class="follow-status">No runs for this instrument in the surveys indexed so far.</p>';
+            els.follow.innerHTML = h + followLink();
+            return;
+        }
+        h += '<p class="follow-meta">' + num(it.stops.length) + ' ' + plural(it.stops.length, 'survey') + ' · '
+            + num(it.nStations) + ' ' + plural(it.nStations, 'station') + ' · ' + num1(it.hours) + ' h recorded</p>';
+
+        var n = it.stops.length, s, msg;
+        if (!fs.latest) {
+            s = it.stops[0];
+            msg = 'Not in the field yet. First stop: <strong>' + esc(s.title) + '</strong>, from ' + esc(fmtDay(s.first)) + '.';
+        } else if (fs.cur >= 0 && fs.recording) {
+            msg = 'Stop ' + (fs.cur + 1) + ' of ' + n + ' · recording at <strong>' + esc(fs.latest.station) + '</strong>, '
+                + esc(svTitle(fs.latest.survey)) + ', this week.';
+        } else if (fs.cur >= 0) {
+            msg = 'Stop ' + (fs.cur + 1) + ' of ' + n + ' · ' + esc(svTitle(fs.latest.survey)) + ' · between runs; last recorded at <strong>'
+                + esc(fs.latest.station) + '</strong> on ' + esc(fmtDay(fs.latest.b)) + '.';
+        } else if (fs.nextOcc) {
+            msg = 'Between surveys. Last: ' + esc(fs.last.title) + ', to ' + esc(fmtDay(fs.last.last)) + '. Next: <strong>'
+                + esc(svTitle(fs.nextOcc.survey)) + '</strong>, from ' + esc(fmtDay(fs.nextOcc.a)) + '.';
+        } else {
+            msg = 'Past its last indexed stop, ' + esc(fs.last.title) + ', which ended ' + esc(fmtDay(fs.last.last)) + '.';
+        }
+        h += '<p class="follow-status">' + msg + '</p>';
+
+        h += '<ol class="stops">' + it.stops.map(function (st) {
+            var cls = st.idx === fs.cur ? 'current' : (st.first > D ? 'future' : 'past');
+            return '<li class="' + cls + '"' + (cls === 'current' ? ' aria-current="step"' : '') + '>'
+                + esc(st.title) + ' · ' + esc(U.fmtMonthRange(st.first, st.last))
+                + (cls === 'current' && fs.recording ? ' · here this week' : '') + '</li>';
+        }).join('') + '</ol>';
+        els.follow.innerHTML = h + followLink();
+    }
+
+    // Link up to #follow only once that section has content to land on.
+    function followLink() {
+        var f = document.getElementById('follow');
+        if (!f || !f.children.length) return '';
+        return '<a class="btn" href="#follow" target="_self">Follow this instrument ' + ICON_ARROW + '</a>';
+    }
+
+    // ---------- play ----------
+    function setPlaying(on) {
+        M.playing = on;
+        els.play.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+        els.play.setAttribute('aria-pressed', on ? 'true' : 'false');     // the label stays 'Play'; pressed means playing
+        els.live.setAttribute('aria-live', on ? 'off' : 'polite');
+        if (!on && els.grid) { els.grid.style.minHeight = ''; M.gridMin = 0; }
+    }
+    function stopPlay() {
+        if (M.timer) { clearTimeout(M.timer); M.timer = 0; }
+        if (M.playing) { setPlaying(false); render(); }
+    }
+    // Stop without a re-render: the panel already shows this week, and redrawing it
+    // would remove the element a keyboard user has just moved focus to.
+    function pause() {
+        if (M.timer) { clearTimeout(M.timer); M.timer = 0; }
+        if (M.playing) setPlaying(false);
+    }
+    function tick() {
+        M.timer = 0;
+        var v = +els.range.value + WINDOW;
+        if (v > M.max) { setDay(M.max); stopPlay(); render(); return; }
+        setDay(v);
+        var n = render();
+        M.timer = setTimeout(tick, n ? TICK_MS : TICK_EMPTY_MS);
+    }
+    function startPlay() {
+        if (+els.range.value >= M.max) setDay(M.min);
+        setPlaying(true);
+        var n = render();
+        M.timer = setTimeout(tick, n ? TICK_MS : TICK_EMPTY_MS);
+    }
+
+    // ---------- init ----------
+    function init(feed) {
+        prepare(feed);
+        if (!M.occ.length) {
+            els.body.hidden = false;
+            els.body.innerHTML = '<div class="status">The feed has no instrument runs with station coordinates yet, so there is nothing to map.</div>';
+            PID.util.resized();
+            return;
+        }
+        drawCoast();
+        renderCoverage();
+        renderWhy();
+
+        els.range.min = String(M.min);
+        els.range.max = String(M.max);
+        els.spanLong.textContent = fmtDay(M.min) + ' → ' + fmtDay(M.max) + ' · one week per tick';
+        els.spanShort.textContent = new Date(M.min * 86400000).getUTCFullYear() + ' → ' + new Date(M.max * 86400000).getUTCFullYear();
+        setDay(isFinite(DEFAULT_DAY) ? DEFAULT_DAY : M.max);
+        els.range.disabled = false;
+        els.play.disabled = false;
+        els.body.hidden = false;
+        M.ready = true;
+
+        els.range.addEventListener('input', function () {
+            if (M.timer) { clearTimeout(M.timer); M.timer = 0; }
+            if (M.playing) setPlaying(false);
+            setDay(+els.range.value);
+            render();
+        });
+        // Arrows step a week, Page keys a year (52 weeks), Home and End the ends of the record.
+        els.range.addEventListener('keydown', function (e) {
+            var v = +els.range.value;
+            switch (e.key) {
+                case 'ArrowLeft': case 'ArrowDown': v -= WINDOW; break;
+                case 'ArrowRight': case 'ArrowUp': v += WINDOW; break;
+                case 'PageDown': v -= 52 * WINDOW; break;
+                case 'PageUp': v += 52 * WINDOW; break;
+                case 'Home': v = M.min; break;
+                case 'End': v = M.max; break;
+                default: return;
+            }
+            e.preventDefault();
+            pause();
+            setDay(v);
+            render();
+        });
+        els.play.addEventListener('click', function () { if (M.playing) stopPlay(); else startPlay(); });
+        // Keyboard focus entering the side panel pauses play, so the panel holds still.
+        els.follow.addEventListener('focusin', pause);
+        els.now.addEventListener('focusin', pause);
+        els.now.addEventListener('click', function (e) {
+            var b = e.target && e.target.closest ? e.target.closest('[data-skip]') : null;
+            if (!b) return;
+            stopPlay();
+            setDay(+b.getAttribute('data-skip') + WINDOW - 1);
+            render();
+            els.range.focus({ preventScroll: true });
+        });
+        window.addEventListener('pid:selected', function () { render(); });
+
+        if ('ResizeObserver' in window) {
+            new ResizeObserver(function () {
+                var w = els.svg.getBoundingClientRect().width;
+                if (w && Math.abs(w - M.w) > 1) render();
+            }).observe(els.svg);
+        } else {
+            window.addEventListener('resize', function () { render(); });
+        }
+        render();
+    }
+
+    PID.whenData(function (feed) {
+        outlineP.then(function () {
+            try { init(feed); }
+            catch (e) {
+                els.body.hidden = false;
+                els.body.innerHTML = '<div class="status">The map could not be drawn (' + esc(e && e.message ? e.message : 'error') + ').</div>';
+                PID.util.resized();
+                if (window.console) console.error(e);
+            }
+        });
+    });
+})();
+</script>
+
+<script>
+/* Kick off the feed once every feature has registered with PID.whenData. */
+window.PID._loadFeed();
+</script>
+
+<script>
+/* Auto-height (child side of the Squarespace embed). Measures #embed-root and
+   posts {type:'auscope-embed:height', height} to the parent, debounced 50 ms. */
+(function () {
+  'use strict';
+  if (window.parent === window) return;               // opened directly: an ordinary page
+  var root = document.getElementById('embed-root');
+  if (!root) return;
+  var last = -1, timer = 0;
+
+  // Measure the wrapper, NOT documentElement.scrollHeight. scrollHeight can never
+  // report less than the iframe's current height, so the frame could grow but never shrink.
+  function measure() { return Math.ceil(root.getBoundingClientRect().height); }
+
+  function send(force) {
+    timer = 0;
+    var h = measure();
+    if (!force && Math.abs(h - last) < 2) return;     // ignore sub-pixel jitter (stops resize ping-pong)
+    last = h;
+    // Payload is a single number, so '*' leaks nothing. The parent checks origin AND source.
+    // A strict targetOrigin would also drop messages in Squarespace's preview frames.
+    window.parent.postMessage({ type: 'auscope-embed:height', height: h }, '*');
+  }
+  // setTimeout, not requestAnimationFrame: rAF stalls in offscreen cross-origin frames.
+  function schedule() { if (!timer) timer = setTimeout(function () { send(false); }, 50); }
+  window.auscopeEmbedResize = schedule;               // the app calls this after each render, tab switch or expand
+
+  if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(root);
+  else setInterval(schedule, 500);
+  window.addEventListener('load', schedule);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  window.addEventListener('message', function (e) {
+    if (e.source === window.parent && e.data && e.data.type === 'auscope-embed:hello') send(true);
+  });
+  // Hide our own scrollbar only once the parent has proved it resizes us (our viewport
+  // now equals the height we asked for). If the listener is missing (Ajax navigation,
+  // editor preview), the page stays scrollable inside its fallback height. Only a change in
+  // our height counts: a width-only resize near the fallback height proves nothing.
+  var vh = window.innerHeight;
+  window.addEventListener('resize', function () {
+    var changed = window.innerHeight !== vh;
+    vh = window.innerHeight;
+    if (changed && last > 0 && Math.abs(vh - last) < 2) document.documentElement.classList.add('ah-on');
+  });
+  // In-page links (#follow, #map, ...): once the parent sizes us to our content, our own viewport
+  // is the whole document, so a fragment jump has nothing to scroll and the parent page stays put
+  // (cross-origin, the browser does not scroll it for us). Ask the parent to scroll instead, and move
+  // keyboard focus to the target as the jump would have (the reader's own click, so not on load). Before
+  // ah-on (listener missing, editor preview) the default jump scrolls inside the frame and is left alone.
+  document.addEventListener('click', function (e) {
+    if (!document.documentElement.classList.contains('ah-on')) return;
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    var id = a ? a.getAttribute('href').slice(1) : '', el = id ? document.getElementById(id) : null;
+    if (!el) return;
+    e.preventDefault();
+    var top = el.getBoundingClientRect().top - root.getBoundingClientRect().top;
+    window.parent.postMessage({ type: 'auscope-embed:scroll', top: Math.max(0, Math.round(top)) }, '*');
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+  });
+  send(true);
+})();
+</script>
+</body>
+</html>
