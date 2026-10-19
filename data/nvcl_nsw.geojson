@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-10-13T10:55:18Z"
+    "fetched": "2026-10-19T00:19:44Z"
   },
   "features": [
     {
@@ -29572,6 +29572,34 @@
         "coordinates": [
           146.9934,
           -31.6081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nyngan Scandium Project: SNRDD003",
+        "boreholeId": "MIN_230166",
+        "boreholeLength": 45.70000076293945,
+        "elevation": 183.467,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-10-12",
+        "firstSeen": "2026-10-19",
+        "scannedMetres": 45.7,
+        "project": "Nyngan Scandium Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.995,
+          -31.6104
         ]
       }
     },

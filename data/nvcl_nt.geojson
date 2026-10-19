@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nt",
     "stateLabel": "Northern Territory",
-    "fetched": "2026-10-13T10:55:18Z"
+    "fetched": "2026-10-19T00:19:44Z"
   },
   "features": [
     {
@@ -5956,7 +5956,7 @@
         "purpose": null,
         "instrument": "HyLogger 2-7",
         "drillDate": null,
-        "datasetCreated": null,
+        "datasetCreated": "2026-10-15",
         "firstSeen": "2026-03-26",
         "scannedMetres": 88.82,
         "project": null,
