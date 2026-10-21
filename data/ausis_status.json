@@ -1,209 +1,209 @@
 {
-  "checked": "2026-10-20T23:51:35Z",
+  "checked": "2026-10-21T04:43:15Z",
   "stations": {
     "AUBRN": {
       "streaming": false,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUGRF": {
       "streaming": false,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUMAR": {
       "streaming": false,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMOU": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUBSH": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUKHS": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUNRC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUDCS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUWSH": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUSSC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AURSC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUNHS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUTKS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AULHS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUBRM": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUALB": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUUHS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUKAR": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMBR": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUROX": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUSMG": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
-    "AUYLT": {
+    "AURSC": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
-    "AUHPC": {
+    "AULHS": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
-    "AUALC": {
+    "AUKAR": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUCSH": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUCAR": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
-    "AUDHS": {
+    "AUBSH": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUKAL": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUJCS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUPHS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMTS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUPKL": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUCAS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUTOO": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUKAT": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUKSC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMAG": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUTAR": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUKUL": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUAYR": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMHS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUBUS": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUANU": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUOKV": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMTC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUAPY": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AURMK": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AULRC": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
-    },
-    "AUMAZ": {
-      "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUDAR": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUHPC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUKUL": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMTS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUUHS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
     },
     "AUHAR": {
       "streaming": true,
-      "checkedAt": "2026-10-20T23:51:35Z"
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUOKV": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUNRC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUBUS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUTOO": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUAYR": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMHS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUCAS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUYLT": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMAZ": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUTKS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMBR": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUCSH": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUANU": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUKAT": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AULRC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUROX": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUALB": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AURMK": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUJCS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUALC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUWSH": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUAPY": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUSSC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUPKL": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUTAR": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUBRM": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMTC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUDCS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUDHS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUKAL": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUKSC": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMOU": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUNHS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUPHS": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
+    },
+    "AUMAG": {
+      "streaming": true,
+      "checkedAt": "2026-10-21T04:43:15Z"
     }
   }
 }
