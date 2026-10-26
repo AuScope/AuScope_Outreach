@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "sa",
     "stateLabel": "South Australia",
-    "fetched": "2026-10-19T00:19:44Z"
+    "fetched": "2026-10-26T00:11:34Z"
   },
   "features": [
     {
@@ -53528,7 +53528,7 @@
         "purpose": "mineral borehole, stratigraphic borehole",
         "instrument": "HyLogger 3-3",
         "drillDate": null,
-        "datasetCreated": "2023-10-31",
+        "datasetCreated": "2026-10-23",
         "firstSeen": "2026-03-26",
         "scannedMetres": 887.9,
         "project": null,

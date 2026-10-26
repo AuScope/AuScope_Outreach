@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-10-19T00:19:44Z"
+    "fetched": "2026-10-26T00:11:34Z"
   },
   "features": [
     {
@@ -28514,6 +28514,342 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Syerston: SRC1264",
+        "boreholeId": "MIN_167542",
+        "boreholeLength": 13,
+        "elevation": 320,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2014",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3923,
+          -32.7507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1266",
+        "boreholeId": "MIN_167544",
+        "boreholeLength": 31,
+        "elevation": 303,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2014",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3936,
+          -32.7492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1267",
+        "boreholeId": "MIN_167545",
+        "boreholeLength": 18,
+        "elevation": 307,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2014",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3948,
+          -32.7488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1277",
+        "boreholeId": "MIN_167555",
+        "boreholeLength": 34,
+        "elevation": 310.844,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3957,
+          -32.7495
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1279",
+        "boreholeId": "MIN_167557",
+        "boreholeLength": 28,
+        "elevation": 306.2,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3957,
+          -32.7505
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1280",
+        "boreholeId": "MIN_167558",
+        "boreholeLength": 30,
+        "elevation": 306.944,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.395,
+          -32.7507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1281",
+        "boreholeId": "MIN_167559",
+        "boreholeLength": 34,
+        "elevation": 305.34,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3954,
+          -32.7511
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1287",
+        "boreholeId": "MIN_167565",
+        "boreholeLength": 28,
+        "elevation": 310.5,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3944,
+          -32.7503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1288",
+        "boreholeId": "MIN_167566",
+        "boreholeLength": 20,
+        "elevation": 313.2,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3942,
+          -32.7499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1291",
+        "boreholeId": "MIN_167569",
+        "boreholeLength": 22,
+        "elevation": 313.704,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3928,
+          -32.7512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1292",
+        "boreholeId": "MIN_167570",
+        "boreholeLength": 10,
+        "elevation": 310.2,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3936,
+          -32.7496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston: SRC1302",
+        "boreholeId": "MIN_167580",
+        "boreholeLength": 24,
+        "elevation": 310.3,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.4064,
+          -32.7488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Kilparney Magnetic Anomaly: KPDD002",
         "boreholeId": "MIN_167589",
         "boreholeLength": 345.3,
@@ -29516,6 +29852,62 @@
         "coordinates": [
           145.6992,
           -29.4679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston Project: SRC1313",
+        "boreholeId": "MIN_229787",
+        "boreholeLength": 29,
+        "elevation": 309.5,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3963,
+          -32.7498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Syerston Project: SRC1315",
+        "boreholeId": "MIN_229789",
+        "boreholeLength": 31,
+        "elevation": 311,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-21",
+        "firstSeen": "2026-10-26",
+        "scannedMetres": null,
+        "project": "Syerston Project",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          147.3931,
+          -32.7518
         ]
       }
     },

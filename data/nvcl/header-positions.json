@@ -1,23 +1,26 @@
 {
- "generated": "2026-10-19T00:19:44Z",
+ "generated": "2026-10-26T00:11:34Z",
  "source": "scripts/nvcl/coords.js - TSG header lat lon against the WFS collar of the hole each archive joined",
  "rule": "a class/state pair is used for placement when the p95 distance to the WFS collar is at most 5000 m over at least 5 validated rows; with fewer, the class's national verdict, except mga_inferred, which needs validated rows of its own state",
  "classes_by_state": {
   "NT": {
-   "zeroed": 353,
-   "decimal": 130,
+   "zeroed": 426,
+   "decimal": 135,
    "absent": 2,
    "decimal_sign": 1,
    "decimal_swapped": 1,
-   "unread": 79
+   "unread": 1
   },
   "QLD": {
-   "decimal": 20,
-   "unread": 486,
-   "unresolved:3_zones_too_few_neighbours": 17,
+   "decimal": 81,
+   "unresolved:2_zones_too_few_neighbours": 32,
+   "zeroed": 149,
+   "unresolved:3_zones_too_few_neighbours": 71,
    "mga_explicit": 1,
-   "zeroed": 11,
-   "mga_inferred:neighbour_median": 17
+   "decimal_sign": 2,
+   "mga_inferred:neighbour_median": 29,
+   "swapped:neighbour_median": 3,
+   "unread": 184
   },
   "SA": {
    "unread": 1812,
@@ -36,31 +39,33 @@
    "unread": 39
   },
   "WA": {
-   "unread": 1796,
-   "decimal": 193,
-   "zeroed": 12,
+   "unread": 1653,
+   "decimal": 319,
+   "zeroed": 27,
    "decimal_swapped": 1,
+   "unresolved:3_zones_too_few_neighbours": 1,
+   "decimal_sign": 1,
    "absent": 2
   }
  },
  "validation": {
   "decimal/*": {
-   "n": 367,
+   "n": 559,
    "median_m": 2,
-   "p95_m": 733,
+   "p95_m": 749,
    "max_m": 1250214
   },
   "decimal/NT": {
-   "n": 130,
+   "n": 135,
    "median_m": 0,
    "p95_m": 909,
    "max_m": 22592
   },
   "decimal/QLD": {
-   "n": 9,
+   "n": 70,
    "median_m": 0,
-   "p95_m": 0,
-   "max_m": 0
+   "p95_m": 3,
+   "max_m": 206
   },
   "decimal/SA": {
    "n": 13,
@@ -75,16 +80,16 @@
    "max_m": 203
   },
   "decimal/WA": {
-   "n": 193,
+   "n": 319,
    "median_m": 2,
-   "p95_m": 43,
+   "p95_m": 2410,
    "max_m": 1250214
   },
   "decimal_sign/*": {
-   "n": 5,
+   "n": 8,
    "median_m": 3,
-   "p95_m": 3,
-   "max_m": 3
+   "p95_m": 45534,
+   "max_m": 45534
   },
   "decimal_sign/NT": {
    "n": 1,
@@ -92,14 +97,26 @@
    "p95_m": 0,
    "max_m": 0
   },
+  "decimal_sign/QLD": {
+   "n": 2,
+   "median_m": 4,
+   "p95_m": 9,
+   "max_m": 9
+  },
   "decimal_sign/SA": {
    "n": 4,
    "median_m": 3,
    "p95_m": 3,
    "max_m": 3
   },
+  "decimal_sign/WA": {
+   "n": 1,
+   "median_m": 45534,
+   "p95_m": 45534,
+   "max_m": 45534
+  },
   "decimal_swapped/*": {
-   "n": 4,
+   "n": 5,
    "median_m": 3,
    "p95_m": 34697,
    "max_m": 34697
@@ -111,7 +128,7 @@
    "max_m": 1
   },
   "decimal_swapped/SA": {
-   "n": 2,
+   "n": 3,
    "median_m": 3,
    "p95_m": 3,
    "max_m": 3
@@ -135,16 +152,28 @@
    "max_m": 100
   },
   "mga_inferred/*": {
-   "n": 17,
+   "n": 29,
    "median_m": 11,
    "p95_m": 12,
    "max_m": 12
   },
   "mga_inferred/QLD": {
-   "n": 17,
+   "n": 29,
    "median_m": 11,
    "p95_m": 12,
    "max_m": 12
+  },
+  "swapped/*": {
+   "n": 3,
+   "median_m": 2,
+   "p95_m": 2,
+   "max_m": 2
+  },
+  "swapped/QLD": {
+   "n": 3,
+   "median_m": 2,
+   "p95_m": 2,
+   "max_m": 2
   }
  },
  "accepted": {
@@ -153,13 +182,16 @@
   "decimal/SA": true,
   "decimal/TAS": true,
   "decimal/WA": true,
-  "decimal_sign/NT": true,
-  "decimal_sign/SA": true,
+  "decimal_sign/NT": false,
+  "decimal_sign/QLD": false,
+  "decimal_sign/SA": false,
+  "decimal_sign/WA": false,
   "decimal_swapped/NT": false,
   "decimal_swapped/SA": false,
   "decimal_swapped/WA": false,
   "mga_explicit/QLD": false,
   "mga_inferred/QLD": true,
+  "swapped/QLD": false,
   "swapped/TAS": false
  }
 }

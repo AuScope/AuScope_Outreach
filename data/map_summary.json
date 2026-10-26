@@ -1,10 +1,10 @@
 {
-  "generated": "2026-10-19T01:39:57Z",
+  "generated": "2026-10-26T02:09:22Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
-  "harvest_as_of": "2026-10-19",
-  "total_boreholes": 6653,
+  "harvest_as_of": "2026-10-26",
+  "total_boreholes": 6667,
   "total_km": 1916.8,
-  "spectra_measured": 257566899,
+  "spectra_measured": 257574095,
   "undated": 0,
   "by_state": [
     {
@@ -12,23 +12,23 @@
       "boreholes": 5,
       "km": 0.2,
       "status": "participating",
-      "fetched": "2026-10-19",
+      "fetched": "2026-10-26",
       "spectra_measured": 27089
     },
     {
       "state": "NSW",
-      "boreholes": 1258,
+      "boreholes": 1272,
       "km": 284.1,
       "status": "participating",
-      "fetched": "2026-10-19",
-      "spectra_measured": 37059834
+      "fetched": "2026-10-26",
+      "spectra_measured": 37067030
     },
     {
       "state": "NT",
       "boreholes": 612,
       "km": 189.5,
       "status": "participating",
-      "fetched": "2026-10-19",
+      "fetched": "2026-10-26",
       "spectra_measured": 24978705
     },
     {
@@ -44,7 +44,7 @@
       "boreholes": 1833,
       "km": 431.1,
       "status": "participating",
-      "fetched": "2026-10-19",
+      "fetched": "2026-10-26",
       "spectra_measured": 56585897
     },
     {
@@ -60,14 +60,14 @@
       "boreholes": 29,
       "km": 6,
       "status": "participating",
-      "fetched": "2026-10-19",
+      "fetched": "2026-10-26",
       "spectra_measured": 0
     },
     {
       "state": "WA",
       "boreholes": 1897,
       "km": 677.6,
-      "status": "participating",
+      "status": "degraded",
       "fetched": "2026-10-19",
       "spectra_measured": 89381398
     }
@@ -77,14 +77,15 @@
     "latest": "2026-10"
   },
   "month_sources": {
-    "tsg": 4329,
-    "api": 1316,
+    "tsg": 2435,
+    "api": 1327,
     "none": 0,
-    "carried": 1008
+    "carried": 2905
   },
   "stale_states": [
     "QLD",
-    "TAS"
+    "TAS",
+    "WA"
   ],
   "provisional_holes": {
     "total": 12,
