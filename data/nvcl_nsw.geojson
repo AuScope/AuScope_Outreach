@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-10-26T00:11:34Z"
+    "fetched": "2026-11-02T01:34:11Z"
   },
   "features": [
     {
@@ -25064,6 +25064,34 @@
         "coordinates": [
           148.219,
           -32.5916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tomingley: WY339",
+        "boreholeId": "MIN_115483",
+        "boreholeLength": 252,
+        "elevation": 266.635,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2002",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-10-27",
+        "firstSeen": "2026-11-02",
+        "scannedMetres": 279.84,
+        "project": null,
+        "owner": null,
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          148.2183,
+          -32.5904
         ]
       }
     },
