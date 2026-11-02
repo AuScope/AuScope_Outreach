@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "nodal_shortperiod",
-    "fetched": "2026-10-26T13:41:14Z"
+    "fetched": "2026-11-02T16:39:23Z"
   },
   "features": [
     {
@@ -14722,7 +14722,7 @@
         "type": "Point",
         "coordinates": [
           148.99681,
-          -35.31866
+          -35.31886
         ]
       }
     },
@@ -14801,8 +14801,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          148.9969,
-          -35.31923
+          148.997,
+          -35.31924
         ]
       }
     },
