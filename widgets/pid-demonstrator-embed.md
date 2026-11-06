@@ -143,6 +143,22 @@ any later `iframe[data-auscope-autoheight]` on any page is handled too.
   fetches `https://ausmt.auscope.org.au/data/build.json` for the footer's
   "newer AusMT release" note; if that fetch fails the note is omitted.
 
+## What the page leaves unsaid
+
+- The map uses a 7-day window because a run lasts about two days (in
+  October 2026: median 45 h over 1,432 runs). On days with a survey in the
+  field a single day shows 7 stations on average and none on 14 percent of
+  them, while the week shows 15. Play steps one week, so no run is skipped.
+- The map draws AuScope-funded instruments only. In October 2026 that left
+  out 62 stations recorded only by instruments without AuScope funding, and
+  15 runs with no recorded time period (all Cariewerloo 2012). Runs without
+  station coordinates are not drawn either.
+- Dataset citation counts are read live from DataCite and shown only when
+  above zero. Every count was zero in October 2026, because the NCI
+  collections were minted that year.
+- The caption under the stops is a two-phrase legend; each stop button
+  names its own gap.
+
 ## Live browser calls - a deliberate exception to this repo's rule
 
 This repo's standing rule is that **the browser never calls a third-party
@@ -162,15 +178,17 @@ On every resolve the page calls, from the browser:
 The "Follow one instrument" feature also fetches
 `https://api.datacite.org/dois/<dataset doi>` for its live citation count,
 once per page view for each stop's collection DOIs (or its first dataset
-when the stop has no collection); a failed lookup is asked again the next
-time that stop is drawn. No request goes to the CKAN registry
+when the stop has no collection); the line appears only when the total is
+above zero, and a failed lookup is asked again the next time that stop is
+drawn. No request goes to the CKAN registry
 (`pidinst.data.auscope.org.au`), which sends no CORS headers; the PIDINST
 detail comes from the DataCite record instead.
 
 Every call has a failure state the visitor can read (the card shows the
-error in muted type and no latency), except the footer's `build.json`
-staleness check, which fails silently: the "newer AusMT release" note is
-simply omitted. Nothing on the page is fabricated when a service is down,
+error in muted type and no latency), except two that fail silently: the
+footer's `build.json` staleness check (the "newer AusMT release" note is
+simply omitted) and the dataset citation lookup (the citation line stays
+hidden). Nothing on the page is fabricated when a service is down,
 and the deployment data itself still comes from the pre-built feed. If any of these hosts ever redirects without CORS (the
 EarthScope case that motivated the rule), the affected hop degrades to its
 error state and the rest of the page is unaffected.

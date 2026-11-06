@@ -423,7 +423,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     <header class="page-head">
         <div class="section-label">Instrument PIDs in practice</div>
         <h2>Where AuScope's instruments have been</h2>
-        <p class="lede">Every AuScope magnetotelluric instrument carries a persistent identifier, so each one can be followed from the stations where it recorded to the data and papers that came out of that work. Where a link is still missing, the page says so.</p>
+        <p class="lede">Every AuScope magnetotelluric instrument carries a persistent identifier. Follow one from the field to its data and papers.</p>
     </header>
 
     <noscript><div class="status">This page draws everything from a live data feed and needs JavaScript to run.</div></noscript>
@@ -432,7 +432,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     <section id="follow" class="feature" aria-labelledby="follow-h">
         <div class="feature-head">
             <h3 id="follow-h" class="feature-title">Follow one instrument</h3>
-            <p class="lede">Pick an instrument, then one of the surveys it recorded in, to see what that survey produced and how the identifiers link up.</p>
+            <p class="lede">Pick an instrument, then a survey it recorded in.</p>
         </div>
 
         <div id="follow-body" class="feature" hidden>
@@ -468,7 +468,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     <section id="resolve" class="feature" aria-labelledby="resolve-h">
         <div class="feature-head">
             <h3 id="resolve-h" class="feature-title">Watch it resolve</h3>
-            <p class="lede">A persistent identifier is only useful if it resolves. Watch this instrument's DOI do its job, hop by hop, live from the services themselves, with the time each hop took.</p>
+            <p class="lede">Watch this instrument's DOI resolve, hop by hop, live.</p>
         </div>
 
         <div id="rv-body" class="feature" hidden>
@@ -487,7 +487,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
             <ol id="rv-hops" class="rv-hops" aria-label="Resolution hops"></ol>
 
             <div class="rv-foot">
-                <span>Every hop is a live request from your browser · times measured on this visit</span>
+                <span>Live requests from your browser, timed on this visit</span>
                 <span class="rv-links"><a href="#follow" target="_self">Back to the instrument</a><a id="rv-ausmt" href="https://ausmt.auscope.org.au/" rel="noopener">Open in AusMT<span aria-hidden="true">&nbsp;&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a></span>
             </div>
         </div>
@@ -496,7 +496,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     <section id="map" class="feature" aria-labelledby="map-h">
         <div class="feature-head">
             <h3 id="map-h" class="feature-title">Where the fleet was, week by week</h3>
-            <p class="lede">Drag the slider. Every dot is a station where an AuScope instrument was recording that week, placed from its entry in the AusMT catalogue.</p>
+            <p class="lede">Drag the slider. Each dot is a station recording that week.</p>
         </div>
 
         <div id="map-body" class="feature" hidden>
@@ -513,7 +513,6 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
                     <svg id="map-svg" class="map-svg" viewBox="0 0 600 520" role="img" aria-label="Map of Australia"><g class="coast"></g><g id="map-dyn"></g></svg>
                     <figcaption class="map-cap">
                         <p id="map-cap"></p>
-                        <p id="map-why"></p>
                     </figcaption>
                 </figure>
 
@@ -751,8 +750,9 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
    Picker -> summary tiles -> stops (one per survey, date order) ->
    stop card (deployment | what it produced) -> identifier chain.
    Every figure comes from the feed except the dataset citation count,
-   which is fetched live from DataCite once per DOI per page view; a
-   failed lookup is retried on the next render.
+   which is fetched live from DataCite once per DOI per page view and
+   shown only when it is above zero; a failed lookup stays hidden and is
+   retried on the next render.
    PID.selected carries {doi, model, serial} plus, from this section,
    survey (the selected stop) and station (its first station). The
    "Watch the instrument DOI resolve" button only fires 'pid:selected' with
@@ -764,9 +764,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     var PID = window.PID, U = PID.util;
     var esc = U.esc, num = U.num, num1 = U.num1, plural = U.plural, fmtDay = U.fmtDay, dayIndex = U.dayIndex, MONTHS = U.MONTHS;
     var DATACITE = 'https://api.datacite.org/dois/';
-    // A zero count is called "too new to be cited" only for DOIs minted in the last two years.
-    var TOO_NEW_DAYS = 730;
-    var CITE_MS = 20000;            // a citation lookup is abandoned after this and reads as unavailable
+    var CITE_MS = 20000;            // a citation lookup is abandoned after this and the line stays hidden
     var NEW_TAB = '<span class="sr-only"> (opens in a new tab)</span>';
     var IDENT = { collection: 'dataset collection', raw: 'raw time series', level2: 'level 2 transfer functions', other: 'other data product' };
     var IDENT_SHORT = { collection: 'collection', raw: 'raw time series', level2: 'level 2', other: 'data product' };
@@ -785,7 +783,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
         chainWrap: document.getElementById('fo-chain-wrap')
     };
     var S = { surveys: {}, insts: [], byDoi: {}, occ: {}, inst: null, stops: [], stop: null, own: false };
-    var citeCache = {};             // lower-cased DOI -> Promise<{count, created}>, kept for the page view
+    var citeCache = {};             // lower-cased DOI -> Promise<citation count>, kept for the page view
 
     // ---------- helpers ----------
     function fire(name, detail) {
@@ -814,7 +812,6 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     function andList(list) {
         return list.length < 2 ? list.join('') : list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1];
     }
-    function has(list, n) { return n === 1 ? list + ' has' : list + ' have'; }
     function yearSpan(first, last, short) {
         var a = String(first || '').slice(0, 4), b = String(last || '').slice(0, 4);
         if (!/^\d{4}$/.test(a) || !/^\d{4}$/.test(b)) return '–';
@@ -938,20 +935,10 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
                 '<span class="fo-long">in service, per AusMT runs</span><span class="fo-short">in service</span>');
     }
 
+    // A fixed legend for the marks; each stop button names its own gap.
     function caption() {
-        var filled = 0, reg = [], none = [], noReg = [], out = [], gaps = [];
-        S.stops.forEach(function (s) {
-            if (s.ds.length) { filled++; if (!s.reg) noReg.push(s.title); }
-            else if (s.reg) reg.push(s.title);
-            else none.push(s.title);
-        });
-        if (filled) out.push(filled === 1 ? 'The filled mark reached a registered dataset.' : 'Filled marks reached registered datasets.');
-        if (reg.length) gaps.push(has(andList(reg), reg.length) + ' a registry record but no dataset DOI yet');
-        if (none.length) gaps.push(has(andList(none), none.length) + ' no registry record and no dataset DOI yet');
-        if (gaps.length) {
-            out.push((reg.length + none.length === 1 ? 'The hollow mark is an honest gap: ' : 'The hollow marks are honest gaps: ') + gaps.join('; ') + '.');
-        }
-        if (noReg.length) out.push(has(andList(noReg), noReg.length) + ' a dataset DOI but no registry record yet.');
+        var out = [];
+        if (S.stops.length) out.push('Filled mark: reached a dataset. Hollow: not yet.');
         var un = undatedNote(S.inst);
         if (un) out.push(un);
         return out.join(' ');
@@ -967,8 +954,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
             if (!sv[id]) { sv[id] = 1; titles.push((S.surveys[id] && S.surveys[id].title) || id); }
         });
         if (!n) return '';
-        return num(n) + ' ' + plural(n, 'run') + ' at ' + andList(titles) + (n === 1 ? ' has' : ' have')
-            + ' no recorded time period and ' + (n === 1 ? 'is' : 'are') + ' not shown.';
+        return num(n) + ' undated ' + plural(n, 'run') + ' at ' + andList(titles) + (n === 1 ? ' is' : ' are') + ' not shown.';
     }
 
     function renderStops() {
@@ -1024,7 +1010,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
             + '<span><strong>' + esc(num1(s.hours)) + '</strong> ' + esc(hoursLabel(i.role)) + '</span></div>'
             + '<div class="fo-small">' + (ns === 1 ? 'Station: ' : 'Stations: ') + esc(s.stations.join(', ')) + '</div>'
             + '<div class="fo-row"><span class="fo-row-lbl">Survey record</span>'
-            + (s.reg ? chip(s.reg) : '<span>' + esc(s.title) + ' has no registry record yet.</span>') + '</div>'
+            + (s.reg ? chip(s.reg) : '<span>No registry record yet.</span>') + '</div>'
             + '<button type="button" class="btn" data-resolve>Watch the instrument DOI resolve ' + ICON_DOWN + '</button>'
             + '<p class="fo-note" data-note aria-live="polite"></p>'
             + '</div>';
@@ -1036,16 +1022,15 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
                 if (main && d.custodian) lbl += ' · ' + d.custodian;
                 return '<div class="fo-row">' + chip(d.doi, !main) + '<span class="fo-row-lbl">' + esc(lbl) + '</span></div>';
             }).join('') + '</div>'
-                + '<div class="fo-cites" data-cites="' + esc(s.id) + '">Dataset citations: checking DataCite&hellip;</div>';
+                + '<div class="fo-cites" data-cites="' + esc(s.id) + '" hidden></div>';
         } else {
-            right += '<p class="fo-p">' + esc(s.title) + (s.reg ? ' has a registry record but no dataset DOI yet.' : ' has no registry record and no dataset DOI yet.') + '</p>';
+            right += '<p class="fo-p">' + (s.reg ? 'No dataset DOI yet.' : 'No registry record or dataset DOI yet.') + '</p>';
         }
         right += '<div class="fo-rule"></div><div class="kicker">Described in</div>';
         if (s.papers.length) {
-            right += '<div class="fo-papers">' + s.papers.map(paper).join('') + '</div>'
-                + '<p class="fo-note">Linked by the survey record, not by a dataset citation.</p>';
+            right += '<div class="fo-papers">' + s.papers.map(paper).join('') + '</div>';
         } else {
-            right += '<p class="fo-p fo-small">' + (s.reg ? 'No paper is linked to this survey record yet.' : 'No survey record, so no paper is linked yet.') + '</p>';
+            right += '<p class="fo-p fo-small">' + 'No paper linked yet.' + '</p>';
         }
         right += '</div>';
 
@@ -1072,6 +1057,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     }
 
     // ---------- live dataset citations (DataCite), once per DOI ----------
+    // The line is drawn hidden and shown only when the total is above zero.
     function citeFor(doi) {
         var k = String(doi).toLowerCase(), ctrl, timer = 0;
         if (!citeCache[k]) {
@@ -1082,39 +1068,36 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
                 .then(function (j) {
                     var a = j && j.data && j.data.attributes;
                     if (!a || typeof a.citationCount !== 'number') throw new Error('no citation count');
-                    return { count: a.citationCount, created: a.created || null };
+                    return a.citationCount;
                 });
             // The failure itself is handled where it is used; dropping it here lets the next render ask again.
             citeCache[k].then(function () { clearTimeout(timer); }, function () { clearTimeout(timer); delete citeCache[k]; });
         }
         return citeCache[k];
     }
-    function citeText(res, prim) {
-        var total = 0, made = [], many = res.length > 1, h, lo, hi, when, today;
-        res.forEach(function (r) { total += r.count; var d = dayIndex(r.created); if (isFinite(d)) made.push(d); });
-        h = 'Dataset citations: <strong>' + esc(num(total)) + '</strong>';
-        if (many) {
-            h += ' across ' + res.length + ' ' + (prim.every(function (d) { return d.identifies === 'collection'; }) ? 'collections' : 'datasets');
+    function citeText(total, prim) {
+        var h = 'Dataset citations: <strong>' + esc(num(total)) + '</strong>';
+        if (prim.length > 1) {
+            h += ' across ' + prim.length + ' ' + (prim.every(function (d) { return d.identifies === 'collection'; }) ? 'collections' : 'datasets');
         }
-        if (total === 0 && made.length) {
-            made.sort(function (a, b) { return a - b; });
-            lo = made[0]; hi = made[made.length - 1];
-            when = lo === hi ? fmtDay(lo) : fmtDay(lo) + (made.length === 2 ? ' and ' : ' to ') + fmtDay(hi);
-            today = Math.floor(Date.now() / 86400000);
-            h += ' - minted ' + esc(when) + (today - lo <= TOO_NEW_DAYS ? ', too new to be cited' : ', none recorded yet');
-        }
-        return h + '. Checked live against DataCite.';
+        return h + ' · DataCite, live';
     }
     function paintCites(id, html) {
         var el = els.cards.querySelector('[data-cites]');
         if (!el || el.getAttribute('data-cites') !== id) return;      // the reader has moved on
         el.innerHTML = html;
+        el.removeAttribute('hidden');
         U.resized();
     }
+    // A zero total or a failed lookup leaves the line hidden.
     function loadCites(s, prim) {
         Promise.all(prim.map(function (d) { return citeFor(d.doi); }))
-            .then(function (res) { paintCites(s.id, citeText(res, prim)); })
-            .catch(function () { paintCites(s.id, 'Dataset citations: unavailable.'); });
+            .then(function (counts) {
+                var total = 0;
+                counts.forEach(function (n) { total += n; });
+                if (total > 0) paintCites(s.id, citeText(total, prim));
+            })
+            .catch(function () { /* stays hidden */ });
     }
 
     // ---------- state changes ----------
@@ -1757,7 +1740,6 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
         coast: document.querySelector('#map-svg .coast'),
         dyn: document.getElementById('map-dyn'),
         cap: document.getElementById('map-cap'),
-        why: document.getElementById('map-why'),
         now: document.getElementById('map-now'),
         follow: document.getElementById('map-follow'),
         coverage: document.getElementById('map-coverage'),
@@ -1773,8 +1755,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
 
     var M = {
         ready: false, feed: null, surveys: {}, all: [], occ: [], buckets: [], min: 0, max: 0,
-        span: {}, nInst: 0, excluded: 0, untagged: false, missing: 0,
-        nRuns: 0, nStations: 0, excludedStations: 0, nUndatedRuns: 0, said: '', gridMin: 0,
+        span: {}, nInst: 0, untagged: false, nRuns: 0, said: '', gridMin: 0,
         outline: null, outlineFailed: false, w: 0, playing: false, timer: 0, it: null, itKey: null
     };
 
@@ -1817,7 +1798,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
     function runKey(x) { return x.key + '/' + x.run; }
 
     function prepare(feed) {
-        var coords = feed.stations || {}, raw = feed.occupations || [], all = [], undated = {}, missing = {}, i, o, a, b, c, key;
+        var coords = feed.stations || {}, raw = feed.occupations || [], all = [], i, o, a, b, c, key;
         M.feed = feed;
         M.surveys = U.surveyMap(feed);
         for (i = 0; i < raw.length; i++) {
@@ -1825,10 +1806,10 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
             if (!o) continue;
             a = U.dayIndex(o.start); b = U.dayIndex(o.end);
             key = String(o.survey) + '/' + String(o.station);
-            if (!isFinite(a)) { undated[key + '/' + String(o.run)] = 1; continue; }
+            if (!isFinite(a)) continue;                 // undated runs cannot be placed on the timeline
             if (!isFinite(b) || b < a) b = a;
             c = coords[key];
-            if (!c || c.length < 2 || !isFinite(+c[0]) || !isFinite(+c[1])) { missing[key + '/' + String(o.run)] = 1; continue; }
+            if (!c || c.length < 2 || !isFinite(+c[0]) || !isFinite(+c[1])) continue;     // no station coordinates: not drawn
             all.push({
                 survey: String(o.survey), station: String(o.station), run: String(o.run), key: key, a: a, b: b,
                 role: o.role, model: o.model, serial: o.serial, doi: o.doi || null,
@@ -1842,18 +1823,8 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
         // (no af at all) falls back to every instrument and says so.
         M.occ = all.filter(function (x) { return x.af === true; });
         if (!M.occ.length && all.length) { M.occ = all.slice(); M.untagged = true; }
-        M.excluded = all.length - M.occ.length;
-        // Each feed row is one instrument at one run, so runs and stations are counted by key.
+        // Each feed row is one instrument at one run, so runs are counted by key.
         M.nRuns = distinct(M.occ, runKey);
-        M.nStations = distinct(M.occ, function (x) { return x.key; });
-        M.nUndatedRuns = Object.keys(undated).length;
-        M.missing = Object.keys(missing).length;
-        M.excludedStations = 0;
-        if (!M.untagged) {
-            var funded = {};
-            M.occ.forEach(function (x) { funded[x.key] = 1; });
-            M.excludedStations = distinct(all.filter(function (x) { return !funded[x.key]; }), function (x) { return x.key; });
-        }
 
         M.min = Infinity; M.max = -Infinity;
         var inst = {};
@@ -1890,60 +1861,13 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
         }
         return out;
     }
-    function stationCount(from, to) {
-        var w = windowOcc(from, to), s = {}, n = 0, i;
-        for (i = 0; i < w.length; i++) if (!s[w[i].key]) { s[w[i].key] = 1; n++; }
-        return n;
-    }
-
-    // Why a week, in the feed's own numbers.
-    function renderWhy() {
-        // One hours value per run: the instrument rows of a run share it.
-        var seen = {}, hrs = [];
-        M.occ.forEach(function (x) {
-            if (!(x.hours > 0) || seen[runKey(x)]) return;
-            seen[runKey(x)] = 1;
-            hrs.push(x.hours);
-        });
-        hrs.sort(function (x, y) { return x - y; });
-        if (!hrs.length) { els.why.textContent = ''; return; }
-        var med = hrs.length % 2 ? hrs[(hrs.length - 1) / 2] : (hrs[hrs.length / 2 - 1] + hrs[hrs.length / 2]) / 2;
-        var spans = [], fieldDays = 0, sum1 = 0, sum7 = 0, empty1 = 0, d, j, k, n1, n7, inField;
-        for (k in M.span) if (Object.prototype.hasOwnProperty.call(M.span, k)) spans.push(M.span[k]);
-        for (d = M.min; d <= M.max; d++) {
-            // A field day lies inside some survey's span, from its first run to its last,
-            // and its 7-day window holds a run (long idle gaps inside a survey do not count).
-            for (inField = false, j = 0; j < spans.length && !inField; j++) inField = spans[j].a <= d && d <= spans[j].b;
-            if (!inField) continue;
-            n7 = stationCount(d - WINDOW + 1, d);
-            if (!n7) continue;
-            n1 = stationCount(d, d);
-            fieldDays++; sum1 += n1; sum7 += n7; if (!n1) empty1++;
-        }
-        if (!fieldDays) { els.why.textContent = ''; return; }
-        var days = Math.max(1, Math.round(med / 24));
-        els.why.textContent = 'Why a week: a run lasts about ' + days + ' ' + plural(days, 'day')
-            + ' (median ' + Math.round(med) + ' h over ' + num(hrs.length) + ' runs), so a single day catches few stations. '
-            + 'On days with a survey in the field, one day shows ' + Math.round(sum1 / fieldDays) + ' stations on average and none at all on '
-            + Math.round(100 * empty1 / fieldDays) + '% of them; the 7-day window shows ' + Math.round(sum7 / fieldDays) + '. '
-            + 'Play moves one week per tick, so no run is skipped, and hurries through weeks with nothing in the field.';
-    }
-
     function renderCoverage() {
         var m = M.feed.metadata || {}, t = '';
         if (m.surveys_populated != null && m.surveys_total != null) {
-            t += num(m.surveys_populated) + ' of ' + num(m.surveys_total) + ' AusMT surveys carry run-level instrument identifiers so far · ';
+            t += num(m.surveys_populated) + ' of ' + num(m.surveys_total) + ' AusMT surveys carry instrument PIDs so far · ';
         }
-        t += num(M.nInst) + ' instruments · ' + num(M.nRuns) + ' ' + plural(M.nRuns, 'run')
-            + (M.nRuns === M.nStations ? ', one per station' : ' at ' + num(M.nStations) + ' ' + plural(M.nStations, 'station'))
-            + ' · the map fills in as more surveys are published with PIDs.';
-        if (M.untagged) t += ' Funding tags were missing from this snapshot, so every instrument is shown.';
-        else if (M.excludedStations) {
-            t += ' ' + num(M.excludedStations) + ' ' + plural(M.excludedStations, 'station') + ' recorded only by instruments without AuScope funding '
-                + plural(M.excludedStations, 'is', 'are') + ' left out.';
-        }
-        if (M.missing) t += ' ' + num(M.missing) + ' ' + plural(M.missing, 'run has', 'runs have') + ' no station coordinates and ' + plural(M.missing, 'is', 'are') + ' not mapped.';
-        if (M.nUndatedRuns) t += ' ' + num(M.nUndatedRuns) + ' ' + plural(M.nUndatedRuns, 'run has', 'runs have') + ' no recorded time period and cannot be placed on the timeline.';
+        t += num(M.nInst) + ' instruments · ' + num(M.nRuns) + ' ' + plural(M.nRuns, 'run');
+        if (M.untagged) t += '. Funding tags were missing from this snapshot, so every instrument is shown.';
         els.coverage.textContent = t;
     }
 
@@ -2160,17 +2084,7 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
             + (who ? '; ' + who + (fs.recording && fs.latest ? ' recording at ' + fs.latest.station : ', ' + fs.drawn.length + ' of ' + it.stops.length + ' stops so far') : '') + '.');
 
         var cap = 'Week to ' + fmtDay(D) + ' · ';
-        if (!stList.length) cap += 'no indexed station was recording.';
-        else {
-            cap += svNames.join(', ') + '.';
-            // Only the clusters whose ring is drawn.
-            var ringed = big.filter(function (c) { return c.r <= 40 * u; });
-            if (ringed.length) {
-                cap += ' Stations within a few pixels of each other at this scale share a ringed mark: '
-                    + ringed.map(function (c) { return c.n + ' of ' + svTitle(c.survey); }).join(', ') + '.';
-            }
-        }
-        if (fs.drawn.some(function (s) { return s.idx !== fs.cur || !curXY; })) cap += ' Hollow marks are the earlier stops of the followed instrument.';
+        cap += stList.length ? svNames.join(', ') + '.' : 'no indexed station was recording.';
         if (M.outlineFailed) cap += ' Coastline outline unavailable.';
         els.cap.textContent = cap;
 
@@ -2310,7 +2224,6 @@ h3, h4 { margin: 0; font-family: var(--font-medium); font-size: 18.9px; font-wei
         }
         drawCoast();
         renderCoverage();
-        renderWhy();
 
         els.range.min = String(M.min);
         els.range.max = String(M.max);
