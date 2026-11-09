@@ -1,7 +1,7 @@
 {
-  "generated": "2026-11-02T02:52:01Z",
+  "generated": "2026-11-09T02:52:19Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
-  "harvest_as_of": "2026-11-02",
+  "harvest_as_of": "2026-11-09",
   "total_boreholes": 6663,
   "total_km": 1917,
   "spectra_measured": 257575894,
@@ -12,14 +12,14 @@
       "boreholes": 5,
       "km": 0.2,
       "status": "participating",
-      "fetched": "2026-11-02",
+      "fetched": "2026-11-09",
       "spectra_measured": 27089
     },
     {
       "state": "NSW",
       "boreholes": 1273,
       "km": 284.4,
-      "status": "participating",
+      "status": "degraded",
       "fetched": "2026-11-02",
       "spectra_measured": 37068829
     },
@@ -28,7 +28,7 @@
       "boreholes": 612,
       "km": 189.5,
       "status": "participating",
-      "fetched": "2026-11-02",
+      "fetched": "2026-11-09",
       "spectra_measured": 24978705
     },
     {
@@ -44,7 +44,7 @@
       "boreholes": 1833,
       "km": 431.1,
       "status": "participating",
-      "fetched": "2026-11-02",
+      "fetched": "2026-11-09",
       "spectra_measured": 56585897
     },
     {
@@ -60,7 +60,7 @@
       "boreholes": 29,
       "km": 6,
       "status": "participating",
-      "fetched": "2026-11-02",
+      "fetched": "2026-11-09",
       "spectra_measured": 0
     },
     {
@@ -68,7 +68,7 @@
       "boreholes": 1897,
       "km": 677.6,
       "status": "participating",
-      "fetched": "2026-11-02",
+      "fetched": "2026-11-09",
       "spectra_measured": 89381398
     }
   ],
@@ -78,11 +78,12 @@
   },
   "month_sources": {
     "tsg": 4373,
-    "api": 1282,
+    "api": 9,
     "none": 0,
-    "carried": 1008
+    "carried": 2281
   },
   "stale_states": [
+    "NSW",
     "QLD",
     "TAS"
   ],
