@@ -3,7 +3,7 @@
   "metadata": {
     "source": "AusPASS FDSN station service",
     "category": "seismic_broadband",
-    "fetched": "2026-11-02T16:39:23Z"
+    "fetched": "2026-11-09T16:57:11Z"
   },
   "features": [
     {
@@ -20609,6 +20609,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "TPSO",
+        "network": "DU",
+        "channel": "HHZ",
+        "sensor": "STS-2, 120 s, 1500 V/m/s, generation 3 electronics",
+        "sampleRate": 100.0,
+        "elevation": 77.0,
+        "startTime": "2020-03-17T22:33:00",
+        "endTime": "2024-07-21T23:59:59.99"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.63727,
+          -35.48949
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "CTAO",
         "network": "IU",
         "channel": "HHZ",
@@ -21029,6 +21049,26 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "BK42",
+        "network": "M8",
+        "channel": "HHZ",
+        "sensor": "Trillium Compact 120s (BB)",
+        "sampleRate": 100.0,
+        "elevation": 304.0,
+        "startTime": "2024-10-29T00:00:00",
+        "endTime": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.97005,
+          -28.5146
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "BK45",
         "network": "M8",
         "channel": "HHZ",
@@ -21074,15 +21114,15 @@
         "channel": "HHZ",
         "sensor": "Trillium Compact 120s PostHole (BB)",
         "sampleRate": 100.0,
-        "elevation": 500.0,
-        "startTime": "2026-11-09T00:00:00",
+        "elevation": 278.0,
+        "startTime": "2026-11-06T05:53:00",
         "endTime": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          146.47,
-          -36.2
+          146.47687,
+          -36.27593
         ]
       }
     },
@@ -22776,7 +22816,7 @@
         "sampleRate": 100.0,
         "elevation": 670.0,
         "startTime": "2019-08-07T01:46:00",
-        "endTime": null
+        "endTime": "2024-08-05T00:00:00"
       },
       "geometry": {
         "type": "Point",
