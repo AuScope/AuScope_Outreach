@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-09T01:19:34Z",
+ "generated": "2026-11-16T03:11:14Z",
  "source": "scripts/nvcl/coords.js - TSG header lat lon against the WFS collar of the hole each archive joined",
  "rule": "a class/state pair is used for placement when the p95 distance to the WFS collar is at most 5000 m over at least 5 validated rows; with fewer, the class's national verdict, except mga_inferred, which needs validated rows of its own state",
  "classes_by_state": {
@@ -22,11 +22,11 @@
    "swapped:neighbour_median": 8
   },
   "SA": {
-   "decimal": 98,
-   "zeroed": 265,
-   "decimal_swapped": 5,
-   "decimal_sign": 8,
-   "unread": 1465,
+   "decimal": 130,
+   "zeroed": 377,
+   "decimal_swapped": 6,
+   "decimal_sign": 9,
+   "unread": 1319,
    "unresolved:whole_degrees": 1
   },
   "TAS": {
@@ -38,20 +38,21 @@
    "unread": 39
   },
   "WA": {
-   "unread": 1232,
-   "decimal": 679,
-   "zeroed": 90,
+   "unread": 1110,
+   "decimal": 774,
+   "zeroed": 116,
    "decimal_swapped": 3,
    "unresolved:3_zones_too_few_neighbours": 1,
    "decimal_sign": 1,
+   "unresolved:degrees_outside_state": 1,
    "absent": 2
   }
  },
  "validation": {
   "decimal/*": {
-   "n": 1044,
+   "n": 1171,
    "median_m": 2,
-   "p95_m": 203,
+   "p95_m": 354,
    "max_m": 1250214
   },
   "decimal/NT": {
@@ -67,7 +68,7 @@
    "max_m": 210
   },
   "decimal/SA": {
-   "n": 97,
+   "n": 129,
    "median_m": 3,
    "p95_m": 3,
    "max_m": 945
@@ -79,13 +80,13 @@
    "max_m": 203
   },
   "decimal/WA": {
-   "n": 679,
+   "n": 774,
    "median_m": 2,
-   "p95_m": 84,
+   "p95_m": 785,
    "max_m": 1250214
   },
   "decimal_sign/*": {
-   "n": 13,
+   "n": 14,
    "median_m": 3,
    "p95_m": 45534,
    "max_m": 45534
@@ -103,7 +104,7 @@
    "max_m": 9
   },
   "decimal_sign/SA": {
-   "n": 8,
+   "n": 9,
    "median_m": 3,
    "p95_m": 553,
    "max_m": 553
@@ -115,7 +116,7 @@
    "max_m": 45534
   },
   "decimal_swapped/*": {
-   "n": 9,
+   "n": 10,
    "median_m": 3,
    "p95_m": 34697,
    "max_m": 34697
@@ -127,7 +128,7 @@
    "max_m": 1
   },
   "decimal_swapped/SA": {
-   "n": 5,
+   "n": 6,
    "median_m": 3,
    "p95_m": 3,
    "max_m": 3

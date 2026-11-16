@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-09T02:52:19Z",
+  "generated": "2026-11-16T04:34:39Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
-  "harvest_as_of": "2026-11-09",
-  "total_boreholes": 6663,
-  "total_km": 1917,
-  "spectra_measured": 257575894,
+  "harvest_as_of": "2026-11-16",
+  "total_boreholes": 6712,
+  "total_km": 1924.4,
+  "spectra_measured": 257770810,
   "undated": 0,
   "by_state": [
     {
@@ -12,23 +12,23 @@
       "boreholes": 5,
       "km": 0.2,
       "status": "participating",
-      "fetched": "2026-11-09",
+      "fetched": "2026-11-16",
       "spectra_measured": 27089
     },
     {
       "state": "NSW",
-      "boreholes": 1273,
-      "km": 284.4,
-      "status": "degraded",
-      "fetched": "2026-11-02",
-      "spectra_measured": 37068829
+      "boreholes": 1320,
+      "km": 291.3,
+      "status": "participating",
+      "fetched": "2026-11-16",
+      "spectra_measured": 37116374
     },
     {
       "state": "NT",
       "boreholes": 612,
       "km": 189.5,
       "status": "participating",
-      "fetched": "2026-11-09",
+      "fetched": "2026-11-16",
       "spectra_measured": 24978705
     },
     {
@@ -44,7 +44,7 @@
       "boreholes": 1833,
       "km": 431.1,
       "status": "participating",
-      "fetched": "2026-11-09",
+      "fetched": "2026-11-16",
       "spectra_measured": 56585897
     },
     {
@@ -60,30 +60,29 @@
       "boreholes": 29,
       "km": 6,
       "status": "participating",
-      "fetched": "2026-11-09",
+      "fetched": "2026-11-16",
       "spectra_measured": 0
     },
     {
       "state": "WA",
-      "boreholes": 1897,
-      "km": 677.6,
+      "boreholes": 1899,
+      "km": 678.1,
       "status": "participating",
-      "fetched": "2026-11-09",
-      "spectra_measured": 89381398
+      "fetched": "2026-11-16",
+      "spectra_measured": 89528769
     }
   ],
   "date_range": {
     "earliest": "2003-09",
-    "latest": "2026-10"
+    "latest": "2026-11"
   },
   "month_sources": {
     "tsg": 4373,
-    "api": 9,
+    "api": 1331,
     "none": 0,
-    "carried": 2281
+    "carried": 1008
   },
   "stale_states": [
-    "NSW",
     "QLD",
     "TAS"
   ],

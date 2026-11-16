@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-11-09T01:19:34Z"
+    "fetched": "2026-11-16T03:11:14Z"
   },
   "features": [
     {
@@ -13052,6 +13052,62 @@
         "coordinates": [
           116.16301039,
           -23.9686864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBDD011",
+        "boreholeId": "CBDD011",
+        "boreholeLength": 450.6,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 4-2301",
+        "drillDate": "2025-07-10",
+        "datasetCreated": "2026-11-09",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 450.6,
+        "project": "Mangaroon",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.1742,
+          -23.9767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CBDD012",
+        "boreholeId": "CBDD012",
+        "boreholeLength": 456.7,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": null,
+        "drillDate": null,
+        "datasetCreated": null,
+        "firstSeen": "2026-11-16",
+        "scannedMetres": null,
+        "project": null,
+        "owner": null,
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.1824,
+          -23.9823
         ]
       }
     },
@@ -27598,7 +27654,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-08-03",
         "firstSeen": "2026-03-26",
@@ -30986,7 +31042,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-03-18",
         "firstSeen": "2026-03-26",
@@ -52504,6 +52560,34 @@
         "coordinates": [
           116.03501042,
           -23.95698638
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "YINDD021",
+        "boreholeId": "YINDD021",
+        "boreholeLength": 77.39999999999999,
+        "elevation": null,
+        "custodian": "gswa",
+        "drillingMethod": "Diamond Core",
+        "drillEndDate": "unknown",
+        "purpose": null,
+        "instrument": "HyLogger 3-2",
+        "drillDate": "2022-11-10",
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 77.39,
+        "project": "Yin",
+        "owner": "GSWA",
+        "state": "WA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0338,
+          -23.957
         ]
       }
     },

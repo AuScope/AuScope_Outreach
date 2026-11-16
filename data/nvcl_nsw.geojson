@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-11-02T01:34:11Z"
+    "fetched": "2026-11-16T03:11:14Z"
   },
   "features": [
     {
@@ -21290,6 +21290,62 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Avoca Tank - Girilambone: ATRC015",
+        "boreholeId": "MIN_059157",
+        "boreholeLength": 250,
+        "elevation": 206.295,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2008",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 319.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8396,
+          -31.1993
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: ATRC016",
+        "boreholeId": "MIN_059158",
+        "boreholeLength": 228,
+        "elevation": 205,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2008",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 239.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8408,
+          -31.1964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Barmedman: BAR09-01",
         "boreholeId": "MIN_060155",
         "boreholeLength": 312.3,
@@ -27674,6 +27730,286 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Budgery Mine - Tritton: BUDD006",
+        "boreholeId": "MIN_150777",
+        "boreholeLength": 318.8,
+        "elevation": 243.307,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6858,
+          -31.5306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDD008",
+        "boreholeId": "MIN_150778",
+        "boreholeLength": 351.3,
+        "elevation": 244.516,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6865,
+          -31.531
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDD009",
+        "boreholeId": "MIN_150779",
+        "boreholeLength": 390.8,
+        "elevation": 244.189,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6869,
+          -31.5308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDD010",
+        "boreholeId": "MIN_150780",
+        "boreholeLength": 390.8,
+        "elevation": 244.309,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6873,
+          -31.5306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC046",
+        "boreholeId": "MIN_150785",
+        "boreholeLength": 126,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": null,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.685,
+          -31.5309
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC047",
+        "boreholeId": "MIN_150786",
+        "boreholeLength": 150,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6925,
+          -31.5246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC051",
+        "boreholeId": "MIN_150790",
+        "boreholeLength": 234,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 239.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.685,
+          -31.53
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC052",
+        "boreholeId": "MIN_150791",
+        "boreholeLength": 150,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6906,
+          -31.5174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC053",
+        "boreholeId": "MIN_150792",
+        "boreholeLength": 150,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6914,
+          -31.5174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Budgery Mine - Tritton: BUDRC054",
+        "boreholeId": "MIN_150793",
+        "boreholeLength": 150,
+        "elevation": 240,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2010",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Budgery Mine - Tritton",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6922,
+          -31.5174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Dandaloo: Dan001",
         "boreholeId": "MIN_152611",
         "boreholeLength": 228.8,
@@ -29236,6 +29572,286 @@
         "coordinates": [
           146.1003,
           -32.413
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC001",
+        "boreholeId": "MIN_172228",
+        "boreholeLength": 199,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8418,
+          -31.2037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC002",
+        "boreholeId": "MIN_172229",
+        "boreholeLength": 199,
+        "elevation": 209,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8407,
+          -31.2042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC003",
+        "boreholeId": "MIN_172230",
+        "boreholeLength": 199,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8433,
+          -31.2032
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC004",
+        "boreholeId": "MIN_172231",
+        "boreholeLength": 253,
+        "elevation": 220,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 319.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8317,
+          -31.1982
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC005",
+        "boreholeId": "MIN_172232",
+        "boreholeLength": 253,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 319.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8305,
+          -31.2009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC006",
+        "boreholeId": "MIN_172233",
+        "boreholeLength": 169,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8306,
+          -31.202
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC007",
+        "boreholeId": "MIN_172234",
+        "boreholeLength": 199,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8292,
+          -31.1992
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC008",
+        "boreholeId": "MIN_172235",
+        "boreholeLength": 109,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8268,
+          -31.1973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC009",
+        "boreholeId": "MIN_172236",
+        "boreholeLength": 199,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.829,
+          -31.2019
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Avoca Tank - Girilambone: TAVRC010",
+        "boreholeId": "MIN_172237",
+        "boreholeLength": 199,
+        "elevation": 210,
+        "custodian": null,
+        "drillingMethod": "RC",
+        "drillEndDate": "2015",
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Avoca Tank - Girilambone",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.8269,
+          -31.1967
         ]
       }
     },
@@ -35172,6 +35788,706 @@
         "coordinates": [
           141.5064,
           -31.9214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC001",
+        "boreholeId": "MIN_588180",
+        "boreholeLength": 108,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6843,
+          -31.5272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC003",
+        "boreholeId": "MIN_588182",
+        "boreholeLength": 90,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6851,
+          -31.5269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC004",
+        "boreholeId": "MIN_588183",
+        "boreholeLength": 50,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": null,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.684,
+          -31.5267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC007",
+        "boreholeId": "MIN_588186",
+        "boreholeLength": 50,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": null,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6839,
+          -31.5267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC008",
+        "boreholeId": "MIN_588187",
+        "boreholeLength": 90,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 79.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6845,
+          -31.5268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC009",
+        "boreholeId": "MIN_588188",
+        "boreholeLength": 90,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6846,
+          -31.527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC010",
+        "boreholeId": "MIN_588189",
+        "boreholeLength": 96,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6851,
+          -31.5271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC012",
+        "boreholeId": "MIN_588191",
+        "boreholeLength": 144,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6853,
+          -31.5277
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC014",
+        "boreholeId": "MIN_588193",
+        "boreholeLength": 102,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6845,
+          -31.5271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC015",
+        "boreholeId": "MIN_588194",
+        "boreholeLength": 120,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6847,
+          -31.5276
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC017",
+        "boreholeId": "MIN_588196",
+        "boreholeLength": 150,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.685,
+          -31.528
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC021",
+        "boreholeId": "MIN_588200",
+        "boreholeLength": 138,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6856,
+          -31.5273
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC024",
+        "boreholeId": "MIN_588203",
+        "boreholeLength": 150,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.686,
+          -31.5273
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC025",
+        "boreholeId": "MIN_588204",
+        "boreholeLength": 120,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6855,
+          -31.5271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC026",
+        "boreholeId": "MIN_588205",
+        "boreholeLength": 102,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6853,
+          -31.5267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC030",
+        "boreholeId": "MIN_588209",
+        "boreholeLength": 120,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6858,
+          -31.5269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC032",
+        "boreholeId": "MIN_588211",
+        "boreholeLength": 132,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6853,
+          -31.5274
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC033",
+        "boreholeId": "MIN_588212",
+        "boreholeLength": 72,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 79.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6837,
+          -31.527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC035",
+        "boreholeId": "MIN_588214",
+        "boreholeLength": 240,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6865,
+          -31.5282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC037",
+        "boreholeId": "MIN_588216",
+        "boreholeLength": 50,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": null,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6841,
+          -31.5265
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC041",
+        "boreholeId": "MIN_588220",
+        "boreholeLength": 180,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6851,
+          -31.5283
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDRC042",
+        "boreholeId": "MIN_588221",
+        "boreholeLength": 186,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-11",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 199.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6846,
+          -31.5281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDD04",
+        "boreholeId": "MIN_588228",
+        "boreholeLength": 304,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6873,
+          -31.5287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDD05",
+        "boreholeId": "MIN_588229",
+        "boreholeLength": 289.17,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6877,
+          -31.5286
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tritton Regional: BUDD07",
+        "boreholeId": "MIN_588230",
+        "boreholeLength": 200,
+        "elevation": null,
+        "custodian": null,
+        "drillingMethod": null,
+        "drillEndDate": null,
+        "purpose": null,
+        "instrument": "HyLogger 3-4",
+        "drillDate": null,
+        "datasetCreated": "2026-11-12",
+        "firstSeen": "2026-11-16",
+        "scannedMetres": 119.84,
+        "project": "Tritton Regional",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          146.6882,
+          -31.5284
         ]
       }
     },
