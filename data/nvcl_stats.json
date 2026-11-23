@@ -1,22 +1,22 @@
 {
- "as_of": "2026-11-16",
+ "as_of": "2026-11-23",
  "method": "merged-v1.2",
  "source": "scripts/nvcl/harvest.js - live harvest of all public NVCL node services (see scripts/nvcl/METHODOLOGY.md)",
  "summary": {
-  "total_datasets": 6865,
-  "total_boreholes_with_data": 6705,
-  "total_scanned_km": 1919.56,
+  "total_datasets": 6866,
+  "total_boreholes_with_data": 6706,
+  "total_scanned_km": 1919.82,
   "total_scanned_km_note": "alias of unique_scanned_km (union of per-dataset scan intervals per borehole)",
-  "unique_scanned_km": 1919.56,
-  "api_measured_km": 311.06,
-  "tsg_measured_km": 1283.54,
+  "unique_scanned_km": 1919.82,
+  "api_measured_km": 311.35,
+  "tsg_measured_km": 1283.51,
   "tsg_measured_boreholes": 4341,
   "tsg_source": "NCI THREDDS TSG (10.25914/bztg-rg43)",
-  "total_scan_km": 1935.5,
+  "total_scan_km": 1935.77,
   "mirror_only_km": 9.89,
   "mirror_only_archives": 38,
   "mirror_only_boreholes": 45,
-  "evidenced_boreholes": 6750,
+  "evidenced_boreholes": 6751,
   "provisional_holes": 7,
   "provisional_unplaced": 28,
   "provisional_by_state": {
@@ -41,12 +41,12 @@
     "reason": "node_unreachable"
    }
   },
-  "national_measured_km": 1929.45,
+  "national_measured_km": 1929.71,
   "estimated_km": 4.74,
   "estimated_boreholes": 57,
-  "combined_estimate_km": 1934.19,
+  "combined_estimate_km": 1934.45,
   "dates_from_tsg": 4456,
-  "dates_from_api": 1337,
+  "dates_from_api": 1338,
   "dates_from_tsg_pct": 76.9,
   "tsg_cache": {
    "path": "data/nvcl/tsg-cache.jsonl",
@@ -67,8 +67,8 @@
   },
   "interval_unrecorded_datasets": 113,
   "interval_clamped_datasets": 113,
-  "total_borehole_drilled_km": 2124.91,
-  "datasets_with_instrument_data": 5496,
+  "total_borehole_drilled_km": 2125.21,
+  "datasets_with_instrument_data": 5497,
   "participating_nodes": [
    "CSIRO",
    "NSW",
@@ -91,7 +91,7 @@
    "max_scans_one_borehole": 3
   },
   "tir_stats": {
-   "tir_datasets": 5226,
+   "tir_datasets": 5227,
    "tir_pct_of_total": 76.1
   }
  },
@@ -119,10 +119,10 @@
    "dates_from_api_scandate": 0,
    "dates_from_api_createddate": 5,
    "latest_dataset_date": "2026-08-16",
-   "days_since_latest": 92,
+   "days_since_latest": 99,
    "datasets_last_12mo": 5,
    "km_scanned_last_12mo": 0.22,
-   "measured_as_of": "2026-11-16",
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 0,
    "provisional_reason": null,
    "provisional_unplaced": 0
@@ -132,28 +132,28 @@
    "status": "participating",
    "coords_as_of": null,
    "coords_from_cache": false,
-   "wfs_registered_boreholes": 1320,
-   "total_datasets": 1326,
-   "total_boreholes_with_data": 1320,
-   "total_km_scanned": 291.33,
-   "unique_scanned_km": 291.33,
-   "api_measured_km": 291.33,
+   "wfs_registered_boreholes": 1321,
+   "total_datasets": 1327,
+   "total_boreholes_with_data": 1321,
+   "total_km_scanned": 291.62,
+   "unique_scanned_km": 291.62,
+   "api_measured_km": 291.62,
    "tsg_measured_km": 0,
    "tsg_measured_boreholes": 0,
-   "total_scan_km": 292.25,
+   "total_scan_km": 292.55,
    "estimated_km": 2.05,
    "estimated_boreholes": 37,
    "interval_unrecorded": 38,
    "interval_clamped": 38,
    "dates_from_tsg": 0,
-   "dates_from_api": 1326,
+   "dates_from_api": 1327,
    "dates_from_api_scandate": 0,
-   "dates_from_api_createddate": 1326,
+   "dates_from_api_createddate": 1327,
    "latest_dataset_date": "2026-11-12",
-   "days_since_latest": 4,
-   "datasets_last_12mo": 134,
-   "km_scanned_last_12mo": 23.27,
-   "measured_as_of": "2026-11-16",
+   "days_since_latest": 11,
+   "datasets_last_12mo": 135,
+   "km_scanned_last_12mo": 23.56,
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 0,
    "provisional_reason": null,
    "provisional_unplaced": 0
@@ -181,10 +181,10 @@
    "dates_from_api_scandate": 0,
    "dates_from_api_createddate": 1,
    "latest_dataset_date": "2026-02-17",
-   "days_since_latest": 272,
+   "days_since_latest": 279,
    "datasets_last_12mo": 1,
    "km_scanned_last_12mo": 1.03,
-   "measured_as_of": "2026-11-16",
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 0,
    "provisional_reason": null,
    "provisional_unplaced": 2,
@@ -193,8 +193,8 @@
    "mirror_unsurfaced": 4,
    "mirror_note": "4 archive(s) on the AuScope NCI mirror beyond the 612 borehole(s) this node surfaces as having data. Scanned core the state service does not advertise is still scanned core.",
    "wfs_paging": {
-    "features_paged": 328923,
-    "features_reported": 328923,
+    "features_paged": 328924,
+    "features_reported": 328924,
     "paged_pct": 100,
     "nvcl_paged": 718,
     "nvcl_reported": 718
@@ -226,7 +226,7 @@
   {
    "state": "QLD",
    "status": "degraded",
-   "coords_as_of": "2026-11-16",
+   "coords_as_of": "2026-11-23",
    "coords_from_cache": false,
    "wfs_registered_boreholes": 587,
    "total_datasets": 538,
@@ -278,7 +278,7 @@
     }
    },
    "tsg_match_rate_pct": 96,
-   "note": "This node served its borehole list but its dataset service failed most queries, so the figures are those last measured on 2026-11-09. Coordinates are current; the measurements are not."
+   "note": "This node served its borehole list but its dataset service failed most queries, so the figures are those last measured on 2026-11-16. Coordinates are current; the measurements are not."
   },
   {
    "state": "SA",
@@ -303,10 +303,10 @@
    "dates_from_api_scandate": 0,
    "dates_from_api_createddate": 0,
    "latest_dataset_date": "2025-11-04",
-   "days_since_latest": 377,
+   "days_since_latest": 384,
    "datasets_last_12mo": 0,
    "km_scanned_last_12mo": 0,
-   "measured_as_of": "2026-11-16",
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 1,
    "provisional_reason": "orphan",
    "provisional_unplaced": 4,
@@ -327,13 +327,13 @@
    "tsg_match_tiers": {
     "archives": {
      "uuid": 1821,
-     "id": 13,
-     "drillhole": 4
+     "id": 12,
+     "drillhole": 5
     },
     "boreholes": {
      "uuid": 1816,
-     "id": 12,
-     "drillhole": 4
+     "id": 11,
+     "drillhole": 5
     }
    },
    "tsg_match_rate_pct": 99.7
@@ -393,7 +393,7 @@
     }
    },
    "tsg_match_rate_pct": 96.6,
-   "note": "Node did not answer this run. Boreholes are drawn from cached coordinates and the figures are those last measured on 2026-11-09. Carried forward rather than reported as zero."
+   "note": "Node did not answer this run. Boreholes are drawn from cached coordinates and the figures are those last measured on 2026-11-16. Carried forward rather than reported as zero."
   },
   {
    "state": "VIC",
@@ -421,7 +421,7 @@
    "days_since_latest": null,
    "datasets_last_12mo": 0,
    "km_scanned_last_12mo": 0,
-   "measured_as_of": "2026-11-16",
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 0,
    "provisional_reason": null,
    "provisional_unplaced": 0,
@@ -459,12 +459,12 @@
    "wfs_registered_boreholes": 1900,
    "total_datasets": 2010,
    "total_boreholes_with_data": 1899,
-   "total_km_scanned": 678.07,
-   "unique_scanned_km": 678.07,
+   "total_km_scanned": 678.04,
+   "unique_scanned_km": 678.04,
    "api_measured_km": 12.38,
-   "tsg_measured_km": 665.7,
+   "tsg_measured_km": 665.67,
    "tsg_measured_boreholes": 1881,
-   "total_scan_km": 689.44,
+   "total_scan_km": 689.41,
    "estimated_km": 1.22,
    "estimated_boreholes": 12,
    "interval_unrecorded": 71,
@@ -474,10 +474,10 @@
    "dates_from_api_scandate": 0,
    "dates_from_api_createddate": 5,
    "latest_dataset_date": "2026-11-11",
-   "days_since_latest": 5,
+   "days_since_latest": 12,
    "datasets_last_12mo": 11,
    "km_scanned_last_12mo": 3.24,
-   "measured_as_of": "2026-11-16",
+   "measured_as_of": "2026-11-23",
    "provisional_holes": 0,
    "provisional_reason": null,
    "provisional_unplaced": 0,
@@ -497,15 +497,15 @@
    "tsg_matched_boreholes": 1897,
    "tsg_match_tiers": {
     "archives": {
-     "uuid": 1994,
+     "uuid": 1996,
      "drillhole": 1,
-     "id": 16,
+     "id": 14,
      "name": 1
     },
     "boreholes": {
-     "uuid": 1886,
+     "uuid": 1887,
      "drillhole": 1,
-     "id": 10
+     "id": 9
     }
    },
    "tsg_match_rate_pct": 100
@@ -561,10 +561,10 @@
    "hits_url": "https://geossdi.dmp.wa.gov.au/services/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=gsmlp:BoreholeView&resultType=hits&CQL_FILTER=nvclCollection=%27true%27"
   }
  },
- "harvested_at": "2026-11-16T03:11:14Z",
- "harvest_seconds": 5005,
+ "harvested_at": "2026-11-23T02:29:00Z",
+ "harvest_seconds": 5370,
  "detail": {
   "path": "data/nvcl/boreholes-detail.jsonl",
-  "rows": 7117
+  "rows": 7118
  }
 }

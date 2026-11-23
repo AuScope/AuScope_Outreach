@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "nsw",
     "stateLabel": "New South Wales",
-    "fetched": "2026-11-16T03:11:14Z"
+    "fetched": "2026-11-23T02:29:00Z"
   },
   "features": [
     {
@@ -30692,6 +30692,34 @@
         "coordinates": [
           147.0607,
           -32.0407
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Main Lode Rasp Mine - Broken Hill: MLDD3623",
+        "boreholeId": "MIN_230807",
+        "boreholeLength": 300,
+        "elevation": -104,
+        "custodian": "Geological Survey of NSW",
+        "drillingMethod": null,
+        "drillEndDate": "2016",
+        "purpose": "Resource Definition Surface",
+        "instrument": "HyLogger 4-2303",
+        "drillDate": null,
+        "datasetCreated": "2026-06-15",
+        "firstSeen": "2026-11-23",
+        "scannedMetres": 294.98,
+        "project": "Main Lode Rasp Mine - Broken Hill",
+        "owner": "GSNSW",
+        "state": "NSW"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.4586,
+          -31.9715
         ]
       }
     },

@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-16T04:34:39Z",
+  "generated": "2026-11-23T03:58:31Z",
   "methodology": "merged, TSG-first; see scripts/nvcl/METHODOLOGY.md",
-  "harvest_as_of": "2026-11-16",
-  "total_boreholes": 6712,
-  "total_km": 1924.4,
-  "spectra_measured": 257770810,
+  "harvest_as_of": "2026-11-23",
+  "total_boreholes": 6713,
+  "total_km": 1924.7,
+  "spectra_measured": 257814035,
   "undated": 0,
   "by_state": [
     {
@@ -12,23 +12,23 @@
       "boreholes": 5,
       "km": 0.2,
       "status": "participating",
-      "fetched": "2026-11-16",
+      "fetched": "2026-11-23",
       "spectra_measured": 27089
     },
     {
       "state": "NSW",
-      "boreholes": 1320,
-      "km": 291.3,
+      "boreholes": 1321,
+      "km": 291.6,
       "status": "participating",
-      "fetched": "2026-11-16",
-      "spectra_measured": 37116374
+      "fetched": "2026-11-23",
+      "spectra_measured": 37159599
     },
     {
       "state": "NT",
       "boreholes": 612,
       "km": 189.5,
       "status": "participating",
-      "fetched": "2026-11-16",
+      "fetched": "2026-11-23",
       "spectra_measured": 24978705
     },
     {
@@ -44,7 +44,7 @@
       "boreholes": 1833,
       "km": 431.1,
       "status": "participating",
-      "fetched": "2026-11-16",
+      "fetched": "2026-11-23",
       "spectra_measured": 56585897
     },
     {
@@ -60,15 +60,15 @@
       "boreholes": 29,
       "km": 6,
       "status": "participating",
-      "fetched": "2026-11-16",
+      "fetched": "2026-11-23",
       "spectra_measured": 0
     },
     {
       "state": "WA",
       "boreholes": 1899,
-      "km": 678.1,
+      "km": 678,
       "status": "participating",
-      "fetched": "2026-11-16",
+      "fetched": "2026-11-23",
       "spectra_measured": 89528769
     }
   ],
@@ -78,7 +78,7 @@
   },
   "month_sources": {
     "tsg": 4373,
-    "api": 1331,
+    "api": 1332,
     "none": 0,
     "carried": 1008
   },

@@ -4,7 +4,7 @@
     "source": "NVCL WFS + NVCLDataServices + TSG headers on NCI THREDDS (10.25914/bztg-rg43)",
     "state": "wa",
     "stateLabel": "Western Australia",
-    "fetched": "2026-11-16T03:11:14Z"
+    "fetched": "2026-11-23T02:29:00Z"
   },
   "features": [
     {
@@ -34346,7 +34346,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-08-18",
         "firstSeen": "2026-03-26",
@@ -34458,7 +34458,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-08-05",
         "firstSeen": "2026-03-26",
@@ -34770,7 +34770,7 @@
         "drillDate": "1966-05-24",
         "datasetCreated": "2020-04-06",
         "firstSeen": "2026-03-26",
-        "scannedMetres": 132.59,
+        "scannedMetres": 102.11,
         "project": "Mt Adams",
         "owner": "GSWA",
         "state": "WA"
@@ -35858,7 +35858,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 3-2",
+        "instrument": "HyLogger 2-2",
         "drillDate": "2011-09-01",
         "datasetCreated": "2015-11-18",
         "firstSeen": "2026-03-26",
@@ -36362,7 +36362,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-08-04",
         "firstSeen": "2026-03-26",
@@ -36446,7 +36446,7 @@
         "drillingMethod": "Diamond Core",
         "drillEndDate": "unknown",
         "purpose": null,
-        "instrument": "HyLogger 2-2",
+        "instrument": "HyLogger 3-2",
         "drillDate": null,
         "datasetCreated": "2015-08-05",
         "firstSeen": "2026-03-26",
